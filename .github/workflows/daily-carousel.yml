@@ -3,6 +3,11 @@ on:
   schedule:
     - cron: '15 3 * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/create_carousel.py'
+      - '.github/workflows/daily-carousel.yml'
 permissions:
   contents: read
 jobs:
