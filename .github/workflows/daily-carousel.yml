@@ -7,7 +7,6 @@ on:
     branches: [main]
     paths:
       - 'scripts/create_carousel.py'
-      - '.github/workflows/daily-carousel.yml'
 permissions:
   contents: read
 jobs:
