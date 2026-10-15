@@ -1,0 +1,36 @@
+name: AbasonPlus Daily Carousel
+on:
+  schedule:
+    - cron: '15 3 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-noto-core
+          python -m pip install -r requirements.txt
+      - name: Render MP4
+        run: python scripts/create_carousel.py
+      - name: Save video artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: abasonplus-carousel
+          path: output/abasonplus_daily.mp4
+          retention-days: 7
+      - name: Send to Make webhook when configured
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        if: ${{ env.MAKE_WEBHOOK_URL != '' }}
+        run: |
+          curl --fail-with-body --retry 2 --max-time 120 \
+            -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
+            -F "title=AbasonPlus Daily Housing Tips" \
+            -F "caption=আবাসন+ | জমি ও আবাসন বিষয়ে দরকারি তথ্য | https://abasonplus.wordpress.com/" \
+            "$MAKE_WEBHOOK_URL"
