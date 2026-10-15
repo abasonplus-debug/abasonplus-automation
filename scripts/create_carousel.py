@@ -72,10 +72,14 @@ with wave.open(str(OUT / "original_audio.wav"), "wb") as wav:
         envelope = min(1.0, (t % 0.75) * 12) * max(0.0, 1 - (t % 0.75) / 0.75)
         value = 0.12 * envelope * (math.sin(2 * math.pi * frequency * t) + 0.2 * math.sin(4 * math.pi * frequency * t))
         wav.writeframesraw(struct.pack("<h", int(32767 * value)))
+# Prefer the user-supplied soundtrack when it is present in the repository.
+custom_audio = ROOT / "assets" / "abasonplus.mp3"
+audio_path = custom_audio if custom_audio.is_file() else OUT / "original_audio.wav"
+print("Soundtrack:", audio_path)
 subprocess.run([
     "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
     "-f", "concat", "-safe", "0", "-i", str(playlist),
-    "-i", str(OUT / "original_audio.wav"),
+    "-i", str(audio_path),
     "-t", "15", "-r", "25", "-vf", "format=yuv420p",
     "-c:v", "libx264", "-preset", "veryfast", "-crf", "24",
     "-c:a", "aac", "-b:a", "96k", "-shortest", "-movflags", "+faststart",
