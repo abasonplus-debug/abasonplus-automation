@@ -36,6 +36,6 @@ jobs:
         run: |
           curl --fail-with-body --retry 2 --max-time 120 \
             -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
-            -F "title=AbasonPlus | জমি ও আবাসন টিপস #RealEstate #Bangladesh #Property" \
-            -F "caption=আবাসন+ | জমি ও আবাসন বিষয়ে দরকারি তথ্য | https://abasonplus.wordpress.com/ | #Bangladesh #RealEstate #Property #Housing #Home #জমি #আবাসন #AbasonPlus" \
+            -F "title=<output/title.txt" \
+            -F "caption=<output/caption.txt" \
             "$MAKE_WEBHOOK_URL"
