@@ -119,18 +119,13 @@ for i, (main, subtitle) in enumerate(slides):
     im = image_for(query, i)
     if im is None:
         im = Image.new("RGB", (1080, 1920), (9, 29, 49))
-    # The text area spans 80% of image width, with translucent contrast panel.
+    # Draw the lettering directly on the topic-specific photograph: no panel or box.
     im = im.convert("RGBA")
-    overlay = Image.new("RGBA", im.size, (0, 0, 0, 0))
-    panel = ImageDraw.Draw(overlay)
-    panel.rounded_rectangle((108, 650, 972, 1310), radius=48, fill=(3, 24, 32, 185), outline=(125, 239, 207, 220), width=5)
-    panel.rounded_rectangle((80, 1540, 1000, 1760), radius=35, fill=(3, 24, 32, 185))
-    im = Image.alpha_composite(im, overlay)
     d = ImageDraw.Draw(im)
     if logo:
         im.paste(logo, ((1080-logo.width)//2, 195), logo)
     else:
-        centered(d, "আবাসন+", 240, big, (125, 239, 207))
+        centered(d, "আবাসন+", 240, big, (255, 255, 255))
     # Fit the Bengali headline inside 80% width; wrap long text into two lines.
     words = main.split()
     lines = [main]
@@ -144,8 +139,8 @@ for i, (main, subtitle) in enumerate(slides):
             font = ImageFont.truetype(str(FONT), font.size - 4)
         centered(d, line, y, font, (255, 255, 255))
         y += 100
-    centered(d, subtitle, 1110, medium, (203, 230, 235))
-    centered(d, "abasonplus.wordpress.com", 1630, small, (125, 239, 207))
+    centered(d, subtitle, 1110, medium, (255, 255, 255))
+    centered(d, "abasonplus.wordpress.com", 1630, small, (255, 255, 255))
     im.convert("RGB").save(OUT / f"slide_{i}.png", optimize=True)
 
 playlist = OUT / "slides.txt"
