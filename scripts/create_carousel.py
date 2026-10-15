@@ -2,7 +2,12 @@
 """Render an original 15-second Bengali housing-tips video with free tools."""
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from urllib.request import urlretrieve
+from urllib.request import urlretrieve, Request, urlopen
+from urllib.parse import urlencode
+import json
+import io
+import re
+from PIL import ImageOps
 import math
 import subprocess
 import wave
@@ -54,19 +59,94 @@ def centered(draw, text, y, font, color):
     width = bbox[2] - bbox[0]
     draw.text(((1080 - width)/2, y), text, font=font, fill=color, direction="ltr")
 
+# Search Wikimedia Commons for topic-specific photographs with reusable licenses.
+# Search terms are tied to each slide's message, not random stock photos.
+SCENES = {
+    "জমি কেনার আগে": ["green agricultural land Bangladesh", "landscape green fields", "land survey landscape", "rural landscape", "agricultural land"],
+    "ফ্ল্যাট কেনার আগে": ["modern apartment buildings", "residential apartment exterior", "apartment building construction", "modern residential building", "apartment architecture"],
+    "বাড়ি নির্মাণের আগে": ["house construction building", "architectural house plan", "building foundation construction", "building construction site", "civil engineer construction"],
+}
+KEYWORDS = {
+    "গাছ": "lush green trees forest", "বাগান": "beautiful flower garden",
+    "গার্ডেন": "beautiful green garden", "ফুল": "colorful flower garden",
+    "জমি": "green agricultural land", "দলিল": "paper documents desk",
+    "খতিয়ান": "land survey map", "সীমানা": "rural field fence",
+    "ফ্ল্যাট": "modern apartment building", "প্রকল্প": "residential apartment construction",
+    "চুক্তি": "paperwork signing contract", "হস্তান্তর": "modern apartment interior",
+    "বাড়ি": "beautiful residential house", "নকশা": "architectural blueprint",
+    "মাটি": "construction ground foundation", "উপকরণ": "building materials construction",
+    "প্রকৌশলী": "construction engineer hardhat", "মালিকানা": "property deed document",
+    "দাগ": "survey field landscape", "বিরোধ": "property documents",
+}
+
+def image_for(query, slide_index):
+    params = urlencode({"action": "query", "generator": "search", "gsrsearch": f'filetype:bitmap {query}',
+        "gsrnamespace": 6, "gsrlimit": 8, "prop": "imageinfo", "iiprop": "url|extmetadata",
+        "iiurlwidth": 1100, "format": "json"})
+    api = "https://commons.wikimedia.org/w/api.php?" + params
+    try:
+        req = Request(api, headers={"User-Agent": "AbasonPlusEducationBot/1.0 (https://abasonplus.wordpress.com/)"})
+        with urlopen(req, timeout=12) as response:
+            pages = json.load(response).get("query", {}).get("pages", {})
+        for page in sorted(pages.values(), key=lambda x: x.get("index", 999)):
+            info = (page.get("imageinfo") or [{}])[0]
+            metadata = info.get("extmetadata") or {}
+            license_name = re.sub("<[^>]+>", "", metadata.get("LicenseShortName", {}).get("value", ""))
+            if not (license_name.startswith("CC BY") or license_name in ("CC0", "Public domain", "Public Domain")):
+                continue
+            url = info.get("thumburl") or info.get("url")
+            if not url:
+                continue
+            with urlopen(Request(url, headers={"User-Agent": "AbasonPlusEducationBot/1.0"}), timeout=15) as response:
+                raw = response.read(7_000_000)
+            image = Image.open(io.BytesIO(raw)).convert("RGB")
+            if min(image.size) < 400:
+                continue
+            attribution = metadata.get("Artist", {}).get("value", "Wikimedia Commons")
+            attribution = re.sub("<[^>]+>", "", attribution).strip()[:150]
+            with (OUT / "image_credits.txt").open("a", encoding="utf-8") as credits:
+                credits.write(f"Slide {slide_index + 1}: {page.get('title')} | {license_name} | {attribution} | {info.get('descriptionurl', '')}\\n")
+            print(f"Slide {slide_index + 1} scene: {query}, source: {page.get('title')}")
+            return ImageOps.fit(image, (1080, 1920), method=Image.Resampling.LANCZOS)
+    except Exception as exc:
+        print("Commons image lookup failed:", query, str(exc)[:150])
+    return None
+
 for i, (main, subtitle) in enumerate(slides):
-    im = Image.new("RGB", (1080, 1920), (9, 29, 49))
+    query = next((term for key, term in KEYWORDS.items() if key in main), None)
+    if not query:
+        query = SCENES[heading][i]
+    im = image_for(query, i)
+    if im is None:
+        im = Image.new("RGB", (1080, 1920), (9, 29, 49))
+    # The text area spans 80% of image width, with translucent contrast panel.
+    im = im.convert("RGBA")
+    overlay = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    panel = ImageDraw.Draw(overlay)
+    panel.rounded_rectangle((108, 650, 972, 1310), radius=48, fill=(3, 24, 32, 185), outline=(125, 239, 207, 220), width=5)
+    panel.rounded_rectangle((80, 1540, 1000, 1760), radius=35, fill=(3, 24, 32, 185))
+    im = Image.alpha_composite(im, overlay)
     d = ImageDraw.Draw(im)
-    d.rounded_rectangle((65, 105, 1015, 1815), radius=65, fill=(22, 59, 80), outline=(62, 191, 167), width=7)
     if logo:
-        im.paste(logo, ((1080-logo.width)//2, 215), logo)
+        im.paste(logo, ((1080-logo.width)//2, 195), logo)
     else:
-        centered(d, "আবাসন+", 265, big, (125, 239, 207))
-    d.line((145, 525, 935, 525), fill=(62, 191, 167), width=5)
-    centered(d, main, 780, big, (255, 255, 255))
-    centered(d, subtitle, 1060, medium, (203, 230, 235))
-    centered(d, "abasonplus.wordpress.com", 1650, small, (125, 239, 207))
-    im.save(OUT / f"slide_{i}.png", optimize=True)
+        centered(d, "আবাসন+", 240, big, (125, 239, 207))
+    # Fit the Bengali headline inside 80% width; wrap long text into two lines.
+    words = main.split()
+    lines = [main]
+    if d.textbbox((0, 0), main, font=big)[2] > 830 and len(words) > 1:
+        midpoint = (len(words) + 1) // 2
+        lines = [" ".join(words[:midpoint]), " ".join(words[midpoint:])]
+    y = 820 if len(lines) == 1 else 760
+    for line in lines:
+        font = big
+        while d.textbbox((0, 0), line, font=font)[2] > 825 and font.size > 40:
+            font = ImageFont.truetype(str(FONT), font.size - 4)
+        centered(d, line, y, font, (255, 255, 255))
+        y += 100
+    centered(d, subtitle, 1110, medium, (203, 230, 235))
+    centered(d, "abasonplus.wordpress.com", 1630, small, (125, 239, 207))
+    im.convert("RGB").save(OUT / f"slide_{i}.png", optimize=True)
 
 playlist = OUT / "slides.txt"
 playlist.write_text("".join(f"file 'slide_{i}.png'\nduration 3\n" for i in range(5)) + "file 'slide_4.png'\n", encoding="utf-8")
