@@ -27,7 +27,19 @@ topics = [
 ]
 date = datetime.now(timezone(timedelta(hours=6))).date()
 heading, tips = topics[date.toordinal() % len(topics)]
-slides = [(heading, "আবাসন+ | আজকের চারটি পরামর্শ")] + [(tip, f"পরামর্শ {i}/৪") for i, tip in enumerate(tips, 1)]
+hooks = {
+    "জমি কেনার আগে": "জমি কিনবেন? এই ৪টি ভুল এড়ান!",
+    "ফ্ল্যাট কেনার আগে": "ফ্ল্যাট কেনার আগে ৪টি বিষয় জানুন!",
+    "বাড়ি নির্মাণের আগে": "বাড়ি বানাবেন? আগে এই ৪টি দেখুন!",
+}
+hook = hooks[heading]
+slides = [(hook, "শেষ পর্যন্ত দেখুন • গুরুত্বপূর্ণ ৪টি টিপস")] + [(tip, f"পরামর্শ {i}/৪") for i, tip in enumerate(tips, 1)]
+hashtags = "#Bangladesh #RealEstate #Property #Housing #Home #জমি #আবাসন #AbasonPlus"
+(OUT / "title.txt").write_text(f"{hook} | আবাসন+ #Bangladesh #RealEstate #Property", encoding="utf-8")
+(OUT / "caption.txt").write_text(
+    f"{hook}\\n\\n" + "\\n".join(f"✅ {i}. {tip}" for i, tip in enumerate(tips, 1))
+    + f"\\n\\nআরও তথ্য: https://abasonplus.wordpress.com/\\n\\n{hashtags}", encoding="utf-8"
+)
 logo = None
 try:
     logo_path = OUT / "logo.png"
