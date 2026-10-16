@@ -24,7 +24,7 @@ Bangla-first, practical, source-linked and useful to Bangladeshi readers. Attrac
 - NEVER reuse fake/outdated sources, clickbait fear or guaranteed returns.
 - Do not misrepresent historical estimates as present status.
 - Each time-sensitive story needs a `verified_on` and `expires_on`; after expiration the GitHub email generator MUST skip the entry instead of publishing dated claims as fresh.
-- Daily research is NOT implemented by a static article queue. New government announcements require fresh source verification and editorial review before being added to approved articles. Never claim fully automated live research exists without a working verified news-data workflow.
+- ChatGPT Daily Research Task is enabled to create a new source-linked editorial JSON file on GitHub each day, but its first unattended scheduled execution still needs verification. The fallback queue is finite and is NOT live research. If the daily source, quality checks or upload fail, do not call recycled content new; notify via the independent Publication Audit. Confirm primary-source dates before publishing new government announcements.
 
 ## High-confidence source domains
 https://investbangladesh.gov.bd/press-release/invest-bangladesh-reports-progress-under-180-day-plan
