@@ -17,11 +17,11 @@ concurrency:
 jobs:
   prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 16
     steps:
       - uses: actions/checkout@v4
       - name: Check safe email source code
-        run: python3 -m py_compile wordpress_email_prepare.py wordpress_email_send.py
+        run: python3 -m py_compile wordpress_email_prepare.py wordpress_email_send.py scripts/verify_wordpress_publication.py
       - name: Prepare next reviewed unpublished article with a public duplicate check
         run: python3 wordpress_email_prepare.py
       - name: Save email preview (no publication)
@@ -38,4 +38,17 @@ jobs:
           ABASONPLUS_PUBLISH: 'OWNER_APPROVED'
           ABASONPLUS_POST_BY_EMAIL_READY: 'CONFIRMED'
         run: python3 wordpress_email_send.py
+      - name: Verify the article is actually published on WordPress, not merely accepted by Make
+        if: ${{ github.event_name == 'schedule' }}
+        run: python3 scripts/verify_wordpress_publication.py --attempts 6 --interval 35
+      - name: Archive send receipt and public post verification result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: abasonplus-wordpress-publication-audit
+          path: |
+            output/wordpress_send_receipt.json
+            output/wordpress_published_verified.json
+          if-no-files-found: ignore
+          retention-days: 7
 # GitHub does not need WORDPRESS_ACCESS_TOKEN; WordPress receives email via authorized Make Gmail.
