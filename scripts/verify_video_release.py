@@ -61,6 +61,8 @@ for n,info in enumerate(quality):
              "text design region less than 60 percent of screen area")
     required(info.get("photo_semantic_qa") is True,
              "visual brief was not semantically screened")
+    required(info.get("font_glyph_coverage_qa") is True,
+             "Bengali and English font coverage unverified; reject tofu □ boxes")
     credit=info.get("source","")
     required(bool(credit) and ("Pexels Free License" in credit or
              re.search(r"\b(?:CC0|CC BY|Public Domain)\b",credit,re.I)),
