@@ -1,0 +1,23 @@
+name: AbasonPlus WordPress OAuth Check Only
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - tests/check_wordpress_oauth.py
+      - .github/workflows/check-wordpress-oauth.yml
+permissions:
+  contents: read
+jobs:
+  read-only-auth-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify scope and site without ever posting
+        env:
+          WORDPRESS_ACCESS_TOKEN: ${{ secrets.WORDPRESS_ACCESS_TOKEN }}
+          WPCOM_CLIENT_ID: "150614"
+          WPCOM_SITE_ID: "257973809"
+        run: python3 tests/check_wordpress_oauth.py
+# No post create, no update, no publishing.
