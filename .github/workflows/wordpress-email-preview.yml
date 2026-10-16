@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'wordpress_email_prepare.py'
+      - 'wordpress_email_send.py'
       - 'wordpress_posts.json'
       - '.github/workflows/wordpress-email-preview.yml'
   workflow_dispatch:
@@ -16,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Compile publisher code without posting
-        run: python3 -m py_compile wordpress_email_prepare.py
+        run: python3 -m py_compile wordpress_email_prepare.py wordpress_email_send.py
       - name: Build next draft and check public WordPress slugs
         run: python3 wordpress_email_prepare.py
       - name: Validate safe preview email envelope
@@ -34,6 +35,12 @@ jobs:
           else:
               print('No unpublished reviewed posts; NO OUTBOUND SEND.')
           PY
+      - name: Verify outbound delivery stays blocked without owner authorization
+        run: |
+          if python3 wordpress_email_send.py >output/blocked-delivery-check.txt 2>&1; then
+            echo 'ERROR: sender should be blocked'; exit 1
+          fi
+          grep -q 'Publication disabled' output/blocked-delivery-check.txt
       - name: Save preview email payload
         uses: actions/upload-artifact@v4
         with:
