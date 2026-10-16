@@ -73,6 +73,8 @@ jobs:
           PY
       - name: Approve release ONLY after separate real-photo and metadata QA
         run: python3 scripts/verify_video_release.py
+      - name: Prepare TikTok-specific caption and video package (NO TikTok posting)
+        run: python3 scripts/prepare_tiktok_preview.py
       - name: Save video, slides and license/source QA results
         uses: actions/upload-artifact@v4
         with:
@@ -86,6 +88,8 @@ jobs:
             output/title.txt
             output/caption.txt
             output/description.txt
+            output/tiktok_caption.txt
+            output/tiktok_preview.json
           retention-days: 7
       - name: Send ONE daily validated Reel and Short to Make on automatic schedule ONLY
         if: ${{ github.event_name == 'schedule' }}
