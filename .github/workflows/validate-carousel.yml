@@ -6,6 +6,7 @@ on:
       - 'scripts/create_carousel.py'
       - 'content/topics.json'
       - 'tests/validate_carousel.py'
+      - 'tests/photo_source_probe.py'
       - '.github/workflows/validate-carousel.yml'
   workflow_dispatch:
 permissions:
