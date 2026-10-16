@@ -73,6 +73,7 @@ def image_for(query, slide_index):
         req = Request(api,headers={"User-Agent":"AbasonPlusEducationBot/2.0 (https://abasonplus.wordpress.com/)"})
         with urlopen(req,timeout=20) as response:
             pages=json.load(response).get("query",{}).get("pages",{})
+        print(f"Commons search {query!r}: {len(pages)} results",flush=True)
         for page in sorted(pages.values(),key=lambda p:p.get("index",999)):
             title=page.get("title","")
             if title in used_photo_titles: continue
@@ -81,13 +82,17 @@ def image_for(query, slide_index):
             license_name=re.sub("<[^>]+>","",meta.get("LicenseShortName",{}).get("value","")).strip()
             is_public=license_name.lower() in ("cc0","public domain","public domain mark")
             is_cc_by=license_name.startswith("CC BY ") and "SA" not in license_name.upper() and "NC" not in license_name.upper()
-            if not (is_public or is_cc_by): continue
+            if not (is_public or is_cc_by):
+                print(f"Skipped license: {title[:40]} | {license_name}",flush=True)
+                continue
             url=info.get("thumburl") or info.get("url")
             if not url: continue
             with urlopen(Request(url,headers={"User-Agent":"AbasonPlusEducationBot/2.0"}),timeout=20) as response:
                 raw=response.read(9_000_000)
             picture=Image.open(io.BytesIO(raw)).convert("RGB")
-            if picture.width<1080 or picture.height<1400: continue
+            if picture.width<1080 or picture.height<1400:
+                print(f"Skipped small: {title[:40]} ({picture.width}x{picture.height})",flush=True)
+                continue
             used_photo_titles.add(title)
             attribution=re.sub("<[^>]+>","",meta.get("Artist",{}).get("value","")).strip()[:120]
             photo_credits.append(f"Slide {slide_index+1}: {title} | {attribution or 'Wikimedia contributor'} | {license_name} | {info.get('descriptionurl','')}")
@@ -100,7 +105,7 @@ def image_for(query, slide_index):
             print(f"Slide {slide_index+1} photo: {title}")
             return picture
     except Exception as exc:
-        print(f"Photo fetch failed: {query}: {str(exc)[:180]}")
+        print(f"Photo fetch failed: {query}: {str(exc)[:180]}",flush=True)
     return None
 
 # Independent full-bleed frames; translucent Bengali, true 130px font size.
