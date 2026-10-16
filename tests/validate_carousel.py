@@ -11,6 +11,16 @@ ast.parse(SOURCE,filename="scripts/create_carousel.py")
 catalog = json.loads((ROOT / "content" / "topics.json").read_text(encoding="utf-8"))
 assert len(catalog) >= 15, "At least 15 distinct curated topics required"
 assert len({x["title"] for x in catalog}) == len(catalog), "Topic duplicated"
+photo_map=json.loads((ROOT/"content"/"researched_photos.json").read_text(encoding="utf-8"))
+photo_urls=[]
+for subject,pictures in photo_map.items():
+    assert 5<=len(pictures)<=10,subject
+    for entry in pictures:
+        assert entry["source"].startswith("https://www.pexels.com/photo/"),subject
+        assert entry["license"]=="Pexels Free License",subject
+        assert entry["url"].startswith("https://images.pexels.com/photos/"),subject
+        photo_urls.append(entry["url"])
+assert len(photo_urls)==len(set(photo_urls)), "Exact curated photo reused across multiple videos"
 assert features.check("raqm"), "Bengali shaping support missing"
 fonts = [p for p in pathlib.Path("/usr/share/fonts").rglob("*.ttf") if "Bengali" in p.name and "Regular" in p.name]
 assert fonts, "Regular Bengali font missing"
@@ -64,6 +74,8 @@ assert "needs.source.outputs.ready == 'true'" in video_workflow,"Video missing f
 assert "if: ${{ github.event_name == 'schedule' }}" in video_workflow,"Manual video workflow must be preview-only"
 assert "python3 scripts/select_video_story.py" in video_workflow,"Mandatory topic-and-source gate missing"
 assert "Verify dimensions, original audio and visual layout" in video_workflow,"Mandatory rendering QA missing"
+assert "python3 scripts/verify_video_release.py" in video_workflow,"Independent photo release gate missing"
+assert '-F "visual_qa_passed=true"' in video_workflow,"Make video QA approval mapping missing"
 # Owner explicitly enabled ONLY WordPress Post by Email, scheduled once daily.
 wp_workflow=(ROOT/".github/workflows/wordpress-post.yml").read_text(encoding="utf-8")
 assert "cron: '20 6 * * *'" in wp_workflow,"WordPress expected 06:20 UTC schedule"
