@@ -126,62 +126,85 @@ for i, (main, subtitle) in enumerate(slides):
         im.paste(logo, ((1080-logo.width)//2, 195), logo)
     else:
         centered(d, "আবাসন+", 240, big, (255, 255, 255))
-    # Large, high-contrast Bengali lettering occupies the central ~80% of the frame.
-    # Keep the photograph visible behind the lettering; do not draw opaque cards.
+    # Approved 9:16 poster style: large yellow/white Bengali text, thick black
+    # outlines, red brushstroke accents, and visible subject photography.
+    # The text treatment dominates roughly 80% of the vertical canvas.
     from PIL import ImageFilter
-    shade = Image.new("RGBA", im.size, (0, 0, 0, 0))
-    sd = ImageDraw.Draw(shade)
-    for py in range(200, 1740, 4):
-        strength = 95 if 370 <= py <= 1530 else 60
-        sd.rectangle((0, py, 1080, py + 4), fill=(0, 0, 0, strength))
-    im = Image.alpha_composite(im, shade)
+    overlay = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    od = ImageDraw.Draw(overlay)
+    for py in range(170, 1770, 5):
+        alpha = 65 if py < 480 or py > 1550 else 100
+        od.rectangle((0, py, 1080, py + 5), fill=(0, 0, 0, alpha))
+    im = Image.alpha_composite(im, overlay)
     d = ImageDraw.Draw(im)
 
-    def wrap_text(text, font, max_width=930):
-        result = []
-        current = ""
-        for word in text.split():
+    def wrap_poster(text, font, max_width=940):
+        words = text.split()
+        lines, current = [], ""
+        for word in words:
             candidate = (current + " " + word).strip()
             if current and d.textbbox((0, 0), candidate, font=font)[2] > max_width:
-                result.append(current)
+                lines.append(current)
                 current = word
             else:
                 current = candidate
         if current:
-            result.append(current)
-        return result
+            lines.append(current)
+        return lines
 
-    # Put the main message across most of the useful viewing area.
-    font_size = 124
-    while font_size >= 70:
-        display_font = ImageFont.truetype(str(FONT), font_size)
-        lines = wrap_text(main, display_font)
-        if len(lines) <= 4 and all(d.textbbox((0, 0), line, font=display_font)[2] <= 930 for line in lines):
-            break
-        font_size -= 4
-    line_height = int(font_size * 1.7)
-    group_height = len(lines) * line_height
-    start_y = max(430, 890 - group_height // 2)
-    for j, line in enumerate(lines):
-        bbox = d.textbbox((0, 0), line, font=display_font)
-        x = (1080 - (bbox[2] - bbox[0])) / 2
-        y = start_y + j * line_height
-        d.text((x, y), line, font=display_font, fill="white",
-               stroke_width=6, stroke_fill=(0, 0, 0))
+    # Split headline into punchy, highly visible lines.
+    headline = main.replace("?", "?|").replace("!", "!|")
+    segments = [part.strip() for part in headline.split("|") if part.strip()]
+    if len(segments) == 1:
+        segments = [main]
+    poster_lines = []
+    for segment in segments:
+        size = 152
+        while size > 76:
+            candidate_font = ImageFont.truetype(str(FONT), size)
+            candidate_lines = wrap_poster(segment, candidate_font)
+            if len(candidate_lines) <= 3:
+                break
+            size -= 6
+        poster_lines.extend(candidate_lines)
+    if len(poster_lines) < 2 and len(main.split()) > 2:
+        words = main.split()
+        poster_lines = [" ".join(words[:len(words)//2]), " ".join(words[len(words)//2:])]
+    poster_lines = poster_lines[:5]
+    line_count = len(poster_lines)
+    line_step = min(275, int(1110 / max(1, line_count)))
+    start_y = 350 + max(0, (4 - line_count)) * 65
+    for j, line in enumerate(poster_lines):
+        size = 170 if len(line) < 12 else 140
+        while size > 68:
+            font = ImageFont.truetype(str(FONT), size)
+            if d.textbbox((0, 0), line, font=font)[2] <= 945:
+                break
+            size -= 5
+        bbox = d.textbbox((0, 0), line, font=font, stroke_width=9)
+        width = bbox[2] - bbox[0]
+        x = (1080 - width) / 2
+        y = start_y + j * line_step
+        # Alternating white/yellow words, black outlines, strong red accent.
+        if j == min(1, line_count - 1):
+            d.rounded_rectangle((42, y - 16, 1038, y + size + 50),
+                                radius=22, fill=(226, 20, 30, 235))
+        ink = (255, 236, 0) if j % 2 == 0 else (255, 255, 255)
+        d.text((x, y), line, font=font, fill=ink,
+               stroke_width=9, stroke_fill=(0, 0, 0))
 
-    subfont = ImageFont.truetype(str(FONT), 67)
-    sublines = wrap_text(subtitle, subfont, 930)
-    sub_start = max(start_y + group_height + 100, 1200)
-    for j, line in enumerate(sublines):
+    subfont = ImageFont.truetype(str(FONT), 57)
+    for j, line in enumerate(wrap_poster(subtitle, subfont, 930)[:2]):
         bbox = d.textbbox((0, 0), line, font=subfont)
-        x = (1080 - (bbox[2] - bbox[0])) / 2
-        d.text((x, sub_start + j * 105), line, font=subfont,
-               fill=(255, 244, 180), stroke_width=4, stroke_fill=(0, 0, 0))
+        d.text(((1080 - (bbox[2] - bbox[0])) / 2, 1480 + j * 88),
+               line, font=subfont, fill=(255, 244, 160),
+               stroke_width=5, stroke_fill=(0, 0, 0))
     footer_font = ImageFont.truetype(str(FONT), 40)
     footer = "abasonplus.wordpress.com"
     bbox = d.textbbox((0, 0), footer, font=footer_font)
-    d.text(((1080 - (bbox[2] - bbox[0])) / 2, 1650), footer,
-           font=footer_font, fill="white", stroke_width=3, stroke_fill=(0, 0, 0))
+    d.text(((1080 - (bbox[2] - bbox[0])) / 2, 1730),
+           footer, font=footer_font, fill="white",
+           stroke_width=4, stroke_fill=(0, 0, 0))
     im.convert("RGB").save(OUT / f"slide_{i}.png", optimize=True)
 
 playlist = OUT / "slides.txt"
