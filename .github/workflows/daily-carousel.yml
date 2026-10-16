@@ -1,13 +1,12 @@
 name: AbasonPlus Daily Carousel
+# Publishing paused at user's request. No scheduled, push or manual triggers.
 on:
-  schedule:
-    - cron: '15 3 * * *'
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'scripts/create_carousel.py'
-      - 'assets/abasonplus.mp3'
+    inputs:
+      preview_only:
+        description: 'Preview only; publishing is disabled'
+        required: false
+        default: 'true'
 permissions:
   contents: read
 jobs:
@@ -36,9 +35,9 @@ jobs:
             output/image_credits.txt
           retention-days: 7
       - name: Send to Make webhook when configured
+        if: ${{ false }} # Disabled: do not publish without fresh approval
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
-        if: ${{ env.MAKE_WEBHOOK_URL != '' }}
         run: |
           curl --fail-with-body --retry 2 --max-time 120 \
             -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
