@@ -126,21 +126,62 @@ for i, (main, subtitle) in enumerate(slides):
         im.paste(logo, ((1080-logo.width)//2, 195), logo)
     else:
         centered(d, "আবাসন+", 240, big, (255, 255, 255))
-    # Fit the Bengali headline inside 80% width; wrap long text into two lines.
-    words = main.split()
-    lines = [main]
-    if d.textbbox((0, 0), main, font=big)[2] > 830 and len(words) > 1:
-        midpoint = (len(words) + 1) // 2
-        lines = [" ".join(words[:midpoint]), " ".join(words[midpoint:])]
-    y = 820 if len(lines) == 1 else 760
-    for line in lines:
-        font = big
-        while d.textbbox((0, 0), line, font=font)[2] > 825 and font.size > 40:
-            font = ImageFont.truetype(str(FONT), font.size - 4)
-        centered(d, line, y, font, (255, 255, 255))
-        y += 100
-    centered(d, subtitle, 1110, medium, (255, 255, 255))
-    centered(d, "abasonplus.wordpress.com", 1630, small, (255, 255, 255))
+    # Large, high-contrast Bengali lettering occupies the central ~80% of the frame.
+    # Keep the photograph visible behind the lettering; do not draw opaque cards.
+    from PIL import ImageFilter
+    shade = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    sd = ImageDraw.Draw(shade)
+    for py in range(200, 1740, 4):
+        strength = 95 if 370 <= py <= 1530 else 60
+        sd.rectangle((0, py, 1080, py + 4), fill=(0, 0, 0, strength))
+    im = Image.alpha_composite(im, shade)
+    d = ImageDraw.Draw(im)
+
+    def wrap_text(text, font, max_width=930):
+        result = []
+        current = ""
+        for word in text.split():
+            candidate = (current + " " + word).strip()
+            if current and d.textbbox((0, 0), candidate, font=font)[2] > max_width:
+                result.append(current)
+                current = word
+            else:
+                current = candidate
+        if current:
+            result.append(current)
+        return result
+
+    # Put the main message across most of the useful viewing area.
+    font_size = 124
+    while font_size >= 70:
+        display_font = ImageFont.truetype(str(FONT), font_size)
+        lines = wrap_text(main, display_font)
+        if len(lines) <= 4 and all(d.textbbox((0, 0), line, font=display_font)[2] <= 930 for line in lines):
+            break
+        font_size -= 4
+    line_height = int(font_size * 1.7)
+    group_height = len(lines) * line_height
+    start_y = max(430, 890 - group_height // 2)
+    for j, line in enumerate(lines):
+        bbox = d.textbbox((0, 0), line, font=display_font)
+        x = (1080 - (bbox[2] - bbox[0])) / 2
+        y = start_y + j * line_height
+        d.text((x, y), line, font=display_font, fill="white",
+               stroke_width=6, stroke_fill=(0, 0, 0))
+
+    subfont = ImageFont.truetype(str(FONT), 67)
+    sublines = wrap_text(subtitle, subfont, 930)
+    sub_start = max(start_y + group_height + 100, 1200)
+    for j, line in enumerate(sublines):
+        bbox = d.textbbox((0, 0), line, font=subfont)
+        x = (1080 - (bbox[2] - bbox[0])) / 2
+        d.text((x, sub_start + j * 105), line, font=subfont,
+               fill=(255, 244, 180), stroke_width=4, stroke_fill=(0, 0, 0))
+    footer_font = ImageFont.truetype(str(FONT), 40)
+    footer = "abasonplus.wordpress.com"
+    bbox = d.textbbox((0, 0), footer, font=footer_font)
+    d.text(((1080 - (bbox[2] - bbox[0])) / 2, 1650), footer,
+           font=footer_font, fill="white", stroke_width=3, stroke_fill=(0, 0, 0))
     im.convert("RGB").save(OUT / f"slide_{i}.png", optimize=True)
 
 playlist = OUT / "slides.txt"
