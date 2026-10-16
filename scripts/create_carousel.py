@@ -324,7 +324,7 @@ for i, slide in enumerate(slides):
     bbox=layer.getbbox()
     if bbox is None:
         raise RuntimeError(f"Slide {i+1}: no visible Bengali text")
-    design_zone=(65,220,1015,1100)
+    design_zone=(40,200,1040,1100)
     if bbox[0]<design_zone[0] or bbox[2]>design_zone[2] or bbox[1]<design_zone[1] or bbox[3]>design_zone[3]:
         raise RuntimeError(f"Slide {i+1}: typography extends outside reserved design zone: text={bbox}, zone={design_zone}")
     # No panel, gradient, outline or shadow. A naturally light part of the photo
