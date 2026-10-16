@@ -25,6 +25,8 @@ jobs:
         run: python -m py_compile scripts/create_carousel.py wordpress_publish.py
       - name: Validate topics, typography and paused publishing
         run: python tests/validate_carousel.py
+      - name: Read-only photo source diagnostics
+        run: python tests/photo_source_probe.py
       - name: Render preview locally without any publishing
         run: python scripts/create_carousel.py
       - name: Verify preview video, audio and images
