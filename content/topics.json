@@ -1,0 +1,416 @@
+[
+  {
+    "title": "জমি কেনার আগে",
+    "hook": "জমি কিনবেন? আগে এই ৪টি দেখুন!",
+    "cover_query": "land property rural landscape",
+    "tips": [
+      {
+        "text": "মালিকানার কাগজ যাচাই করুন",
+        "query": "property deed documents"
+      },
+      {
+        "text": "দলিল ও খতিয়ান মিলিয়ে দেখুন",
+        "query": "property land records map"
+      },
+      {
+        "text": "দাগ নম্বর ও সীমানা পরীক্ষা করুন",
+        "query": "land surveyor surveying instrument"
+      },
+      {
+        "text": "বিরোধ বা দায় আছে কি না জানুন",
+        "query": "people discuss land property"
+      }
+    ]
+  },
+  {
+    "title": "ফ্ল্যাট কেনার আগে",
+    "hook": "ফ্ল্যাট কিনছেন? এই ৪টি ভুল এড়ান!",
+    "cover_query": "modern residential apartment building",
+    "tips": [
+      {
+        "text": "প্রকল্পের অনুমোদন যাচাই করুন",
+        "query": "architecture building plans"
+      },
+      {
+        "text": "চুক্তির শর্ত ভালোভাবে পড়ুন",
+        "query": "property contract paperwork"
+      },
+      {
+        "text": "হস্তান্তরের সময় জেনে নিন",
+        "query": "apartment key handover"
+      },
+      {
+        "text": "ভবনের অবস্থা পরীক্ষা করুন",
+        "query": "apartment building inspection"
+      }
+    ]
+  },
+  {
+    "title": "বাড়ি নির্মাণের আগে",
+    "hook": "বাড়ি বানাবেন? আগে ৪টি যাচাই!",
+    "cover_query": "house construction site",
+    "tips": [
+      {
+        "text": "নকশা ও অনুমোদন যাচাই করুন",
+        "query": "architectural house blueprints"
+      },
+      {
+        "text": "মাটির পরীক্ষা সম্পর্কে জানুন",
+        "query": "soil test construction site"
+      },
+      {
+        "text": "নির্মাণসামগ্রীর মান পরীক্ষা করুন",
+        "query": "building materials construction"
+      },
+      {
+        "text": "প্রকৌশলীর পরামর্শ নিন",
+        "query": "civil engineer construction"
+      }
+    ]
+  },
+  {
+    "title": "বাড়ি ভাড়া",
+    "hook": "বাড়ি ভাড়া নেবেন? এই ৪টি দেখুন!",
+    "cover_query": "apartment interior living room",
+    "tips": [
+      {
+        "text": "ভাড়ার শর্ত লিখিতভাবে পড়ুন",
+        "query": "rental agreement documents"
+      },
+      {
+        "text": "পানি ও বিদ্যুৎ পরীক্ষা করুন",
+        "query": "home bathroom faucet"
+      },
+      {
+        "text": "দেয়ালের স্যাঁতসেঁতে দাগ দেখুন",
+        "query": "damp wall moisture"
+      },
+      {
+        "text": "জমা টাকার রসিদ সংরক্ষণ করুন",
+        "query": "receipt paperwork"
+      }
+    ]
+  },
+  {
+    "title": "ছাদে পানি জমা",
+    "hook": "ছাদে পানি জমে? ৪টি কারণ দেখুন!",
+    "cover_query": "rooftop house rainwater",
+    "tips": [
+      {
+        "text": "পানি নামার পথ পরিষ্কার রাখুন",
+        "query": "roof drainage gutter"
+      },
+      {
+        "text": "ছাদের নিচু জায়গা পর্যবেক্ষণ করুন",
+        "query": "flat roof puddle"
+      },
+      {
+        "text": "জলরোধী স্তর পরীক্ষা করান",
+        "query": "roof waterproofing worker"
+      },
+      {
+        "text": "ভেজা ছাদে ঝুঁকি নেবেন না",
+        "query": "wet rooftop safety"
+      }
+    ]
+  },
+  {
+    "title": "বাড়ির নকশা",
+    "hook": "বাড়ির নকশায় এই ৪টি ভুল এড়ান!",
+    "cover_query": "modern home architectural drawing",
+    "tips": [
+      {
+        "text": "প্রাকৃতিক আলো বিবেচনা করুন",
+        "query": "sunlight through living room window"
+      },
+      {
+        "text": "বায়ু চলাচলের ব্যবস্থা রাখুন",
+        "query": "home windows ventilation"
+      },
+      {
+        "text": "যাতায়াতের পথ সহজ রাখুন",
+        "query": "residential floor plan"
+      },
+      {
+        "text": "পেশাদার দিয়ে নকশা যাচাই করুন",
+        "query": "architect reviewing blueprint"
+      }
+    ]
+  },
+  {
+    "title": "ফাউন্ডেশন",
+    "hook": "বাড়ির ভিত্তি মজবুত? ৪টি যাচাই!",
+    "cover_query": "building concrete foundation",
+    "tips": [
+      {
+        "text": "মাটির অবস্থা পরীক্ষা করুন",
+        "query": "soil investigation construction"
+      },
+      {
+        "text": "অনুমোদিত নকশা অনুসরণ করুন",
+        "query": "engineer foundation blueprint"
+      },
+      {
+        "text": "রড ও কংক্রিটের মান দেখুন",
+        "query": "concrete reinforcement construction"
+      },
+      {
+        "text": "প্রকৌশলীর তত্ত্বাবধান নিন",
+        "query": "construction engineer site inspection"
+      }
+    ]
+  },
+  {
+    "title": "বিদ্যুৎ নিরাপত্তা",
+    "hook": "বাড়ির বিদ্যুতে ৪টি সতর্কতা!",
+    "cover_query": "residential electrical panel",
+    "tips": [
+      {
+        "text": "পুরোনো তার পরীক্ষা করান",
+        "query": "electrician residential wiring"
+      },
+      {
+        "text": "ক্ষতিগ্রস্ত সকেট ব্যবহার করবেন না",
+        "query": "damaged electrical outlet"
+      },
+      {
+        "text": "সুরক্ষা যন্ত্র পরীক্ষা করান",
+        "query": "circuit breaker panel"
+      },
+      {
+        "text": "সমস্যায় দক্ষ ইলেকট্রিশিয়ান ডাকুন",
+        "query": "professional electrician working"
+      }
+    ]
+  },
+  {
+    "title": "পানির সমস্যা",
+    "hook": "বাড়ির পানির সমস্যা? ৪টি যাচাই!",
+    "cover_query": "house water faucet plumbing",
+    "tips": [
+      {
+        "text": "পাইপে দৃশ্যমান লিক দেখুন",
+        "query": "water pipe leaking"
+      },
+      {
+        "text": "পানির ট্যাংক পরিষ্কার রাখুন",
+        "query": "rooftop water tank"
+      },
+      {
+        "text": "বাথরুমের নিষ্কাশন দেখুন",
+        "query": "bathroom floor drain"
+      },
+      {
+        "text": "প্রয়োজনে প্লাম্বার ডাকুন",
+        "query": "plumber repairing pipe"
+      }
+    ]
+  },
+  {
+    "title": "ফ্ল্যাট হস্তান্তর",
+    "hook": "ফ্ল্যাট বুঝে নেবেন? ৪টি কাজ আগে!",
+    "cover_query": "new apartment interior keys",
+    "tips": [
+      {
+        "text": "চুক্তির শর্ত মিলিয়ে নিন",
+        "query": "real estate agreement"
+      },
+      {
+        "text": "দরজা জানালা পরীক্ষা করুন",
+        "query": "apartment window and door"
+      },
+      {
+        "text": "পানি বিদ্যুৎ পরীক্ষা করুন",
+        "query": "kitchen faucet apartment"
+      },
+      {
+        "text": "ত্রুটির তালিকা লিখে রাখুন",
+        "query": "inspection checklist clipboard"
+      }
+    ]
+  },
+  {
+    "title": "বাড়ি রক্ষণাবেক্ষণ",
+    "hook": "বাড়ির ক্ষতি কমাতে ৪টি অভ্যাস!",
+    "cover_query": "house exterior maintenance",
+    "tips": [
+      {
+        "text": "ছাদের পানি নিষ্কাশন দেখুন",
+        "query": "house rain gutter"
+      },
+      {
+        "text": "দেয়ালের ফাটল পর্যবেক্ষণ করুন",
+        "query": "cracked wall house"
+      },
+      {
+        "text": "দরজা জানালা পরীক্ষা করুন",
+        "query": "window frame repair"
+      },
+      {
+        "text": "মেরামতের নথি সংরক্ষণ করুন",
+        "query": "home maintenance documents"
+      }
+    ]
+  },
+  {
+    "title": "জমির রাস্তা",
+    "hook": "জমি কিনবেন? যাওয়ার রাস্তা দেখুন!",
+    "cover_query": "rural access road residential property",
+    "tips": [
+      {
+        "text": "প্রবেশপথের অবস্থা যাচাই করুন",
+        "query": "property access road"
+      },
+      {
+        "text": "বর্ষায় চলাচল কেমন দেখুন",
+        "query": "rainy dirt road"
+      },
+      {
+        "text": "পার্শ্ববর্তী পথ সম্পর্কে জানুন",
+        "query": "rural road intersection"
+      },
+      {
+        "text": "নথিতে রাস্তার তথ্য মিলিয়ে নিন",
+        "query": "map land access road"
+      }
+    ]
+  },
+  {
+    "title": "নির্মাণ বাজেট",
+    "hook": "বাড়ি বানাতে বাজেট ভুল করবেন না!",
+    "cover_query": "construction budget calculator",
+    "tips": [
+      {
+        "text": "খরচের খাত আলাদা করুন",
+        "query": "home budget spreadsheet"
+      },
+      {
+        "text": "উপকরণের হিসাব রাখুন",
+        "query": "construction materials warehouse"
+      },
+      {
+        "text": "পরিবর্তনের খরচ লিখুন",
+        "query": "contractor estimating plans"
+      },
+      {
+        "text": "জরুরি ব্যয়ের প্রস্তুতি রাখুন",
+        "query": "financial planning papers"
+      }
+    ]
+  },
+  {
+    "title": "ফ্ল্যাটের পরিবেশ",
+    "hook": "ফ্ল্যাট কিনবেন? আশপাশ দেখেছেন?",
+    "cover_query": "apartment city neighborhood",
+    "tips": [
+      {
+        "text": "প্রাকৃতিক আলো পর্যবেক্ষণ করুন",
+        "query": "sunny apartment interior"
+      },
+      {
+        "text": "শব্দের মাত্রা বিবেচনা করুন",
+        "query": "busy road apartments"
+      },
+      {
+        "text": "যাতায়াতের সুবিধা দেখুন",
+        "query": "city street transport"
+      },
+      {
+        "text": "পানি ও নিষ্কাশন সম্পর্কে জানুন",
+        "query": "urban stormwater drainage"
+      }
+    ]
+  },
+  {
+    "title": "বাড়ির স্যাঁতসেঁতে",
+    "hook": "দেয়ালে স্যাঁতসেঁতে? অবহেলা নয়!",
+    "cover_query": "damp apartment wall",
+    "tips": [
+      {
+        "text": "পানির উৎস খুঁজে দেখুন",
+        "query": "leaking water pipe wall"
+      },
+      {
+        "text": "জানালার আশপাশ পরীক্ষা করুন",
+        "query": "window condensation home"
+      },
+      {
+        "text": "বাতাস চলাচলের ব্যবস্থা দেখুন",
+        "query": "open window ventilation"
+      },
+      {
+        "text": "কারণ নির্ণয়ে বিশেষজ্ঞ নিন",
+        "query": "building inspector damp wall"
+      }
+    ]
+  },
+  {
+    "title": "জমির নথি",
+    "hook": "জমির নথিতে এই ৪টি মিলিয়ে নিন!",
+    "cover_query": "cadastral land records papers",
+    "tips": [
+      {
+        "text": "নাম ও পরিচয় মিলিয়ে নিন",
+        "query": "ownership identity documents"
+      },
+      {
+        "text": "দাগ ও খতিয়ান মিলিয়ে নিন",
+        "query": "land survey cadastral map"
+      },
+      {
+        "text": "নথির তথ্য যাচাই করুন",
+        "query": "official paperwork desk"
+      },
+      {
+        "text": "প্রয়োজনে পেশাদার পরামর্শ নিন",
+        "query": "property advisor meeting"
+      }
+    ]
+  },
+  {
+    "title": "বাড়ির গাছপালা",
+    "hook": "বাড়ির চারপাশে গাছ লাগাবেন?",
+    "cover_query": "home garden greenery",
+    "tips": [
+      {
+        "text": "গাছের বেড়ে ওঠার জায়গা দেখুন",
+        "query": "garden tree planting"
+      },
+      {
+        "text": "দেয়াল থেকে দূরত্ব বিবেচনা করুন",
+        "query": "tree near house"
+      },
+      {
+        "text": "পানি নিষ্কাশন ঠিক রাখুন",
+        "query": "garden drainage soil"
+      },
+      {
+        "text": "নিয়মিত পরিচর্যা করুন",
+        "query": "person gardening plants"
+      }
+    ]
+  },
+  {
+    "title": "বাসার অগ্নিনিরাপত্তা",
+    "hook": "বাসায় অগ্নিনিরাপত্তার ৪টি নিয়ম!",
+    "cover_query": "home smoke alarm safety",
+    "tips": [
+      {
+        "text": "বের হওয়ার পথ খোলা রাখুন",
+        "query": "building fire exit sign"
+      },
+      {
+        "text": "সতর্কসংকেতের যন্ত্র পরীক্ষা করুন",
+        "query": "home smoke detector ceiling"
+      },
+      {
+        "text": "বৈদ্যুতিক ত্রুটি মেরামত করান",
+        "query": "electrician checking wires"
+      },
+      {
+        "text": "পরিবারের জরুরি পরিকল্পনা রাখুন",
+        "query": "family emergency planning"
+      }
+    ]
+  }
+]
