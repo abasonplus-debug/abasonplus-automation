@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Prepare a preview-only licensed-photography Bengali carousel and MP4."""
-from datetime import datetime
+from datetime import datetime, date
 from zoneinfo import ZoneInfo
 from pathlib import Path
 from urllib.request import urlretrieve, Request, urlopen
@@ -31,8 +31,12 @@ small = ImageFont.truetype(str(FONT), 130)
 catalog = json.loads((ROOT / "content" / "topics.json").read_text(encoding="utf-8"))
 if len(catalog) < 10:
     raise RuntimeError("Topic catalog too short: refusing repetitive content")
-date = datetime.now(ZoneInfo("Europe/Berlin")).date()
-item = catalog[date.toordinal() % len(catalog)]
+today = datetime.now(ZoneInfo("Asia/Dhaka")).date()
+# Never repeat a stale government-project claim after its verified status expires.
+current_catalog = [x for x in catalog if not x.get("expires_on") or today<=date.fromisoformat(x["expires_on"])]
+if len(current_catalog)<10:
+    raise RuntimeError("Too few fresh carousel topics: hold for editorial refresh")
+item = current_catalog[today.toordinal() % len(current_catalog)]
 heading, hook, points = item["title"], item["hook"], item["tips"]
 if not 4 <= len(points) <= 9:
     raise RuntimeError("Carousel requires 5 to 10 slides")
@@ -281,9 +285,10 @@ credits = "\n".join(photo_credits)
 (OUT / "description.txt").write_text(
     f"{hook}\n" + "\n".join(f"{i}. {p['text']}" for i,p in enumerate(points,1))
     + f"\n\nhttps://abasonplus.wordpress.com/\n{hashtags} #Shorts"
+    + (f"\n\nSource: {item['source_url']}\nVerified: {item.get('verified_on','')}" if item.get("source_url") else "")
     + "\n\nPhoto sources and licenses:\n" + credits,encoding="utf-8")
 (OUT / "metadata.json").write_text(json.dumps(
-    {"date":str(date),"topic":heading,"hook":hook,"slides":len(slides),
+    {"date":str(today),"topic":heading,"hook":hook,"slides":len(slides),"source_url":item.get("source_url"),"verified_on":item.get("verified_on"),
      "status":"preview_only","visual_approval":"required","photo_selection":("researched_not_user_approved" if selected_photos else "semantic_screened_unreviewed"),"quality":quality_results},
     ensure_ascii=False,indent=2),encoding="utf-8")
 playlist = OUT / "slides.txt"
