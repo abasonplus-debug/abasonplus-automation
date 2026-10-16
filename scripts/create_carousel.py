@@ -276,7 +276,7 @@ def image_for(query, slide_index):
 # Independent full-bleed frames; selected editorial photo overlay style.
 STYLE_ID = "editorial_photo_overlay_v1"
 INK = (6, 27, 62, 230)  # dark navy, approximately 90% opacity
-def fit_lines(draw, value, fnt, limit=920):
+def fit_lines(draw, value, fnt, limit=950):
     lines=[]
     current=""
     for word in value.split():
@@ -308,7 +308,7 @@ for i, slide in enumerate(slides):
     draw=ImageDraw.Draw(layer)
     main_font=None
     lines=[]
-    for size in range(210,129,-10):
+    for size in range(210,119,-10):
         candidate_font=ImageFont.truetype(str(FONT),size)
         try: candidate_lines=fit_lines(draw,slide["main"],candidate_font)
         except RuntimeError: continue
@@ -317,7 +317,7 @@ for i, slide in enumerate(slides):
             main_font=candidate_font
             break
     if main_font is None:
-        raise RuntimeError(f"Slide {i+1}: exact wording cannot fit in three lines at 130px+")
+        raise RuntimeError(f"Slide {i+1}: exact wording cannot fit in three lines at 120px+")
     line_step=int(main_font.size*1.52)
     for j,line in enumerate(lines):
         draw_line(draw,line,260+j*line_step,main_font,INK)
