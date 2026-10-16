@@ -86,6 +86,28 @@ def search_phrases(query):
     phrases=[query, " ".join(words[:2]), *fallback]
     return list(dict.fromkeys(p for p in phrases if p))
 
+def subject_guard(query, filename):
+    """Conservative filename screen: reject unrelated archives, diagrams and scans.
+    Not a substitute for manual visual review of licensed photo content."""
+    name=filename.lower()
+    q=query.lower()
+    if not name.endswith((".jpg",".jpeg",".webp")): return False
+    blocked=("certificate","membership","historic","cadastral map","old map",
+             "illustration","engraving","diagram","painting","poster",
+             "scan of","newspaper","cartoon","drawing","passport")
+    if any(x in name for x in blocked): return False
+    if any(x in q for x in ("advisor","meeting","consultation")):
+        return any(x in name for x in ("meeting","discussion","consultation",
+                   "advisor","consultant","realtor","estate agent","client"))
+    if any(x in q for x in ("document","deed","paper","contract","record","agreement")):
+        return any(x in name for x in ("document","deed","paperwork",
+                   "property contract","agreement","registration","land record",
+                   "title deed","office desk"))
+    if any(x in q for x in ("survey","map","cadastral","boundary")):
+        return any(x in name for x in ("survey","land parcel","boundary",
+                   "field work","measuring","topographic"))
+    return True
+
 def image_for(query, slide_index):
     for phrase in search_phrases(query):
         params=urlencode({"action":"query","generator":"search",
@@ -100,7 +122,7 @@ def image_for(query, slide_index):
             print(f"Photo search {phrase!r}: {len(pages)} candidates",flush=True)
             for page in sorted(pages.values(),key=lambda p:p.get("index",999)):
                 title=page.get("title","")
-                if title in used_photo_titles: continue
+                if title in used_photo_titles or not subject_guard(query,title): continue
                 info=(page.get("imageinfo") or [{}])[0]
                 meta=info.get("extmetadata") or {}
                 license_name=re.sub("<[^>]+>","",meta.get("LicenseShortName",{}).get("value","")).strip()
@@ -206,7 +228,7 @@ credits = "\n".join(photo_credits)
     + "\n\nPhoto sources and licenses:\n" + credits,encoding="utf-8")
 (OUT / "metadata.json").write_text(json.dumps(
     {"date":str(date),"topic":heading,"hook":hook,"slides":len(slides),
-     "status":"preview_only","quality":quality_results},
+     "status":"preview_only","visual_approval":"required","quality":quality_results},
     ensure_ascii=False,indent=2),encoding="utf-8")
 playlist = OUT / "slides.txt"
 slide_seconds=3
