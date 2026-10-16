@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.request import urlretrieve, Request, urlopen
 from urllib.parse import urlencode
 import json
+import os
 import io
 import re
 from PIL import ImageOps
@@ -29,18 +30,29 @@ medium = ImageFont.truetype(str(FONT), 130)
 small = ImageFont.truetype(str(FONT), 130)
 # Curated Bengali housing content, not invented legal advice.
 catalog = json.loads((ROOT / "content" / "topics.json").read_text(encoding="utf-8"))
-if len(catalog) < 10:
-    raise RuntimeError("Topic catalog too short: refusing repetitive content")
+if len(catalog)<10:
+    raise RuntimeError("Too few topics")
 today = datetime.now(ZoneInfo("Asia/Dhaka")).date()
-# Never repeat a stale government-project claim after its verified status expires.
-current_catalog = [x for x in catalog if not x.get("expires_on") or today<=date.fromisoformat(x["expires_on"])]
-if len(current_catalog)<10:
-    raise RuntimeError("Too few fresh carousel topics: hold for editorial refresh")
-item = current_catalog[today.toordinal() % len(current_catalog)]
-heading, hook, points = item["title"], item["hook"], item["tips"]
-if not 4 <= len(points) <= 9:
-    raise RuntimeError("Carousel requires 5 to 10 slides")
-slides = [{"main":hook,"photo":item["cover_query"],"sub":"জরুরি তথ্য"}]
+current_catalog=[x for x in catalog if not x.get("expires_on") or today<=date.fromisoformat(x["expires_on"])]
+if len(current_catalog)<10:raise RuntimeError("Outdated carousel catalog")
+daily_story_file=os.getenv("ABASONPLUS_DAILY_STORY","")
+if daily_story_file:
+    target=Path(daily_story_file).resolve()
+    if not target.is_relative_to(ROOT.resolve()) or not target.is_file():
+        raise RuntimeError("AI story must be a real, in-repository output file")
+    item=json.loads(target.read_text(encoding="utf-8"))
+    if date.fromisoformat(item["verified_on"]) != today:
+        raise RuntimeError("AI story verified date is not today")
+    if not item.get("source_url","").startswith("https://www.tbsnews.net/"):
+        raise RuntimeError("AI story source URL not approved")
+    if item.get("source_kind")!="external_news_report":
+        raise RuntimeError("AI story was not grounded in a retrieved source")
+    print("NEW_SOURCE_GROUNDED_CAROUSEL:",item["source_url"],flush=True)
+else:
+    item=current_catalog[today.toordinal() % len(current_catalog)]
+heading,hook,points=item["title"],item["hook"],item["tips"]
+if not 4<=len(points)<=9:raise RuntimeError("Carousel requires 5-10 slides")
+slides=[{"main":hook,"photo":item["cover_query"],"sub":"জরুরি তথ্য"}]
 slides += [{"main":p["text"],"photo":p["query"],"sub":f"পরামর্শ {i}/{len(points)}"}
            for i,p in enumerate(points,1)]
 hashtags = "#AbasonPlus #আবাসন #PropertyTips #RealEstateBangladesh "
