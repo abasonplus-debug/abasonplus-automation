@@ -106,5 +106,8 @@ jobs:
             -F "title=<output/title.txt" \
             -F "caption=<output/caption.txt" \
             -F "description=<output/description.txt" \
+            -F "tiktok_caption=<output/tiktok_caption.txt" \
+            -F "tiktok_post_key=abasonplus-tiktok-$(TZ=Asia/Dhaka date +%F)" \
+            -F "tiktok_publish_approved=false" \
             "$MAKE_WEBHOOK_URL"
 # Manual dispatch is PREVIEW ONLY. No daily verified story -> NO VIDEO, never fake a live project photo.
