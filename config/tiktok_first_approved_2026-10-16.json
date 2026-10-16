@@ -25,7 +25,7 @@
   "creator_consent_scope": "THIS EXACT REVIEWED VIDEO ONLY; never reused for future video",
   "reviewed_and_authorized_on": "2026-10-16",
   "auto_publish_future_videos": false,
-  "status": "approved_waiting_for_verified_make_direct_post_route",
-  "delivery_enabled": false,
-  "review_scope_note": "User reviewed the corrected Land Share video, approved Public posting and ON for all 3 TikTok interaction settings; applies only to MP4 SHA256 above. Publishing held until Make direct-post route is verified."
+  "status": "approved_delivery_enabled_for_verified_make_route",
+  "delivery_enabled": true,
+  "review_scope_note": "User reviewed the corrected Land Share video, approved Public posting and ON for all 3 TikTok interaction settings; applies only to MP4 SHA256 above. Make direct-post route 7968544 module 15 verified on 2026-10-17."
 }
