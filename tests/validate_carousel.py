@@ -22,8 +22,8 @@ for subject,pictures in photo_map.items():
         photo_urls.append(entry["url"])
 assert len(photo_urls)==len(set(photo_urls)), "Exact curated photo reused across multiple videos"
 assert features.check("raqm"), "Bengali shaping support missing"
-fonts = [p for p in pathlib.Path("/usr/share/fonts").rglob("*.ttf") if "Bengali" in p.name and "Regular" in p.name]
-assert fonts, "Regular Bengali font missing"
+fonts = [p for p in pathlib.Path("/usr/share/fonts").rglob("*.ttf") if "Bengali" in p.name and "Bold" in p.name]
+assert fonts, "Bold Bengali font missing"
 dummy = Image.new("RGBA",(1080,1920))
 d = ImageDraw.Draw(dummy)
 
