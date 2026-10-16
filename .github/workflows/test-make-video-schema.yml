@@ -36,5 +36,5 @@ jobs:
             -F 'description=Schema test — DO NOT PUBLISH' \
             -F 'video=@/tmp/schema-only.mp4;type=video/mp4' \
             "$MAKE_WEBHOOK_URL" >/dev/null
-          echo 'NONPUBLISHING video and email schema sent: review_approved=false'
+          echo 'NONPUBLISHING video and email schema sent: review_approved=false, visual_qa_passed=false'
 # Both Make social and WordPress routes require review_approved=true; therefore ZERO posts.
