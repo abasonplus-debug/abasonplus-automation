@@ -24,47 +24,41 @@ assert len(photo_urls)==len(set(photo_urls)), "Exact curated photo reused across
 assert features.check("raqm"), "Bengali shaping support missing"
 fonts = [p for p in pathlib.Path("/usr/share/fonts").rglob("*.ttf") if "Bengali" in p.name and "Regular" in p.name]
 assert fonts, "Regular Bengali font missing"
-font = ImageFont.truetype(str(fonts[0]),130)
 dummy = Image.new("RGBA",(1080,1920))
 d = ImageDraw.Draw(dummy)
 
-def wrap(value):
+def wrap(value,font):
     lines=[]
     current=""
     for word in value.split():
         candidate=(current+" "+word).strip()
-        if current and d.textbbox((0,0),candidate,font=font)[2]>940:
+        if current and d.textbbox((0,0),candidate,font=font)[2]>920:
             lines.append(current)
             current=word
         else:
             current=candidate
     if current: lines.append(current)
-    assert lines and all(d.textbbox((0,0),x,font=font)[2]<=940 for x in lines),f"Unfit 130px: {value}"
+    assert lines and all(d.textbbox((0,0),x,font=font)[2]<=920 for x in lines),f"Unfit 130px: {value}"
     return lines
 
 checked=0
 for topic in catalog:
     assert len(topic["tips"]) >= 4 and len(topic["tips"]) <= 9
-    cases = [(topic["hook"],"জরুরি তথ্য")] + [(p["text"],f"পরামর্শ {i}/{len(topic['tips'])}") for i,p in enumerate(topic["tips"],1)]
-    for idx,(message,sub) in enumerate(cases):
+    cases = [topic["hook"]] + [p["text"] for p in topic["tips"]]
+    for idx,message in enumerate(cases):
         assert idx == 0 or topic["tips"][idx-1]["query"]
         assert topic["cover_query"]
-        top=wrap(topic["title"] if idx else "আবাসনপ্লাস")
-        middle=wrap(message)
-        bottom=wrap(sub)
-        assert len(top)<=2 and len(middle)<=4 and len(bottom)==1,(topic["title"],message,len(top),len(middle),len(bottom))
+        font=ImageFont.truetype(str(fonts[0]),130)
+        lines=wrap(message,font)
+        assert len(lines)<=3,(topic["title"],message,len(lines))
         layer=Image.new("RGBA",(1080,1920))
         dt=ImageDraw.Draw(layer)
         def drawline(t,y):
             width=dt.textbbox((0,0),t,font=font)[2]
-            dt.text(((1080-width)//2,y),t,font=font,fill=(255,255,255,205),stroke_width=2,stroke_fill=(0,0,0,185))
-        for j,line in enumerate(top): drawline(line,265+j*170)
-        start=960-((len(middle)-1)*170)//2
-        for j,line in enumerate(middle): drawline(line,start+j*170)
-        drawline(bottom[0],1500)
+            dt.text(((1080-width)//2,y),t,font=font,fill=(6,27,62,230))
+        for j,line in enumerate(lines): drawline(line,260+j*int(font.size*1.52))
         bbox=layer.getbbox()
-        assert bbox and bbox[3]-bbox[1]>=1152,(topic["title"],idx,"<60% vertical composition")
-        assert bbox[3]<1750,(topic["title"],idx,"UI safe region overflow")
+        assert bbox and 65<=bbox[0]<bbox[2]<=1015 and 220<=bbox[1]<bbox[3]<=1100,(topic["title"],idx,"selected style safe region")
         checked+=1
 
 # Only scheduled and sourced, QA-passed video uploads may publish.
@@ -81,4 +75,4 @@ wp_workflow=(ROOT/".github/workflows/wordpress-post.yml").read_text(encoding="ut
 assert "cron: '20 6 * * *'" in wp_workflow,"WordPress expected 06:20 UTC schedule"
 assert "github.event_name == 'schedule'" in wp_workflow,"WordPress manual runs must stay preview-only"
 assert (ROOT / "assets" / "abasonplus.mp3").stat().st_size > 1000, "Original audio missing"
-print(f"Validated {len(catalog)} topics, {checked} frame layouts, 130px font, >=60% vertical text composition, source-gated VIDEO publishing, separately scheduled WordPress, and original audio.")
+print(f"Validated {len(catalog)} topics, {checked} dark direct-photo headline layouts at 130px, source-gated VIDEO publishing, separately scheduled WordPress, and original audio.")
