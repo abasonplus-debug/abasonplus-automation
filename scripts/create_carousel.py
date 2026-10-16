@@ -21,16 +21,16 @@ from photo_relevance import PhotoRelevanceGuard
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "output"
 OUT.mkdir(exist_ok=True)
-FONT = next((p for p in Path("/usr/share/fonts").rglob("*.ttf") if "Bengali" in p.name and "Regular" in p.name), None)
+FONT = next((p for p in Path("/usr/share/fonts").rglob("*.ttf") if "Bengali" in p.name and "Bold" in p.name), None)
 if not FONT:
-    raise RuntimeError("Install fonts-noto-core to render Bengali")
+    raise RuntimeError("Install fonts-noto-core with Noto Sans Bengali Bold")
 if not features.check("raqm"):
     raise RuntimeError("Pillow must support libraqm for correct Bengali shaping")
 # NotoSansBengali-Regular.ttf has NO Latin glyphs. Always use a genuine
 # Latin fallback for words like "Land Share" rather than rendering □□□□.
-LATIN_FONT = next((p for p in Path("/usr/share/fonts").rglob("NotoSans-Regular.ttf")), None)
+LATIN_FONT = next((p for p in Path("/usr/share/fonts").rglob("NotoSans-Bold.ttf")), None)
 if not LATIN_FONT:
-    raise RuntimeError("Install fonts-noto-core: NotoSans-Regular.ttf is required for bilingual hooks")
+    raise RuntimeError("Install fonts-noto-core: NotoSans-Bold.ttf is required for bilingual hooks")
 BN_CMAP = TTFont(str(FONT)).getBestCmap()
 LATIN_CMAP = TTFont(str(LATIN_FONT)).getBestCmap()
 LATIN_FONTS = {}
