@@ -27,3 +27,18 @@ for term in tests:
         print(term,"->",len(pages),"candidate(s)",[(p.get("title","")[:35],(p.get("imageinfo") or [{}])[0].get("width")) for p in pages[:2]],flush=True)
     except Exception as e:
         print(term,"ERROR",str(e)[:140],flush=True)
+
+print("OPENVERSE (photograph-only, licensed, large images)",flush=True)
+for term in ("land surveying","real estate meeting","documents on a desk","new apartment keys"):
+    query=urlencode({"q":term,"page_size":8,"license":"by,by-sa,cc0,pdm",
+       "category":"photograph","size":"large","mature":"false"})
+    try:
+        req=Request("https://api.openverse.org/v1/images/?"+query,
+            headers={"User-Agent":"AbasonPlusEducationalContent/1.0 (https://abasonplus.wordpress.com/)"})
+        with urlopen(req,timeout=18) as response: data=json.load(response)
+        items=data.get("results",[])
+        print("Openverse",repr(term),"count",data.get("result_count"),"sample",
+            [(x.get("title","")[:65],x.get("width"),x.get("height"),
+              x.get("category"),x.get("license")) for x in items[:4]],flush=True)
+    except Exception as e:
+        print("Openverse",repr(term),"error",str(e)[:140],flush=True)
