@@ -1,12 +1,16 @@
 # AbasonPlus — Approved Production Specification (2026-10-16)
 
-## CURRENT STATUS (updated 16 October 2026)
-**WordPress Post-by-Email scheduled publishing is ACTIVE; Facebook/YouTube VIDEO publishing is PAUSED.**
-GitHub WordPress scheduler: once daily 06:20 UTC, next reviewed unpublished article via Make Gmail; manual preview runs do NOT send email. Make.com scenario 7968544 ACTIVE with only its WordPress delivery branch able to publish; video Facebook/YouTube modules DISABLED.
-There are **11 newly researched official-source Bengali articles** prioritized ahead of **15 older queued articles**; both are finite queues.
-Read-only official-source monitoring at 05:35 UTC collects reports for editorial review, NOT automatically written breaking-news articles.
-Full real-world publication verification is still required after next scheduled WordPress run.
-See `ABASONPLUS_EDITORIAL_POLICY.md` for detailed sourcing/freshness standards.
+## CURRENT VERIFIED STATUS — 16 OCTOBER 2026
+**WordPress Post-by-Email is scheduled daily at 06:20 UTC and VIDEO Reels/Shorts is source-and-quality-gated daily at 06:45 UTC.** Both routes are enabled in the active Make scenario 7968544. MANUAL GitHub workflow dispatches are PREVIEW-ONLY and cannot publish.
+
+- ChatGPT Daily Research automation is enabled at approximately 05:00 Germany time. It is designed to write `content/daily_editorial_YYYY-MM-DD.json`; its **first independent scheduled run has NOT been observed**. A manually committed 2026-10-16 sample and full editorial+five-slide preview passed.
+- WordPress's `wordpress_email_prepare.py` selects today's verified ChatGPT package first, then 11 verified researched articles, then 15 evergreen queue entries. It now normalizes missing auto-editorial metadata, verifies a recognized official/source host and avoids known public-post slugs. Preview CI **confirmed correct daily article selection** (run 38900447265).
+- Video publisher **requires today's matching, source-linked editorial**, five unique licensed photographs checked against text with local CLIP, typography region ≥60% frame area (reserved design region, NOT opaque ink area), 130+ px regular Bengali, source attribution and authentic `assets/abasonplus.mp3`. Separate `scripts/verify_video_release.py` must pass before GitHub sends `visual_qa_passed=true`; Make rejects videos missing that flag. Successful safe tests 38901322710 and 38901322717.
+- Video automatic machine QA is NOT equivalent to professional human photographic review; it cannot guarantee perfect relevance, originality or aesthetics. Fail-closed on unknown photos, missing source, insufficient dimensions or failures.
+- WordPress Make branch includes a unique slug key, sequential execution and independent Gmail gate requiring `status=publish`. A deliberate duplicate PREVIEW-ONLY Make test proved the second slug was blocked; test key removed, no email or posts sent (run 38902367868).
+- WordPress scheduled sender now stores a receipt and **independently verifies the newly published post on WordPress**. First genuine scheduled publication through this new flow is not yet independently confirmed; expected next run is 2026-10-17. No test post sent.
+- A separate read-only ChatGPT Publication Audit automation is active to report missed publications, missing daily editorials, errors and dedupe problems. It never publishes.
+- For sources, review `ABASONPLUS_EDITORIAL_POLICY.md`. Government-project "guaranteed returns" claims prohibited.
 
 ## Image / Slideshow Requirements
 - Individual slides: **1080×1920 pixels**, **9:16 Vertical**, 5–10 independent images.
@@ -26,21 +30,20 @@ Use only original `assets/abasonplus.mp3`; no fallback. MP4 H.264/AAC, 1080×192
 
 ## Publishing and deduplication
 Existing authorized destinations: AbasonPlus Facebook Page Reels, YouTube Shorts, and WordPress. Instagram/TikTok are not connected destinations.
-- Video/social publishing steps remain OFF until authorization.
-- When authorized to resume, use **only the single Make.com scenario**; WordPress remains a separate flow.
+- Video/social scheduled publication is now owner-authorized, but ONLY after source-and-automatic-photo QA gates pass.
+- WordPress and video use **the same single Make.com scenario**, on separate exclusive filters, with distinct keys.
 - Make Data Store `AbasonPlus Published Video Keys` (id 220796): unique local-day key, overwrite=false, BEFORE router; sequential execution to reduce duplicate risk. This is an at-most-once *attempt*, not guaranteed exactly-once delivery to both platforms. Review partial failures manually.
 - YouTube Description = incoming `description`; Facebook caption = incoming `caption`.
 - GitHub preview files: independent `slide_*.png`, `thumbnail.png`, `metadata.json`, titles/captions/descriptions, MP4, source credits.
-- Preserve source attribution and license obligations. WordPress OAuth `invalid_token` remains an external account blocker until owner reauthorizes; never invent or leak credentials.
+- Preserve source attribution and license obligations. Legacy WordPress OAuth `invalid_token` is unused: current publication uses authenticated Gmail -> private WordPress Post-by-Email. Do not expose the private recipient.
 
 ## Current QA Gate
-A GitHub safe validation workflow compiles scripts, validates 18 curated topics/90 typography layouts, checks paused publishing, produces an MP4 without outbound posting and probes metadata/FFmpeg streams.
-**Technical render success is NOT visual approval.** Wikimedia fallback search has chosen irrelevant items (historic maps/certificates and cityscape). The photography selection is still not production-quality. Do not reactivate publishing until the photo assets/selection are human-reviewed or a reliable photo QA pipeline is proven.
+Safe workflows validate 32 static themes/160 individual frame layouts, demonstrate WordPress editorial selection and render a 5-slide MP4 with original music. Automated video release checks *semantically screened* photos, distinct filenames/scene perceptual hashes, source/attribution and codec. This is automated release QA, **not human artistic approval**. Incorrect/unlicensed photos must fail rather than auto-publish.
 
-## Scheduling note (historical video / current WordPress)
-Previous VIDEO generation schedule (suspended): 03:15 UTC daily, 05:15 summer / 04:15 winter Germany. WordPress ACTIVE: 06:20 UTC, 08:20 summer / 07:20 winter. GitHub Actions may start late; generation time != publication time.
+## Scheduling note
+Read-only official-source monitoring: 05:35 UTC. WordPress ACTIVE: 06:20 UTC (08:20 summer/07:20 winter Germany). Daily VIDEO ACTIVE with source-and-quality gate: 06:45 UTC (08:45 summer/07:45 winter Germany). GitHub Actions may start late; generation time != publication time.
 
-**Never call this complete, nor publish, merely because a test workflow is green.**
+**A green code test is NOT a proven public publication. Actual live publishing must be confirmed from WordPress/YouTube/Facebook after a scheduled run.**
 
 ## 2026-10-16 Photo / OAuth remediation findings
 - Photo screening now includes an offline CLIP semantic relevance model. Wikimedia/Openverse broad keyword searching alone produced unrelated historical/scanned materials; automated ranking alone cannot guarantee visual fidelity.
