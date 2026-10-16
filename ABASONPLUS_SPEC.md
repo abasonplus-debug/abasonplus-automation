@@ -61,3 +61,12 @@ Make Gmail connection `11995107` is authorized and OK (gmail.readonly + gmail.se
 - Gmail `sendAnEmail` (module 8), subject from `{{1.subject}}`, HTML body from `{{1.html_content}}`
 - SAFE STAGING destination `abasonplus@gmail.com` (owner's own inbox). NOT the WordPress publishing address.
 Final activation blocked: owner must enable WordPress.com Post by Email under site Settings → Writing and put the newly generated confidential `@post.wordpress.com` destination **directly in module 8's To field** in Make. Never send this secret to chat or GitHub. Gmail module and Make scenario currently have not been run. Keep scenario inactive and GitHub sender `if: false` until explicit publishing authorization.
+
+## Production status update — 2026-10-16
+**WordPress Post-by-Email automation: ENABLED at the owner's explicit request.** Daily GitHub workflow `.github/workflows/wordpress-post.yml` runs at 06:20 UTC; the sending step is enabled ONLY for GitHub `schedule` runs, while manual dispatch remains PREVIEW-ONLY. GitHub uses the existing private Make webhook secret; it does not use or expose the invalid WordPress OAuth token.
+
+Make.com scenario `7968544` is ACTIVE. WordPress JSON webhook fields were learned with a harmless unapproved schema sample; no message was sent from the learning run. WordPress route requires `kind=wordpress_email` and `review_approved=true`, checks unique slug key in Data Store `220796`, and sends via authorized Gmail module 8 to the configured private WordPress Post-by-Email recipient. Do not write the private email address into GitHub or chat.
+
+**Facebook and YouTube video posting remains DISABLED** in Make.com modules 3 and 4 and in the GitHub video workflow, until visual image quality is approved. There are 15 curated WordPress articles queued, not an unlimited content generator. Real-world email-to-post delivery remains to be verified after the first scheduled publication; Make webhook acceptance alone is not proof of publication.
+
+**Security:** the Post-by-Email address appeared in an earlier screenshot. Rotate it through WordPress Settings -> Writing and update the private Make Gmail recipient before treating the address as secure. If rotated, update Make before future scheduled sends or delivery will fail.
