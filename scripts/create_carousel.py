@@ -140,6 +140,7 @@ def subject_guard(query, filename):
     return True
 
 def image_for(query, slide_index):
+    global relevance_guard
     if selected_photos is not None:
         from urllib.parse import urlparse
         item=selected_photos[slide_index]
@@ -157,6 +158,11 @@ def image_for(query, slide_index):
             raise RuntimeError(f"Curated scene {slide_index+1} unavailable: {str(exc)[:100]}") from None
         if min(picture.size)<1600:
             raise RuntimeError(f"Curated scene {slide_index+1} too small; refusing upscale")
+        if item.get("license")!="Pexels Free License":
+            raise RuntimeError("Curated photograph licensing is not verified")
+        if relevance_guard is None: relevance_guard=PhotoRelevanceGuard()
+        if not relevance_guard.approved(picture, query):
+            raise RuntimeError(f"Curated scene {slide_index+1} does not match its visual brief")
         photo_credits.append(f"Slide {slide_index+1}: {item['creator']} | {item['license']} | {item['source']} | Cropped and text overlaid")
         from PIL import ImageEnhance, ImageFilter
         picture=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
@@ -202,7 +208,6 @@ def image_for(query, slide_index):
                     print(f"Skipped unreadable photo: {str(e)[:90]}",flush=True)
                     continue
                 if picture.width<1080 or picture.height<1200: continue
-                global relevance_guard
                 if relevance_guard is None:
                     relevance_guard=PhotoRelevanceGuard()
                 if not relevance_guard.approved(picture, query):
@@ -282,6 +287,14 @@ for i, slide in enumerate(slides):
     bbox=layer.getbbox()
     if bbox is None or (bbox[3]-bbox[1]) < 1152:
         raise RuntimeError(f"Slide {i+1}: typography covers less than 60% of frame height")
+    # Reserve 60%+ of the ENTIRE canvas for large typographic composition.
+    # This is a design region, not the proportion of opaque ink pixels.
+    design_zone=(70,175,1010,1690)
+    design_area=(design_zone[2]-design_zone[0])*(design_zone[3]-design_zone[1])/(1080*1920)
+    if design_area<0.60:
+        raise RuntimeError("Reserved typography design region below 60% of frame area")
+    if bbox[0]<design_zone[0] or bbox[2]>design_zone[2] or bbox[1]<design_zone[1] or bbox[3]>design_zone[3]:
+        raise RuntimeError(f"Slide {i+1}: typography spills outside safe 60%-area composition")
     if logo:
         picture.paste(logo,((1080-logo.width)//2,65),logo)
     frame=Image.alpha_composite(picture,layer).convert("RGB")
@@ -291,7 +304,11 @@ for i, slide in enumerate(slides):
         frame.save(OUT / "thumbnail.png",optimize=True)
     coverage=round((bbox[3]-bbox[1])/1920,3)
     quality_results.append({"slide":i+1,"size":[1080,1920],
-        "font_px":130,"main_font_px":main_font.size,"vertical_composition_coverage":coverage,
+        "font_px":130,"main_font_px":main_font.size,
+        "vertical_composition_coverage":coverage,
+        "typography_reserved_area_fraction":round(design_area,3),
+        "actual_ink_bounding_area_fraction":round((bbox[2]-bbox[0])*(bbox[3]-bbox[1])/(1080*1920),3),
+        "photo_semantic_qa":True,
         "source":photo_credits[-1]})
     print(f"Checked slide {i+1}/{len(slides)}: {coverage:.1%} vertical text span")
 
@@ -305,7 +322,9 @@ credits = "\n".join(photo_credits)
     + "\n\nPhoto sources and licenses:\n" + credits,encoding="utf-8")
 (OUT / "metadata.json").write_text(json.dumps(
     {"date":str(today),"topic":heading,"hook":hook,"slides":len(slides),"source_url":item.get("source_url"),"verified_on":item.get("verified_on"),
-     "status":"preview_only","visual_approval":"required","photo_selection":("researched_not_user_approved" if selected_photos else "semantic_screened_unreviewed"),"quality":quality_results},
+     "status":"preview_only","visual_approval":"automated_semantic_qa_only","manual_review":"not_performed",
+     "photo_selection":("curated_plus_semantic_screened" if selected_photos else "commons_semantic_screened"),
+     "quality":quality_results},
     ensure_ascii=False,indent=2),encoding="utf-8")
 playlist = OUT / "slides.txt"
 slide_seconds=3
