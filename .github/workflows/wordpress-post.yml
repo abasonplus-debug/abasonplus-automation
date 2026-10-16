@@ -1,8 +1,12 @@
 name: AbasonPlus Daily WordPress Post
+# Publishing paused at user's request. No scheduled, push or manual triggers.
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '20 6 * * *'
+    inputs:
+      preview_only:
+        description: 'Preview only; publishing is disabled'
+        required: false
+        default: 'true'
 permissions:
   contents: read
 concurrency:
@@ -15,6 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Publish next reviewed Bengali post
+        if: ${{ false }} # Disabled: do not publish without fresh approval
         env:
           WORDPRESS_ACCESS_TOKEN: ${{ secrets.WORDPRESS_ACCESS_TOKEN }}
           WPCOM_SITE_ID: "257973809"
