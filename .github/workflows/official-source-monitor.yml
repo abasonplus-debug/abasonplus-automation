@@ -1,0 +1,35 @@
+name: AbasonPlus Daily Official Source Monitor (Read Only)
+on:
+  schedule:
+    - cron: '35 5 * * *' # Before 06:20 UTC WordPress scheduled post; REPORT ONLY
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/monitor_official_sources.py'
+      - '.github/workflows/official-source-monitor.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: abasonplus-official-source-monitor
+  cancel-in-progress: false
+jobs:
+  read-only-monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile read-only source checker
+        run: python3 -m py_compile scripts/monitor_official_sources.py
+      - name: Check government source pages and timestamps
+        run: python3 scripts/monitor_official_sources.py
+      - name: Archive source-reference report (NEVER publish)
+        uses: actions/upload-artifact@v4
+        with:
+          name: abasonplus-official-sources
+          path: |
+            output/official_source_monitor.json
+            output/official_source_monitor.md
+          if-no-files-found: error
+          retention-days: 7
+# No WordPress, Make, Gmail, Facebook or YouTube sending actions.
