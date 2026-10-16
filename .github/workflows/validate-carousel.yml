@@ -1,0 +1,28 @@
+name: AbasonPlus Safe Code Validation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/create_carousel.py'
+      - 'content/topics.json'
+      - 'tests/validate_carousel.py'
+      - '.github/workflows/validate-carousel.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Bengali fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-noto-core
+          python -m pip install -r requirements.txt
+      - name: Compile Python without running publishers
+        run: python -m py_compile scripts/create_carousel.py wordpress_publish.py
+      - name: Validate topics, typography and paused publishing
+        run: python tests/validate_carousel.py
+# NO webhook call, NO social upload, NO WordPress publishing in this workflow.
