@@ -25,7 +25,10 @@
   "creator_consent_scope": "THIS EXACT REVIEWED VIDEO ONLY; never reused for future video",
   "reviewed_and_authorized_on": "2026-10-16",
   "auto_publish_future_videos": false,
-  "status": "approved_delivery_enabled_for_verified_make_route",
-  "delivery_enabled": true,
-  "review_scope_note": "User reviewed the corrected Land Share video, approved Public posting and ON for all 3 TikTok interaction settings; applies only to MP4 SHA256 above. Make direct-post route 7968544 module 15 verified on 2026-10-17."
+  "status": "published_verified",
+  "delivery_enabled": false,
+  "platform_post_url": "https://www.tiktok.com/@abasonplus/video/7697405584689155361",
+  "platform_post_id": "7697405584689155361",
+  "published_at": "2026-10-16T23:05:04.960Z",
+  "review_scope_note": "Exact creator-approved Land Share MP4 published once to @abasonplus; Make post 6ad2ad8c947c00d1af18fc89 readback confirmed both post and TikTok platform published. Future videos require separate review."
 }
