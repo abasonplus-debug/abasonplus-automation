@@ -30,7 +30,8 @@ topics = [
     ("ফ্ল্যাট কেনার আগে", ["প্রকল্পের অনুমোদন যাচাই করুন", "চুক্তির শর্ত ভালোভাবে পড়ুন", "হস্তান্তরের সময় জেনে নিন", "বিশেষজ্ঞের পরামর্শ নিন"]),
     ("বাড়ি নির্মাণের আগে", ["অনুমোদিত নকশা যাচাই করুন", "মাটির পরীক্ষা সম্পর্কে জানুন", "উপকরণের মান যাচাই করুন", "প্রকৌশলীর পরামর্শ নিন"]),
 ]
-date = datetime.now(timezone(timedelta(hours=6))).date()
+from zoneinfo import ZoneInfo
+date = datetime.now(ZoneInfo("Europe/Berlin")).date()
 heading, tips = topics[date.toordinal() % len(topics)]
 hooks = {
     "জমি কেনার আগে": "জমি কিনবেন? এই ৪টি ভুল এড়ান!",
@@ -39,7 +40,7 @@ hooks = {
 }
 hook = hooks[heading]
 slides = [(hook, "শেষ পর্যন্ত দেখুন • গুরুত্বপূর্ণ ৪টি টিপস")] + [(tip, f"পরামর্শ {i}/৪") for i, tip in enumerate(tips, 1)]
-hashtags = "#AbasonPlus #জমি #আবাসন #PropertyTips #RealEstateBangladesh #BangladeshProperty"
+hashtags = "#AbasonPlus #আবাসন #PropertyTips #RealEstateBangladesh " + ("#জমি #জমিকেনা" if "জমি" in heading else "#ফ্ল্যাট #HomeBuying" if "ফ্ল্যাট" in heading else "#বাড়ি #HomeConstruction")
 (OUT / "title.txt").write_text(f"{hook} | AbasonPlus #Shorts", encoding="utf-8")
 (OUT / "caption.txt").write_text(
     f"{hook}\n\n" + "\n".join(f"✅ {i}. {tip}" for i, tip in enumerate(tips, 1))
@@ -100,12 +101,12 @@ def image_for(query, slide_index):
             with urlopen(Request(url, headers={"User-Agent": "AbasonPlusEducationBot/1.0"}), timeout=15) as response:
                 raw = response.read(7_000_000)
             image = Image.open(io.BytesIO(raw)).convert("RGB")
-            if min(image.size) < 400:
+            if image.width < 1080 or image.height < 1080:
                 continue
             attribution = metadata.get("Artist", {}).get("value", "Wikimedia Commons")
             attribution = re.sub("<[^>]+>", "", attribution).strip()[:150]
             with (OUT / "image_credits.txt").open("a", encoding="utf-8") as credits:
-                credits.write(f"Slide {slide_index + 1}: {page.get('title')} | {license_name} | {attribution} | {info.get('descriptionurl', '')}\\n")
+                credits.write(f"Slide {slide_index + 1}: {page.get('title')} | {license_name} | {attribution} | {info.get('descriptionurl', '')}\n")
             print(f"Slide {slide_index + 1} scene: {query}, source: {page.get('title')}")
             return ImageOps.fit(image, (1080, 1920), method=Image.Resampling.LANCZOS)
     except Exception as exc:
@@ -147,13 +148,18 @@ for i, (main, subtitle) in enumerate(slides):
     # Distribute lines across a large central text composition (60%+ height).
     layer = Image.new("RGBA", im.size, (0, 0, 0, 0))
     ld = ImageDraw.Draw(layer)
-    spacing = max(170, min(400, 1120 // max(1, len(lines)-1)))
-    start_y = max(350, 950 - spacing*(len(lines)-1)//2)
+    # Use a spacious hook-first layout; measure actual glyph coverage below.
+    spacing = 380 if len(lines) <= 4 else 260
+    start_y = max(380, 960 - spacing*(len(lines)-1)//2)
     for j, line in enumerate(lines):
         width = ld.textbbox((0, 0), line, font=font)[2]
         ink = (255, 240, 55, 205) if j % 2 == 0 else (255, 255, 255, 205)
         ld.text(((1080-width)//2, start_y+j*spacing), line, font=font,
                 fill=ink, stroke_width=2, stroke_fill=(0, 0, 0, 155))
+    # Typography must be legible; reject instead of silently accepting tiny coverage.
+    bbox = layer.getbbox()
+    if not bbox or bbox[2] - bbox[0] < 450:
+        raise RuntimeError(f"Slide {i+1}: hook typography too narrow; revise copy")
     im = Image.alpha_composite(im, layer)
     # Preserve 130px minimum by not adding smaller subtitle/footer text.
     # Slide zero is the dedicated hook/cover. Keep it identical to video frame 1.
@@ -163,6 +169,7 @@ for i, (main, subtitle) in enumerate(slides):
     im.convert("RGB").save(OUT / f"slide_{i}.png", optimize=True)
 
 (OUT / "description.txt").write_text(f"{hook}\n" + "\n".join(f"{i}. {tip}" for i, tip in enumerate(tips, 1)) + f"\n\nhttps://abasonplus.wordpress.com/\n{hashtags} #Shorts", encoding="utf-8")
+(OUT / "metadata.json").write_text(json.dumps({"date": str(date), "topic": heading, "hook": hook, "slides": len(slides), "status": "preview_only"}, ensure_ascii=False, indent=2), encoding="utf-8")
 playlist = OUT / "slides.txt"
 playlist.write_text("".join(f"file 'slide_{i}.png'\nduration 3\n" for i in range(5)) + "file 'slide_4.png'\n", encoding="utf-8")
 
@@ -181,4 +188,4 @@ subprocess.run([
     "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart",
     str(OUT / "abasonplus_daily.mp4")
 ], cwd=OUT, check=True)
-print("Created", OUT / "abasonplus_daily.mp4")
+print("Created PREVIEW ONLY", OUT / "abasonplus_daily.mp4")
