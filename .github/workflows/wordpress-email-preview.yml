@@ -5,6 +5,7 @@ on:
     paths:
       - 'wordpress_email_prepare.py'
       - 'wordpress_email_send.py'
+      - 'scripts/verify_wordpress_publication.py'
       - 'wordpress_posts.json'
       - 'content/researched_wordpress_posts.json'
       - 'tests/validate_researched_posts.py'
@@ -19,9 +20,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Compile publisher code without posting
-        run: python3 -m py_compile wordpress_email_prepare.py wordpress_email_send.py
+        run: python3 -m py_compile wordpress_email_prepare.py wordpress_email_send.py scripts/verify_wordpress_publication.py
       - name: Validate official sources and dated article queue
         run: python3 tests/validate_researched_posts.py
+      - name: Unit-test genuine publication matching WITHOUT sending an email
+        run: |
+          python3 - <<'PY'
+          from datetime import datetime,timezone
+          from scripts.verify_wordpress_publication import verify
+          sent=datetime(2026,10,16,8,25,tzinfo=timezone.utc)
+          expected={'post_key':'ap-mock-no-post','subject':'পরীক্ষা & যাচাই'}
+          published=[{'ID':999,'slug':'ap-mock-no-post','title':'পরীক্ষা &amp; যাচাই',
+                      'date':'2026-10-16T08:25:20','status':'publish',
+                      'URL':'https://abasonplus.wordpress.com/mock'}]
+          assert verify(expected,published,sent)['verified'] is True
+          assert verify(expected,[dict(published[0],status='draft')],sent) is None
+          assert verify(expected,[dict(published[0],slug='wrong',title='not match')],sent) is None
+          print('WordPress verification logic passed offline; no post, email, or webhook sent.')
+          PY
       - name: Build next draft and check public WordPress slugs
         run: python3 wordpress_email_prepare.py
       - name: Validate safe preview email envelope
