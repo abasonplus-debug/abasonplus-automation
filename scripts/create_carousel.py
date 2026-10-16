@@ -22,9 +22,9 @@ if not FONT:
     raise RuntimeError("Install fonts-noto-core to render Bengali")
 if not features.check("raqm"):
     raise RuntimeError("Pillow must support libraqm for correct Bengali shaping")
-big = ImageFont.truetype(str(FONT), 76)
-medium = ImageFont.truetype(str(FONT), 51)
-small = ImageFont.truetype(str(FONT), 33)
+big = ImageFont.truetype(str(FONT), 130)
+medium = ImageFont.truetype(str(FONT), 130)
+small = ImageFont.truetype(str(FONT), 130)
 topics = [
     ("জমি কেনার আগে", ["মালিকানার কাগজ যাচাই করুন", "দলিল ও খতিয়ান মিলিয়ে দেখুন", "দাগ নম্বর ও সীমানা পরীক্ষা করুন", "বিরোধ বা দায় আছে কি না জানুন"]),
     ("ফ্ল্যাট কেনার আগে", ["প্রকল্পের অনুমোদন যাচাই করুন", "চুক্তির শর্ত ভালোভাবে পড়ুন", "হস্তান্তরের সময় জেনে নিন", "বিশেষজ্ঞের পরামর্শ নিন"]),
@@ -39,18 +39,18 @@ hooks = {
 }
 hook = hooks[heading]
 slides = [(hook, "শেষ পর্যন্ত দেখুন • গুরুত্বপূর্ণ ৪টি টিপস")] + [(tip, f"পরামর্শ {i}/৪") for i, tip in enumerate(tips, 1)]
-hashtags = "#Bangladesh #RealEstate #Property #Housing #Home #জমি #আবাসন #AbasonPlus"
+hashtags = "#AbasonPlus #জমি #আবাসন #PropertyTips #RealEstateBangladesh #BangladeshProperty"
 (OUT / "title.txt").write_text(f"{hook} | আবাসন+ #Bangladesh #RealEstate #Property", encoding="utf-8")
 (OUT / "caption.txt").write_text(
-    f"{hook}\\n\\n" + "\\n".join(f"✅ {i}. {tip}" for i, tip in enumerate(tips, 1))
-    + f"\\n\\nআরও তথ্য: https://abasonplus.wordpress.com/\\n\\n{hashtags}", encoding="utf-8"
+    f"{hook}\n\n" + "\\n".join(f"✅ {i}. {tip}" for i, tip in enumerate(tips, 1))
+    + f"\n\nআপনার মতে কোন বিষয়টি সবচেয়ে জরুরি?\n\nআরও তথ্য: https://abasonplus.wordpress.com/\n\n{hashtags}", encoding="utf-8"
 )
 logo = None
 try:
     logo_path = OUT / "logo.png"
     urlretrieve("https://abasonplus.wordpress.com/wp-content/uploads/2026/10/abasonplus_round_transparent.png", logo_path)
     logo = Image.open(logo_path).convert("RGBA")
-    logo.thumbnail((240, 240))
+    logo.thumbnail((180, 180))
 except Exception as e:
     print("Logo unavailable, continuing with wordmark:", e)
 
@@ -118,7 +118,7 @@ for i, (main, subtitle) in enumerate(slides):
         query = SCENES[heading][i]
     im = image_for(query, i)
     if im is None:
-        im = Image.new("RGB", (1080, 1920), (9, 29, 49))
+        raise RuntimeError(f"Slide {i+1}: no suitably licensed photograph found; refusing a fake photo fallback")
     # Draw the lettering directly on the topic-specific photograph: no panel or box.
     im = im.convert("RGBA")
     d = ImageDraw.Draw(im)
@@ -126,114 +126,54 @@ for i, (main, subtitle) in enumerate(slides):
         im.paste(logo, ((1080-logo.width)//2, 195), logo)
     else:
         centered(d, "আবাসন+", 240, big, (255, 255, 255))
-    # Approved 9:16 poster style: large yellow/white Bengali text, thick black
-    # outlines, red brushstroke accents, and visible subject photography.
-    # The text treatment dominates roughly 80% of the vertical canvas.
-    from PIL import ImageFilter
-    overlay = Image.new("RGBA", im.size, (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
-    for py in range(170, 1770, 5):
-        alpha = 65 if py < 480 or py > 1550 else 100
-        od.rectangle((0, py, 1080, py + 5), fill=(0, 0, 0, alpha))
-    im = Image.alpha_composite(im, overlay)
-    d = ImageDraw.Draw(im)
-
-    def wrap_poster(text, font, max_width=940):
-        words = text.split()
-        lines, current = [], ""
+    # Borderless semi-transparent, non-bold Bengali lettering, minimum 130px.
+    # Use fewer words per slide rather than shrinking text.
+    def wrap(text, fnt, max_width=950):
+        words, lines, current = text.split(), [], ""
         for word in words:
-            candidate = (current + " " + word).strip()
-            if current and d.textbbox((0, 0), candidate, font=font)[2] > max_width:
+            test = (current + " " + word).strip()
+            if current and d.textbbox((0, 0), test, font=fnt)[2] > max_width:
                 lines.append(current)
                 current = word
             else:
-                current = candidate
-        if current:
-            lines.append(current)
+                current = test
+        if current: lines.append(current)
         return lines
 
-    # Split headline into punchy, highly visible lines.
-    headline = main.replace("?", "?|").replace("!", "!|")
-    segments = [part.strip() for part in headline.split("|") if part.strip()]
-    if len(segments) == 1:
-        segments = [main]
-    poster_lines = []
-    for segment in segments:
-        size = 152
-        while size > 76:
-            candidate_font = ImageFont.truetype(str(FONT), size)
-            candidate_lines = wrap_poster(segment, candidate_font)
-            if len(candidate_lines) <= 3:
-                break
-            size -= 6
-        poster_lines.extend(candidate_lines)
-    if len(poster_lines) < 2 and len(main.split()) > 2:
-        words = main.split()
-        poster_lines = [" ".join(words[:len(words)//2]), " ".join(words[len(words)//2:])]
-    poster_lines = poster_lines[:5]
-    line_count = len(poster_lines)
-    line_step = min(275, int(1110 / max(1, line_count)))
-    start_y = 350 + max(0, (4 - line_count)) * 65
-    for j, line in enumerate(poster_lines):
-        size = 170 if len(line) < 12 else 140
-        while size > 68:
-            font = ImageFont.truetype(str(FONT), size)
-            if d.textbbox((0, 0), line, font=font)[2] <= 945:
-                break
-            size -= 5
-        bbox = d.textbbox((0, 0), line, font=font, stroke_width=9)
-        width = bbox[2] - bbox[0]
-        x = (1080 - width) / 2
-        y = start_y + j * line_step
-        # Alternating white/yellow words, black outlines, strong red accent.
-        if j == min(1, line_count - 1):
-            d.rounded_rectangle((42, y - 16, 1038, y + size + 50),
-                                radius=22, fill=(226, 20, 30, 235))
-        ink = (255, 236, 0) if j % 2 == 0 else (255, 255, 255)
-        d.text((x, y), line, font=font, fill=ink,
-               stroke_width=9, stroke_fill=(0, 0, 0))
-
-    subfont = ImageFont.truetype(str(FONT), 57)
-    for j, line in enumerate(wrap_poster(subtitle, subfont, 930)[:2]):
-        bbox = d.textbbox((0, 0), line, font=subfont)
-        d.text(((1080 - (bbox[2] - bbox[0])) / 2, 1480 + j * 88),
-               line, font=subfont, fill=(255, 244, 160),
-               stroke_width=5, stroke_fill=(0, 0, 0))
-    footer_font = ImageFont.truetype(str(FONT), 40)
-    footer = "abasonplus.wordpress.com"
-    bbox = d.textbbox((0, 0), footer, font=footer_font)
-    d.text(((1080 - (bbox[2] - bbox[0])) / 2, 1730),
-           footer, font=footer_font, fill="white",
-           stroke_width=4, stroke_fill=(0, 0, 0))
+    font = ImageFont.truetype(str(FONT), 130)
+    lines = wrap(main, font)
+    if any(d.textbbox((0, 0), line, font=font)[2] > 950 for line in lines):
+        raise RuntimeError(f"Slide {i+1}: text too long for 130px; edit slide copy")
+    # Distribute lines across a large central text composition (60%+ height).
+    layer = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    ld = ImageDraw.Draw(layer)
+    spacing = max(170, min(400, 1120 // max(1, len(lines)-1)))
+    start_y = max(350, 950 - spacing*(len(lines)-1)//2)
+    for j, line in enumerate(lines):
+        width = ld.textbbox((0, 0), line, font=font)[2]
+        ink = (255, 240, 55, 205) if j % 2 == 0 else (255, 255, 255, 205)
+        ld.text(((1080-width)//2, start_y+j*spacing), line, font=font,
+                fill=ink, stroke_width=2, stroke_fill=(0, 0, 0, 155))
+    im = Image.alpha_composite(im, layer)
+    # Preserve 130px minimum by not adding smaller subtitle/footer text.
     im.convert("RGB").save(OUT / f"slide_{i}.png", optimize=True)
 
 playlist = OUT / "slides.txt"
 playlist.write_text("".join(f"file 'slide_{i}.png'\nduration 3\n" for i in range(5)) + "file 'slide_4.png'\n", encoding="utf-8")
 
-# Original, quiet four-note musical motif (no third-party copyrighted audio).
-rate = 22050
-notes = [261.63, 329.63, 392.0, 329.63, 293.66]
-with wave.open(str(OUT / "original_audio.wav"), "wb") as wav:
-    wav.setnchannels(1)
-    wav.setsampwidth(2)
-    wav.setframerate(rate)
-    for j in range(15 * rate):
-        t = j / rate
-        frequency = notes[int(t / 0.75) % len(notes)]
-        envelope = min(1.0, (t % 0.75) * 12) * max(0.0, 1 - (t % 0.75) / 0.75)
-        value = 0.12 * envelope * (math.sin(2 * math.pi * frequency * t) + 0.2 * math.sin(4 * math.pi * frequency * t))
-        wav.writeframesraw(struct.pack("<h", int(32767 * value)))
-# Prefer the user-supplied soundtrack when it is present in the repository.
+# Only the owner's original music is allowed. Never silently substitute audio.
 custom_audio = ROOT / "assets" / "abasonplus.mp3"
-audio_path = custom_audio if custom_audio.is_file() else OUT / "original_audio.wav"
-print("Soundtrack:", audio_path, "bytes:", audio_path.stat().st_size)
+if not custom_audio.is_file() or custom_audio.stat().st_size < 1000:
+    raise RuntimeError("Original assets/abasonplus.mp3 missing; refusing to substitute soundtrack")
+audio_path = custom_audio
+print("Original soundtrack verified:", audio_path.stat().st_size, "bytes")
 subprocess.run([
     "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
     "-f", "concat", "-safe", "0", "-i", str(playlist),
     "-i", str(audio_path),
-    "-t", "15", "-r", "25", "-vf", "format=yuv420p",
+    "-t", "15", "-r", "30", "-vf", "format=yuv420p",
     "-c:v", "libx264", "-preset", "veryfast", "-crf", "24",
-    "-c:a", "aac", "-b:a", "96k", "-shortest", "-movflags", "+faststart",
+    "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart",
     str(OUT / "abasonplus_daily.mp4")
 ], cwd=OUT, check=True)
 print("Created", OUT / "abasonplus_daily.mp4")
