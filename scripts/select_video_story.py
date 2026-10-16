@@ -29,7 +29,7 @@ if not 12<=len(story.get("hook",""))<=100:
     raise RuntimeError("Hook missing or unsuitable")
 if not 7<=len(story.get("cover_query",""))<=140:
     raise RuntimeError("Cover photographic brief missing")
-story["source_kind"]="external_news_report"
+story["source_kind"]=("official_law_reference" if "bdlaws.minlaw.gov.bd" in data["source_url"] else "external_news_report")
 story["expires_on"]=today
 p=out/"daily_research_story.json"
 p.write_text(json.dumps(story,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
