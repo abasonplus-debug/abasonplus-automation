@@ -24,6 +24,8 @@ jobs:
             -t 3 -c:v libx264 -preset ultrafast -pix_fmt yuv420p \
             -c:a aac -b:a 48k -movflags +faststart /tmp/transport-only.mp4
           test -s /tmp/transport-only.mp4
+          printf 'SOURCE_VIDEO_BYTES='; wc -c </tmp/transport-only.mp4
+          printf 'SOURCE_VIDEO_MD5='; md5sum /tmp/transport-only.mp4 | cut -d' ' -f1
       - name: Send safe, non-publishing MP4 binary to Zernio presign-and-upload route
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
