@@ -154,7 +154,7 @@ def subject_guard(query, filename):
     if not name.endswith((".jpg",".jpeg",".webp")): return False
     blocked=("certificate","membership","historic","cadastral map","old map",
              "illustration","engraving","diagram","painting","poster",
-             "scan of","newspaper","cartoon","drawing","passport")
+             "scan of","newspaper","cartoon","drawing","passport","blueprint")
     if any(x in name for x in blocked): return False
     if any(x in q for x in ("advisor","meeting","consultation")):
         return any(x in name for x in ("meeting","discussion","consultation",
@@ -212,6 +212,8 @@ def image_for(query, slide_index, text_regions):
         picture=ImageOps.autocontrast(picture,cutoff=0.4)
         picture=ImageEnhance.Color(picture).enhance(1.04)
         picture=picture.filter(ImageFilter.UnsharpMask(radius=1.0,percent=50,threshold=3))
+        if not light_text_area(picture,text_regions):
+            raise RuntimeError(f"Curated scene {slide_index+1} lost text contrast after processing")
         print(f"Researched real photograph for slide {slide_index+1}: {item['scene']}",flush=True)
         return picture
 
@@ -259,17 +261,20 @@ def image_for(query, slide_index, text_regions):
                 if not relevance_guard.approved(picture, query):
                     print(f"Rejected unrelated photograph: {title[:65]}",flush=True)
                     continue
-                used_photo_titles.add(title)
                 attribution=re.sub("<[^>]+>","",meta.get("Artist",{}).get("value","")).strip()[:120]
                 extra=(" | Modified visual distributed under the same CC BY-SA license"
                        if license_name.startswith("CC BY-SA ") else "")
-                photo_credits.append(f"Slide {slide_index+1}: {title} | {attribution or 'Wikimedia contributor'} | {license_name} | {info.get('descriptionurl','')}{extra}")
                 from PIL import ImageEnhance, ImageFilter
                 picture=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
                 picture=ImageOps.autocontrast(picture,cutoff=0.5)
                 picture=ImageEnhance.Color(picture).enhance(1.04)
                 picture=ImageEnhance.Contrast(picture).enhance(1.035)
                 picture=picture.filter(ImageFilter.UnsharpMask(radius=1.2,percent=65,threshold=3))
+                if not light_text_area(picture,text_regions):
+                    print(f"Rejected processed photo with poor text contrast: {title[:65]}",flush=True)
+                    continue
+                used_photo_titles.add(title)
+                photo_credits.append(f"Slide {slide_index+1}: {title} | {attribution or 'Wikimedia contributor'} | {license_name} | {info.get('descriptionurl','')}{extra}")
                 print(f"Selected photo for slide {slide_index+1}: {title}",flush=True)
                 return picture
         except Exception as exc:
