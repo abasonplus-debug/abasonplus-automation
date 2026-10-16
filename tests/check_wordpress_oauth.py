@@ -30,6 +30,23 @@ if not token:
     print("WORDPRESS_OAUTH_STATUS=MISSING_SECRET")
     sys.exit(2)
 
+# Bearer-only identity check first: distinguishes an actually rejected secret
+# from an OAuth app client_id mismatch. Never print token, URL or response body.
+identity_req=urllib.request.Request(
+    "https://public-api.wordpress.com/rest/v1.1/me",
+    headers={"Authorization":f"Bearer {token}","User-Agent":"AbasonPlus-Auth-ReadOnly/1.0"})
+try:
+    with urllib.request.urlopen(identity_req,timeout=20) as identity_response:
+        identity=json.load(identity_response)
+    if identity.get("ID") or identity.get("id"):
+        print("WORDPRESS_BEARER_IDENTITY=VALID",flush=True)
+    else:
+        print("WORDPRESS_BEARER_IDENTITY=UNKNOWN_RESPONSE",flush=True)
+except urllib.error.HTTPError as identity_exc:
+    print(f"WORDPRESS_BEARER_IDENTITY=HTTP_{identity_exc.code}",flush=True)
+except Exception:
+    print("WORDPRESS_BEARER_IDENTITY=NETWORK_ERROR",flush=True)
+
 url="https://public-api.wordpress.com/oauth2/token-info?"+urllib.parse.urlencode(
     {"client_id":client_id,"token":token})
 req=urllib.request.Request(url,headers={"User-Agent":"AbasonPlus-OAuth-ReadOnly-Diagnostics/1.0"})
