@@ -1,0 +1,18 @@
+name: AbasonPlus News Feed Probe — Read Only
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tests/probe_live_feeds.py'
+      - '.github/workflows/probe-news-feeds.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tests/probe_live_feeds.py
+# No WordPress, Make, video, email or AI inference call.
