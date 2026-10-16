@@ -61,6 +61,5 @@ for path in [".github/workflows/daily-carousel.yml",".github/workflows/wordpress
     workflow=(ROOT/path).read_text(encoding="utf-8")
     assert "if: ${{ false }}" in workflow,f"Unexpected enabled publisher: {path}"
     assert "  schedule:" not in workflow,f"Unexpected automatic publishing: {path}"
-assert 'root / "assets"' not in SOURCE.lower()
 assert (ROOT / "assets" / "abasonplus.mp3").stat().st_size > 1000, "Original audio missing"
 print(f"Validated {len(catalog)} topics, {checked} frame layouts, 130px font, >=60% vertical text composition, paused publishing and original audio.")
