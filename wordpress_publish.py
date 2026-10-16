@@ -28,7 +28,12 @@ def main():
             with urllib.request.urlopen(req,timeout=25) as response:
                 result=json.load(response)
         except urllib.error.HTTPError as exc:
-            sys.exit(f"WordPress posts-list lookup failed: HTTP {exc.code}; stopped safely")
+            try:
+                details=json.loads(exc.read().decode("utf-8",errors="replace"))
+                reason=str(details.get("error",""))+": "+str(details.get("message",""))
+            except (ValueError, AttributeError):
+                reason="unavailable"
+            sys.exit(f"WordPress posts-list lookup failed: HTTP {exc.code}; API reason: {reason[:350]}; stopped safely")
         posts=result.get("posts",[])
         if not isinstance(posts,list):
             sys.exit("Unexpected WordPress posts-list response; stopped safely")
