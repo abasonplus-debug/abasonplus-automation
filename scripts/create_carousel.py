@@ -42,7 +42,7 @@ slides = [(hook, "শেষ পর্যন্ত দেখুন • গুর�
 hashtags = "#AbasonPlus #জমি #আবাসন #PropertyTips #RealEstateBangladesh #BangladeshProperty"
 (OUT / "title.txt").write_text(f"{hook} | AbasonPlus #Shorts", encoding="utf-8")
 (OUT / "caption.txt").write_text(
-    f"{hook}\n\n" + "\\n".join(f"✅ {i}. {tip}" for i, tip in enumerate(tips, 1))
+    f"{hook}\n\n" + "\n".join(f"✅ {i}. {tip}" for i, tip in enumerate(tips, 1))
     + f"\n\nআপনার মতে কোন বিষয়টি সবচেয়ে জরুরি?\n\nআরও তথ্য: https://abasonplus.wordpress.com/\n\n{hashtags}", encoding="utf-8"
 )
 logo = None
@@ -158,7 +158,7 @@ for i, (main, subtitle) in enumerate(slides):
     # Preserve 130px minimum by not adding smaller subtitle/footer text.
     im.convert("RGB").save(OUT / f"slide_{i}.png", optimize=True)
 
-(OUT / "description.txt").write_text(f"{hook}\\n" + "\\n".join(f"{i}. {tip}" for i, tip in enumerate(tips, 1)) + f"\\n\\nhttps://abasonplus.wordpress.com/\\n{hashtags} #Shorts", encoding="utf-8")
+(OUT / "description.txt").write_text(f"{hook}\n" + "\n".join(f"{i}. {tip}" for i, tip in enumerate(tips, 1)) + f"\n\nhttps://abasonplus.wordpress.com/\n{hashtags} #Shorts", encoding="utf-8")
 playlist = OUT / "slides.txt"
 playlist.write_text("".join(f"file 'slide_{i}.png'\nduration 3\n" for i in range(5)) + "file 'slide_4.png'\n", encoding="utf-8")
 
