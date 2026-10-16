@@ -143,7 +143,7 @@ def search_phrases(query):
         fallback=["architecture", "architect", "building"]
     else:
         fallback=[words[0], "house", "building"]
-    phrases=[query, " ".join(words[:2]), *fallback]
+    phrases=[query+" bright daylight",query," ".join(words[:2]), *fallback]
     return list(dict.fromkeys(p for p in phrases if p))
 
 def subject_guard(query, filename):
@@ -168,6 +168,15 @@ def subject_guard(query, filename):
                    "field work","measuring","topographic"))
     return True
 
+def light_text_area(picture):
+    """Reject busy/dark candidate crops before expensive semantic screening."""
+    from PIL import ImageStat
+    cropped=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
+    area=cropped.crop((65,250,1015,950)).convert("L")
+    mean=ImageStat.Stat(area).mean[0]
+    dark=sum(area.histogram()[:110])/(area.width*area.height)
+    return mean>=150 and dark<=0.27
+
 def image_for(query, slide_index):
     global relevance_guard
     if selected_photos is not None:
@@ -189,6 +198,8 @@ def image_for(query, slide_index):
             raise RuntimeError(f"Curated scene {slide_index+1} too small; refusing upscale")
         if item.get("license")!="Pexels Free License":
             raise RuntimeError("Curated photograph licensing is not verified")
+        if not light_text_area(picture):
+            raise RuntimeError(f"Curated scene {slide_index+1} is too dark behind selected navy typography")
         if relevance_guard is None: relevance_guard=PhotoRelevanceGuard()
         if not relevance_guard.approved(picture, query):
             raise RuntimeError(f"Curated scene {slide_index+1} does not match its visual brief")
@@ -237,6 +248,9 @@ def image_for(query, slide_index):
                     print(f"Skipped unreadable photo: {str(e)[:90]}",flush=True)
                     continue
                 if picture.width<1080 or picture.height<1200: continue
+                if not light_text_area(picture):
+                    print(f"Rejected dark text area: {title[:65]}",flush=True)
+                    continue
                 if relevance_guard is None:
                     relevance_guard=PhotoRelevanceGuard()
                 if not relevance_guard.approved(picture, query):
