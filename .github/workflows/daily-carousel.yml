@@ -1,53 +1,102 @@
-name: AbasonPlus Daily Carousel
-# Publishing paused: manual preview is allowed; scheduled/push publishing and outbound posting are disabled.
+name: AbasonPlus Daily Source-Checked Carousel & Video
 on:
+  schedule:
+    - cron: '45 6 * * *' # After daily 06:20 UTC WordPress schedule
   workflow_dispatch:
     inputs:
       preview_only:
-        description: 'Preview only; publishing is disabled'
+        description: 'Manual runs never publish'
         required: false
         default: 'true'
 permissions:
   contents: read
 concurrency:
-  group: abasonplus-carousel-preview
+  group: abasonplus-video-one-source-per-day
   cancel-in-progress: false
 jobs:
-  render:
+  source:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 4
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
     steps:
       - uses: actions/checkout@v4
-      - name: Install tools
+      - name: Require ChatGPT's source-checked editorial for today
+        id: check
+        run: |
+          if python3 scripts/select_video_story.py; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "No VERIFIED new editorial. Skipping video instead of recycling old content."
+          fi
+  render-and-publish:
+    needs: source
+    if: ${{ needs.source.outputs.ready == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install free local rendering/photograph QA tools
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg fonts-noto-core
-          python -m pip install -r requirements.txt
-      - name: Render MP4
-        run: python scripts/create_carousel.py
-      - name: Save video artifact
+          python3 -m pip install -r requirements.txt
+      - name: Check new 5-slide news story
+        run: python3 scripts/select_video_story.py
+      - name: Render original 9:16 Bengali slides and music MP4
+        env:
+          ABASONPLUS_DAILY_STORY: output/daily_research_story.json
+        run: python3 scripts/create_carousel.py
+      - name: Verify dimensions, original audio and visual layout before ANY publication
+        run: |
+          python3 - <<'PY'
+          from PIL import Image
+          import json,pathlib,subprocess
+          out=pathlib.Path('output')
+          meta=json.loads((out/'metadata.json').read_text(encoding='utf-8'))
+          news=json.loads((out/'daily_research_story.json').read_text(encoding='utf-8'))
+          assert meta['source_url']==news['source_url']
+          assert meta['slides']==5 and len(meta['quality'])==5
+          assert meta['verified_on']==news['verified_on']
+          assert all(x['font_px']>=130 and x['vertical_composition_coverage']>=.6 for x in meta['quality'])
+          assert all((out/f'slide_{i}.png').is_file() for i in range(5))
+          for i in range(5):
+              with Image.open(out/f'slide_{i}.png') as im: assert im.size==(1080,1920)
+          assert (out/'thumbnail.png').read_bytes()==(out/'slide_0.png').read_bytes()
+          vid=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_streams','-show_format','-of','json',str(out/'abasonplus_daily.mp4')]))
+          assert any(s['codec_type']=='video' and s['width']==1080 and s['height']==1920 for s in vid['streams'])
+          assert any(s['codec_type']=='audio' and s['codec_name']=='aac' for s in vid['streams'])
+          assert float(vid['format']['duration'])>=14
+          assert len((out/'image_credits.txt').read_text(encoding='utf-8').strip().splitlines())==5
+          print('AUTO VIDEO QA PASS: original licensed photos, 5 independent 9:16 slides, real soundtrack.')
+          PY
+      - name: Save video, slides and license/source QA results
         uses: actions/upload-artifact@v4
         with:
-          name: abasonplus-carousel
+          name: abasonplus-source-checked-video
           path: |
-            output/abasonplus_daily.mp4
+            output/*.mp4
             output/slide_*.png
             output/thumbnail.png
             output/metadata.json
+            output/image_credits.txt
             output/title.txt
             output/caption.txt
             output/description.txt
-            output/image_credits.txt
           retention-days: 7
-      - name: Send to Make webhook when configured
-        if: ${{ false }} # Disabled: do not publish without fresh approval
+      - name: Send ONE daily validated Reel and Short to Make on automatic schedule ONLY
+        if: ${{ github.event_name == 'schedule' }}
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
         run: |
-          curl --fail-with-body --retry 2 --max-time 120 \
-            -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
+          test -n "$MAKE_WEBHOOK_URL" || { echo 'Missing Make webhook; no publication'; exit 1; }
+          curl --fail-with-body --max-time 120 --retry 0 \
             -F "kind=video" \
+            -F "review_approved=true" \
+            -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
             -F "title=<output/title.txt" \
             -F "caption=<output/caption.txt" \
             -F "description=<output/description.txt" \
             "$MAKE_WEBHOOK_URL"
+# Manual dispatch is PREVIEW ONLY. No daily verified story -> NO VIDEO, never fake a live project photo.
