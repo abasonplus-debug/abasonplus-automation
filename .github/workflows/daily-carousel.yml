@@ -9,6 +9,9 @@ on:
         default: 'true'
 permissions:
   contents: read
+concurrency:
+  group: abasonplus-carousel-preview
+  cancel-in-progress: false
 jobs:
   render:
     runs-on: ubuntu-latest
@@ -29,6 +32,8 @@ jobs:
           path: |
             output/abasonplus_daily.mp4
             output/slide_*.png
+            output/thumbnail.png
+            output/metadata.json
             output/title.txt
             output/caption.txt
             output/description.txt
