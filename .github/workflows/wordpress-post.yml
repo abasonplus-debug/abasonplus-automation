@@ -1,8 +1,8 @@
-name: AbasonPlus WordPress Post by Email (PAUSED)
-# Daily 06:20 UTC preview only; NO OAuth token copying and NO sending until reauthorized.
+name: AbasonPlus Daily WordPress Post by Email
+# Daily 06:20 UTC automatic WordPress email publication; manual workflow runs preview ONLY.
 on:
   schedule:
-    - cron: '20 6 * * *' # PREVIEW ONLY until publication gates are approved
+    - cron: '20 6 * * *' # 08:20 CEST / 07:20 CET
   workflow_dispatch:
     inputs:
       preview_only:
@@ -17,7 +17,7 @@ concurrency:
 jobs:
   prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - name: Check safe email source code
@@ -31,11 +31,11 @@ jobs:
           path: output/wordpress_email_preview.json
           if-no-files-found: ignore
           retention-days: 3
-      - name: Deliver via already-configured Make webhook and Gmail
-        if: ${{ false }} # BLOCKED: reenable only after Gmail OAuth, email recipient and approval check
+      - name: Send exactly one approved article on SCHEDULED runs only
+        if: ${{ github.event_name == 'schedule' }} # manual run remains preview-only
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
-          ABASONPLUS_PUBLISH: 'DISABLED'
-          ABASONPLUS_POST_BY_EMAIL_READY: 'NOT_READY'
+          ABASONPLUS_PUBLISH: 'OWNER_APPROVED'
+          ABASONPLUS_POST_BY_EMAIL_READY: 'CONFIRMED'
         run: python3 wordpress_email_send.py
-# NOTE: no schedule while publication is paused; never use WORDPRESS_ACCESS_TOKEN.
+# GitHub does not need WORDPRESS_ACCESS_TOKEN; WordPress receives email via authorized Make Gmail.
