@@ -1,10 +1,12 @@
 # AbasonPlus — Approved Production Specification (2026-10-16)
 
-## Status: PUBLISHING PAUSED
-**No Facebook, YouTube or WordPress publishing until the owner explicitly reauthorizes it.**
-GitHub video workflow: manual preview only, publish step `if: false`.
-GitHub WordPress workflow: publishing step `if: false`.
-Make.com scenario 7968544 must remain inactive. Do not silently reactivate.
+## CURRENT STATUS (updated 16 October 2026)
+**WordPress Post-by-Email scheduled publishing is ACTIVE; Facebook/YouTube VIDEO publishing is PAUSED.**
+GitHub WordPress scheduler: once daily 06:20 UTC, next reviewed unpublished article via Make Gmail; manual preview runs do NOT send email. Make.com scenario 7968544 ACTIVE with only its WordPress delivery branch able to publish; video Facebook/YouTube modules DISABLED.
+There are **11 newly researched official-source Bengali articles** prioritized ahead of **15 older queued articles**; both are finite queues.
+Read-only official-source monitoring at 05:35 UTC collects reports for editorial review, NOT automatically written breaking-news articles.
+Full real-world publication verification is still required after next scheduled WordPress run.
+See `ABASONPLUS_EDITORIAL_POLICY.md` for detailed sourcing/freshness standards.
 
 ## Image / Slideshow Requirements
 - Individual slides: **1080×1920 pixels**, **9:16 Vertical**, 5–10 independent images.
@@ -35,8 +37,8 @@ Existing authorized destinations: AbasonPlus Facebook Page Reels, YouTube Shorts
 A GitHub safe validation workflow compiles scripts, validates 18 curated topics/90 typography layouts, checks paused publishing, produces an MP4 without outbound posting and probes metadata/FFmpeg streams.
 **Technical render success is NOT visual approval.** Wikimedia fallback search has chosen irrelevant items (historic maps/certificates and cityscape). The photography selection is still not production-quality. Do not reactivate publishing until the photo assets/selection are human-reviewed or a reliable photo QA pipeline is proven.
 
-## Scheduled times — only when explicitly reenabled
-Previous (now suspended) generation: 03:15 UTC daily, 05:15 summer / 04:15 winter Germany. WordPress: 06:20 UTC, 08:20 summer / 07:20 winter. GitHub Actions may start late; generation time != publication time.
+## Scheduling note (historical video / current WordPress)
+Previous VIDEO generation schedule (suspended): 03:15 UTC daily, 05:15 summer / 04:15 winter Germany. WordPress ACTIVE: 06:20 UTC, 08:20 summer / 07:20 winter. GitHub Actions may start late; generation time != publication time.
 
 **Never call this complete, nor publish, merely because a test workflow is green.**
 
@@ -47,7 +49,7 @@ Previous (now suspended) generation: 03:15 UTC daily, 05:15 summer / 04:15 winte
 - WordPress site 257973809 is accessible using the connected WordPress.com app (read-only test), but separate GitHub Actions secret `WORDPRESS_ACCESS_TOKEN` failed the official token-info endpoint with HTTP 400 `invalid_request` and also failed independent WordPress REST bearer identity verification with HTTP 400. The secret exists but is not usable. This requires an owner-authorized replacement; **GitHub connector cannot create/edit Actions secrets**. Do not write or publish to WordPress until the new credential passes read-only verification.
 - Previously shared OAuth app credentials appeared in chat screenshots: rotate exposed secrets/access tokens through the official provider UI; never paste tokens in chat, public repository, commits or workflow logs.
 
-## Token-free WordPress.com publishing design (2026-10-16)
+## Token-free WordPress.com publishing design — HISTORICAL setup notes; current status above supersedes older activation statements
 Official WordPress.com Free-site alternative: Post by Email (Settings → Writing → Post by Email). A unique private destination email address acts as a publishing credential. Never commit it to the public repository, paste it in chat, or expose it in logs.
 
 GitHub `wordpress_email_prepare.py` converts reviewed articles into formatted emails and checks public published slugs first (fail closed on error).
@@ -55,7 +57,7 @@ GitHub `wordpress_email_send.py` uses existing secret `MAKE_WEBHOOK_URL` and req
 Make.com scenario `7968544` is INACTIVE, with the original `kind=video` route and a new `kind=wordpress_email` route guarded by review approval. The WordPress route records key `abasonplus-wp-{{1.post_key}}` in Data Store `220796` to prevent duplicate attempts.
 The Gmail sender module is not yet attached: user must authorize Make `google-email:sendAnEmail` (request currently pending), enable Post by Email on WordPress.com, and enter its special email address privately in Make. Until then, publishing cannot work; do not claim completion or activate.
 
-## Gmail authorization completed (2026-10-16)
+## Gmail authorization completed — HISTORICAL setup notes; production recipient is now configured privately
 Make Gmail connection `11995107` is authorized and OK (gmail.readonly + gmail.send). The WordPress branch in inactive scenario `7968544` now has:
 - approved request filter and duplicate slug guard (module 7)
 - Gmail `sendAnEmail` (module 8), subject from `{{1.subject}}`, HTML body from `{{1.html_content}}`
@@ -70,3 +72,11 @@ Make.com scenario `7968544` is ACTIVE. WordPress JSON webhook fields were learne
 **Facebook and YouTube video posting remains DISABLED** in Make.com modules 3 and 4 and in the GitHub video workflow, until visual image quality is approved. There are 15 curated WordPress articles queued, not an unlimited content generator. Real-world email-to-post delivery remains to be verified after the first scheduled publication; Make webhook acceptance alone is not proof of publication.
 
 **Security:** the Post-by-Email address appeared in an earlier screenshot. Rotate it through WordPress Settings -> Writing and update the private Make Gmail recipient before treating the address as secure. If rotated, update Make before future scheduled sends or delivery will fail.
+
+## Audience-oriented reporting upgrade — 16 Oct 2026
+- `ABASONPLUS_EDITORIAL_POLICY.md`: authoritative-source-first content policy, project-status labels, risks vs opportunities, building-code safety rules and no guaranteed profits.
+- `content/researched_wordpress_posts.json`: 11 new project, land-share, material quality, earthquake and land-service articles backed by links to government/legal sources, with `verified_on` and `expires_on` where time-sensitive. The publisher puts these before older generic articles.
+- `wordpress_email_prepare.py` rejects stale researched facts, missing citations and expired government-project status rather than calling them current. Static articles are not automatic live fact research.
+- `content/topics.json`: 32 video themes, including 14 new high-interest topics. Video rendering skips expired dated topics; still PAUSED from social publishing until photographs pass manual approval.
+- `.github/workflows/official-source-monitor.yml`: read-only official source report at 05:35 UTC daily (saved as 7-day GitHub artifact). Monitoring is NOT independent verification and cannot create fresh researched stories by itself.
+- `tests/validate_researched_posts.py` checks sources, article structure, dates and duplicate slugs without publishing.
