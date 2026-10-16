@@ -35,3 +35,21 @@ Before enabling actual TikTok delivery:
 - Zernio account pricing: https://docs.zernio.com/pricing
 
 **Status: Preview rendering works. TikTok account authorization and actual media upload path remain unverified. No TikTok video was posted.**
+
+## Confirmed new integration results — 16 October 2026
+- The Zernio connection is live and returns a connected, active TikTok account `@abasonplus` with `video.publish` and `video.upload` permissions. No TikTok posts were made by ChatGPT.
+- The existing authenticated Zernio Make connector successfully requested a signed temporary MP4 upload URL through `/media/presign` (no additional API key or paid hosting).
+- GitHub generated an isolated 24,552-byte transport-test MP4. Make received it, then the Make HTTP v4 module uploaded it as `video/mp4` to Zernio R2 temporary storage with HTTP 200.
+- Byte integrity was independently verified: uploaded R2 ETag matched the original sample's MD5 exactly. Test GitHub run: `38915481663`; Make execution: `ac35ed08ec204ce8a248f421eeccd82d`. This proves the media transport, **not** TikTok publication.
+- The Make router has a separate TikTok route behind **`kind=video`, `review_approved=true`, `visual_qa_passed=true`, and `tiktok_publish_approved=true`** (a separate transport-test-only alternate).
+- The TikTok route has a per-day Data Store key module after media upload using `{{1.tiktok_post_key}}` to avoid duplicate posting attempts.
+- The existing GitHub scheduled video workflow maps `tiktok_caption` and a TikTok post key but ALWAYS sends `tiktok_publish_approved=false`; therefore daily video publication to TikTok **cannot trigger** yet. The existing WordPress/Facebook/YouTube routes remain unchanged.
+- Final TikTok create-post module and platform return-status verification are PENDING. TikTok's Content Posting API requires creator content-preview and express-consent signals and the account's permitted privacy options. Do not fabricate creator preview confirmation.
+- The user's older Zernio API key was visible in a screenshot. The authorized Make connection has been retested successfully, but a working connection alone cannot prove that the previous exposed key was revoked. Any new API key must remain private.
+- Zernio's temporary uploaded media deletes after seven days unless attached to a Zernio post, and uploads may not be scheduled beyond its allowed window. No monetary paid upgrade is part of this implementation.
+
+Official references:
+https://docs.zernio.com/guides/media-uploads
+https://docs.zernio.com/platforms/tiktok
+
+**TikTok AUTO-PUBLISH STATUS: BLOCKED BY CONTENT-PREVIEW/CONSENT AND FINAL MODULE; NOT COMPLETE.**
