@@ -1,0 +1,24 @@
+name: AbasonPlus Learn WordPress Webhook Schema (NO PUBLICATION)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/learn-wordpress-schema.yml'
+permissions:
+  contents: read
+jobs:
+  teach-fields-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Deliver harmless schema to inactive Make webhook
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        shell: bash
+        run: |
+          test -n "$MAKE_WEBHOOK_URL" || { echo "Webhook secret unavailable"; exit 1; }
+          curl --fail-with-body --silent --show-error --max-time 20 \
+            -H 'Content-Type: application/json' \
+            --data '{"kind":"wordpress_email","review_approved":"false","status":"preview_only","post_key":"SCHEMA_ONLY_NEVER_PUBLISH","subject":"Schema-only event, DO NOT SEND","html_content":"<p>Non-publishing schema sample</p>"}' \
+            "$MAKE_WEBHOOK_URL" >/dev/null
+          echo 'A NON-PUBLISHING sample was sent for field detection. NO EMAIL WAS SENT.'
