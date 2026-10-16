@@ -3,6 +3,8 @@
 import urllib.request,xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
 feeds=[
+("TBS live", "https://www.tbsnews.net/top-news/rss.xml"),
+("TBS business","https://www.tbsnews.net/economy/rss.xml"),
 ("BSS RSS", "https://www.bssnews.net/rss"),
 ("BSS latest", "https://www.bssnews.net/rss/news"),
 ("Google metro", "https://news.google.com/rss/search?q=site%3Abssnews.net%20Bangladesh%20metro%20rail%20land&hl=en-BD&gl=BD&ceid=BD:en"),
@@ -13,7 +15,7 @@ for label,url in feeds:
  try:
   req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0 (AbasonPlus Education Feed Monitor)"})
   with urllib.request.urlopen(req,timeout=14) as resp:
-   data=resp.read(120_000)
+   data=resp.read(900_000)
    print(label,"HTTP",resp.status,"TYPE",resp.headers.get("content-type"),flush=True)
   root=ET.fromstring(data)
   items=root.findall(".//item")
