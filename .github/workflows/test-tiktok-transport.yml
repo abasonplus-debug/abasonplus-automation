@@ -24,7 +24,7 @@ jobs:
             -t 3 -c:v libx264 -preset ultrafast -pix_fmt yuv420p \
             -c:a aac -b:a 48k -movflags +faststart /tmp/transport-only.mp4
           test -s /tmp/transport-only.mp4
-      - name: Upload the transport sample to temporary Zernio storage through Make
+      - name: Request temporary Zernio upload ticket via Make (does NOT publish)
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
         run: |
@@ -33,6 +33,25 @@ jobs:
             -F "kind=tiktok_transport_probe" \
             -F "review_approved=false" \
             -F "video=@/tmp/transport-only.mp4;type=video/mp4" \
-            "$MAKE_WEBHOOK_URL" >/dev/null
-          echo "Sent safe transport-only MP4. No TikTok social post and no publication attempt."
+            "$MAKE_WEBHOOK_URL" -o /tmp/upload_ticket.json
+          python3 - <<'PY'
+          import json,urllib.parse
+          with open("/tmp/upload_ticket.json") as f: p=json.load(f)
+          u=urllib.parse.urlparse(p["uploadUrl"])
+          v=urllib.parse.urlparse(p["publicUrl"])
+          assert u.scheme=="https" and u.hostname and u.hostname.endswith(".r2.cloudflarestorage.com")
+          assert v.scheme=="https" and v.hostname=="media.zernio.com"
+          print("Temporary upload ticket host and public CDN verified; URLs not disclosed.")
+          PY
+      - name: Upload the MP4 straight from GitHub to Zernio storage, without TikTok posting
+        run: |
+          UPLOAD_URL=$(python3 -c 'import json; print(json.load(open("/tmp/upload_ticket.json"))["uploadUrl"])')
+          PUBLIC_URL=$(python3 -c 'import json; print(json.load(open("/tmp/upload_ticket.json"))["publicUrl"])')
+          curl --fail-with-body --silent --show-error --max-time 55 \
+            -X PUT -H 'Content-Type: video/mp4' \
+            --data-binary @/tmp/transport-only.mp4 "$UPLOAD_URL" -o /dev/null
+          curl --fail --silent --show-error -L --max-time 30 \
+            -H "Range: bytes=0-1023" "$PUBLIC_URL" -o /tmp/zernio-media-proof.bin
+          test -s /tmp/zernio-media-proof.bin
+          echo "Direct MP4 delivery verified using temporary Zernio storage. TikTok posts sent: ZERO."
 # This workflow contains no TikTok post action. The matching Make route ends at temporary-media upload.
