@@ -1,0 +1,16 @@
+name: AbasonPlus WordPress Post (manual test)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish one reviewed post
+        env:
+          WPCOM_ACCESS_TOKEN: ${{ secrets.WPCOM_ACCESS_TOKEN }}
+          WPCOM_SITE_ID: "257973809"
+        run: python3 wordpress_publish.py
