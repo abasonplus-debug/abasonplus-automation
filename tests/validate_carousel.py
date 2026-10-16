@@ -57,13 +57,16 @@ for topic in catalog:
         assert bbox[3]<1750,(topic["title"],idx,"UI safe region overflow")
         checked+=1
 
-# Video remains intentionally disabled pending visual quality approval.
+# Only scheduled and sourced, QA-passed video uploads may publish.
 video_workflow=(ROOT/".github/workflows/daily-carousel.yml").read_text(encoding="utf-8")
-assert "if: ${{ false }}" in video_workflow,"Video publisher must remain disabled"
-assert "  schedule:" not in video_workflow,"Video publisher schedule must stay paused"
+assert "cron: '45 6 * * *'" in video_workflow,"Unexpected scheduled video time"
+assert "needs.source.outputs.ready == 'true'" in video_workflow,"Video missing fresh daily editorial gate"
+assert "if: ${{ github.event_name == 'schedule' }}" in video_workflow,"Manual video workflow must be preview-only"
+assert "python3 scripts/select_video_story.py" in video_workflow,"Mandatory topic-and-source gate missing"
+assert "Verify dimensions, original audio and visual layout" in video_workflow,"Mandatory rendering QA missing"
 # Owner explicitly enabled ONLY WordPress Post by Email, scheduled once daily.
 wp_workflow=(ROOT/".github/workflows/wordpress-post.yml").read_text(encoding="utf-8")
 assert "cron: '20 6 * * *'" in wp_workflow,"WordPress expected 06:20 UTC schedule"
 assert "github.event_name == 'schedule'" in wp_workflow,"WordPress manual runs must stay preview-only"
 assert (ROOT / "assets" / "abasonplus.mp3").stat().st_size > 1000, "Original audio missing"
-print(f"Validated {len(catalog)} topics, {checked} frame layouts, 130px font, >=60% vertical text composition, paused VIDEO publishing, separately scheduled WordPress, and original audio.")
+print(f"Validated {len(catalog)} topics, {checked} frame layouts, 130px font, >=60% vertical text composition, source-gated VIDEO publishing, separately scheduled WordPress, and original audio.")
