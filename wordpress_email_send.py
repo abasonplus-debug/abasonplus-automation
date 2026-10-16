@@ -5,6 +5,7 @@ Security: requires 3 independent gates; cannot run in current paused workflow.
 No WordPress OAuth, SMTP password, email recipient, or Gmail token is stored here.
 """
 import json,os,pathlib,sys
+from datetime import datetime,timezone
 from urllib.request import Request,urlopen
 from urllib.error import HTTPError,URLError
 ROOT=pathlib.Path(__file__).resolve().parent
@@ -31,5 +32,7 @@ try:
             sys.exit(f"Make delivery failed HTTP {response.status}")
 except (HTTPError,URLError,TimeoutError) as error:
     sys.exit(f"Make delivery failed: {type(error).__name__}; manual review before retry.")
+receipt={"status":"make_accepted","post_key":payload["post_key"],"sent_utc":datetime.now(timezone.utc).isoformat()}
+(ROOT/"output"/"wordpress_send_receipt.json").write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf-8")
 print("Make webhook accepted one email-publish request.")
 print("This is NOT a WordPress publish confirmation; verify WordPress URL before marking published.")
