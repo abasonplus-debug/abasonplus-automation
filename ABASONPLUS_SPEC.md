@@ -39,3 +39,10 @@ A GitHub safe validation workflow compiles scripts, validates 18 curated topics/
 Previous (now suspended) generation: 03:15 UTC daily, 05:15 summer / 04:15 winter Germany. WordPress: 06:20 UTC, 08:20 summer / 07:20 winter. GitHub Actions may start late; generation time != publication time.
 
 **Never call this complete, nor publish, merely because a test workflow is green.**
+
+## 2026-10-16 Photo / OAuth remediation findings
+- Photo screening now includes an offline CLIP semantic relevance model. Wikimedia/Openverse broad keyword searching alone produced unrelated historical/scanned materials; automated ranking alone cannot guarantee visual fidelity.
+- The `জমির নথি` topic has FIVE curated photo source URLs with photographer provenance and Pexels license recorded in `content/researched_photos.json`. The safe CI `38858152894` rendered five topic-related 1080×1920 slides and MP4 successfully. These images are **PREVIEW ONLY**; user has not approved publication.
+- Other topics still need reliable vetted photographic assets; reject or hold when there is no photographic match, rather than publishing unrelated stock photos.
+- WordPress site 257973809 is accessible using the connected WordPress.com app (read-only test), but separate GitHub Actions secret `WORDPRESS_ACCESS_TOKEN` failed the official token-info endpoint with HTTP 400 `invalid_request` and also failed independent WordPress REST bearer identity verification with HTTP 400. The secret exists but is not usable. This requires an owner-authorized replacement; **GitHub connector cannot create/edit Actions secrets**. Do not write or publish to WordPress until the new credential passes read-only verification.
+- Previously shared OAuth app credentials appeared in chat screenshots: rotate exposed secrets/access tokens through the official provider UI; never paste tokens in chat, public repository, commits or workflow logs.
