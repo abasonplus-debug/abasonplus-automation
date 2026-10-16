@@ -63,49 +63,81 @@ def centered(draw, text, y, font, color):
     draw.text(((1080 - width)/2, y), text, font=font, fill=color, direction="ltr")
 
 # Real licensed photographs; do not fabricate or reuse scenes.
+def search_phrases(query):
+    words=query.split()
+    q=query.lower()
+    fallback=[]
+    if any(t in q for t in ("deed","document","paper","receipt","contract","record","agreement")):
+        fallback=["documents", "paperwork", "paper"]
+    elif any(t in q for t in ("survey","map","cadastral","boundary")):
+        fallback=["surveying", "land surveying", "field"]
+    elif any(t in q for t in ("land","field","farm","rural","garden","tree")):
+        fallback=["agricultural land", "farmland", "field"]
+    elif any(t in q for t in ("house","home","roof","building","apartment","construction")):
+        fallback=["residential building", "house", "construction"]
+    elif any(t in q for t in ("electric","wiring","circuit","socket")):
+        fallback=["electrician", "electrical wiring", "electrical"]
+    elif any(t in q for t in ("water","plumb","bathroom","drain","gutter")):
+        fallback=["plumbing", "water pipe", "bathroom"]
+    elif any(t in q for t in ("architect","blueprint","floor plan")):
+        fallback=["architecture", "architect", "building"]
+    else:
+        fallback=[words[0], "house", "building"]
+    phrases=[query, " ".join(words[:2]), *fallback]
+    return list(dict.fromkeys(p for p in phrases if p))
+
 def image_for(query, slide_index):
-    params = urlencode({"action":"query","generator":"search",
-        "gsrsearch":f"filetype:bitmap {query}","gsrnamespace":6,
-        "gsrlimit":20,"prop":"imageinfo","iiprop":"url|extmetadata",
-        "iiurlwidth":1800,"format":"json"})
-    api = "https://commons.wikimedia.org/w/api.php?" + params
-    try:
-        req = Request(api,headers={"User-Agent":"AbasonPlusEducationBot/2.0 (https://abasonplus.wordpress.com/)"})
-        with urlopen(req,timeout=20) as response:
-            pages=json.load(response).get("query",{}).get("pages",{})
-        print(f"Commons search {query!r}: {len(pages)} results",flush=True)
-        for page in sorted(pages.values(),key=lambda p:p.get("index",999)):
-            title=page.get("title","")
-            if title in used_photo_titles: continue
-            info=(page.get("imageinfo") or [{}])[0]
-            meta=info.get("extmetadata") or {}
-            license_name=re.sub("<[^>]+>","",meta.get("LicenseShortName",{}).get("value","")).strip()
-            is_public=license_name.lower() in ("cc0","public domain","public domain mark")
-            is_cc_by=license_name.startswith("CC BY ") and "SA" not in license_name.upper() and "NC" not in license_name.upper()
-            if not (is_public or is_cc_by):
-                print(f"Skipped license: {title[:40]} | {license_name}",flush=True)
-                continue
-            url=info.get("thumburl") or info.get("url")
-            if not url: continue
-            with urlopen(Request(url,headers={"User-Agent":"AbasonPlusEducationBot/2.0"}),timeout=20) as response:
-                raw=response.read(9_000_000)
-            picture=Image.open(io.BytesIO(raw)).convert("RGB")
-            if picture.width<1080 or picture.height<1400:
-                print(f"Skipped small: {title[:40]} ({picture.width}x{picture.height})",flush=True)
-                continue
-            used_photo_titles.add(title)
-            attribution=re.sub("<[^>]+>","",meta.get("Artist",{}).get("value","")).strip()[:120]
-            photo_credits.append(f"Slide {slide_index+1}: {title} | {attribution or 'Wikimedia contributor'} | {license_name} | {info.get('descriptionurl','')}")
-            from PIL import ImageEnhance, ImageFilter
-            picture=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
-            picture=ImageOps.autocontrast(picture,cutoff=0.5)
-            picture=ImageEnhance.Color(picture).enhance(1.04)
-            picture=ImageEnhance.Contrast(picture).enhance(1.035)
-            picture=picture.filter(ImageFilter.UnsharpMask(radius=1.2,percent=65,threshold=3))
-            print(f"Slide {slide_index+1} photo: {title}")
-            return picture
-    except Exception as exc:
-        print(f"Photo fetch failed: {query}: {str(exc)[:180]}",flush=True)
+    for phrase in search_phrases(query):
+        params=urlencode({"action":"query","generator":"search",
+            "gsrsearch":f"filetype:bitmap {phrase}","gsrnamespace":6,
+            "gsrlimit":35,"prop":"imageinfo","iiprop":"url|extmetadata|size",
+            "iiurlwidth":1800,"format":"json"})
+        api="https://commons.wikimedia.org/w/api.php?"+params
+        try:
+            req=Request(api,headers={"User-Agent":"AbasonPlusEducationBot/2.0 (https://abasonplus.wordpress.com/)"})
+            with urlopen(req,timeout=18) as response:
+                pages=json.load(response).get("query",{}).get("pages",{})
+            print(f"Photo search {phrase!r}: {len(pages)} candidates",flush=True)
+            for page in sorted(pages.values(),key=lambda p:p.get("index",999)):
+                title=page.get("title","")
+                if title in used_photo_titles: continue
+                info=(page.get("imageinfo") or [{}])[0]
+                meta=info.get("extmetadata") or {}
+                license_name=re.sub("<[^>]+>","",meta.get("LicenseShortName",{}).get("value","")).strip()
+                is_public=license_name.lower() in ("cc0","public domain","public domain mark")
+                is_cc=license_name.startswith("CC BY ") or license_name.startswith("CC BY-SA ")
+                if not (is_public or is_cc): continue
+                # Exclude illustrations, logo graphics and thumbnail-sized photos.
+                lower=title.lower()
+                if any(term in lower for term in ("diagram","screenshot","icon","logo","cartoon","clipart",".svg",".gif",".pdf")):
+                    continue
+                iw,ih=info.get("width",0),info.get("height",0)
+                if iw and ih and (iw<1080 or ih<1200): continue
+                url=info.get("thumburl") or info.get("url")
+                if not url: continue
+                try:
+                    with urlopen(Request(url,headers={"User-Agent":"AbasonPlusEducationBot/2.0"}),timeout=18) as response:
+                        raw=response.read(10_000_000)
+                    picture=Image.open(io.BytesIO(raw)).convert("RGB")
+                except Exception as e:
+                    print(f"Skipped unreadable photo: {str(e)[:90]}",flush=True)
+                    continue
+                if picture.width<1080 or picture.height<1200: continue
+                used_photo_titles.add(title)
+                attribution=re.sub("<[^>]+>","",meta.get("Artist",{}).get("value","")).strip()[:120]
+                extra=(" | Modified visual distributed under the same CC BY-SA license"
+                       if license_name.startswith("CC BY-SA ") else "")
+                photo_credits.append(f"Slide {slide_index+1}: {title} | {attribution or 'Wikimedia contributor'} | {license_name} | {info.get('descriptionurl','')}{extra}")
+                from PIL import ImageEnhance, ImageFilter
+                picture=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
+                picture=ImageOps.autocontrast(picture,cutoff=0.5)
+                picture=ImageEnhance.Color(picture).enhance(1.04)
+                picture=ImageEnhance.Contrast(picture).enhance(1.035)
+                picture=picture.filter(ImageFilter.UnsharpMask(radius=1.2,percent=65,threshold=3))
+                print(f"Selected photo for slide {slide_index+1}: {title}",flush=True)
+                return picture
+        except Exception as exc:
+            print(f"Photo search failed {phrase!r}: {str(exc)[:120]}",flush=True)
     return None
 
 # Independent full-bleed frames; translucent Bengali, true 130px font size.
