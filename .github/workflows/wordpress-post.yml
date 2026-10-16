@@ -1,16 +1,21 @@
-name: AbasonPlus WordPress Post (manual test)
+name: AbasonPlus Daily WordPress Post
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '20 6 * * *'
 permissions:
   contents: read
+concurrency:
+  group: abasonplus-wordpress-publisher
+  cancel-in-progress: false
 jobs:
   publish:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Publish one reviewed post
+      - name: Publish next reviewed Bengali post
         env:
-          WPCOM_ACCESS_TOKEN: ${{ secrets.WPCOM_ACCESS_TOKEN }}
+          WORDPRESS_ACCESS_TOKEN: ${{ secrets.WORDPRESS_ACCESS_TOKEN }}
           WPCOM_SITE_ID: "257973809"
         run: python3 wordpress_publish.py
