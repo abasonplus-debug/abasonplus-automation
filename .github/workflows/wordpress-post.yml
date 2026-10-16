@@ -1,5 +1,5 @@
 name: AbasonPlus Daily WordPress Post
-# Publishing paused at user's request. No scheduled, push or manual triggers.
+# Publishing paused: manual preview is allowed; scheduled/push publishing and outbound posting are disabled.
 on:
   workflow_dispatch:
     inputs:
