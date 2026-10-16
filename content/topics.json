@@ -412,5 +412,358 @@
         "query": "family emergency planning"
       }
     ]
+  },
+  {
+    "title": "সরকারি প্রকল্পে জমি",
+    "hook": "প্রকল্প শুনে জমি কিনবেন?",
+    "cover_query": "government project road aerial photography",
+    "tips": [
+      {
+        "text": "সরকারি প্রকল্পের ধাপ দেখুন",
+        "query": "government infrastructure construction"
+      },
+      {
+        "text": "অধিগ্রহণের তথ্য যাচাই করুন",
+        "query": "land survey government boundary"
+      },
+      {
+        "text": "মৌজা ও রাস্তা মিলিয়ে নিন",
+        "query": "rural road farmland"
+      },
+      {
+        "text": "লাভ নিশ্চিত ধরে নেবেন না",
+        "query": "property investment document meeting"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://investbangladesh.gov.bd/press-release/invest-bangladesh-reports-progress-under-180-day-plan",
+    "expires_on": "2026-11-16"
+  },
+  {
+    "title": "মেট্রোরেলের পাশে জমি",
+    "hook": "মেট্রোরেল পাশে জমি কিনবেন?",
+    "cover_query": "urban metro station modern Bangladesh",
+    "tips": [
+      {
+        "text": "স্টেশনের অবস্থান যাচাই করুন",
+        "query": "metro station entrance"
+      },
+      {
+        "text": "জমি অধিগ্রহণের তথ্য দেখুন",
+        "query": "urban construction corridor"
+      },
+      {
+        "text": "রাস্তা ও জলাবদ্ধতা যাচাই করুন",
+        "query": "urban street drainage"
+      },
+      {
+        "text": "সাম্প্রতিক বিক্রির দাম মিলান",
+        "query": "real estate property documents"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://www.bssnews.net/news/422295",
+    "expires_on": "2026-11-16"
+  },
+  {
+    "title": "অর্থনৈতিক অঞ্চলে জমি",
+    "hook": "শিল্পাঞ্চলের পাশে জমির ঝুঁকি?",
+    "cover_query": "industrial zone modern factories",
+    "tips": [
+      {
+        "text": "প্রকল্প চলছে নাকি প্রস্তাব?",
+        "query": "industrial zone construction"
+      },
+      {
+        "text": "জমির ব্যবহার অনুমোদন দেখুন",
+        "query": "industrial land zoning"
+      },
+      {
+        "text": "পরিবেশ ও পানি পরীক্ষা করুন",
+        "query": "industrial water drainage"
+      },
+      {
+        "text": "দামের প্রমাণ যাচাই করুন",
+        "query": "real estate desk documents"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://nsez.gov.bd/?page_id=639",
+    "expires_on": "2026-11-16"
+  },
+  {
+    "title": "ল্যান্ড শেয়ার চুক্তি",
+    "hook": "ল্যান্ড শেয়ারে আগে এই ৪টি!",
+    "cover_query": "real estate developer landowner agreement",
+    "tips": [
+      {
+        "text": "ফ্ল্যাটের ভাগ লিখে নিন",
+        "query": "apartment architectural plan"
+      },
+      {
+        "text": "নির্মাণের সময়সীমা লিখুন",
+        "query": "house construction schedule"
+      },
+      {
+        "text": "আমমোক্তারনামা যাচাই করুন",
+        "query": "property legal paperwork"
+      },
+      {
+        "text": "আইনজীবী দিয়ে চুক্তি পড়ান",
+        "query": "lawyer real estate consultation"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://bdlaws.minlaw.gov.bd/act-1055/act-chapter-print-1694.html"
+  },
+  {
+    "title": "ডেভেলপার বাছাই",
+    "hook": "ডেভেলপার বিশ্বাসযোগ্য তো?",
+    "cover_query": "real estate developer meeting clients",
+    "tips": [
+      {
+        "text": "নিবন্ধন ও প্রকল্প যাচাই করুন",
+        "query": "real estate office registration"
+      },
+      {
+        "text": "পুরোনো কাজ সরেজমিনে দেখুন",
+        "query": "finished apartment building"
+      },
+      {
+        "text": "চুক্তিতে বিলম্বের শর্ত রাখুন",
+        "query": "real estate contract signing"
+      },
+      {
+        "text": "মালিকানা নথি যাচাই করুন",
+        "query": "property land documentation"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://bdlaws.minlaw.gov.bd/act-1055/act-chapter-print-1694.html"
+  },
+  {
+    "title": "ভূমিকম্প নিরাপদ নকশা",
+    "hook": "ভূমিকম্পে বাড়ি কতটা নিরাপদ?",
+    "cover_query": "structural engineer concrete building",
+    "tips": [
+      {
+        "text": "BNBC নকশা যাচাই করুন",
+        "query": "structural design blueprint"
+      },
+      {
+        "text": "মাটি পরীক্ষার নথি দেখুন",
+        "query": "soil sampling geotechnical"
+      },
+      {
+        "text": "প্রকৌশলীর তত্ত্বাবধান নিন",
+        "query": "structural engineer construction site"
+      },
+      {
+        "text": "মান পরীক্ষার রিপোর্ট রাখুন",
+        "query": "concrete materials laboratory"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://hbri.gov.bd/site/page/a5c13d7e-212d-4a16-bbf9-3e1ad937ba56/"
+  },
+  {
+    "title": "ভালো রড বাছাই",
+    "hook": "রড কিনবেন? ব্র্যান্ডই সব নয়!",
+    "cover_query": "reinforcement steel bars building construction",
+    "tips": [
+      {
+        "text": "নকশার গ্রেড মিলিয়ে নিন",
+        "query": "engineer steel bars"
+      },
+      {
+        "text": "ব্যাচ নম্বর ও চালান দেখুন",
+        "query": "construction materials paperwork"
+      },
+      {
+        "text": "মান পরীক্ষার রিপোর্ট যাচাই করুন",
+        "query": "steel tensile testing laboratory"
+      },
+      {
+        "text": "নিজে গ্রেড বদলাবেন না",
+        "query": "civil engineer construction meeting"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://hbri.gov.bd/site/page/a5c13d7e-212d-4a16-bbf9-3e1ad937ba56/"
+  },
+  {
+    "title": "সিমেন্টের মান",
+    "hook": "সিমেন্ট কেনার আগে ৪টি দেখুন!",
+    "cover_query": "cement bags construction warehouse",
+    "tips": [
+      {
+        "text": "কাজ অনুযায়ী ধরন জানুন",
+        "query": "cement construction material"
+      },
+      {
+        "text": "প্যাকেট ও ব্যাচ যাচাই করুন",
+        "query": "cement bag manufacturer label"
+      },
+      {
+        "text": "সংরক্ষণের অবস্থা দেখুন",
+        "query": "dry cement warehouse"
+      },
+      {
+        "text": "প্রয়োজনীয় পরীক্ষা করান",
+        "query": "construction concrete laboratory"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://hbri.gov.bd/site/page/a5c13d7e-212d-4a16-bbf9-3e1ad937ba56/"
+  },
+  {
+    "title": "ইট বনাম ব্লক",
+    "hook": "ইট ভালো নাকি ব্লক?",
+    "cover_query": "brick wall concrete block wall house",
+    "tips": [
+      {
+        "text": "নকশায় কোনটি মানায় দেখুন",
+        "query": "architect wall construction plan"
+      },
+      {
+        "text": "ওজনের প্রভাব যাচাই করুন",
+        "query": "concrete building blocks"
+      },
+      {
+        "text": "পানি ও তাপের আচরণ দেখুন",
+        "query": "building wall weatherproofing"
+      },
+      {
+        "text": "মোট খরচ তুলনা করুন",
+        "query": "construction budget documents"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://hbri.gov.bd/site/page/a5c13d7e-212d-4a16-bbf9-3e1ad937ba56/"
+  },
+  {
+    "title": "পুরোনো ভবন নিরাপত্তা",
+    "hook": "পুরোনো বাড়িতে ফাটল?",
+    "cover_query": "old apartment building exterior",
+    "tips": [
+      {
+        "text": "নকশা ও পরিবর্তন যাচাই করুন",
+        "query": "old building blueprint"
+      },
+      {
+        "text": "ফাটলের তথ্য লিখে রাখুন",
+        "query": "building wall crack"
+      },
+      {
+        "text": "প্রকৌশলীর মূল্যায়ন নিন",
+        "query": "structural engineer building inspection"
+      },
+      {
+        "text": "শুধু রং দিয়ে ঢাকবেন না",
+        "query": "wall repair inspection"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://hbri.gov.bd/site/page/a5c13d7e-212d-4a16-bbf9-3e1ad937ba56/"
+  },
+  {
+    "title": "ই নামজারি যাচাই",
+    "hook": "ই-নামজারি জানেন তো?",
+    "cover_query": "land documents online laptop",
+    "tips": [
+      {
+        "text": "সরকারি সেবা ব্যবহার করুন",
+        "query": "person using official website laptop"
+      },
+      {
+        "text": "দাগ ও খতিয়ান মিলিয়ে নিন",
+        "query": "cadastral property documents"
+      },
+      {
+        "text": "বন্ধক ও দায় যাচাই করুন",
+        "query": "bank property loan paperwork"
+      },
+      {
+        "text": "প্রয়োজনে ভূমি অফিসে যান",
+        "query": "government land records office"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://mutation.land.gov.bd/nirdeshika"
+  },
+  {
+    "title": "ফ্ল্যাট কেনায় গোপন খরচ",
+    "hook": "ফ্ল্যাটের দামের বাইরে কত খরচ?",
+    "cover_query": "modern apartment buyer calculator",
+    "tips": [
+      {
+        "text": "রেজিস্ট্রেশনের খরচ জানুন",
+        "query": "property tax paperwork"
+      },
+      {
+        "text": "পার্কিংয়ের অধিকার যাচাই করুন",
+        "query": "apartment parking area"
+      },
+      {
+        "text": "সার্ভিস চার্জ বুঝে নিন",
+        "query": "apartment management office"
+      },
+      {
+        "text": "মেরামত খরচের হিসাব রাখুন",
+        "query": "home repair budgeting"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://ss.pwd.gov.bd/download"
+  },
+  {
+    "title": "বাড়ির মাটি পরীক্ষা",
+    "hook": "বাড়ির আগে মাটি পরীক্ষা কেন?",
+    "cover_query": "soil engineer building site",
+    "tips": [
+      {
+        "text": "মাটির রিপোর্ট সংগ্রহ করুন",
+        "query": "geotechnical soil survey"
+      },
+      {
+        "text": "ভিত্তির নকশা মিলিয়ে দেখুন",
+        "query": "structural foundation blueprint"
+      },
+      {
+        "text": "ভরাট জমি পরীক্ষা করান",
+        "query": "filled land construction site"
+      },
+      {
+        "text": "প্রকৌশলীর মতামত নিন",
+        "query": "civil engineer consultation"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://ss.pwd.gov.bd/download"
+  },
+  {
+    "title": "দলিলে ভুল ধরুন",
+    "hook": "জমির দলিলে ভুল আছে?",
+    "cover_query": "land deed documents on office desk",
+    "tips": [
+      {
+        "text": "মালিকের নাম মিলিয়ে নিন",
+        "query": "property ownership document"
+      },
+      {
+        "text": "দাগ নম্বর যাচাই করুন",
+        "query": "land parcel survey map"
+      },
+      {
+        "text": "সীমানা সরেজমিনে দেখুন",
+        "query": "land boundary survey"
+      },
+      {
+        "text": "আইনজীবীর মতামত নিন",
+        "query": "property lawyer office"
+      }
+    ],
+    "verified_on": "2026-10-16",
+    "source_url": "https://ss.pwd.gov.bd/download"
   }
 ]
