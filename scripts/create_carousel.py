@@ -50,6 +50,15 @@ photo_credits = []
 used_photo_titles = set()
 quality_results = []
 relevance_guard = None
+# Research-backed references are preview candidates, NOT user-approved publications.
+researched_photos=json.loads((ROOT/"content"/"researched_photos.json").read_text(encoding="utf-8"))
+selected_photos=researched_photos.get(heading)
+if selected_photos is not None:
+    if len(selected_photos)!=len(slides):
+        raise RuntimeError("Research photo manifest does not match slide count")
+    if len({x["url"] for x in selected_photos}) != len(selected_photos):
+        raise RuntimeError("Photo manifest repeats an image")
+
 logo = None
 try:
     logo_path = OUT / "logo.png"
@@ -111,6 +120,32 @@ def subject_guard(query, filename):
     return True
 
 def image_for(query, slide_index):
+    if selected_photos is not None:
+        from urllib.parse import urlparse
+        item=selected_photos[slide_index]
+        url=item["url"]
+        if urlparse(url).hostname!="images.pexels.com":
+            raise RuntimeError("Unapproved photographic host in manifest")
+        if not item["source"].startswith("https://www.pexels.com/photo/"):
+            raise RuntimeError("Missing verified photographer source page")
+        try:
+            req=Request(url,headers={"User-Agent":"Mozilla/5.0 AbasonPlus preview research"})
+            with urlopen(req,timeout=30) as response:
+                raw=response.read(17_000_000)
+            picture=Image.open(io.BytesIO(raw)).convert("RGB")
+        except Exception as exc:
+            raise RuntimeError(f"Curated scene {slide_index+1} unavailable: {str(exc)[:100]}") from None
+        if min(picture.size)<1600:
+            raise RuntimeError(f"Curated scene {slide_index+1} too small; refusing upscale")
+        photo_credits.append(f"Slide {slide_index+1}: {item['creator']} | {item['license']} | {item['source']} | Cropped and text overlaid")
+        from PIL import ImageEnhance, ImageFilter
+        picture=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
+        picture=ImageOps.autocontrast(picture,cutoff=0.4)
+        picture=ImageEnhance.Color(picture).enhance(1.04)
+        picture=picture.filter(ImageFilter.UnsharpMask(radius=1.0,percent=50,threshold=3))
+        print(f"Researched real photograph for slide {slide_index+1}: {item['scene']}",flush=True)
+        return picture
+
     for phrase in search_phrases(query):
         params=urlencode({"action":"query","generator":"search",
             "gsrsearch":f"filetype:bitmap {phrase}","gsrnamespace":6,
@@ -249,7 +284,7 @@ credits = "\n".join(photo_credits)
     + "\n\nPhoto sources and licenses:\n" + credits,encoding="utf-8")
 (OUT / "metadata.json").write_text(json.dumps(
     {"date":str(date),"topic":heading,"hook":hook,"slides":len(slides),
-     "status":"preview_only","visual_approval":"required","quality":quality_results},
+     "status":"preview_only","visual_approval":"required","photo_selection":("researched_not_user_approved" if selected_photos else "semantic_screened_unreviewed"),"quality":quality_results},
     ensure_ascii=False,indent=2),encoding="utf-8")
 playlist = OUT / "slides.txt"
 slide_seconds=3
