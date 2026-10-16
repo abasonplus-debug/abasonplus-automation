@@ -46,6 +46,7 @@ jobs:
         run: |
           curl --fail-with-body --retry 2 --max-time 120 \
             -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
+            -F "kind=video" \
             -F "title=<output/title.txt" \
             -F "caption=<output/caption.txt" \
             -F "description=<output/description.txt" \
