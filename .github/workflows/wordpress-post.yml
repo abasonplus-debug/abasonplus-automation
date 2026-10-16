@@ -1,26 +1,39 @@
-name: AbasonPlus Daily WordPress Post
-# Publishing paused: manual preview is allowed; scheduled/push publishing and outbound posting are disabled.
+name: AbasonPlus WordPress Post by Email (PAUSED)
+# One future production workflow; NO OAuth token copying and NO sending until reauthorized.
 on:
   workflow_dispatch:
     inputs:
       preview_only:
-        description: 'Preview only; publishing is disabled'
+        description: 'Prepare safely; do not send email'
         required: false
         default: 'true'
 permissions:
   contents: read
 concurrency:
-  group: abasonplus-wordpress-publisher
+  group: abasonplus-wordpress-email-one-per-day
   cancel-in-progress: false
 jobs:
-  publish:
+  prepare:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Publish next reviewed Bengali post
-        if: ${{ false }} # Disabled: do not publish without fresh approval
+      - name: Check safe email source code
+        run: python3 -m py_compile wordpress_email_prepare.py wordpress_email_send.py
+      - name: Prepare next reviewed unpublished article with a public duplicate check
+        run: python3 wordpress_email_prepare.py
+      - name: Save email preview (no publication)
+        uses: actions/upload-artifact@v4
+        with:
+          name: wordpress-postbyemail-preview
+          path: output/wordpress_email_preview.json
+          if-no-files-found: ignore
+          retention-days: 3
+      - name: Deliver via already-configured Make webhook and Gmail
+        if: ${{ false }} # BLOCKED: reenable only after Gmail OAuth, email recipient and approval check
         env:
-          WORDPRESS_ACCESS_TOKEN: ${{ secrets.WORDPRESS_ACCESS_TOKEN }}
-          WPCOM_SITE_ID: "257973809"
-        run: python3 wordpress_publish.py
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+          ABASONPLUS_PUBLISH: 'DISABLED'
+          ABASONPLUS_POST_BY_EMAIL_READY: 'NOT_READY'
+        run: python3 wordpress_email_send.py
+# NOTE: no schedule while publication is paused; never use WORDPRESS_ACCESS_TOKEN.
