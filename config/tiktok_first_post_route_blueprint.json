@@ -1,0 +1,140 @@
+{
+  "purpose": "EXACTLY_ONE owner-approved TikTok public post; apply to Make scenario 7968544 only after read-back, NEVER auto-apply from public GitHub",
+  "status": "prepared_not_deployed",
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "account_handle": "@abasonplus",
+  "account_verified_creator_privacy": [
+    "PUBLIC_TO_EVERYONE"
+  ],
+  "preview_run_id": 38923421174,
+  "video_sha256": "c04ce290b16e620198f625da4d0aa88c1eb698ddb249d23021caa693fa89f116",
+  "idempotency_key": "d31e802b-880e-5e48-b5d2-e61b858aa182",
+  "webhook_filter": {
+    "name": "EXACT creator-reviewed Land Share with specific approved media",
+    "conditions": [
+      [
+        {
+          "a": "{{1.kind}}",
+          "o": "text:equal",
+          "b": "tiktok_reviewed_publish"
+        },
+        {
+          "a": "{{1.tiktok_post_key}}",
+          "o": "text:equal",
+          "b": "abasonplus-tiktok-2026-10-16"
+        },
+        {
+          "a": "{{1.video_sha256}}",
+          "o": "text:equal",
+          "b": "c04ce290b16e620198f625da4d0aa88c1eb698ddb249d23021caa693fa89f116"
+        },
+        {
+          "a": "{{1.review_approved}}",
+          "o": "text:equal",
+          "b": "true"
+        },
+        {
+          "a": "{{1.visual_qa_passed}}",
+          "o": "text:equal",
+          "b": "true"
+        },
+        {
+          "a": "{{1.tiktok_publish_approved}}",
+          "o": "text:equal",
+          "b": "true"
+        },
+        {
+          "a": "{{1.content_preview_confirmed}}",
+          "o": "text:equal",
+          "b": "true"
+        },
+        {
+          "a": "{{1.express_consent_given}}",
+          "o": "text:equal",
+          "b": "true"
+        },
+        {
+          "a": "{{1.tiktok_privacy_level}}",
+          "o": "text:equal",
+          "b": "PUBLIC_TO_EVERYONE"
+        },
+        {
+          "a": "{{1.tiktok_allow_comment}}",
+          "o": "text:equal",
+          "b": "true"
+        },
+        {
+          "a": "{{1.tiktok_allow_duet}}",
+          "o": "text:equal",
+          "b": "true"
+        },
+        {
+          "a": "{{1.tiktok_allow_stitch}}",
+          "o": "text:equal",
+          "b": "true"
+        },
+        {
+          "a": "{{1.rights_confirmed}}",
+          "o": "text:equal",
+          "b": "true"
+        }
+      ]
+    ]
+  },
+  "make_module": {
+    "module": "make-nodes-late:Universal",
+    "version": 1,
+    "connector_id": 12011130,
+    "mapper": {
+      "url": "/posts",
+      "method": "POST",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "key": "Idempotency-Key",
+          "value": "d31e802b-880e-5e48-b5d2-e61b858aa182"
+        }
+      ],
+      "body": {
+        "content": "{{1.tiktok_caption}}",
+        "mediaItems": [
+          {
+            "type": "video",
+            "url": "{{9.publicUrl}}"
+          }
+        ],
+        "platforms": [
+          {
+            "platform": "tiktok",
+            "accountId": "6ad22ddb280aa6cf7d25310d"
+          }
+        ],
+        "tiktokSettings": {
+          "privacy_level": "PUBLIC_TO_EVERYONE",
+          "allow_comment": true,
+          "allow_duet": true,
+          "allow_stitch": true,
+          "content_preview_confirmed": true,
+          "express_consent_given": true,
+          "video_made_with_ai": true,
+          "video_cover_timestamp_ms": 0,
+          "commercialContentType": "none"
+        },
+        "publishNow": true
+      }
+    }
+  },
+  "must_verify": [
+    "Read actual Make scenario and edit version; never assume old failed patch succeeded.",
+    "Replace (do not enable) disabled legacy addTiktokPost module 14, which cannot supply required express-consent fields.",
+    "Keep TikTok-only filters completely separate from Facebook+YouTube and WordPress.",
+    "Use output of the tested Zernio presign upload module 9; HTTP module 12 must finish 200 before call.",
+    "Check any existing Zernio/TikTok post for this exact SHA/caption before sending, to prevent duplicates.",
+    "Treat 207 response or post/platform status=failed as failure; only public published status and proper URL confirm completion.",
+    "Do not activate GitHub tiktok_publication_gate.json until Make route and TikTok account readback verified.",
+    "Never reuse approval for other date's video."
+  ]
+}
