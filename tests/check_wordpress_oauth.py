@@ -12,7 +12,19 @@ import urllib.parse
 import urllib.request
 
 client_id=os.environ.get("WPCOM_CLIENT_ID","150614")
-token=os.environ.get("WORDPRESS_ACCESS_TOKEN","")
+token_raw=os.environ.get("WORDPRESS_ACCESS_TOKEN","")
+has_bearer_prefix=token_raw.strip().lower().startswith("bearer ")
+contains_whitespace=any(ch.isspace() for ch in token_raw.strip())
+token=token_raw.strip()
+if has_bearer_prefix:
+    token=token[7:].strip()
+if token.startswith('"') and token.endswith('"'):
+    token=token[1:-1]
+print("WORDPRESS_SECRET_FORMAT="
+      + ("BEARER_PREFIX " if has_bearer_prefix else "")
+      + ("WHITESPACE " if contains_whitespace else "")
+      + ("TOKEN_PRESENT" if token else "EMPTY"),
+      flush=True)
 expected_blog_id=os.environ.get("WPCOM_SITE_ID","257973809")
 if not token:
     print("WORDPRESS_OAUTH_STATUS=MISSING_SECRET")
