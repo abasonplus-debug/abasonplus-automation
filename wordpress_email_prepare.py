@@ -81,6 +81,29 @@ def main():
     evergreen=json.loads((ROOT/"wordpress_posts.json").read_text(encoding="utf-8"))
     if not isinstance(researched,list) or not isinstance(evergreen,list):
         raise RuntimeError("Article catalogs must be JSON arrays")
+    # First choice: ChatGPT's daily source-checked briefing committed via GitHub app.
+    today=datetime.now(ZoneInfo("Asia/Dhaka")).date()
+    chatgpt_path=ROOT/"content"/("daily_editorial_"+today.isoformat()+".json")
+    chatgpt=[]
+    if chatgpt_path.is_file():
+        entry=json.loads(chatgpt_path.read_text(encoding="utf-8"))
+        source=entry.get("source_url","")
+        if entry.get("date")!=today.isoformat() or entry.get("verified_on")!=today.isoformat():
+            raise RuntimeError("ChatGPT daily editorial is stale or incorrectly dated")
+        if not source.startswith("https://") or source not in entry.get("content",""):
+            raise RuntimeError("ChatGPT daily editorial missing in-article source citation")
+        if not (entry.get("slug","").startswith("ap-") or entry.get("slug","").startswith("abasonplus-")):
+            raise RuntimeError("ChatGPT daily editorial lacks unique source-based slug")
+        body=entry.get("content","")
+        if len(body)<1700 or body.count("<h2>")<3 or any(tag in body.lower() for tag in ("<script","<iframe","<form","<object","<embed")):
+            raise RuntimeError("ChatGPT daily article failed editorial structure checks")
+        if len(entry.get("tags",[]))<3 or len(entry.get("tags",[]))>8:
+            raise RuntimeError("ChatGPT daily article has invalid tag count")
+        story=entry.get("story")
+        if not isinstance(story,dict) or len(story.get("tips",[]))<4 or story.get("source_url")!=source:
+            raise RuntimeError("ChatGPT daily slide plan incomplete")
+        chatgpt=[entry]
+        print("SOURCE_LINKED_CHATGPT_DAILY_PACKAGE:",entry["slug"],flush=True)
     generated_file=ROOT/"output"/"daily_research_post.json"
     generated=[]
     if generated_file.is_file():
@@ -99,7 +122,7 @@ def main():
     today=datetime.now(ZoneInfo("Asia/Dhaka")).date()
     items=[]
     queued=set()
-    for post in generated+researched+evergreen:
+    for post in chatgpt+generated+researched+evergreen:
         slug=post.get("slug","")
         if not slug or slug in known or slug in queued:
             continue
