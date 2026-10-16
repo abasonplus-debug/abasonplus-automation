@@ -25,27 +25,28 @@ if not features.check("raqm"):
 big = ImageFont.truetype(str(FONT), 130)
 medium = ImageFont.truetype(str(FONT), 130)
 small = ImageFont.truetype(str(FONT), 130)
-topics = [
-    ("জমি কেনার আগে", ["মালিকানার কাগজ যাচাই করুন", "দলিল ও খতিয়ান মিলিয়ে দেখুন", "দাগ নম্বর ও সীমানা পরীক্ষা করুন", "বিরোধ বা দায় আছে কি না জানুন"]),
-    ("ফ্ল্যাট কেনার আগে", ["প্রকল্পের অনুমোদন যাচাই করুন", "চুক্তির শর্ত ভালোভাবে পড়ুন", "হস্তান্তরের সময় জেনে নিন", "বিশেষজ্ঞের পরামর্শ নিন"]),
-    ("বাড়ি নির্মাণের আগে", ["অনুমোদিত নকশা যাচাই করুন", "মাটির পরীক্ষা সম্পর্কে জানুন", "উপকরণের মান যাচাই করুন", "প্রকৌশলীর পরামর্শ নিন"]),
-]
-from zoneinfo import ZoneInfo
+# Curated Bengali housing content, not invented legal advice.
+catalog = json.loads((ROOT / "content" / "topics.json").read_text(encoding="utf-8"))
+if len(catalog) < 10:
+    raise RuntimeError("Topic catalog too short: refusing repetitive content")
 date = datetime.now(ZoneInfo("Europe/Berlin")).date()
-heading, tips = topics[date.toordinal() % len(topics)]
-hooks = {
-    "জমি কেনার আগে": "জমি কিনবেন? এই ৪টি ভুল এড়ান!",
-    "ফ্ল্যাট কেনার আগে": "ফ্ল্যাট কেনার আগে ৪টি বিষয় জানুন!",
-    "বাড়ি নির্মাণের আগে": "বাড়ি বানাবেন? আগে এই ৪টি দেখুন!",
-}
-hook = hooks[heading]
-slides = [(hook, "শেষ পর্যন্ত দেখুন • গুরুত্বপূর্ণ ৪টি টিপস")] + [(tip, f"পরামর্শ {i}/৪") for i, tip in enumerate(tips, 1)]
-hashtags = "#AbasonPlus #আবাসন #PropertyTips #RealEstateBangladesh " + ("#জমি #জমিকেনা" if "জমি" in heading else "#ফ্ল্যাট #HomeBuying" if "ফ্ল্যাট" in heading else "#বাড়ি #HomeConstruction")
-(OUT / "title.txt").write_text(f"{hook} | AbasonPlus #Shorts", encoding="utf-8")
+item = catalog[date.toordinal() % len(catalog)]
+heading, hook, points = item["title"], item["hook"], item["tips"]
+if not 4 <= len(points) <= 9:
+    raise RuntimeError("Carousel requires 5 to 10 slides")
+slides = [{"main":hook,"photo":item["cover_query"],"sub":"জরুরি বিষয়গুলো জানুন"}]
+slides += [{"main":p["text"],"photo":p["query"],"sub":f"পরামর্শ {i}/{len(points)}"}
+           for i,p in enumerate(points,1)]
+hashtags = "#AbasonPlus #আবাসন #PropertyTips #RealEstateBangladesh "
+hashtags += ("#জমি #জমিকেনা" if "জমি" in heading else "#ফ্ল্যাট #HomeBuying" if "ফ্ল্যাট" in heading else "#বাড়ি #HousingTips")
+(OUT / "title.txt").write_text(f"{hook} | AbasonPlus #Shorts",encoding="utf-8")
 (OUT / "caption.txt").write_text(
-    f"{hook}\n\n" + "\n".join(f"✅ {i}. {tip}" for i, tip in enumerate(tips, 1))
-    + f"\n\nআপনার মতে কোন বিষয়টি সবচেয়ে জরুরি?\n\nআরও তথ্য: https://abasonplus.wordpress.com/\n\n{hashtags}", encoding="utf-8"
-)
+    f"{hook}\n\n" + "\n".join(f"✅ {i}. {p['text']}" for i,p in enumerate(points,1))
+    + f"\n\nআপনার অভিজ্ঞতা কী? মন্তব্যে জানান।\n\nhttps://abasonplus.wordpress.com/\n\n{hashtags}",
+    encoding="utf-8")
+photo_credits = []
+used_photo_titles = set()
+quality_results = []
 logo = None
 try:
     logo_path = OUT / "logo.png"
