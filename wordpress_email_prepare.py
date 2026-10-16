@@ -3,6 +3,8 @@
 GitHub -> existing Make webhook -> Gmail OAuth -> WordPress secret Post-by-Email address.
 """
 import argparse, html, json, pathlib, re
+from datetime import date, datetime
+from zoneinfo import ZoneInfo
 from html.parser import HTMLParser
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -74,10 +76,41 @@ def main():
     ap.add_argument("--skip-public-lookup",action="store_true",help="Offline QA only")
     ap.add_argument("--output",default="output/wordpress_email_preview.json")
     args=ap.parse_args()
-    items=json.loads((ROOT/"wordpress_posts.json").read_text(encoding="utf-8"))
-    if not isinstance(items,list):raise RuntimeError("Expected a list of WordPress articles")
+    # Research-backed timely articles take priority over the older generic queue.
+    researched=json.loads((ROOT/"content"/"researched_wordpress_posts.json").read_text(encoding="utf-8"))
+    evergreen=json.loads((ROOT/"wordpress_posts.json").read_text(encoding="utf-8"))
+    if not isinstance(researched,list) or not isinstance(evergreen,list):
+        raise RuntimeError("Article catalogs must be JSON arrays")
     known=set() if args.skip_public_lookup else slugs_already_published()
-    item=next((p for p in items if p.get("slug") not in known),None)
+    today=datetime.now(ZoneInfo("Asia/Dhaka")).date()
+    items=[]
+    queued=set()
+    for post in researched+evergreen:
+        slug=post.get("slug","")
+        if not slug or slug in known or slug in queued:
+            continue
+        queued.add(slug)
+        if "verified_on" in post:
+            verified=date.fromisoformat(post["verified_on"])
+            if verified>today or (today-verified).days>180:
+                print(f"SKIP outdated research: {slug} (last verified {verified})")
+                continue
+            if post.get("time_sensitive",False):
+                if not post.get("expires_on"):
+                    print(f"SKIP missing project expiry: {slug}")
+                    continue
+                if today>date.fromisoformat(post["expires_on"]):
+                    print(f"SKIP expired project status: {slug}")
+                    continue
+            if post.get("editorial_review")!="verified_primary_sources":
+                print(f"SKIP unreviewed article: {slug}")
+                continue
+            sources=post.get("sources",[])
+            if not sources or not all(u.startswith("https://") and u in post.get("content","") for u in sources):
+                print(f"SKIP missing article source citations: {slug}")
+                continue
+        items.append(post)
+    item=items[0] if items else None
     if item is None:
         print("No unpublished reviewed articles; NO email sent")
         return
