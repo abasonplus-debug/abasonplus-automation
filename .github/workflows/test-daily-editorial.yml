@@ -1,0 +1,66 @@
+name: AbasonPlus Live Editorial End-to-End Preview — NO POSTS
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/test-daily-editorial.yml'
+      - 'content/daily_editorial_*.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verified-draft-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install local photo and Bengali rendering tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-noto-core
+          python3 -m pip install -r requirements.txt
+      - name: Check source-linked today's article and prevent duplicate WordPress post
+        run: python3 wordpress_email_prepare.py
+      - name: Validate matching five-slide editorial
+        run: python3 scripts/select_video_story.py
+      - name: Render licensed, source-matched video with original music without posting
+        env:
+          ABASONPLUS_DAILY_STORY: output/daily_research_story.json
+        run: python3 scripts/create_carousel.py
+      - name: Validate zero-publish preview content
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import json,subprocess
+          out=Path('output')
+          article=json.loads((out/'wordpress_email_preview.json').read_text(encoding='utf-8'))
+          assert article['review_approved']=='false' and article['status']=='preview_only'
+          story=json.loads((out/'daily_research_story.json').read_text(encoding='utf-8'))
+          report=json.loads((out/'metadata.json').read_text(encoding='utf-8'))
+          assert report['source_url']==story['source_url'] and report['slides']==5
+          assert len(report['quality'])==5
+          assert len({x['source'] for x in report['quality']})==5
+          assert all(x['font_px']>=130 and x['vertical_composition_coverage']>=.6 for x in report['quality'])
+          for i in range(5):
+              with Image.open(out/f'slide_{i}.png') as im: assert im.size==(1080,1920)
+          assert (out/'thumbnail.png').read_bytes()==(out/'slide_0.png').read_bytes()
+          meta=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_streams','-of','json',str(out/'abasonplus_daily.mp4')]))
+          assert any(s['codec_type']=='audio' for s in meta['streams'])
+          print('SOURCED POST + LICENSED 5 SLIDE VIDEO QA: PASS, PUBLICATIONS SENT: 0')
+          PY
+      - name: Upload ONLY private preview artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: abasonplus-daily-editorial-preview
+          path: |
+            output/slide_*.png
+            output/thumbnail.png
+            output/abasonplus_daily.mp4
+            output/metadata.json
+            output/wordpress_email_preview.json
+            output/image_credits.txt
+          if-no-files-found: ignore
+          retention-days: 3
+# This workflow contains NO webhook, Gmail, WordPress or social publishing calls.
