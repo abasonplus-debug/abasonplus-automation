@@ -80,7 +80,7 @@ def source_article_text(raw):
     chunks=[]
     for selector in selectors:
         for node in soup.select(selector)[:3]:
-            paragraphs=[re.sub(r"\\s+"," ",el.get_text(" ",strip=True)).strip()
+            paragraphs=[re.sub(r"\s+"," ",el.get_text(" ",strip=True)).strip()
                         for el in node.select("p, h2, h3")]
             text="\n".join(p for p in paragraphs if 30<=len(p)<=950)
             if len(text)>len("\n".join(chunks)):chunks=[text]
@@ -178,7 +178,7 @@ def quality(source, story):
     if any(bad in combined for bad in BANNED):raise RuntimeError("Unfounded investment claim")
     # Numbers from the AI output must be grounded in the source, not guessed.
     def nums(t):
-        return {m for m in re.findall(r"(?<!\\w)\\d[\\d,.%]*",t) if m.strip("%,.") not in ("1","2","3","4")}
+        return {m for m in re.findall(r"(?<!\w)\d[\d,.%]*",t) if m.strip("%,.") not in ("1","2","3","4")}
     unsupported=nums(combined)-nums(source["source_excerpt"]+" "+source["title"]+" "+source["source_date"])
     if unsupported:raise RuntimeError("Unverified numerical claims: "+",".join(sorted(unsupported)[:6]))
     return True
