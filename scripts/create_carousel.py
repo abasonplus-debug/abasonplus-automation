@@ -158,7 +158,8 @@ for i, (main, subtitle) in enumerate(slides):
     # Preserve 130px minimum by not adding smaller subtitle/footer text.
     im.convert("RGB").save(OUT / f"slide_{i}.png", optimize=True)
 
-(OUT / "description.txt").write_text(f"{hook}\\n" + "\\n".join(f"{i}. {tip}" for i, tip in enumerate(tips, 1)) + f"\\n\\nhttps://abasonplus.wordpress.com/\\n{hashtags} #Shorts", encoding="utf-8")\nplaylist = OUT / "slides.txt"
+(OUT / "description.txt").write_text(f"{hook}\\n" + "\\n".join(f"{i}. {tip}" for i, tip in enumerate(tips, 1)) + f"\\n\\nhttps://abasonplus.wordpress.com/\\n{hashtags} #Shorts", encoding="utf-8")
+playlist = OUT / "slides.txt"
 playlist.write_text("".join(f"file 'slide_{i}.png'\nduration 3\n" for i in range(5)) + "file 'slide_4.png'\n", encoding="utf-8")
 
 # Only the owner's original music is allowed. Never silently substitute audio.
