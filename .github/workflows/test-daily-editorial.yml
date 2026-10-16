@@ -7,6 +7,7 @@ on:
       - 'content/daily_editorial_*.json'
       - 'scripts/verify_video_release.py'
       - 'scripts/create_carousel.py'
+      - 'scripts/prepare_tiktok_preview.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -31,6 +32,8 @@ jobs:
         run: python3 scripts/create_carousel.py
       - name: Verify machine-ready photo release without publishing
         run: python3 scripts/verify_video_release.py
+      - name: Prepare TikTok-specific caption and video package (NO TikTok posting)
+        run: python3 scripts/prepare_tiktok_preview.py
       - name: Validate zero-publish preview content
         run: |
           python3 - <<'PY'
@@ -44,6 +47,9 @@ jobs:
           report=json.loads((out/'metadata.json').read_text(encoding='utf-8'))
           assert report['source_url']==story['source_url'] and report['slides']==5
           assert (out/'video_qa_passed.txt').exists()
+          tt=json.loads((out/'tiktok_preview.json').read_text(encoding='utf-8'))
+          assert tt['status']=='preview_only' and not tt['posting_enabled']
+          assert tt['source_url']==story['source_url'] and tt['format']['width']==1080
           assert all(x.get('photo_semantic_qa') and x.get('typography_reserved_area_fraction',0)>=.6 for x in report['quality'])
           assert len(report['quality'])==5
           assert len({x['source'] for x in report['quality']})==5
@@ -67,6 +73,8 @@ jobs:
             output/metadata.json
             output/wordpress_email_preview.json
             output/image_credits.txt
+            output/tiktok_caption.txt
+            output/tiktok_preview.json
           if-no-files-found: ignore
           retention-days: 3
 # This workflow contains NO webhook, Gmail, WordPress or social publishing calls.
