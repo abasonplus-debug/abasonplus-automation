@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Only check openly available RSS feeds. No publishing or model requests."""
-import urllib.request,xml.etree.ElementTree as ET
+import urllib.request,xml.etree.ElementTree as ET, re,html
 from email.utils import parsedate_to_datetime
 feeds=[
 ("TBS live", "https://www.tbsnews.net/top-news/rss.xml"),
@@ -22,5 +22,16 @@ for label,url in feeds:
   for item in items[:3]:
    txt=lambda n:(item.findtext(n) or "")[:110].strip()
    print("  ",txt("title"),"|",txt("pubDate"),"|",txt("link")[:100],flush=True)
+   if label.startswith("Google"):
+    src=item.find("source")
+    print("  PUBLISHER:",src.text if src is not None else None,
+          "publisher_domain:",src.attrib.get("url") if src is not None else None,flush=True)
+    try:
+     request=urllib.request.Request(txt("link"),headers={"User-Agent":"Mozilla/5.0"})
+     with urllib.request.urlopen(request,timeout=9) as article_resp:
+      snippet=article_resp.read(500_000).decode("utf-8","replace")
+      print("  TARGET:",article_resp.url[:200],"TBS ARTICLE URLs:",
+            re.findall(r'https?://(?:www\\.)?tbsnews\\.net/[^"<> ]+',snippet)[:2],flush=True)
+    except Exception as exc:print("  REDIRECT_ERROR:",type(exc).__name__,flush=True)
   print("  TOTAL",len(items),flush=True)
  except Exception as exc: print(label,"ERROR",type(exc).__name__,str(exc)[:140],flush=True)
