@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Render an original 15-second Bengali housing-tips video with free tools."""
-from datetime import datetime, timedelta, timezone
+"""Prepare a preview-only licensed-photography Bengali carousel and MP4."""
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from urllib.request import urlretrieve, Request, urlopen
 from urllib.parse import urlencode
@@ -160,12 +161,22 @@ for i, slide in enumerate(slides):
     print(f"Checked slide {i+1}/{len(slides)}: {coverage:.1%} vertical text span")
 
 (OUT / "image_credits.txt").write_text("\n".join(photo_credits)+"\n",encoding="utf-8")
-(OUT / "caption.txt").open("a",encoding="utf-8").write(
-    "\n\nছবির উৎস ও লাইসেন্সের বিস্তারিত ভিডিওর Description-এ।")
-(OUT / "description.txt").write_text(f"{hook}\n" + "\n".join(f"{i}. {tip}" for i, tip in enumerate(tips, 1)) + f"\n\nhttps://abasonplus.wordpress.com/\n{hashtags} #Shorts", encoding="utf-8")
-(OUT / "metadata.json").write_text(json.dumps({"date": str(date), "topic": heading, "hook": hook, "slides": len(slides), "status": "preview_only"}, ensure_ascii=False, indent=2), encoding="utf-8")
+credits = "\n".join(photo_credits)
+(OUT / "caption.txt").open("a",encoding="utf-8").write("\n\nছবির উৎস ও লাইসেন্স:\n"+credits)
+(OUT / "description.txt").write_text(
+    f"{hook}\n" + "\n".join(f"{i}. {p['text']}" for i,p in enumerate(points,1))
+    + f"\n\nhttps://abasonplus.wordpress.com/\n{hashtags} #Shorts"
+    + "\n\nPhoto sources and licenses:\n" + credits,encoding="utf-8")
+(OUT / "metadata.json").write_text(json.dumps(
+    {"date":str(date),"topic":heading,"hook":hook,"slides":len(slides),
+     "status":"preview_only","quality":quality_results},
+    ensure_ascii=False,indent=2),encoding="utf-8")
 playlist = OUT / "slides.txt"
-playlist.write_text("".join(f"file 'slide_{i}.png'\nduration 3\n" for i in range(5)) + "file 'slide_4.png'\n", encoding="utf-8")
+slide_seconds=3
+duration=len(slides)*slide_seconds
+playlist.write_text("".join(f"file 'slide_{i}.png'\nduration {slide_seconds}\n"
+    for i in range(len(slides))) + f"file 'slide_{len(slides)-1}.png'\n",
+    encoding="utf-8")
 
 # Only the owner's original music is allowed. Never silently substitute audio.
 custom_audio = ROOT / "assets" / "abasonplus.mp3"
@@ -177,9 +188,9 @@ subprocess.run([
     "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
     "-f", "concat", "-safe", "0", "-i", str(playlist),
     "-i", str(audio_path),
-    "-t", "15", "-r", "30", "-vf", "format=yuv420p",
+    "-t", str(duration), "-r", "30", "-vf", "format=yuv420p",
     "-c:v", "libx264", "-preset", "veryfast", "-crf", "24",
-    "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart",
+    "-c:a", "aac", "-b:a", "192k", "-af", f"afade=t=out:st={max(0,duration-1)}:d=1", "-shortest", "-movflags", "+faststart",
     str(OUT / "abasonplus_daily.mp4")
 ], cwd=OUT, check=True)
 print("Created PREVIEW ONLY", OUT / "abasonplus_daily.mp4")
