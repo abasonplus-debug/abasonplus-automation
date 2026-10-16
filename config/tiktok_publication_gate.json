@@ -1,9 +1,9 @@
 {
-  "enabled": false,
+  "enabled": true,
   "tiktok_account": "@abasonplus",
-  "reason": "Zernio TikTok final direct-post module must be validated and compliant per-video consent fields before allowing publication.",
+  "reason": "Exact creator-approved 2026-10-16 Land Share video only; Make direct-post route 7968544 module 15 read back with consent, privacy and unique key.",
   "consent_model": "explicit review of each particular completed MP4, privacy choice and creator interactions; no unattended blanket consent",
-  "last_verified": "2026-10-16",
-  "latest_preview_run": 38909294406,
+  "last_verified": "2026-10-17",
+  "latest_preview_run": 38923421174,
   "latest_verified_media_transfer_run": 38915481663
 }
