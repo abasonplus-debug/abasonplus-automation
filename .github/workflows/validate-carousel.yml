@@ -13,16 +13,51 @@ permissions:
 jobs:
   validate-only:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - name: Install Bengali fonts
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq fonts-noto-core
+          sudo apt-get install -y -qq fonts-noto-core ffmpeg
           python -m pip install -r requirements.txt
       - name: Compile Python without running publishers
         run: python -m py_compile scripts/create_carousel.py wordpress_publish.py
       - name: Validate topics, typography and paused publishing
         run: python tests/validate_carousel.py
+      - name: Render preview locally without any publishing
+        run: python scripts/create_carousel.py
+      - name: Verify preview video, audio and images
+        run: |
+          python - <<'PY'
+          import json, pathlib, subprocess
+          from PIL import Image
+          out=pathlib.Path("output")
+          report=json.loads((out/"metadata.json").read_text(encoding="utf-8"))
+          assert report["status"]=="preview_only"
+          files=list(out.glob("slide_*.png"))
+          assert 5<=len(files)<=10 and len(files)==report["slides"]
+          for p in files:
+              with Image.open(p) as im: assert im.size==(1080,1920),p
+          assert all(x["font_px"]>=130 and x["vertical_composition_coverage"]>=.6 for x in report["quality"])
+          assert (out/"thumbnail.png").read_bytes()==(out/"slide_0.png").read_bytes()
+          meta=json.loads(subprocess.check_output(["ffprobe","-v","error","-show_streams","-show_format","-of","json",str(out/"abasonplus_daily.mp4")]))
+          streams=meta["streams"]
+          assert any(x["codec_type"]=="video" and x["width"]==1080 and x["height"]==1920 for x in streams)
+          assert any(x["codec_type"]=="audio" and x["codec_name"]=="aac" for x in streams)
+          assert float(meta["format"]["duration"])>=len(files)*3-0.5
+          print("Full preview render verified; no publication was attempted.")
+          PY
+      - name: Archive preview in GitHub workflow artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: abasonplus-test-preview
+          path: |
+            output/*.png
+            output/*.mp4
+            output/*.json
+            output/*.txt
+          if-no-files-found: ignore
+          retention-days: 3
 # NO webhook call, NO social upload, NO WordPress publishing in this workflow.
