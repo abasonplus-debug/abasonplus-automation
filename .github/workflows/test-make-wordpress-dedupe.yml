@@ -1,0 +1,30 @@
+name: AbasonPlus WordPress Duplicate Guard Test (NEVER EMAIL)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/test-make-wordpress-dedupe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  duplicate-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Send same PREVIEW ONLY WordPress slug twice - Gmail filter blocks both
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: |
+          test -n "$MAKE_WEBHOOK_URL"
+          export KEY="qa-duplicate-never-post-${{ github.run_id }}"
+          for attempt in 1 2; do
+            BODY=$(python3 -c 'import json,os; print(json.dumps({"kind":"wordpress_email","review_approved":"true","status":"preview_only","post_key":os.environ["KEY"],"subject":"QA ONLY - DO NOT SEND","html_content":"<p>Do not deliver, status preview_only</p>"}))' )
+            curl --silent --show-error --fail-with-body --max-time 25 \
+              -H 'Content-Type: application/json' \
+              --data "$BODY" "$MAKE_WEBHOOK_URL" >/dev/null
+            echo "Submitted review-approved but preview_only record #$attempt - production Gmail requires status=publish."
+            sleep 5
+          done
+          echo "Inspect Make duplicate Data Store manually. NO GMAIL OR WORDPRESS TEST POST."
+# NEVER test with status=publish or a real post recipient.
