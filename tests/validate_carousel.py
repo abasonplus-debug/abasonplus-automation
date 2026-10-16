@@ -32,13 +32,13 @@ def wrap(value,font):
     current=""
     for word in value.split():
         candidate=(current+" "+word).strip()
-        if current and d.textbbox((0,0),candidate,font=font)[2]>920:
+        if current and d.textbbox((0,0),candidate,font=font)[2]>950:
             lines.append(current)
             current=word
         else:
             current=candidate
     if current: lines.append(current)
-    assert lines and all(d.textbbox((0,0),x,font=font)[2]<=920 for x in lines),f"Unfit 130px: {value}"
+    assert lines and all(d.textbbox((0,0),x,font=font)[2]<=950 for x in lines),f"Unfit 120px: {value}"
     return lines
 
 checked=0
@@ -48,7 +48,7 @@ for topic in catalog:
     for idx,message in enumerate(cases):
         assert idx == 0 or topic["tips"][idx-1]["query"]
         assert topic["cover_query"]
-        font=ImageFont.truetype(str(fonts[0]),130)
+        font=ImageFont.truetype(str(fonts[0]),120)
         lines=wrap(message,font)
         assert len(lines)<=3,(topic["title"],message,len(lines))
         layer=Image.new("RGBA",(1080,1920))
@@ -75,4 +75,4 @@ wp_workflow=(ROOT/".github/workflows/wordpress-post.yml").read_text(encoding="ut
 assert "cron: '20 6 * * *'" in wp_workflow,"WordPress expected 06:20 UTC schedule"
 assert "github.event_name == 'schedule'" in wp_workflow,"WordPress manual runs must stay preview-only"
 assert (ROOT / "assets" / "abasonplus.mp3").stat().st_size > 1000, "Original audio missing"
-print(f"Validated {len(catalog)} topics, {checked} dark direct-photo headline layouts at 130px, source-gated VIDEO publishing, separately scheduled WordPress, and original audio.")
+print(f"Validated {len(catalog)} topics, {checked} dark direct-photo headline layouts at 120px+, source-gated VIDEO publishing, separately scheduled WordPress, and original audio.")
