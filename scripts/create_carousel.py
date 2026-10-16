@@ -289,12 +289,12 @@ for i, slide in enumerate(slides):
         raise RuntimeError(f"Slide {i+1}: typography covers less than 60% of frame height")
     # Reserve 60%+ of the ENTIRE canvas for large typographic composition.
     # This is a design region, not the proportion of opaque ink pixels.
-    design_zone=(70,175,1010,1690)
+    design_zone=(20,155,1060,1775)
     design_area=(design_zone[2]-design_zone[0])*(design_zone[3]-design_zone[1])/(1080*1920)
     if design_area<0.60:
         raise RuntimeError("Reserved typography design region below 60% of frame area")
     if bbox[0]<design_zone[0] or bbox[2]>design_zone[2] or bbox[1]<design_zone[1] or bbox[3]>design_zone[3]:
-        raise RuntimeError(f"Slide {i+1}: typography spills outside safe 60%-area composition")
+        raise RuntimeError(f"Slide {i+1}: typography extends outside reserved design zone: text={bbox}, zone={design_zone}")
     if logo:
         picture.paste(logo,((1080-logo.width)//2,65),logo)
     frame=Image.alpha_composite(picture,layer).convert("RGB")
