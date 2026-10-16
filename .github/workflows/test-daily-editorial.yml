@@ -5,6 +5,8 @@ on:
     paths:
       - '.github/workflows/test-daily-editorial.yml'
       - 'content/daily_editorial_*.json'
+      - 'scripts/verify_video_release.py'
+      - 'scripts/create_carousel.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -27,6 +29,8 @@ jobs:
         env:
           ABASONPLUS_DAILY_STORY: output/daily_research_story.json
         run: python3 scripts/create_carousel.py
+      - name: Verify machine-ready photo release without publishing
+        run: python3 scripts/verify_video_release.py
       - name: Validate zero-publish preview content
         run: |
           python3 - <<'PY'
@@ -39,6 +43,8 @@ jobs:
           story=json.loads((out/'daily_research_story.json').read_text(encoding='utf-8'))
           report=json.loads((out/'metadata.json').read_text(encoding='utf-8'))
           assert report['source_url']==story['source_url'] and report['slides']==5
+          assert (out/'video_qa_passed.txt').exists()
+          assert all(x.get('photo_semantic_qa') and x.get('typography_reserved_area_fraction',0)>=.6 for x in report['quality'])
           assert len(report['quality'])==5
           assert len({x['source'] for x in report['quality']})==5
           assert all(x['font_px']>=130 and x['vertical_composition_coverage']>=.6 for x in report['quality'])
