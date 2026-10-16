@@ -1,6 +1,8 @@
 name: AbasonPlus WordPress Post by Email (PAUSED)
-# One future production workflow; NO OAuth token copying and NO sending until reauthorized.
+# Daily 06:20 UTC preview only; NO OAuth token copying and NO sending until reauthorized.
 on:
+  schedule:
+    - cron: '20 6 * * *' # PREVIEW ONLY until publication gates are approved
   workflow_dispatch:
     inputs:
       preview_only:
