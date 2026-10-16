@@ -156,6 +156,10 @@ for i, (main, subtitle) in enumerate(slides):
                 fill=ink, stroke_width=2, stroke_fill=(0, 0, 0, 155))
     im = Image.alpha_composite(im, layer)
     # Preserve 130px minimum by not adding smaller subtitle/footer text.
+    # Slide zero is the dedicated hook/cover. Keep it identical to video frame 1.
+    if i == 0:
+        im.convert("RGB").save(OUT / "thumbnail.png", optimize=True)
+        print("Saved first-frame hook thumbnail: thumbnail.png")
     im.convert("RGB").save(OUT / f"slide_{i}.png", optimize=True)
 
 (OUT / "description.txt").write_text(f"{hook}\n" + "\n".join(f"{i}. {tip}" for i, tip in enumerate(tips, 1)) + f"\n\nhttps://abasonplus.wordpress.com/\n{hashtags} #Shorts", encoding="utf-8")
