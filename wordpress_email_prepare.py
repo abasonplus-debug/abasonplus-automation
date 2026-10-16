@@ -81,11 +81,25 @@ def main():
     evergreen=json.loads((ROOT/"wordpress_posts.json").read_text(encoding="utf-8"))
     if not isinstance(researched,list) or not isinstance(evergreen,list):
         raise RuntimeError("Article catalogs must be JSON arrays")
+    generated_file=ROOT/"output"/"daily_research_post.json"
+    generated=[]
+    if generated_file.is_file():
+        candidate=json.loads(generated_file.read_text(encoding="utf-8"))
+        if candidate.get("editorial_review")!="automated_source_grounded_checks":
+            raise RuntimeError("Generated article missing source-grounded QA status")
+        if candidate.get("kind")!="fresh_independent_source":
+            raise RuntimeError("AI article is not labeled as current source reporting")
+        src=candidate.get("source_url","")
+        if not src.startswith("https://www.tbsnews.net/") or src not in candidate.get("sources",[]):
+            raise RuntimeError("Generated article lacks recognized primary publication source")
+        if date.fromisoformat(candidate.get("verified_on"))!=datetime.now(ZoneInfo("Asia/Dhaka")).date():
+            raise RuntimeError("Generated article is not freshly verified today")
+        generated=[candidate]
     known=set() if args.skip_public_lookup else slugs_already_published()
     today=datetime.now(ZoneInfo("Asia/Dhaka")).date()
     items=[]
     queued=set()
-    for post in researched+evergreen:
+    for post in generated+researched+evergreen:
         slug=post.get("slug","")
         if not slug or slug in known or slug in queued:
             continue
@@ -102,9 +116,13 @@ def main():
                 if today>date.fromisoformat(post["expires_on"]):
                     print(f"SKIP expired project status: {slug}")
                     continue
-            if post.get("editorial_review")!="verified_primary_sources":
+            if post.get("editorial_review") not in ("verified_primary_sources","automated_source_grounded_checks"):
                 print(f"SKIP unreviewed article: {slug}")
                 continue
+            if post.get("editorial_review")=="automated_source_grounded_checks":
+                if verified!=today or not post["slug"].startswith("ap-"):
+                    print(f"SKIP unverified current news item: {slug}")
+                    continue
             sources=post.get("sources",[])
             if not sources or not all(u.startswith("https://") and u in post.get("content","") for u in sources):
                 print(f"SKIP missing article source citations: {slug}")
