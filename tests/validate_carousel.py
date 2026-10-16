@@ -57,9 +57,13 @@ for topic in catalog:
         assert bbox[3]<1750,(topic["title"],idx,"UI safe region overflow")
         checked+=1
 
-for path in [".github/workflows/daily-carousel.yml",".github/workflows/wordpress-post.yml"]:
-    workflow=(ROOT/path).read_text(encoding="utf-8")
-    assert "if: ${{ false }}" in workflow,f"Unexpected enabled publisher: {path}"
-    assert "  schedule:" not in workflow,f"Unexpected automatic publishing: {path}"
+# Video remains intentionally disabled pending visual quality approval.
+video_workflow=(ROOT/".github/workflows/daily-carousel.yml").read_text(encoding="utf-8")
+assert "if: ${{ false }}" in video_workflow,"Video publisher must remain disabled"
+assert "  schedule:" not in video_workflow,"Video publisher schedule must stay paused"
+# Owner explicitly enabled ONLY WordPress Post by Email, scheduled once daily.
+wp_workflow=(ROOT/".github/workflows/wordpress-post.yml").read_text(encoding="utf-8")
+assert "cron: '20 6 * * *'" in wp_workflow,"WordPress expected 06:20 UTC schedule"
+assert "github.event_name == 'schedule'" in wp_workflow,"WordPress manual runs must stay preview-only"
 assert (ROOT / "assets" / "abasonplus.mp3").stat().st_size > 1000, "Original audio missing"
-print(f"Validated {len(catalog)} topics, {checked} frame layouts, 130px font, >=60% vertical text composition, paused publishing and original audio.")
+print(f"Validated {len(catalog)} topics, {checked} frame layouts, 130px font, >=60% vertical text composition, paused VIDEO publishing, separately scheduled WordPress, and original audio.")
