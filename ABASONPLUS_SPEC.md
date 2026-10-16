@@ -54,3 +54,10 @@ GitHub `wordpress_email_prepare.py` converts reviewed articles into formatted em
 GitHub `wordpress_email_send.py` uses existing secret `MAKE_WEBHOOK_URL` and requires explicit owner permission plus confirmed Gmail/Post-by-Email readiness. GitHub `.github/workflows/wordpress-post.yml` schedules DAILY 06:20 UTC preview-only work; outbound delivery is hard-disabled. The separate `wordpress-email-preview.yml` verifies the publisher stays blocked.
 Make.com scenario `7968544` is INACTIVE, with the original `kind=video` route and a new `kind=wordpress_email` route guarded by review approval. The WordPress route records key `abasonplus-wp-{{1.post_key}}` in Data Store `220796` to prevent duplicate attempts.
 The Gmail sender module is not yet attached: user must authorize Make `google-email:sendAnEmail` (request currently pending), enable Post by Email on WordPress.com, and enter its special email address privately in Make. Until then, publishing cannot work; do not claim completion or activate.
+
+## Gmail authorization completed (2026-10-16)
+Make Gmail connection `11995107` is authorized and OK (gmail.readonly + gmail.send). The WordPress branch in inactive scenario `7968544` now has:
+- approved request filter and duplicate slug guard (module 7)
+- Gmail `sendAnEmail` (module 8), subject from `{{1.subject}}`, HTML body from `{{1.html_content}}`
+- SAFE STAGING destination `abasonplus@gmail.com` (owner's own inbox). NOT the WordPress publishing address.
+Final activation blocked: owner must enable WordPress.com Post by Email under site Settings → Writing and put the newly generated confidential `@post.wordpress.com` destination **directly in module 8's To field** in Make. Never send this secret to chat or GitHub. Gmail module and Make scenario currently have not been run. Keep scenario inactive and GitHub sender `if: false` until explicit publishing authorization.
