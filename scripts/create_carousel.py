@@ -14,6 +14,7 @@ import subprocess
 import wave
 import struct
 from PIL import Image, ImageDraw, ImageFont, features
+from photo_relevance import PhotoRelevanceGuard
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "output"
@@ -48,6 +49,7 @@ hashtags += ("#জমি #জমিকেনা" if "জমি" in heading else 
 photo_credits = []
 used_photo_titles = set()
 quality_results = []
+relevance_guard = None
 logo = None
 try:
     logo_path = OUT / "logo.png"
@@ -145,6 +147,12 @@ def image_for(query, slide_index):
                     print(f"Skipped unreadable photo: {str(e)[:90]}",flush=True)
                     continue
                 if picture.width<1080 or picture.height<1200: continue
+                global relevance_guard
+                if relevance_guard is None:
+                    relevance_guard=PhotoRelevanceGuard()
+                if not relevance_guard.approved(picture, query):
+                    print(f"Rejected unrelated photograph: {title[:65]}",flush=True)
+                    continue
                 used_photo_titles.add(title)
                 attribution=re.sub("<[^>]+>","",meta.get("Artist",{}).get("value","")).strip()[:120]
                 extra=(" | Modified visual distributed under the same CC BY-SA license"
