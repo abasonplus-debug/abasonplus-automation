@@ -113,7 +113,7 @@ try:
     logo_path = OUT / "logo.png"
     urlretrieve("https://abasonplus.wordpress.com/wp-content/uploads/2026/10/abasonplus_round_transparent.png", logo_path)
     logo = Image.open(logo_path).convert("RGBA")
-    logo.thumbnail((180, 180))
+    logo.thumbnail((115, 115))
 except Exception as e:
     print("Logo unavailable, continuing with wordmark:", e)
 
@@ -259,8 +259,10 @@ def image_for(query, slide_index):
             print(f"Photo search failed {phrase!r}: {str(exc)[:120]}",flush=True)
     return None
 
-# Independent full-bleed frames; translucent Bengali, true 130px font size.
-def fit_lines(draw, value, fnt, limit=940):
+# Independent full-bleed frames; selected editorial photo overlay style.
+STYLE_ID = "editorial_photo_overlay_v1"
+INK = (6, 27, 62, 230)  # dark navy, approximately 90% opacity
+def fit_lines(draw, value, fnt, limit=920):
     lines=[]
     current=""
     for word in value.split():
@@ -272,7 +274,7 @@ def fit_lines(draw, value, fnt, limit=940):
             current=candidate
     if current: lines.append(current)
     if not lines or any(mixed_text_width(draw,line,fnt)>limit for line in lines):
-        raise RuntimeError(f"Text too long at 130px: {value[:80]}")
+        raise RuntimeError(f"Text too long for selected style at {fnt.size}px: {value[:80]}")
     return lines
 
 def draw_line(draw,line,y,fnt,ink):
@@ -280,8 +282,7 @@ def draw_line(draw,line,y,fnt,ink):
     x=(1080-width)/2
     for part, font in mixed_tokens(line,fnt):
         if not part.isspace():
-            draw.text((x,y),part,font=font,fill=ink,
-                      stroke_width=2,stroke_fill=(0,0,0,150))
+            draw.text((x,y),part,font=font,fill=ink)
         x+=draw.textlength(part,font=font)
 
 for i, slide in enumerate(slides):
@@ -289,63 +290,58 @@ for i, slide in enumerate(slides):
     if picture is None:
         raise RuntimeError(f"Slide {i+1}: no matching licensed full-resolution photo; fail closed")
     picture=picture.convert("RGBA")
-    # Edge-to-edge gentle darkening for transparent text legibility; no boxes.
-    picture=Image.alpha_composite(picture,Image.new("RGBA",picture.size,(0,0,0,44)))
     layer=Image.new("RGBA",picture.size,(0,0,0,0))
     draw=ImageDraw.Draw(layer)
-    fnt=ImageFont.truetype(str(FONT),130)
-    top=fit_lines(draw,heading if i else "আবাসনপ্লাস",fnt)
-    bottom=fit_lines(draw,slide["sub"],fnt)
-    # Prioritize the large hook and tip. NEVER lower than 130px.
-    main_font=fnt
-    middle=[]
-    for size in range(220,129,-10):
+    main_font=None
+    lines=[]
+    for size in range(210,129,-10):
         candidate_font=ImageFont.truetype(str(FONT),size)
         try: candidate_lines=fit_lines(draw,slide["main"],candidate_font)
         except RuntimeError: continue
-        if len(candidate_lines)<=4:
-            middle=candidate_lines
+        if len(candidate_lines)<=3:
+            lines=candidate_lines
             main_font=candidate_font
             break
-    if len(top)>2 or not middle or len(bottom)>1:
-        raise RuntimeError(f"Slide {i+1}: too much text for 130px+ layout")
-    for j,line in enumerate(top):
-        draw_line(draw,line,205+j*170,fnt,(255,255,255,205))
-    line_step=max(220,int(main_font.size*1.18))
-    middle_y=930-((len(middle)-1)*line_step)//2
-    for j,line in enumerate(middle):
-        ink=(255,236,22,206) if j%2==0 else (255,255,255,206)
-        draw_line(draw,line,middle_y+j*line_step,main_font,ink)
-    draw_line(draw,bottom[0],1540,fnt,(255,245,170,205))
+    if main_font is None:
+        raise RuntimeError(f"Slide {i+1}: exact wording cannot fit in three lines at 130px+")
+    line_step=int(main_font.size*1.52)
+    for j,line in enumerate(lines):
+        draw_line(draw,line,260+j*line_step,main_font,INK)
     bbox=layer.getbbox()
-    if bbox is None or (bbox[3]-bbox[1]) < 1152:
-        raise RuntimeError(f"Slide {i+1}: typography covers less than 60% of frame height")
-    # Reserve 60%+ of the ENTIRE canvas for large typographic composition.
-    # This is a design region, not the proportion of opaque ink pixels.
-    design_zone=(20,155,1060,1775)
-    design_area=(design_zone[2]-design_zone[0])*(design_zone[3]-design_zone[1])/(1080*1920)
-    if design_area<0.60:
-        raise RuntimeError("Reserved typography design region below 60% of frame area")
+    if bbox is None:
+        raise RuntimeError(f"Slide {i+1}: no visible Bengali text")
+    design_zone=(65,220,1015,1100)
     if bbox[0]<design_zone[0] or bbox[2]>design_zone[2] or bbox[1]<design_zone[1] or bbox[3]>design_zone[3]:
         raise RuntimeError(f"Slide {i+1}: typography extends outside reserved design zone: text={bbox}, zone={design_zone}")
+    # No panel, gradient, outline or shadow. A naturally light part of the photo
+    # must support dark letters; if not, reject this photo rather than obscuring it.
+    from PIL import ImageStat
+    luminance=picture.crop((bbox[0],bbox[1],bbox[2],bbox[3])).convert("L")
+    mean_luma=ImageStat.Stat(luminance).mean[0]
+    dark_fraction=sum(luminance.histogram()[:110])/(luminance.width*luminance.height)
+    if mean_luma<150 or dark_fraction>0.27:
+        raise RuntimeError(f"Slide {i+1}: photo too dark/busy behind navy text; choose a lighter composition")
     if logo:
-        picture.paste(logo,((1080-logo.width)//2,65),logo)
+        picture.alpha_composite(logo,(1080-logo.width-72,1920-logo.height-210))
     frame=Image.alpha_composite(picture,layer).convert("RGB")
     if frame.size!=(1080,1920): raise RuntimeError("Incorrect frame size")
     frame.save(OUT / f"slide_{i}.png",optimize=True)
     if i==0:
         frame.save(OUT / "thumbnail.png",optimize=True)
-    coverage=round((bbox[3]-bbox[1])/1920,3)
     quality_results.append({"slide":i+1,"size":[1080,1920],
-        "font_px":130,"main_font_px":main_font.size,
-        "vertical_composition_coverage":coverage,
-        "typography_reserved_area_fraction":round(design_area,3),
+        "font_px":main_font.size,"main_font_px":main_font.size,
+        "style_id":STYLE_ID,"text_opacity":230,"text_color":"#061B3E",
+        "text_lines":len(lines),"text_bbox":list(bbox),
+        "text_background":False,"text_stroke":False,"photo_overlay":False,
+        "logo_position":"bottom_right" if logo else "omitted_unavailable",
+        "background_mean_luminance":round(mean_luma,2),
+        "background_dark_fraction":round(dark_fraction,3),
         "actual_ink_bounding_area_fraction":round((bbox[2]-bbox[0])*(bbox[3]-bbox[1])/(1080*1920),3),
         "photo_semantic_qa":True,
         "font_glyph_coverage_qa":True,
         "latin_fallback_font":LATIN_FONT.name,
         "source":photo_credits[-1]})
-    print(f"Checked slide {i+1}/{len(slides)}: {coverage:.1%} vertical text span")
+    print(f"Checked slide {i+1}/{len(slides)}: {main_font.size}px, direct navy text, no panel")
 
 (OUT / "image_credits.txt").write_text("\n".join(photo_credits)+"\n",encoding="utf-8")
 credits = "\n".join(photo_credits)
@@ -356,7 +352,7 @@ credits = "\n".join(photo_credits)
     + (f"\n\nSource: {item['source_url']}\nVerified: {item.get('verified_on','')}" if item.get("source_url") else "")
     + "\n\nPhoto sources and licenses:\n" + credits,encoding="utf-8")
 (OUT / "metadata.json").write_text(json.dumps(
-    {"date":str(today),"topic":heading,"hook":hook,"slides":len(slides),"source_url":item.get("source_url"),"verified_on":item.get("verified_on"),
+    {"date":str(today),"topic":heading,"hook":hook,"slides":len(slides),"style_id":STYLE_ID,"source_url":item.get("source_url"),"verified_on":item.get("verified_on"),
      "status":"preview_only","visual_approval":"automated_semantic_qa_only","manual_review":"not_performed",
      "photo_selection":("curated_plus_semantic_screened" if selected_photos else "commons_semantic_screened"),
      "quality":quality_results},
