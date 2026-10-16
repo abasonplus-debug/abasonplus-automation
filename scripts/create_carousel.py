@@ -21,16 +21,16 @@ from photo_relevance import PhotoRelevanceGuard
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "output"
 OUT.mkdir(exist_ok=True)
-FONT = next((p for p in Path("/usr/share/fonts").rglob("*.ttf") if "Bengali" in p.name and "Regular" in p.name), None)
+FONT = next((p for p in Path("/usr/share/fonts").rglob("*.ttf") if "Bengali" in p.name and "Bold" in p.name), None)
 if not FONT:
-    raise RuntimeError("Install fonts-noto-core to render Bengali")
+    raise RuntimeError("Install fonts-noto-core with Noto Sans Bengali Bold")
 if not features.check("raqm"):
     raise RuntimeError("Pillow must support libraqm for correct Bengali shaping")
 # NotoSansBengali-Regular.ttf has NO Latin glyphs. Always use a genuine
 # Latin fallback for words like "Land Share" rather than rendering □□□□.
-LATIN_FONT = next((p for p in Path("/usr/share/fonts").rglob("NotoSans-Regular.ttf")), None)
+LATIN_FONT = next((p for p in Path("/usr/share/fonts").rglob("NotoSans-Bold.ttf")), None)
 if not LATIN_FONT:
-    raise RuntimeError("Install fonts-noto-core: NotoSans-Regular.ttf is required for bilingual hooks")
+    raise RuntimeError("Install fonts-noto-core: NotoSans-Bold.ttf is required for bilingual hooks")
 BN_CMAP = TTFont(str(FONT)).getBestCmap()
 LATIN_CMAP = TTFont(str(LATIN_FONT)).getBestCmap()
 LATIN_FONTS = {}
@@ -276,7 +276,7 @@ def image_for(query, slide_index):
 # Independent full-bleed frames; selected editorial photo overlay style.
 STYLE_ID = "editorial_photo_overlay_v1"
 INK = (6, 27, 62, 230)  # dark navy, approximately 90% opacity
-def fit_lines(draw, value, fnt, limit=920):
+def fit_lines(draw, value, fnt, limit=950):
     lines=[]
     current=""
     for word in value.split():
@@ -308,7 +308,7 @@ for i, slide in enumerate(slides):
     draw=ImageDraw.Draw(layer)
     main_font=None
     lines=[]
-    for size in range(210,129,-10):
+    for size in range(210,119,-10):
         candidate_font=ImageFont.truetype(str(FONT),size)
         try: candidate_lines=fit_lines(draw,slide["main"],candidate_font)
         except RuntimeError: continue
@@ -317,14 +317,14 @@ for i, slide in enumerate(slides):
             main_font=candidate_font
             break
     if main_font is None:
-        raise RuntimeError(f"Slide {i+1}: exact wording cannot fit in three lines at 130px+")
+        raise RuntimeError(f"Slide {i+1}: exact wording cannot fit in three lines at 120px+")
     line_step=int(main_font.size*1.52)
     for j,line in enumerate(lines):
         draw_line(draw,line,260+j*line_step,main_font,INK)
     bbox=layer.getbbox()
     if bbox is None:
         raise RuntimeError(f"Slide {i+1}: no visible Bengali text")
-    design_zone=(65,220,1015,1100)
+    design_zone=(40,200,1040,1100)
     if bbox[0]<design_zone[0] or bbox[2]>design_zone[2] or bbox[1]<design_zone[1] or bbox[3]>design_zone[3]:
         raise RuntimeError(f"Slide {i+1}: typography extends outside reserved design zone: text={bbox}, zone={design_zone}")
     # No panel, gradient, outline or shadow. A naturally light part of the photo
