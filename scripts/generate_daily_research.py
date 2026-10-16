@@ -4,6 +4,7 @@ Does NOT send to WordPress, Make, Gmail, Facebook, or YouTube.
 No external paid AI API. Fail closed if source/model/QA fails.
 """
 import html, json, os, re, sys, hashlib, pathlib, calendar
+from safe_carousel_briefs import safeguard_slide_text
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from urllib.parse import urlparse
@@ -219,6 +220,9 @@ def write_outputs(source,story):
 def main():
     source=find_latest_story()
     story=request_local_ai(source)
+    category,checked_video=safeguard_slide_text(story,source["title"])
+    story.update(checked_video)
+    print("REVIEWED_VIDEO_CATEGORY:",category,flush=True)
     print("DRAFT HEADING:",str(story.get("title",""))[:140],flush=True)
     print("DRAFT INTRO:",str(story.get("intro",""))[:220],flush=True)
     for item in story.get("sections",[]):
