@@ -1,0 +1,9 @@
+{
+  "enabled": false,
+  "tiktok_account": "@abasonplus",
+  "reason": "Zernio TikTok final direct-post module must be validated and compliant per-video consent fields before allowing publication.",
+  "consent_model": "explicit review of each particular completed MP4, privacy choice and creator interactions; no unattended blanket consent",
+  "last_verified": "2026-10-16",
+  "latest_preview_run": 38909294406,
+  "latest_verified_media_transfer_run": 38915481663
+}
