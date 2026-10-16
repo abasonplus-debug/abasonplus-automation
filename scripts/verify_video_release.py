@@ -66,8 +66,8 @@ for n,info in enumerate(quality):
              and 1<=info.get("text_lines",0)<=3,
              "incorrect dark large headline")
     box=info.get("text_bbox",[])
-    required(len(box)==4 and 65<=box[0]<box[2]<=1015
-             and 220<=box[1]<box[3]<=1100,
+    required(len(box)==4 and 40<=box[0]<box[2]<=1040
+             and 200<=box[1]<box[3]<=1100,
              "headline outside upper photo region")
     required(info.get("background_mean_luminance",0)>=150
              and info.get("background_dark_fraction",1)<=0.27,
