@@ -29,7 +29,7 @@ Show one BIG real 9:16 slide, below it clickable SMALL thumbnail strip showing t
 Use only original `assets/abasonplus.mp3`; no fallback. MP4 H.264/AAC, 1080×1920, 30fps, 3sec per slide with music fade-out. Each image is its own frame; no reuse of one image as multiple slides.
 
 ## Publishing and deduplication
-Existing authorized destinations: AbasonPlus Facebook Page Reels, YouTube Shorts, and WordPress. Instagram/TikTok are not connected destinations.
+Existing authorized destinations: AbasonPlus Facebook Page Reels, YouTube Shorts, and WordPress. TikTok integration is prepared and its third-party publishing authorization is PENDING; TikTok is NOT a live delivery destination. Instagram remains unconnected.
 - Video/social scheduled publication is now owner-authorized, but ONLY after source-and-automatic-photo QA gates pass.
 - WordPress and video use **the same single Make.com scenario**, on separate exclusive filters, with distinct keys.
 - Make Data Store `AbasonPlus Published Video Keys` (id 220796): unique local-day key, overwrite=false, BEFORE router; sequential execution to reduce duplicate risk. This is an at-most-once *attempt*, not guaranteed exactly-once delivery to both platforms. Review partial failures manually.
@@ -83,3 +83,9 @@ Make.com scenario `7968544` is ACTIVE. WordPress JSON webhook fields were learne
 - `content/topics.json`: 32 video themes, including 14 new high-interest topics. Video rendering skips expired dated topics; still PAUSED from social publishing until photographs pass manual approval.
 - `.github/workflows/official-source-monitor.yml`: read-only official source report at 05:35 UTC daily (saved as 7-day GitHub artifact). Monitoring is NOT independent verification and cannot create fresh researched stories by itself.
 - `tests/validate_researched_posts.py` checks sources, article structure, dates and duplicate slugs without publishing.
+
+## TikTok preparation — 16 October 2026
+- GitHub now builds TikTok-ready `tiktok_caption.txt` and `tiktok_preview.json` after the verified 1080×1920 MP4 render, without sending to TikTok. Successful no-post test: 38909294406.
+- `TIKTOK_SETUP.md` describes free Zernio via Make, media URL handling, per-post consent, account eligibility, proper status checks and duplicate protection.
+- Zernio/TikTok account authorization is not yet complete; do NOT enable TikTok posting, infer account IDs, or mark a post published.
+- Keep existing WordPress, Facebook and YouTube production workflows unchanged while TikTok authentication is pending.
