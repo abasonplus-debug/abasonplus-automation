@@ -57,10 +57,13 @@ def prepare(post):
     plain=document.text()
     if len(plain)<250:raise RuntimeError("Article is too short; delivery BLOCKED")
     tags=[re.sub(r"[\[\],\r\n]"," ",str(x)).strip() for x in post.get("tags",[])][:8]
-    directives=f"[slug {slug}]\n[publicize off]\n[tags {', '.join(tags)}]"
+    directives=f"[slug {slug}]\n[status publish]\n[publicize off]\n[tags {', '.join(tags)}]"
     email_body=directives+"\n\n"+plain+"\n\nআরও তথ্য: "+WEBSITE
     html_body="<p>"+html.escape(directives).replace("\n","</p><p>")+"</p>"
-    html_body+="".join("<p>"+html.escape(line)+"</p>" for line in plain.split("\n") if line.strip())
+    # Keep original reviewed headings and lists for readable SEO-friendly articles.
+    if re.search(r"<\\s*(?:script|iframe|form|object|embed)\\b",post["content"],re.I):
+        raise RuntimeError("Unsafe article markup blocked")
+    html_body+=post["content"]
     html_body+="<p>আরও তথ্য: <a href='"+WEBSITE+"'>AbasonPlus</a></p>"
     return {"kind":"wordpress_email","post_key":slug,"subject":title,
             "content":email_body,"html_content":html_body,
