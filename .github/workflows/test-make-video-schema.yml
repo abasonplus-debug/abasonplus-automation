@@ -26,6 +26,7 @@ jobs:
           curl --silent --show-error --fail-with-body --max-time 40 --retry 0 \
             -F 'kind=video' \
             -F 'review_approved=false' \
+            -F 'visual_qa_passed=false' \
             -F 'status=preview_only' \
             -F 'post_key=SCHEMA_ONLY_NEVER_POST' \
             -F 'subject=Nonpublishing schema sample' \
