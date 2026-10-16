@@ -46,7 +46,7 @@ class Headings(HTMLParser):
     def handle_endtag(self,tag):
         if tag==self.current:self.current=None
     def handle_data(self,data):
-        value=re.sub(r"\\s+"," ",data).strip()
+        value=re.sub(r"\s+"," ",data).strip()
         if not value:return
         if self.current=="title":self.title.append(value)
         if self.current in ("h1","h2") and len(self.headlines)<8:self.headlines.append(value[:130])
@@ -80,7 +80,7 @@ def run():
             "note":"Source monitoring only, not verification of current project status or financial gain.",
             "sources":findings}
     (OUT/"official_source_monitor.json").write_text(
-        json.dumps(report,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+        json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     md=["# AbasonPlus official sources: read-only daily monitoring",f"Checked UTC: {checked}",
         "This is a HEADLINE / ACCESSIBILITY monitor. It cannot independently verify a project stage, safety claim, land value, or official approval.",
         "Never republish unsupported automatic summaries. Revisit the original official announcement before writing.", ""]
@@ -91,7 +91,7 @@ def run():
         md.append(f"Page heading: {x.get('page_title','Unavailable')}")
         md.extend("- "+h for h in x.get("headings",[])[:4])
         md.append("")
-    (OUT/"official_source_monitor.md").write_text("\\n".join(md),encoding="utf-8")
+    (OUT/"official_source_monitor.md").write_text("\n".join(md),encoding="utf-8")
     print(f"Sources checked: {len(findings)}. Publication requests sent: ZERO.",flush=True)
 
 if __name__=="__main__":run()
