@@ -8,6 +8,13 @@ on:
       - 'tests/validate_carousel.py'
       - 'tests/photo_source_probe.py'
       - '.github/workflows/validate-carousel.yml'
+  pull_request:
+    paths:
+      - 'scripts/create_carousel.py'
+      - 'scripts/verify_video_release.py'
+      - 'tests/validate_carousel.py'
+      - '.github/workflows/daily-carousel.yml'
+      - '.github/workflows/validate-carousel.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -42,7 +49,12 @@ jobs:
           assert 5<=len(files)<=10 and len(files)==report["slides"]
           for p in files:
               with Image.open(p) as im: assert im.size==(1080,1920),p
-          assert all(x["font_px"]>=130 and x["vertical_composition_coverage"]>=.6 for x in report["quality"])
+          assert report["style_id"]=="editorial_photo_overlay_v1"
+          assert all(x["font_px"]>=120 and x["style_id"]==report["style_id"] and
+                     x["text_background"] is False and x["text_stroke"] is False and
+                     x["photo_overlay"] is False and
+                     x["logo_position"] in ("bottom_right","omitted_unavailable")
+                     for x in report["quality"])
           assert (out/"thumbnail.png").read_bytes()==(out/"slide_0.png").read_bytes()
           meta=json.loads(subprocess.check_output(["ffprobe","-v","error","-show_streams","-show_format","-of","json",str(out/"abasonplus_daily.mp4")]))
           streams=meta["streams"]
