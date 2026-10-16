@@ -60,7 +60,17 @@ def items_in_feed(url):
         desc=(item.findtext("description") or "").strip()
         if not title or not link or urlparse(link).hostname not in ALLOWED:
             continue
-        if not any(w in title.lower() for w in KEYWORDS):continue
+        low=title.lower()
+        # Whole-word matching: 'land' must NOT match 'Netherlands', etc.
+        strict=("land","housing","property","real estate","metro","mrt","economic zone","construction",
+                "earthquake","building","bridge","port","road","infrastructure","solar power","cement",
+                "steel","developer","township","plot","flat","urban plan","industrial zone","power plant",
+                "housing authority","housing loan","জমি","আবাসন","ফ্ল্যাট","নির্মাণ","ভূমিকম্প",
+                "প্রকল্প","সেতু","সড়ক")
+        matched=any((term in low if any(ord(c)>127 for c in term)
+                     else re.search(r"(?<![a-z])"+re.escape(term)+r"(?![a-z])",low))
+                    for term in strict)
+        if not matched:continue
         try:
             published=parsedate_to_datetime(stamp)
             if published.tzinfo is None:published=published.replace(tzinfo=timezone.utc)
@@ -209,6 +219,12 @@ def write_outputs(source,story):
 def main():
     source=find_latest_story()
     story=request_local_ai(source)
+    print("DRAFT HEADING:",str(story.get("title",""))[:140],flush=True)
+    print("DRAFT INTRO:",str(story.get("intro",""))[:220],flush=True)
+    for item in story.get("sections",[]):
+        print("DRAFT SECTION:",str(item.get("heading",""))[:100],str(item.get("text",""))[:175],flush=True)
+    for tip in story.get("tips",[]):
+        print("DRAFT VIDEO TIP:",str(tip.get("text",""))[:120],flush=True)
     quality(source,story)
     write_outputs(source,story)
 
