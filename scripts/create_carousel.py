@@ -61,57 +61,45 @@ def centered(draw, text, y, font, color):
     width = bbox[2] - bbox[0]
     draw.text(((1080 - width)/2, y), text, font=font, fill=color, direction="ltr")
 
-# Search Wikimedia Commons for topic-specific photographs with reusable licenses.
-# Search terms are tied to each slide's message, not random stock photos.
-SCENES = {
-    "জমি কেনার আগে": ["green agricultural land Bangladesh", "landscape green fields", "land survey landscape", "rural landscape", "agricultural land"],
-    "ফ্ল্যাট কেনার আগে": ["modern apartment buildings", "residential apartment exterior", "apartment building construction", "modern residential building", "apartment architecture"],
-    "বাড়ি নির্মাণের আগে": ["house construction building", "architectural house plan", "building foundation construction", "building construction site", "civil engineer construction"],
-}
-KEYWORDS = {
-    "গাছ": "lush green trees forest", "বাগান": "beautiful flower garden",
-    "গার্ডেন": "beautiful green garden", "ফুল": "colorful flower garden",
-    "জমি": "green agricultural land", "দলিল": "paper documents desk",
-    "খতিয়ান": "land survey map", "সীমানা": "rural field fence",
-    "ফ্ল্যাট": "modern apartment building", "প্রকল্প": "residential apartment construction",
-    "চুক্তি": "paperwork signing contract", "হস্তান্তর": "modern apartment interior",
-    "বাড়ি": "beautiful residential house", "নকশা": "architectural blueprint",
-    "মাটি": "construction ground foundation", "উপকরণ": "building materials construction",
-    "প্রকৌশলী": "construction engineer hardhat", "মালিকানা": "property deed document",
-    "দাগ": "survey field landscape", "বিরোধ": "property documents",
-}
-
+# Real licensed photographs; do not fabricate or reuse scenes.
 def image_for(query, slide_index):
-    params = urlencode({"action": "query", "generator": "search", "gsrsearch": f'filetype:bitmap {query}',
-        "gsrnamespace": 6, "gsrlimit": 8, "prop": "imageinfo", "iiprop": "url|extmetadata",
-        "iiurlwidth": 1100, "format": "json"})
+    params = urlencode({"action":"query","generator":"search",
+        "gsrsearch":f"filetype:bitmap {query}","gsrnamespace":6,
+        "gsrlimit":20,"prop":"imageinfo","iiprop":"url|extmetadata",
+        "iiurlwidth":1800,"format":"json"})
     api = "https://commons.wikimedia.org/w/api.php?" + params
     try:
-        req = Request(api, headers={"User-Agent": "AbasonPlusEducationBot/1.0 (https://abasonplus.wordpress.com/)"})
-        with urlopen(req, timeout=12) as response:
-            pages = json.load(response).get("query", {}).get("pages", {})
-        for page in sorted(pages.values(), key=lambda x: x.get("index", 999)):
-            info = (page.get("imageinfo") or [{}])[0]
-            metadata = info.get("extmetadata") or {}
-            license_name = re.sub("<[^>]+>", "", metadata.get("LicenseShortName", {}).get("value", ""))
-            if not (license_name.startswith("CC BY") or license_name in ("CC0", "Public domain", "Public Domain")):
-                continue
-            url = info.get("thumburl") or info.get("url")
-            if not url:
-                continue
-            with urlopen(Request(url, headers={"User-Agent": "AbasonPlusEducationBot/1.0"}), timeout=15) as response:
-                raw = response.read(7_000_000)
-            image = Image.open(io.BytesIO(raw)).convert("RGB")
-            if image.width < 1080 or image.height < 1080:
-                continue
-            attribution = metadata.get("Artist", {}).get("value", "Wikimedia Commons")
-            attribution = re.sub("<[^>]+>", "", attribution).strip()[:150]
-            with (OUT / "image_credits.txt").open("a", encoding="utf-8") as credits:
-                credits.write(f"Slide {slide_index + 1}: {page.get('title')} | {license_name} | {attribution} | {info.get('descriptionurl', '')}\n")
-            print(f"Slide {slide_index + 1} scene: {query}, source: {page.get('title')}")
-            return ImageOps.fit(image, (1080, 1920), method=Image.Resampling.LANCZOS)
+        req = Request(api,headers={"User-Agent":"AbasonPlusEducationBot/2.0 (https://abasonplus.wordpress.com/)"})
+        with urlopen(req,timeout=20) as response:
+            pages=json.load(response).get("query",{}).get("pages",{})
+        for page in sorted(pages.values(),key=lambda p:p.get("index",999)):
+            title=page.get("title","")
+            if title in used_photo_titles: continue
+            info=(page.get("imageinfo") or [{}])[0]
+            meta=info.get("extmetadata") or {}
+            license_name=re.sub("<[^>]+>","",meta.get("LicenseShortName",{}).get("value","")).strip()
+            is_public=license_name.lower() in ("cc0","public domain","public domain mark")
+            is_cc_by=license_name.startswith("CC BY ") and "SA" not in license_name.upper() and "NC" not in license_name.upper()
+            if not (is_public or is_cc_by): continue
+            url=info.get("thumburl") or info.get("url")
+            if not url: continue
+            with urlopen(Request(url,headers={"User-Agent":"AbasonPlusEducationBot/2.0"}),timeout=20) as response:
+                raw=response.read(9_000_000)
+            picture=Image.open(io.BytesIO(raw)).convert("RGB")
+            if picture.width<1080 or picture.height<1400: continue
+            used_photo_titles.add(title)
+            attribution=re.sub("<[^>]+>","",meta.get("Artist",{}).get("value","")).strip()[:120]
+            photo_credits.append(f"Slide {slide_index+1}: {title} | {attribution or 'Wikimedia contributor'} | {license_name} | {info.get('descriptionurl','')}")
+            from PIL import ImageEnhance, ImageFilter
+            picture=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
+            picture=ImageOps.autocontrast(picture,cutoff=0.5)
+            picture=ImageEnhance.Color(picture).enhance(1.04)
+            picture=ImageEnhance.Contrast(picture).enhance(1.035)
+            picture=picture.filter(ImageFilter.UnsharpMask(radius=1.2,percent=65,threshold=3))
+            print(f"Slide {slide_index+1} photo: {title}")
+            return picture
     except Exception as exc:
-        print("Commons image lookup failed:", query, str(exc)[:150])
+        print(f"Photo fetch failed: {query}: {str(exc)[:180]}")
     return None
 
 for i, (main, subtitle) in enumerate(slides):
