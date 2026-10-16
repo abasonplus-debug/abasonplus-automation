@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Publish one reviewed Bengali AbasonPlus post via WordPress.com OAuth API.
 
-Required secrets: WPCOM_ACCESS_TOKEN and WPCOM_SITE_ID (site id defaults to AbasonPlus).
+Required secret: WORDPRESS_ACCESS_TOKEN (site id defaults to AbasonPlus).
 Posts are read from wordpress_posts.json. No paid AI API is called.
 """
 import json, os, sys, urllib.request, urllib.error
@@ -9,13 +9,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 SITE_ID=os.environ.get("WPCOM_SITE_ID","257973809")
-TOKEN=os.environ.get("WPCOM_ACCESS_TOKEN","")
+TOKEN=os.environ.get("WORDPRESS_ACCESS_TOKEN","")
 POSTS=Path(__file__).with_name("wordpress_posts.json")
 API=f"https://public-api.wordpress.com/rest/v1.1/sites/{SITE_ID}/posts/new"
 
 def main():
     if not TOKEN:
-        sys.exit("WPCOM_ACCESS_TOKEN missing: no publication attempted")
+        sys.exit("WORDPRESS_ACCESS_TOKEN missing: no publication attempted")
     items=json.loads(POSTS.read_text(encoding="utf-8"))
     if not isinstance(items,list) or not items:
         sys.exit("No reviewed posts available: no publication attempted")
