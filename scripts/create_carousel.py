@@ -181,28 +181,41 @@ def fit_lines(draw, value, fnt, limit=940):
 def draw_line(draw,line,y,fnt,ink):
     width=draw.textbbox((0,0),line,font=fnt)[2]
     draw.text(((1080-width)//2,y),line,font=fnt,fill=ink,
-              stroke_width=2,stroke_fill=(0,0,0,185))
+              stroke_width=5,stroke_fill=(0,0,0,225))
 
 for i, slide in enumerate(slides):
     picture=image_for(slide["photo"],i)
     if picture is None:
         raise RuntimeError(f"Slide {i+1}: no matching licensed full-resolution photo; fail closed")
     picture=picture.convert("RGBA")
+    # Edge-to-edge gentle darkening for transparent text legibility; no boxes.
+    picture=Image.alpha_composite(picture,Image.new("RGBA",picture.size,(0,0,0,44)))
     layer=Image.new("RGBA",picture.size,(0,0,0,0))
     draw=ImageDraw.Draw(layer)
     fnt=ImageFont.truetype(str(FONT),130)
     top=fit_lines(draw,heading if i else "আবাসনপ্লাস",fnt)
-    middle=fit_lines(draw,slide["main"],fnt)
     bottom=fit_lines(draw,slide["sub"],fnt)
-    if len(top)>2 or len(middle)>4 or len(bottom)>1:
-        raise RuntimeError(f"Slide {i+1}: too many lines at minimum font size")
+    # Prioritize the large hook and tip. NEVER lower than 130px.
+    main_font=fnt
+    middle=[]
+    for size in range(220,129,-10):
+        candidate_font=ImageFont.truetype(str(FONT),size)
+        try: candidate_lines=fit_lines(draw,slide["main"],candidate_font)
+        except RuntimeError: continue
+        if len(candidate_lines)<=4:
+            middle=candidate_lines
+            main_font=candidate_font
+            break
+    if len(top)>2 or not middle or len(bottom)>1:
+        raise RuntimeError(f"Slide {i+1}: too much text for 130px+ layout")
     for j,line in enumerate(top):
-        draw_line(draw,line,265+j*170,fnt,(255,255,255,205))
-    middle_y=960-((len(middle)-1)*170)//2
+        draw_line(draw,line,205+j*170,fnt,(255,255,255,228))
+    line_step=max(220,int(main_font.size*1.18))
+    middle_y=930-((len(middle)-1)*line_step)//2
     for j,line in enumerate(middle):
-        ink=(255,236,22,200) if j%2==0 else (255,255,255,200)
-        draw_line(draw,line,middle_y+j*170,fnt,ink)
-    draw_line(draw,bottom[0],1500,fnt,(255,245,170,205))
+        ink=(255,236,22,226) if j%2==0 else (255,255,255,226)
+        draw_line(draw,line,middle_y+j*line_step,main_font,ink)
+    draw_line(draw,bottom[0],1540,fnt,(255,245,170,228))
     bbox=layer.getbbox()
     if bbox is None or (bbox[3]-bbox[1]) < 1152:
         raise RuntimeError(f"Slide {i+1}: typography covers less than 60% of frame height")
@@ -215,7 +228,7 @@ for i, slide in enumerate(slides):
         frame.save(OUT / "thumbnail.png",optimize=True)
     coverage=round((bbox[3]-bbox[1])/1920,3)
     quality_results.append({"slide":i+1,"size":[1080,1920],
-        "font_px":130,"vertical_composition_coverage":coverage,
+        "font_px":130,"main_font_px":main_font.size,"vertical_composition_coverage":coverage,
         "source":photo_credits[-1]})
     print(f"Checked slide {i+1}/{len(slides)}: {coverage:.1%} vertical text span")
 
