@@ -48,17 +48,32 @@ required(slides==5 and len(brief.get("tips",[]))==4,
          "incorrect carousel story length")
 quality=report.get("quality",[])
 required(len(quality)==5,"missing individual slide QA")
+required(report.get("style_id")=="editorial_photo_overlay_v1",
+         "selected carousel style missing")
 sources=set()
 fingerprints=[]
 for n,info in enumerate(quality):
     required(info.get("slide")==n+1 and info.get("size")==[1080,1920],
              "incorrect individual slide or dimensions")
-    required(info.get("font_px",0)>=130 and info.get("main_font_px",0)>=130,
+    required(info.get("font_px",0)>=120 and info.get("main_font_px",0)>=120,
              "font below agreed minimum")
-    required(info.get("vertical_composition_coverage",0)>=0.60,
-             "text does not span enough of slide height")
-    required(info.get("typography_reserved_area_fraction",0)>=0.60,
-             "text design region less than 60 percent of screen area")
+    required(info.get("style_id")=="editorial_photo_overlay_v1"
+             and info.get("text_background") is False
+             and info.get("text_stroke") is False
+             and info.get("photo_overlay") is False,
+             "slide differs from direct-photo typography style")
+    required(info.get("text_color")=="#061B3E" and info.get("text_opacity")==230
+             and 1<=info.get("text_lines",0)<=3,
+             "incorrect dark large headline")
+    box=info.get("text_bbox",[])
+    required(len(box)==4 and 65<=box[0]<box[2]<=1015
+             and 220<=box[1]<box[3]<=1100,
+             "headline outside upper photo region")
+    required(info.get("background_mean_luminance",0)>=150
+             and info.get("background_dark_fraction",1)<=0.27,
+             "text contrast on photo not verified")
+    required(info.get("logo_position") in ("bottom_right","omitted_unavailable"),
+             "logo must be small at lower right")
     required(info.get("photo_semantic_qa") is True,
              "visual brief was not semantically screened")
     required(info.get("font_glyph_coverage_qa") is True,
