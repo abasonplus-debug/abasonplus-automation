@@ -1,0 +1,142 @@
+name: AbasonPlus TikTok – Publish One Reviewed Video
+on:
+  workflow_dispatch:
+    inputs:
+      preview_run_id:
+        description: 'GitHub run ID containing the exact video you have watched'
+        required: true
+        type: string
+      preview_confirmed:
+        description: 'After watching the video, type exactly: I_REVIEWED_THIS_VIDEO'
+        required: true
+        type: string
+      express_consent:
+        description: 'To publish this exact video, type exactly: I_CONSENT_TO_THIS_TIKTOK_POST'
+        required: true
+        type: string
+      privacy:
+        description: 'Available creator privacy option: type PUBLIC_TO_EVERYONE'
+        required: true
+        type: string
+      allow_comments:
+        description: 'Individually choose true or false for TikTok comments'
+        required: true
+        type: string
+      allow_duet:
+        description: 'Individually choose true or false for TikTok Duet'
+        required: true
+        type: string
+      allow_stitch:
+        description: 'Individually choose true or false for TikTok Stitch'
+        required: true
+        type: string
+      rights_confirmed:
+        description: 'Confirm photo and soundtrack usage rights: type I_OWN_OR_HAVE_RIGHTS'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: abasonplus-tiktok-human-reviewed-${{ inputs.preview_run_id }}
+  cancel-in-progress: false
+
+jobs:
+  publish-reviewed-only:
+    # Only a logged-in repository owner can create this explicit approval.
+    if: ${{ github.actor == 'abasonplus-debug' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify individual video consent and metadata selections
+        env:
+          PREVIEW_CONFIRMED: ${{ inputs.preview_confirmed }}
+          EXPRESS_CONSENT: ${{ inputs.express_consent }}
+          TIKTOK_PRIVACY: ${{ inputs.privacy }}
+          TIKTOK_COMMENTS: ${{ inputs.allow_comments }}
+          TIKTOK_DUET: ${{ inputs.allow_duet }}
+          TIKTOK_STITCH: ${{ inputs.allow_stitch }}
+          RIGHTS: ${{ inputs.rights_confirmed }}
+          PREVIEW_RUN_ID: ${{ inputs.preview_run_id }}
+        run: |
+          python3 - <<'PY'
+          import os
+          assert os.environ["PREVIEW_CONFIRMED"]=="I_REVIEWED_THIS_VIDEO", "Watch exact video before consenting"
+          assert os.environ["EXPRESS_CONSENT"]=="I_CONSENT_TO_THIS_TIKTOK_POST", "Post-specific TikTok consent required"
+          assert os.environ["RIGHTS"]=="I_OWN_OR_HAVE_RIGHTS", "Music and image publishing rights not confirmed"
+          assert os.environ["TIKTOK_PRIVACY"]=="PUBLIC_TO_EVERYONE", "Creator's allowed direct-post option"
+          for field in ("TIKTOK_COMMENTS","TIKTOK_DUET","TIKTOK_STITCH"):
+              assert os.environ[field] in ("true","false"), f"{field} requires individual true or false choice"
+          assert os.environ["PREVIEW_RUN_ID"].isdigit() and len(os.environ["PREVIEW_RUN_ID"])<=15, "Invalid run ID"
+          print("Creator explicitly approved individual privacy, interaction and music-rights fields.")
+          PY
+      - name: Download ONLY the exact previously generated quality-checked video
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIEW_RUN_ID: ${{ inputs.preview_run_id }}
+        run: |
+          gh run view "$PREVIEW_RUN_ID" --repo "$GITHUB_REPOSITORY" --json conclusion,name,event \
+            --jq 'select(.conclusion == "success" and .name == "AbasonPlus Live Editorial End-to-End Preview — NO POSTS") | .name' \
+            | grep -F "End-to-End Preview"
+          mkdir -p output
+          gh run download "$PREVIEW_RUN_ID" --repo "$GITHUB_REPOSITORY" \
+            -n abasonplus-daily-editorial-preview -D output
+      - name: Verify video, first-frame hook, current source and authenticity
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,pathlib,datetime,zoneinfo,subprocess
+          out=pathlib.Path("output")
+          meta=json.loads((out/"metadata.json").read_text(encoding="utf-8"))
+          tt=json.loads((out/"tiktok_preview.json").read_text(encoding="utf-8"))
+          today=datetime.datetime.now(zoneinfo.ZoneInfo("Asia/Dhaka")).date().isoformat()
+          assert tt["status"]=="preview_only" and tt["posting_enabled"] is False
+          assert meta["date"]==today and tt["date"]==today, "No older stale preview publication"
+          assert meta["source_url"]==tt["source_url"] and meta["source_url"].startswith("https://")
+          assert meta["slides"]==5 and len(meta["quality"])==5
+          assert all(x.get("photo_semantic_qa") and x.get("font_px",0)>=130
+             and x.get("typography_reserved_area_fraction",0)>=.6 for x in meta["quality"])
+          assert len({x["source"] for x in meta["quality"]})==5
+          video=out/"abasonplus_daily.mp4"
+          assert video.is_file() and video.stat().st_size>500_000
+          assert (out/"thumbnail.png").read_bytes()==(out/"slide_0.png").read_bytes()
+          assert (out/"tiktok_caption.txt").read_text(encoding="utf-8").strip()
+          info=json.loads(subprocess.check_output(["ffprobe","-v","error","-show_streams","-show_format","-of","json",str(video)]))
+          v=[x for x in info["streams"] if x["codec_type"]=="video"]
+          a=[x for x in info["streams"] if x["codec_type"]=="audio"]
+          assert len(v)==1 and v[0]["width"]==1080 and v[0]["height"]==1920 and v[0]["codec_name"]=="h264"
+          assert len(a)>=1 and a[0]["codec_name"]=="aac"
+          assert 14.5<=float(info["format"]["duration"])<=16.5
+          print("INDIVIDUALLY REVIEWED MP4 SHA256:",hashlib.sha256(video.read_bytes()).hexdigest())
+          PY
+      - name: Deliver ONLY this creator-reviewed video for TikTok (never Facebook/YouTube)
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+          TIKTOK_PRIVACY: ${{ inputs.privacy }}
+          TIKTOK_COMMENTS: ${{ inputs.allow_comments }}
+          TIKTOK_DUET: ${{ inputs.allow_duet }}
+          TIKTOK_STITCH: ${{ inputs.allow_stitch }}
+        run: |
+          test -n "$MAKE_WEBHOOK_URL" || { echo "Missing existing private Make webhook"; exit 1; }
+          KEY="abasonplus-tiktok-$(TZ=Asia/Dhaka date +%F)"
+          curl --fail-with-body --silent --show-error --max-time 120 --retry 0 \
+            -F "kind=tiktok_reviewed_publish" \
+            -F "review_approved=true" \
+            -F "visual_qa_passed=true" \
+            -F "tiktok_publish_approved=true" \
+            -F "content_preview_confirmed=true" \
+            -F "express_consent_given=true" \
+            -F "tiktok_privacy_level=$TIKTOK_PRIVACY" \
+            -F "tiktok_allow_comment=$TIKTOK_COMMENTS" \
+            -F "tiktok_allow_duet=$TIKTOK_DUET" \
+            -F "tiktok_allow_stitch=$TIKTOK_STITCH" \
+            -F "tiktok_post_key=$KEY" \
+            -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
+            -F "tiktok_caption=<output/tiktok_caption.txt" \
+            "$MAKE_WEBHOOK_URL" -o /tmp/make_response.txt
+          echo "Make accepted reviewed video; THIS IS NOT PROOF OF PUBLIC TIKTOK POST."
+          echo "Verify the resulting Zernio/TikTok platform status and public URL separately."
+# No cron trigger. This workflow is impossible to run on a schedule or repository push.
+# The creator must review that specific completed preview and expressly approve that video.
