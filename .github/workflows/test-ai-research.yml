@@ -1,0 +1,57 @@
+name: AbasonPlus Daily AI Research Preview — NO POSTS
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/generate_daily_research.py'
+      - '.github/workflows/test-ai-research.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile and install free text-processing dependencies
+        run: |
+          python3 -m py_compile scripts/generate_daily_research.py
+          python3 -m pip install beautifulsoup4
+      - name: Start local open-source Ollama server (no paid API)
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama serve >/tmp/ollama-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fsS http://localhost:11434/api/tags >/dev/null && break
+            sleep 2
+          done
+          curl -fsS http://localhost:11434/api/tags >/dev/null
+          ollama pull qwen3:4b-instruct
+      - name: Read fresh live reporting and produce Bengali article & carousel story — NO POSTS
+        run: python3 scripts/generate_daily_research.py
+      - name: Verify generated source attribution and content
+        run: |
+          python3 - <<'PY'
+          import json, pathlib
+          out=pathlib.Path('output')
+          article=json.loads((out/'daily_research_post.json').read_text(encoding='utf-8'))
+          story=json.loads((out/'daily_research_story.json').read_text(encoding='utf-8'))
+          assert article['source_url'].startswith('https://www.tbsnews.net/')
+          assert article['source_url'] in article['content']
+          assert article['slug'].startswith('ap-')
+          assert len(story['tips'])==4
+          assert story['source_url']==article['source_url']
+          print('LIVE AI RESEARCH PREVIEW validated:',article['title'])
+          PY
+      - name: Store PRIVATE-PREVIEW data only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: abasonplus-daily-ai-research-preview
+          path: |
+            output/daily_research_post.json
+            output/daily_research_story.json
+          retention-days: 3
+          if-no-files-found: ignore
+# NO email, WordPress, Facebook, YouTube or Make posting step exists.
