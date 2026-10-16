@@ -15,6 +15,7 @@ import subprocess
 import wave
 import struct
 from PIL import Image, ImageDraw, ImageFont, features
+from fontTools.ttLib import TTFont
 from photo_relevance import PhotoRelevanceGuard
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,9 +26,37 @@ if not FONT:
     raise RuntimeError("Install fonts-noto-core to render Bengali")
 if not features.check("raqm"):
     raise RuntimeError("Pillow must support libraqm for correct Bengali shaping")
-big = ImageFont.truetype(str(FONT), 130)
-medium = ImageFont.truetype(str(FONT), 130)
-small = ImageFont.truetype(str(FONT), 130)
+# NotoSansBengali-Regular.ttf has NO Latin glyphs. Always use a genuine
+# Latin fallback for words like "Land Share" rather than rendering □□□□.
+LATIN_FONT = next((p for p in Path("/usr/share/fonts").rglob("NotoSans-Regular.ttf")), None)
+if not LATIN_FONT:
+    raise RuntimeError("Install fonts-noto-core: NotoSans-Regular.ttf is required for bilingual hooks")
+BN_CMAP = TTFont(str(FONT)).getBestCmap()
+LATIN_CMAP = TTFont(str(LATIN_FONT)).getBestCmap()
+LATIN_FONTS = {}
+def latin_font(size):
+    if size not in LATIN_FONTS:
+        LATIN_FONTS[size] = ImageFont.truetype(str(LATIN_FONT),size)
+    return LATIN_FONTS[size]
+
+def word_font(word, bengali_font):
+    # Keep Bengali combining marks and their base consonants in one shaping run.
+    return bengali_font if any(0x0980 <= ord(c) <= 0x09FF for c in word) else latin_font(bengali_font.size)
+
+def mixed_tokens(value, bengali_font):
+    for token in re.findall(r"\\s+|\\S+", value):
+        fnt = word_font(token, bengali_font)
+        cmap = BN_CMAP if fnt is bengali_font else LATIN_CMAP
+        missing = [f"U+{ord(ch):04X}" for ch in token
+                   if not ch.isspace() and ord(ch) not in cmap
+                   and ch not in ("\\u200c","\\u200d")]
+        if missing:
+            raise RuntimeError(f"Unsupported glyphs {missing} in on-screen text; refusing □ boxes: {value[:75]}")
+        yield token,fnt
+
+def mixed_text_width(draw, value, bengali_font):
+    return sum(draw.textlength(piece,font=fnt) for piece,fnt in mixed_tokens(value,bengali_font))
+
 # Curated Bengali housing content, not invented legal advice.
 catalog = json.loads((ROOT / "content" / "topics.json").read_text(encoding="utf-8"))
 if len(catalog)<10:
@@ -236,20 +265,24 @@ def fit_lines(draw, value, fnt, limit=940):
     current=""
     for word in value.split():
         candidate=(current+" "+word).strip()
-        if current and draw.textbbox((0,0),candidate,font=fnt)[2]>limit:
+        if current and mixed_text_width(draw,candidate,fnt)>limit:
             lines.append(current)
             current=word
         else:
             current=candidate
     if current: lines.append(current)
-    if not lines or any(draw.textbbox((0,0),line,font=fnt)[2]>limit for line in lines):
+    if not lines or any(mixed_text_width(draw,line,fnt)>limit for line in lines):
         raise RuntimeError(f"Text too long at 130px: {value[:80]}")
     return lines
 
 def draw_line(draw,line,y,fnt,ink):
-    width=draw.textbbox((0,0),line,font=fnt)[2]
-    draw.text(((1080-width)//2,y),line,font=fnt,fill=ink,
-              stroke_width=5,stroke_fill=(0,0,0,225))
+    width=mixed_text_width(draw,line,fnt)
+    x=(1080-width)/2
+    for part, font in mixed_tokens(line,fnt):
+        if not part.isspace():
+            draw.text((x,y),part,font=font,fill=ink,
+                      stroke_width=2,stroke_fill=(0,0,0,150))
+        x+=draw.textlength(part,font=font)
 
 for i, slide in enumerate(slides):
     picture=image_for(slide["photo"],i)
@@ -277,13 +310,13 @@ for i, slide in enumerate(slides):
     if len(top)>2 or not middle or len(bottom)>1:
         raise RuntimeError(f"Slide {i+1}: too much text for 130px+ layout")
     for j,line in enumerate(top):
-        draw_line(draw,line,205+j*170,fnt,(255,255,255,228))
+        draw_line(draw,line,205+j*170,fnt,(255,255,255,205))
     line_step=max(220,int(main_font.size*1.18))
     middle_y=930-((len(middle)-1)*line_step)//2
     for j,line in enumerate(middle):
-        ink=(255,236,22,226) if j%2==0 else (255,255,255,226)
+        ink=(255,236,22,206) if j%2==0 else (255,255,255,206)
         draw_line(draw,line,middle_y+j*line_step,main_font,ink)
-    draw_line(draw,bottom[0],1540,fnt,(255,245,170,228))
+    draw_line(draw,bottom[0],1540,fnt,(255,245,170,205))
     bbox=layer.getbbox()
     if bbox is None or (bbox[3]-bbox[1]) < 1152:
         raise RuntimeError(f"Slide {i+1}: typography covers less than 60% of frame height")
@@ -309,6 +342,8 @@ for i, slide in enumerate(slides):
         "typography_reserved_area_fraction":round(design_area,3),
         "actual_ink_bounding_area_fraction":round((bbox[2]-bbox[0])*(bbox[3]-bbox[1])/(1080*1920),3),
         "photo_semantic_qa":True,
+        "font_glyph_coverage_qa":True,
+        "latin_fallback_font":LATIN_FONT.name,
         "source":photo_credits[-1]})
     print(f"Checked slide {i+1}/{len(slides)}: {coverage:.1%} vertical text span")
 
