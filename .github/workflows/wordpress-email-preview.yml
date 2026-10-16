@@ -1,0 +1,44 @@
+name: AbasonPlus WordPress Email Preview Only
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'wordpress_email_prepare.py'
+      - 'wordpress_posts.json'
+      - '.github/workflows/wordpress-email-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  prepare-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile publisher code without posting
+        run: python3 -m py_compile wordpress_email_prepare.py
+      - name: Build next draft and check public WordPress slugs
+        run: python3 wordpress_email_prepare.py
+      - name: Validate safe preview email envelope
+        run: |
+          python3 - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('output/wordpress_email_preview.json')
+          if p.exists():
+              x=json.loads(p.read_text(encoding='utf-8'))
+              assert x['status']=='preview_only' and x['review_approved']=='false'
+              assert x['kind']=='wordpress_email'
+              assert '[publicize off]' in x['content'] and '[slug ' in x['content']
+              assert x['post_key'] and len(x['content'])>260
+              print('Safe WordPress email preview created; NO OUTBOUND SEND.')
+          else:
+              print('No unpublished reviewed posts; NO OUTBOUND SEND.')
+          PY
+      - name: Save preview email payload
+        uses: actions/upload-artifact@v4
+        with:
+          name: wordpress-email-preview-only
+          path: output/wordpress_email_preview.json
+          if-no-files-found: ignore
+          retention-days: 3
+# No SMTP, Gmail, webhook, public post, draft upload or OAuth write action.
