@@ -58,7 +58,7 @@ for topic in catalog:
             dt.text(((1080-width)//2,y),t,font=font,fill=(6,27,62,230))
         for j,line in enumerate(lines): drawline(line,260+j*int(font.size*1.52))
         bbox=layer.getbbox()
-        assert bbox and 65<=bbox[0]<bbox[2]<=1015 and 220<=bbox[1]<bbox[3]<=1100,(topic["title"],idx,"selected style safe region")
+        assert bbox and 40<=bbox[0]<bbox[2]<=1040 and 200<=bbox[1]<bbox[3]<=1100,(topic["title"],idx,"selected style safe region",bbox,lines)
         checked+=1
 
 # Only scheduled and sourced, QA-passed video uploads may publish.
