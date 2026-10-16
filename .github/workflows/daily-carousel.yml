@@ -27,7 +27,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: abasonplus-carousel
-          path: output/abasonplus_daily.mp4
+          path: |
+            output/abasonplus_daily.mp4
+            output/slide_*.png
+            output/title.txt
+            output/caption.txt
+            output/description.txt
+            output/image_credits.txt
           retention-days: 7
       - name: Send to Make webhook when configured
         env:
@@ -38,4 +44,5 @@ jobs:
             -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
             -F "title=<output/title.txt" \
             -F "caption=<output/caption.txt" \
+            -F "description=<output/description.txt" \
             "$MAKE_WEBHOOK_URL"
