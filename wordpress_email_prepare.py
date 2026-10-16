@@ -6,7 +6,7 @@ import argparse, html, json, pathlib, re
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
 from html.parser import HTMLParser
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
@@ -63,7 +63,7 @@ def prepare(post):
     email_body=directives+"\n\n"+plain+"\n\nআরও তথ্য: "+WEBSITE
     html_body="<p>"+html.escape(directives).replace("\n","</p><p>")+"</p>"
     # Keep original reviewed headings and lists for readable SEO-friendly articles.
-    if re.search(r"<\\s*(?:script|iframe|form|object|embed)\\b",post["content"],re.I):
+    if re.search(r"<\s*(?:script|iframe|form|object|embed)\b",post["content"],re.I):
         raise RuntimeError("Unsafe article markup blocked")
     html_body+=post["content"]
     html_body+="<p>আরও তথ্য: <a href='"+WEBSITE+"'>AbasonPlus</a></p>"
@@ -88,20 +88,33 @@ def main():
     if chatgpt_path.is_file():
         entry=json.loads(chatgpt_path.read_text(encoding="utf-8"))
         source=entry.get("source_url","")
+        approved_source_hosts={
+            "bdlaws.minlaw.gov.bd","www.bssnews.net","www.tbsnews.net",
+            "investbangladesh.gov.bd","dmtcl.gov.bd","hbri.gov.bd",
+            "ss.pwd.gov.bd","nsez.gov.bd","nha.gov.bd",
+            "mutation.land.gov.bd","mohpw.gov.bd"
+        }
         if entry.get("date")!=today.isoformat() or entry.get("verified_on")!=today.isoformat():
             raise RuntimeError("ChatGPT daily editorial is stale or incorrectly dated")
-        if not source.startswith("https://") or source not in entry.get("content",""):
+        if urlparse(source).scheme!="https" or urlparse(source).hostname not in approved_source_hosts:
+            raise RuntimeError("ChatGPT daily editorial has an unapproved or invalid reference host")
+        if source not in entry.get("content",""):
             raise RuntimeError("ChatGPT daily editorial missing in-article source citation")
-        if not (entry.get("slug","").startswith("ap-") or entry.get("slug","").startswith("abasonplus-")):
-            raise RuntimeError("ChatGPT daily editorial lacks unique source-based slug")
+        if not re.fullmatch(r"ap-[a-z0-9-]{10,95}",entry.get("slug","")):
+            raise RuntimeError("ChatGPT daily editorial lacks a valid unique ap- slug")
         body=entry.get("content","")
-        if len(body)<1700 or body.count("<h2>")<3 or any(tag in body.lower() for tag in ("<script","<iframe","<form","<object","<embed")):
-            raise RuntimeError("ChatGPT daily article failed editorial structure checks")
-        if len(entry.get("tags",[]))<3 or len(entry.get("tags",[]))>8:
+        if len(body)<1700 or body.count("<h2>")<3 or re.search(r"<\\s*(?:script|iframe|form|object|embed)\\b",body,re.I):
+            raise RuntimeError("ChatGPT daily article failed safe HTML structure checks")
+        if not isinstance(entry.get("tags"),list) or not 3<=len(entry["tags"])<=8:
             raise RuntimeError("ChatGPT daily article has invalid tag count")
         story=entry.get("story")
-        if not isinstance(story,dict) or len(story.get("tips",[]))<4 or story.get("source_url")!=source:
-            raise RuntimeError("ChatGPT daily slide plan incomplete")
+        if not isinstance(story,dict) or len(story.get("tips",[]))!=4 or story.get("source_url")!=source or story.get("verified_on")!=today.isoformat():
+            raise RuntimeError("ChatGPT daily slide plan incomplete or out of sync")
+        # Validate the fresh ChatGPT package as a separate recognized category.
+        # Do NOT imply a human editor approved it; the daily task is automated.
+        entry["editorial_review"]="automated_source_grounded_checks"
+        entry["sources"]=[source]
+        entry["kind"]="fresh_independent_source"
         chatgpt=[entry]
         print("SOURCE_LINKED_CHATGPT_DAILY_PACKAGE:",entry["slug"],flush=True)
     generated_file=ROOT/"output"/"daily_research_post.json"
