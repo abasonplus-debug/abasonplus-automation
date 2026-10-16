@@ -24,7 +24,7 @@ Use only original `assets/abasonplus.mp3`; no fallback. MP4 H.264/AAC, 1080×192
 
 ## Publishing and deduplication
 Existing authorized destinations: AbasonPlus Facebook Page Reels, YouTube Shorts, and WordPress. Instagram/TikTok are not connected destinations.
-- Vimeo/social publishing steps remain OFF until authorization.
+- Video/social publishing steps remain OFF until authorization.
 - When authorized to resume, use **only the single Make.com scenario**; WordPress remains a separate flow.
 - Make Data Store `AbasonPlus Published Video Keys` (id 220796): unique local-day key, overwrite=false, BEFORE router; sequential execution to reduce duplicate risk. This is an at-most-once *attempt*, not guaranteed exactly-once delivery to both platforms. Review partial failures manually.
 - YouTube Description = incoming `description`; Facebook caption = incoming `caption`.
