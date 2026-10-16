@@ -8,6 +8,13 @@ on:
       - 'tests/validate_carousel.py'
       - 'tests/photo_source_probe.py'
       - '.github/workflows/validate-carousel.yml'
+  pull_request:
+    paths:
+      - 'scripts/create_carousel.py'
+      - 'scripts/verify_video_release.py'
+      - 'tests/validate_carousel.py'
+      - '.github/workflows/daily-carousel.yml'
+      - '.github/workflows/validate-carousel.yml'
   workflow_dispatch:
 permissions:
   contents: read
