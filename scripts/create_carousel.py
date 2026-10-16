@@ -34,7 +34,7 @@ item = catalog[date.toordinal() % len(catalog)]
 heading, hook, points = item["title"], item["hook"], item["tips"]
 if not 4 <= len(points) <= 9:
     raise RuntimeError("Carousel requires 5 to 10 slides")
-slides = [{"main":hook,"photo":item["cover_query"],"sub":"জরুরি বিষয়গুলো জানুন"}]
+slides = [{"main":hook,"photo":item["cover_query"],"sub":"জরুরি তথ্য"}]
 slides += [{"main":p["text"],"photo":p["query"],"sub":f"পরামর্শ {i}/{len(points)}"}
            for i,p in enumerate(points,1)]
 hashtags = "#AbasonPlus #আবাসন #PropertyTips #RealEstateBangladesh "
@@ -102,61 +102,66 @@ def image_for(query, slide_index):
         print(f"Photo fetch failed: {query}: {str(exc)[:180]}")
     return None
 
-for i, (main, subtitle) in enumerate(slides):
-    query = next((term for key, term in KEYWORDS.items() if key in main), None)
-    if not query:
-        query = SCENES[heading][i]
-    im = image_for(query, i)
-    if im is None:
-        raise RuntimeError(f"Slide {i+1}: no suitably licensed photograph found; refusing a fake photo fallback")
-    # Draw the lettering directly on the topic-specific photograph: no panel or box.
-    im = im.convert("RGBA")
-    d = ImageDraw.Draw(im)
+# Independent full-bleed frames; translucent Bengali, true 130px font size.
+def fit_lines(draw, value, fnt, limit=940):
+    lines=[]
+    current=""
+    for word in value.split():
+        candidate=(current+" "+word).strip()
+        if current and draw.textbbox((0,0),candidate,font=fnt)[2]>limit:
+            lines.append(current)
+            current=word
+        else:
+            current=candidate
+    if current: lines.append(current)
+    if not lines or any(draw.textbbox((0,0),line,font=fnt)[2]>limit for line in lines):
+        raise RuntimeError(f"Text too long at 130px: {value[:80]}")
+    return lines
+
+def draw_line(draw,line,y,fnt,ink):
+    width=draw.textbbox((0,0),line,font=fnt)[2]
+    draw.text(((1080-width)//2,y),line,font=fnt,fill=ink,
+              stroke_width=2,stroke_fill=(0,0,0,185))
+
+for i, slide in enumerate(slides):
+    picture=image_for(slide["photo"],i)
+    if picture is None:
+        raise RuntimeError(f"Slide {i+1}: no matching licensed full-resolution photo; fail closed")
+    picture=picture.convert("RGBA")
+    layer=Image.new("RGBA",picture.size,(0,0,0,0))
+    draw=ImageDraw.Draw(layer)
+    fnt=ImageFont.truetype(str(FONT),130)
+    top=fit_lines(draw,heading if i else "আবাসনপ্লাস",fnt)
+    middle=fit_lines(draw,slide["main"],fnt)
+    bottom=fit_lines(draw,slide["sub"],fnt)
+    if len(top)>2 or len(middle)>4 or len(bottom)>1:
+        raise RuntimeError(f"Slide {i+1}: too many lines at minimum font size")
+    for j,line in enumerate(top):
+        draw_line(draw,line,265+j*170,fnt,(255,255,255,205))
+    middle_y=960-((len(middle)-1)*170)//2
+    for j,line in enumerate(middle):
+        ink=(255,236,22,200) if j%2==0 else (255,255,255,200)
+        draw_line(draw,line,middle_y+j*170,fnt,ink)
+    draw_line(draw,bottom[0],1500,fnt,(255,245,170,205))
+    bbox=layer.getbbox()
+    if bbox is None or (bbox[3]-bbox[1]) < 1152:
+        raise RuntimeError(f"Slide {i+1}: typography covers less than 60% of frame height")
     if logo:
-        im.paste(logo, ((1080-logo.width)//2, 195), logo)
-    else:
-        centered(d, "আবাসন+", 240, big, (255, 255, 255))
-    # Borderless semi-transparent, non-bold Bengali lettering, minimum 130px.
-    # Use fewer words per slide rather than shrinking text.
-    def wrap(text, fnt, max_width=950):
-        words, lines, current = text.split(), [], ""
-        for word in words:
-            test = (current + " " + word).strip()
-            if current and d.textbbox((0, 0), test, font=fnt)[2] > max_width:
-                lines.append(current)
-                current = word
-            else:
-                current = test
-        if current: lines.append(current)
-        return lines
+        picture.paste(logo,((1080-logo.width)//2,65),logo)
+    frame=Image.alpha_composite(picture,layer).convert("RGB")
+    if frame.size!=(1080,1920): raise RuntimeError("Incorrect frame size")
+    frame.save(OUT / f"slide_{i}.png",optimize=True)
+    if i==0:
+        frame.save(OUT / "thumbnail.png",optimize=True)
+    coverage=round((bbox[3]-bbox[1])/1920,3)
+    quality_results.append({"slide":i+1,"size":[1080,1920],
+        "font_px":130,"vertical_composition_coverage":coverage,
+        "source":photo_credits[-1]})
+    print(f"Checked slide {i+1}/{len(slides)}: {coverage:.1%} vertical text span")
 
-    font = ImageFont.truetype(str(FONT), 130)
-    lines = wrap(main, font)
-    if any(d.textbbox((0, 0), line, font=font)[2] > 950 for line in lines):
-        raise RuntimeError(f"Slide {i+1}: text too long for 130px; edit slide copy")
-    # Distribute lines across a large central text composition (60%+ height).
-    layer = Image.new("RGBA", im.size, (0, 0, 0, 0))
-    ld = ImageDraw.Draw(layer)
-    # Use a spacious hook-first layout; measure actual glyph coverage below.
-    spacing = 380 if len(lines) <= 4 else 260
-    start_y = max(380, 960 - spacing*(len(lines)-1)//2)
-    for j, line in enumerate(lines):
-        width = ld.textbbox((0, 0), line, font=font)[2]
-        ink = (255, 240, 55, 205) if j % 2 == 0 else (255, 255, 255, 205)
-        ld.text(((1080-width)//2, start_y+j*spacing), line, font=font,
-                fill=ink, stroke_width=2, stroke_fill=(0, 0, 0, 155))
-    # Typography must be legible; reject instead of silently accepting tiny coverage.
-    bbox = layer.getbbox()
-    if not bbox or bbox[2] - bbox[0] < 450:
-        raise RuntimeError(f"Slide {i+1}: hook typography too narrow; revise copy")
-    im = Image.alpha_composite(im, layer)
-    # Preserve 130px minimum by not adding smaller subtitle/footer text.
-    # Slide zero is the dedicated hook/cover. Keep it identical to video frame 1.
-    if i == 0:
-        im.convert("RGB").save(OUT / "thumbnail.png", optimize=True)
-        print("Saved first-frame hook thumbnail: thumbnail.png")
-    im.convert("RGB").save(OUT / f"slide_{i}.png", optimize=True)
-
+(OUT / "image_credits.txt").write_text("\n".join(photo_credits)+"\n",encoding="utf-8")
+(OUT / "caption.txt").open("a",encoding="utf-8").write(
+    "\n\nছবির উৎস ও লাইসেন্সের বিস্তারিত ভিডিওর Description-এ।")
 (OUT / "description.txt").write_text(f"{hook}\n" + "\n".join(f"{i}. {tip}" for i, tip in enumerate(tips, 1)) + f"\n\nhttps://abasonplus.wordpress.com/\n{hashtags} #Shorts", encoding="utf-8")
 (OUT / "metadata.json").write_text(json.dumps({"date": str(date), "topic": heading, "hook": hook, "slides": len(slides), "status": "preview_only"}, ensure_ascii=False, indent=2), encoding="utf-8")
 playlist = OUT / "slides.txt"
