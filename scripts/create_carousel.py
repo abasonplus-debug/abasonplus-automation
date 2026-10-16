@@ -43,10 +43,14 @@ if daily_story_file:
     item=json.loads(target.read_text(encoding="utf-8"))
     if date.fromisoformat(item["verified_on"]) != today:
         raise RuntimeError("AI story verified date is not today")
-    if not item.get("source_url","").startswith("https://www.tbsnews.net/"):
-        raise RuntimeError("AI story source URL not approved")
-    if item.get("source_kind")!="external_news_report":
-        raise RuntimeError("AI story was not grounded in a retrieved source")
+    from urllib.parse import urlparse
+    trusted_hosts={"www.tbsnews.net","www.bssnews.net","bdlaws.minlaw.gov.bd",
+                   "investbangladesh.gov.bd","mohpw.gov.bd","dmtcl.gov.bd",
+                   "hbri.gov.bd","ss.pwd.gov.bd","nsez.gov.bd","nha.gov.bd"}
+    if urlparse(item.get("source_url","")).hostname not in trusted_hosts:
+        raise RuntimeError("Daily carousel source not among the approved publishers")
+    if item.get("source_kind") not in ("external_news_report","official_law_reference"):
+        raise RuntimeError("Carousel was not grounded in an approved factual source")
     print("NEW_SOURCE_GROUNDED_CAROUSEL:",item["source_url"],flush=True)
 else:
     item=current_catalog[today.toordinal() % len(current_catalog)]
