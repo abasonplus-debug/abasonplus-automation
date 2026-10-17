@@ -227,11 +227,15 @@ def image_for(query, slide_index, placements):
         photo_credits.append(f"Slide {slide_index+1}: {item['creator']} | {item['license']} | {item['source']} | Cropped and text overlaid")
         from PIL import ImageEnhance, ImageFilter
         picture=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
+        original_picture=picture.copy()
         picture=ImageOps.autocontrast(picture,cutoff=0.4)
         picture=ImageEnhance.Color(picture).enhance(1.04)
         picture=picture.filter(ImageFilter.UnsharpMask(radius=1.0,percent=50,threshold=3))
         if choose_text_area(picture,placements) is None:
-            raise RuntimeError(f"Curated scene {slide_index+1} lost text contrast after processing")
+            # Processing can darken an otherwise readable natural photograph.
+            picture=original_picture
+        if choose_text_area(picture,placements) is None:
+            raise RuntimeError(f"Curated scene {slide_index+1} has no readable headline area")
         print(f"Researched real photograph for slide {slide_index+1}: {item['scene']}",flush=True)
         return picture,choose_text_area(picture,placements)
 
@@ -284,12 +288,15 @@ def image_for(query, slide_index, placements):
                        if license_name.startswith("CC BY-SA ") else "")
                 from PIL import ImageEnhance, ImageFilter
                 picture=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
+                original_picture=picture.copy()
                 picture=ImageOps.autocontrast(picture,cutoff=0.5)
                 picture=ImageEnhance.Color(picture).enhance(1.04)
                 picture=ImageEnhance.Contrast(picture).enhance(1.035)
                 picture=picture.filter(ImageFilter.UnsharpMask(radius=1.2,percent=65,threshold=3))
                 if choose_text_area(picture,placements) is None:
-                    print(f"Rejected processed photo with poor text contrast: {title[:65]}",flush=True)
+                    picture=original_picture
+                if choose_text_area(picture,placements) is None:
+                    print(f"Rejected photo with poor text contrast: {title[:65]}",flush=True)
                     continue
                 used_photo_titles.add(title)
                 photo_credits.append(f"Slide {slide_index+1}: {title} | {attribution or 'Wikimedia contributor'} | {license_name} | {info.get('descriptionurl','')}{extra}")
