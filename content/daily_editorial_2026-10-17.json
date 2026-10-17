@@ -26,15 +26,52 @@
         "query": "property paperwork on desk by bright window, portrait professional photograph with spacious upper wall"
       },
       {
-        "text": "সব পক্ষ নিয়ে মাঠের মাপ দেখুন",
-        "query": "people measuring farm field under bright open sky, portrait professional photograph with spacious upper sky"
+        "text": "সব পক্ষ নিয়ে খসড়া নকশা দেখুন",
+        "query": "group of professionals examining construction blueprints together in bright white room, professional photograph"
       },
       {
         "text": "সরকারি অংশে অধিকার হয় না",
-        "query": "person reading property paperwork at bright desk, portrait professional photograph with spacious upper wall"
+        "query": "real estate agent and woman reviewing property documents together at a bright table, portrait professional photograph"
       }
     ],
     "source_url": "https://www.bssnews.net/bangla/news/345716",
-    "verified_on": "2026-10-17"
+    "verified_on": "2026-10-17",
+    "photos": [
+      {
+        "url": "https://images.pexels.com/photos/34247810/pexels-photo-34247810/free-photo-of-surveying-team-in-shiselweni-eswatini.jpeg?auto=compress&cs=tinysrgb&w=2400",
+        "source": "https://www.pexels.com/photo/surveying-team-in-shiselweni-eswatini-34247810/",
+        "creator": "Khaya Motsa",
+        "license": "Pexels Free License",
+        "scene": "Team of land surveyors measuring a dry grassland field."
+      },
+      {
+        "url": "https://images.pexels.com/photos/16664617/pexels-photo-16664617/free-photo-of-fence-on-a-field.jpeg?auto=compress&cs=tinysrgb&w=2400",
+        "source": "https://www.pexels.com/photo/fence-on-a-field-16664617/",
+        "creator": "Sarah Films",
+        "license": "Pexels Free License",
+        "scene": "Green farm field with a fence and rural path under open sky."
+      },
+      {
+        "url": "https://images.pexels.com/photos/7641852/pexels-photo-7641852.jpeg?cs=srgb&fm=jpg",
+        "source": "https://www.pexels.com/photo/man-in-gray-jacket-showing-papers-to-a-couple-to-sign-7641852/",
+        "creator": "Alena Darmel",
+        "license": "Pexels Free License",
+        "scene": "Property buyers and agent reviewing real estate documents in bright interior."
+      },
+      {
+        "url": "https://images.pexels.com/photos/8470033/pexels-photo-8470033.jpeg?auto=compress&cs=tinysrgb&w=2400",
+        "source": "https://www.pexels.com/photo/people-standing-beside-the-white-wall-looking-at-the-big-sheet-of-paper-8470033/",
+        "creator": "Thirdman",
+        "license": "Pexels Free License",
+        "scene": "Group of professionals in hard hats examining large construction blueprints in a bright room."
+      },
+      {
+        "url": "https://images.pexels.com/photos/8962380/pexels-photo-8962380.jpeg?cs=srgb&fm=jpg",
+        "source": "https://www.pexels.com/photo/a-woman-reviewing-documents-with-her-real-estate-agent-8962380/",
+        "creator": "Ivan S",
+        "license": "Pexels Free License",
+        "scene": "Woman reviewing property documents with a real estate agent at a bright table."
+      }
+    ]
   }
 }

@@ -44,6 +44,7 @@ class PhotoRelevanceGuard:
             "An old scanned archival certificate or paper document, flat on the page.",
             "A historical flat map, a diagram, or a screenshot of text.",
             "A cartoon illustration, a digital drawing or a synthetic 3D rendering.",
+            "The lunar surface, spacecraft or a space probe on the moon.",
         ]
         target=float(vector@self.text_vector(positive))
         bad=max(float(vector@self.text_vector(n)) for n in negatives)

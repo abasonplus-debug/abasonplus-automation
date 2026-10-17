@@ -61,6 +61,19 @@ for topic in catalog:
         assert bbox and 40<=bbox[0]<bbox[2]<=1040 and 200<=bbox[1]<bbox[3]<=1100,(topic["title"],idx,"selected style safe region",bbox,lines)
         checked+=1
 
+# Semantic models can mistake the NASA "Surveyor" probe for a land surveyor.
+# Verify title checks independently without importing the renderer or downloading photos.
+import re
+tree=ast.parse(SOURCE)
+guard_node=next(x for x in tree.body if isinstance(x,ast.FunctionDef) and x.name=="subject_guard")
+scope={}
+exec(compile(ast.Module(body=[guard_node],type_ignores=[]),"subject_guard","exec"),{"re":re},scope)
+guard=scope["subject_guard"]
+assert not guard("land surveyor in a field","Surface of the Moon as seen by Surveyor 3.jpg")
+assert not guard("property paperwork","Document concerning an unrelated historical record.jpg")
+assert guard("land surveyor in a field","Land surveyor using a total station.jpg")
+assert guard("property paperwork","Real estate property agreement documents.jpg")
+
 # Only scheduled and sourced, QA-passed video uploads may publish.
 video_workflow=(ROOT/".github/workflows/daily-carousel.yml").read_text(encoding="utf-8")
 assert "cron: '45 6 * * *'" in video_workflow,"Unexpected scheduled video time"

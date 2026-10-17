@@ -22,6 +22,18 @@ if not isinstance(story,dict) or len(story.get("tips",[]))!=4:
     raise RuntimeError("Need exactly four new, sourced carousel tips")
 if story.get("source_url")!=data["source_url"] or story.get("verified_on")!=today:
     raise RuntimeError("Slide and article source/version mismatch")
+photos=story.get("photos")
+if photos is not None:
+    from urllib.parse import urlparse
+    if len(photos)!=5 or len({x.get("url") for x in photos})!=5:
+        raise RuntimeError("Five distinct researched photographs required when provided")
+    for photo in photos:
+        if (urlparse(photo.get("url","")).hostname!="images.pexels.com"
+            or urlparse(photo.get("source","")).hostname!="www.pexels.com"
+            or not urlparse(photo["source"]).path.startswith("/photo/")
+            or photo.get("license")!="Pexels Free License"
+            or not photo.get("creator") or not photo.get("scene")):
+            raise RuntimeError("Invalid researched photographic source or license")
 for x in story["tips"]:
     if not (8<=len(x.get("text",""))<=88 and 5<=len(x.get("query",""))<=140):
         raise RuntimeError("One slide has no concise readable Bengali/visual brief")

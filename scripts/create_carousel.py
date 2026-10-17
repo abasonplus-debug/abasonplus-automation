@@ -101,7 +101,7 @@ quality_results = []
 relevance_guard = None
 # Research-backed references are preview candidates, NOT user-approved publications.
 researched_photos=json.loads((ROOT/"content"/"researched_photos.json").read_text(encoding="utf-8"))
-selected_photos=researched_photos.get(heading)
+selected_photos=item.get("photos") or researched_photos.get(heading)
 if selected_photos is not None:
     if len(selected_photos)!=len(slides):
         raise RuntimeError("Research photo manifest does not match slide count")
@@ -148,25 +148,37 @@ def search_phrases(query):
     return list(dict.fromkeys(p for p in phrases if p))
 
 def subject_guard(query, filename):
-    """Conservative filename screen: reject unrelated archives, diagrams and scans.
-    Not a substitute for manual visual review of licensed photo content."""
+    """Require subject-specific photo titles before CLIP; reject name collisions."""
     name=filename.lower()
     q=query.lower()
-    if not name.endswith((".jpg",".jpeg",".webp")): return False
+    if not name.endswith((".jpg",".jpeg",".webp")):
+        return False
     blocked=("certificate","membership","historic","cadastral map","old map",
-             "illustration","engraving","diagram","painting","poster",
-             "scan of","newspaper","cartoon","drawing","passport","blueprint")
-    if any(x in name for x in blocked): return False
-    if any(x in q for x in ("advisor","meeting","consultation")):
-        return any(x in name for x in ("meeting","discussion","consultation",
-                   "advisor","consultant","realtor","estate agent","client"))
-    if any(x in q for x in ("document","deed","paper","contract","record","agreement")):
-        return any(x in name for x in ("document","deed","paperwork",
-                   "property contract","agreement","registration","land record",
-                   "title deed","office desk"))
-    if any(x in q for x in ("survey","map","cadastral","boundary")):
-        return any(x in name for x in ("survey","land parcel","boundary",
-                   "field work","measuring","topographic"))
+             "illustration","engraving","diagram","painting","poster","scan of",
+             "newspaper","cartoon","drawing","passport","blueprint",
+             "moon","lunar","apollo","spacecraft","nasa","mars rover",
+             "surveyor 1","surveyor 2","surveyor 3","surveyor 4",
+             "surveyor 5","surveyor 6","surveyor 7")
+    if any(term in name for term in blocked):
+        return False
+    if any(term in q for term in ("survey","cadastral","boundary","total station")):
+        return any(term in name for term in
+                   ("land survey","land-survey","surveyor","surveying instrument",
+                    "total station","theodolite","field survey","cadastral survey",
+                    "property boundary"))
+    if any(term in q for term in ("advisor","meeting","consultation")):
+        return any(term in name for term in
+                   ("meeting","discussion","consultation","advisor",
+                    "consultant","realtor","estate agent","client"))
+    if any(term in q for term in ("document","deed","paper","contract","record","agreement")):
+        return (any(term in name for term in
+                    ("property","real estate","house sale","land deed","title deed",
+                     "contract","agreement","registration"))
+                and any(term in name for term in
+                        ("document","paper","deed","contract","agreement","record","signing")))
+    if any(term in q for term in ("farm","field","fence","farmland","rural")):
+        return any(term in name for term in
+                   ("farm","field","fence","rural","pasture","agricultural","countryside"))
     return True
 
 def choose_text_area(picture, placements):
@@ -207,19 +219,27 @@ def image_for(query, slide_index, placements):
             raise RuntimeError(f"Curated scene {slide_index+1} too small; refusing upscale")
         if item.get("license")!="Pexels Free License":
             raise RuntimeError("Curated photograph licensing is not verified")
-        if choose_text_area(picture,placements) is None:
-            raise RuntimeError(f"Curated scene {slide_index+1} is too dark behind selected navy typography")
         if relevance_guard is None: relevance_guard=PhotoRelevanceGuard()
         if not relevance_guard.approved(picture, query):
             raise RuntimeError(f"Curated scene {slide_index+1} does not match its visual brief")
         photo_credits.append(f"Slide {slide_index+1}: {item['creator']} | {item['license']} | {item['source']} | Cropped and text overlaid")
         from PIL import ImageEnhance, ImageFilter
         picture=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
+        original_picture=picture.copy()
         picture=ImageOps.autocontrast(picture,cutoff=0.4)
         picture=ImageEnhance.Color(picture).enhance(1.04)
         picture=picture.filter(ImageFilter.UnsharpMask(radius=1.0,percent=50,threshold=3))
         if choose_text_area(picture,placements) is None:
-            raise RuntimeError(f"Curated scene {slide_index+1} lost text contrast after processing")
+            # Processing can darken an otherwise readable natural photograph.
+            picture=original_picture
+        if choose_text_area(picture,placements) is None:
+            for factor in (1.12,1.25,1.4):
+                brightened=ImageEnhance.Brightness(original_picture).enhance(factor)
+                if choose_text_area(brightened,placements) is not None:
+                    picture=brightened
+                    break
+        if choose_text_area(picture,placements) is None:
+            raise RuntimeError(f"Curated scene {slide_index+1} has no readable headline area")
         print(f"Researched real photograph for slide {slide_index+1}: {item['scene']}",flush=True)
         return picture,choose_text_area(picture,placements)
 
@@ -272,12 +292,15 @@ def image_for(query, slide_index, placements):
                        if license_name.startswith("CC BY-SA ") else "")
                 from PIL import ImageEnhance, ImageFilter
                 picture=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
+                original_picture=picture.copy()
                 picture=ImageOps.autocontrast(picture,cutoff=0.5)
                 picture=ImageEnhance.Color(picture).enhance(1.04)
                 picture=ImageEnhance.Contrast(picture).enhance(1.035)
                 picture=picture.filter(ImageFilter.UnsharpMask(radius=1.2,percent=65,threshold=3))
                 if choose_text_area(picture,placements) is None:
-                    print(f"Rejected processed photo with poor text contrast: {title[:65]}",flush=True)
+                    picture=original_picture
+                if choose_text_area(picture,placements) is None:
+                    print(f"Rejected photo with poor text contrast: {title[:65]}",flush=True)
                     continue
                 used_photo_titles.add(title)
                 photo_credits.append(f"Slide {slide_index+1}: {title} | {attribution or 'Wikimedia contributor'} | {license_name} | {info.get('descriptionurl','')}{extra}")

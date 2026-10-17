@@ -9,6 +9,13 @@ on:
       - 'scripts/create_carousel.py'
       - 'scripts/photo_relevance.py'
       - 'scripts/prepare_tiktok_preview.py'
+  pull_request:
+    paths:
+      - 'content/daily_editorial_*.json'
+      - 'scripts/create_carousel.py'
+      - 'scripts/photo_relevance.py'
+      - 'scripts/select_video_story.py'
+      - '.github/workflows/test-daily-editorial.yml'
   workflow_dispatch:
 permissions:
   contents: read
