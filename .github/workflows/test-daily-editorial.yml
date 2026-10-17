@@ -21,7 +21,7 @@ jobs:
           key: abasonplus-clip-v1-${{ runner.os }}
       - name: Check source-linked today's article and prevent duplicate WordPress post
         run: python3 wordpress_email_prepare.py
-      - name: Validate matching five-slide editorial
+      - name: Validate matching variable-slide editorial
         run: python3 scripts/select_video_story.py
       - name: Render licensed, source-matched video with original music without posting
         env:

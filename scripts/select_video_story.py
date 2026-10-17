@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read today's ChatGPT-researched GitHub editorial and prepare topic-specific 5-slide render.
+"""Read today's ChatGPT-researched GitHub editorial and prepare topic-specific variable-slide render.
 No network, no social publication, no source invention.
 """
 import json, pathlib, sys

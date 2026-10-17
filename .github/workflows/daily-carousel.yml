@@ -48,7 +48,7 @@ jobs:
         with:
           path: .cache/fastembed
           key: abasonplus-clip-v1-${{ runner.os }}
-      - name: Check new 5-slide news story
+      - name: Check new variable-slide news story
         run: python3 scripts/select_video_story.py
       - name: Render original 9:16 Bengali slides and music MP4
         env:

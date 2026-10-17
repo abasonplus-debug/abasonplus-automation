@@ -180,7 +180,7 @@ def quality(source, story):
     for sect in story["sections"]:
         if not 90<=len(sect["text"])<=650:raise RuntimeError("Section too thin/wordy")
     for tip in story["tips"]:
-        if len(tip["text"])>92 or len(tip["query"])>115:raise RuntimeError("Slide text too long")
+        if len(tip["text"])>500 or len(tip["query"])>115:raise RuntimeError("Slide text too long")
         if not re.fullmatch(r"[A-Za-z0-9 ,:/'-]+",tip["query"]):
             raise RuntimeError("Photo query not simple English")
     if not re.fullmatch(r"[A-Za-z0-9 ,:/'-]+",story["cover_query"]):
