@@ -2,9 +2,6 @@ name: AbasonPlus Daily Source-Checked Carousel & Video
 on:
   schedule:
     - cron: '45 6 * * *' # After daily 06:20 UTC WordPress schedule
-  push:
-    branches: [main]
-    paths: ['.github/workflows/daily-carousel.yml']
   workflow_dispatch:
     inputs:
       preview_only:
@@ -106,13 +103,10 @@ jobs:
             output/tiktok_preview.json
           retention-days: 7
       - name: Send ONE daily validated Reel and Short to Make on automatic schedule ONLY
-        if: ${{ github.event_name == 'schedule' || (github.event_name == 'push' && github.event.head_commit.message == 'one-time-publish-2026-10-17-verified') }}
+        if: ${{ github.event_name == 'schedule' }}
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
         run: |
-          if [ "${{ github.event_name }}" = 'push' ]; then
-            test "$(TZ=Asia/Dhaka date +%F)" = '2026-10-17' || { echo 'One-time recovery date passed; no publication'; exit 1; }
-          fi
           test -n "$MAKE_WEBHOOK_URL" || { echo 'Missing Make webhook; no publication'; exit 1; }
           test -f output/video_qa_passed.txt || { echo 'No automatic photo quality approval; no publication'; exit 1; }
           VIDEO_SHA256="$(sha256sum output/abasonplus_daily.mp4 | cut -d ' ' -f1)"
