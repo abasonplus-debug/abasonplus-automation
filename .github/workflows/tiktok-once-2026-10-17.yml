@@ -48,3 +48,5 @@ jobs:
             -F "tiktok_allow_duet=true" \
             -F "tiktok_allow_stitch=true" \
             "$MAKE_WEBHOOK_URL"
+
+# Retry registered push trigger; daily key prevents duplicates.
