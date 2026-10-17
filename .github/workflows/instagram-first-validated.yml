@@ -1,0 +1,85 @@
+name: AbasonPlus Instagram - First Validated Video
+on:
+  push:
+    paths:
+      - 'config/instagram_first_validated_2026-10-17.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: abasonplus-instagram-first-validated
+  cancel-in-progress: false
+jobs:
+  publish-existing-video:
+    if: ${{ github.actor == 'abasonplus-debug' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate the exact authorized existing artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import datetime,json,zoneinfo,pathlib
+          m=json.loads(pathlib.Path('config/instagram_first_validated_2026-10-17.json').read_text())
+          assert m['enabled'] is True
+          assert m['date']==datetime.datetime.now(zoneinfo.ZoneInfo('Europe/Berlin')).date().isoformat()
+          assert m['run_id']==39029928876 and m['artifact_id']==12100455304
+          assert m['instagram_account_id']=='6ad380c8b835331ad1563a7a'
+          PY
+          gh run view 39029928876 --repo "$GITHUB_REPOSITORY" --json conclusion,name,headSha > /tmp/source-run.json
+          python3 - <<'PY'
+          import json
+          r=json.load(open('/tmp/source-run.json'))
+          assert r['conclusion']=='success'
+          assert r['name']=='AbasonPlus Daily Source-Checked Carousel & Video'
+          assert r['headSha']=='09808d99b736c4ee8713494ca40558d4af8d88e8'
+          PY
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/12100455304/zip" > /tmp/source-video.zip
+          python3 - <<'PY'
+          import hashlib,pathlib,zipfile
+          z=pathlib.Path('/tmp/source-video.zip')
+          assert hashlib.sha256(z.read_bytes()).hexdigest()=='3acc5a95e67461bf81c8dabb2b57ccf81720d70059348112360771392315a734'
+          with zipfile.ZipFile(z) as a:
+              assert all(not pathlib.PurePosixPath(n).is_absolute() and '..' not in pathlib.PurePosixPath(n).parts for n in a.namelist())
+              a.extractall('output')
+          PY
+      - name: Verify original video and Instagram caption before publishing
+        run: |
+          python3 - <<'PY'
+          import datetime,hashlib,json,pathlib,zoneinfo
+          p=pathlib.Path('output')
+          m=json.loads((p/'metadata.json').read_text(encoding='utf-8'))
+          assert m['date']==datetime.datetime.now(zoneinfo.ZoneInfo('Asia/Dhaka')).date().isoformat()
+          assert m['slides']==5 and len(m['quality'])==5
+          assert m['style_id']=='editorial_photo_overlay_v1'
+          assert len({q['source'] for q in m['quality']})==5
+          assert all(q.get('photo_semantic_qa') and q['font_px']>=120 and q.get('main_font_px',0)>=120
+              and q['text_background'] is False and q['text_stroke'] is False
+              and q['photo_overlay'] is False for q in m['quality'])
+          caption=(p/'caption.txt').read_text(encoding='utf-8').strip()
+          assert 1<=len(caption)<=2200, 'Instagram caption must fit without losing source credits'
+          assert caption.count('#')>=5
+          v=p/'abasonplus_daily.mp4'
+          assert v.stat().st_size>500000 and v.stat().st_size<300000000
+          (p/'instagram_video_sha256.txt').write_text(hashlib.sha256(v.read_bytes()).hexdigest())
+          print('Existing verified video and Instagram caption passed; no new media generated.')
+          PY
+      - name: Send only this existing video to the Instagram route
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: |
+          test -n "$MAKE_WEBHOOK_URL"
+          VIDEO_SHA256="$(cat output/instagram_video_sha256.txt)"
+          curl --fail-with-body --silent --show-error --max-time 120 --retry 0 \
+            -F "kind=instagram_video" \
+            -F "review_approved=true" \
+            -F "visual_qa_passed=true" \
+            -F "visual_style_id=editorial_photo_overlay_v1" \
+            -F "video_sha256=$VIDEO_SHA256" \
+            -F "caption=<output/caption.txt" \
+            -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
+            "$MAKE_WEBHOOK_URL" -o /tmp/instagram-make-response.txt
+          echo "Make accepted the Instagram-only request. Verify actual provider publication separately."
