@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-10-17T22:43:00.806Z",
+  "checked_at": "2026-10-17T22:49:05.512Z",
   "context": {
     "fresh_content_ready": null,
     "exact_tiktok_video_approved": false,
     "lookup_complete": {
       "website": false,
-      "facebook": false,
-      "youtube": false,
+      "facebook": true,
+      "youtube": true,
       "instagram": true,
       "tiktok": true
     }
@@ -44,26 +44,63 @@
       "verification": "platform_readback",
       "identity_matched": true,
       "source_reference": "Make read-only checker 8007397; provider post 6ad2ad8c947c00d1af18fc89"
+    },
+    {
+      "platform": "youtube",
+      "post_id": "oyeBE_FwFhs",
+      "url": "https://www.youtube.com/watch?v=oyeBE_FwFhs",
+      "status": "published",
+      "published_at": "2026-10-17T11:47:14Z",
+      "identity_matched": true,
+      "source_reference": "YouTube API readback via Make module 33",
+      "observed_at": "2026-10-17T22:49:05.512Z",
+      "verification": "platform_readback"
+    },
+    {
+      "platform": "facebook",
+      "post_id": "1079641431533649",
+      "url": "https://www.facebook.com/reel/1079641431533649/",
+      "status": "published",
+      "published_at": "2026-10-17T11:46:55.000Z",
+      "identity_matched": true,
+      "source_reference": "Facebook GetVideo via fixed Page Make module 34",
+      "observed_at": "2026-10-17T22:49:05.512Z",
+      "verification": "platform_readback"
     }
   ],
   "quota": {
-    "used": 161,
-    "remaining": 839,
+    "used": 174,
+    "remaining": 826,
     "days_until_reset": 26,
-    "measured_daily_credits": null,
-    "note": "Read at initial check; two read-only status calls may consume additional credits; no complete-day forecast established."
+    "measured_daily_credits": null
   },
   "quality": {
-    "status": "new_audit_validation_pending",
+    "status": "25_tests_and_previous_ci_passed",
     "style_id": "compact_white_gold_v2",
     "slide_seconds": 2,
     "actual_logo_available": true,
-    "mobile_preview": "not_generated_for_todays_video_yet",
-    "next_production_cycle": "not_due"
+    "mobile_preview": "not_generated_for_todays_video_yet"
   },
   "weekly_metrics": {
-    "status": "unavailable",
-    "note": "Analytics were not queried in this installation; do not treat missing data as zero."
+    "status": "partial_observation_not_weekly_trend",
+    "observations": [
+      {
+        "platform": "youtube",
+        "post_id": "oyeBE_FwFhs",
+        "observed_at": "2026-10-17T22:49:05.512Z",
+        "view_count": 255,
+        "like_count": 1,
+        "comment_count": 1
+      }
+    ],
+    "unavailable_metrics": [
+      "retention",
+      "watch_time",
+      "shares",
+      "saves",
+      "clicks",
+      "other_platform_metrics"
+    ]
   },
   "recovery": {
     "delivery_attempted": null,

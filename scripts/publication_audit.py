@@ -86,7 +86,7 @@ def markdown(report):
     ls+=['','## Verified post links']
     for p,item in report['platforms'].items():
         for row in item['posts']:ls.append(f"- {p}: {row['url']}")
-    ls+=['','## Free quota',json.dumps(report['quota'],ensure_ascii=False),'','## Recovery',report['recovery'],'','This report never publishes, deletes daily reservations or replays a Make publication.']
+    ls+=['','## Free quota',json.dumps(report['quota'],ensure_ascii=False),'','## Recovery',report['recovery'],'','## Quality and mobile preview',json.dumps(report['quality'],ensure_ascii=False),'','## Weekly metrics and availability',json.dumps(report['weekly_metrics'],ensure_ascii=False),'','This report never publishes, deletes daily reservations or replays a Make publication.']
     return '\n'.join(ls)+'\n'
 
 def main():

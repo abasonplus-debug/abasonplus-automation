@@ -1,0 +1,27 @@
+{
+  "scenario_id": 7968544,
+  "read_only": true,
+  "requests": [
+    {
+      "kind": "audit_youtube_read",
+      "id_format": "11-character video ID",
+      "module_id": 33,
+      "method": "GET",
+      "path": "/v3/videos"
+    },
+    {
+      "kind": "audit_facebook_read",
+      "id_format": "numeric video ID",
+      "module_id": 34,
+      "page_id": "293664680487578",
+      "method": "GET",
+      "module": "facebook-pages:GetVideo"
+    }
+  ],
+  "transport": "Private webhook with audit_video_id from actual uploader. HTTP Accepted is request receipt only; inspect matching execution and module output for provider evidence.",
+  "tested_existing_ids": [
+    "oyeBE_FwFhs",
+    "1079641431533649"
+  ],
+  "no_publisher_modules_invoked_during_reads": true
+}
