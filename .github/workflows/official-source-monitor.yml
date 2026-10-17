@@ -1,7 +1,8 @@
 name: AbasonPlus Daily Official Source Monitor (Read Only)
 on:
   schedule:
-    - cron: '35 5 * * *' # Before 06:20 UTC WordPress scheduled post; REPORT ONLY
+    - cron: '35 7 * * *' # Before 08:20 local WordPress schedule; REPORT ONLY
+      timezone: 'Europe/Berlin'
   push:
     branches: [main]
     paths:
