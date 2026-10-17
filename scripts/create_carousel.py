@@ -176,7 +176,7 @@ def light_text_area(picture, regions):
         area=cropped.crop(region).convert("L")
         mean=ImageStat.Stat(area).mean[0]
         dark=sum(area.histogram()[:110])/(area.width*area.height)
-        if mean<155 or dark>0.20:
+        if mean<150 or dark>0.25:
             return False
     return True
 
@@ -351,7 +351,7 @@ for i, slide in enumerate(slides):
         mean_luma=ImageStat.Stat(luminance).mean[0]
         dark_fraction=sum(luminance.histogram()[:110])/(luminance.width*luminance.height)
         line_stats.append((round(mean_luma,2),round(dark_fraction,3)))
-    if any(mean<155 or dark>0.20 for mean,dark in line_stats):
+    if any(mean<150 or dark>0.25 for mean,dark in line_stats):
         raise RuntimeError(f"Slide {i+1}: photo too dark/busy behind navy text; choose a lighter composition")
     if logo:
         picture.alpha_composite(logo,(1080-logo.width-72,1920-logo.height-210))
