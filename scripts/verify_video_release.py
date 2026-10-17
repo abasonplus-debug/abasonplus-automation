@@ -117,6 +117,9 @@ validate_pack(engagement)
 required(engagement['hook']==brief['hook'] and engagement['caption']==expected_caption and engagement['description']==expected_description,'social package differs from approved story/copy')
 required((OUT/'first_comment.txt').read_text(encoding='utf-8')==engagement['first_comment'],'first comment differs from package')
 required(json.loads((OUT/'first_comment_json.txt').read_text(encoding='utf-8'))==engagement['first_comment'],'comment JSON escaping invalid')
+with Image.open(OUT/'thumbnail_upload.jpg') as cover:
+    required(cover.size==(1080,1920),'Upload cover dimensions changed')
+required(0<(OUT/'thumbnail_upload.jpg').stat().st_size<=2_000_000,'Upload cover too large')
 # This marker is not human aesthetic approval: it records machine QA, explicitly.
 MARKER.write_text("auto_quality_checked="+DATE+"\n",encoding="utf-8")
 print("VIDEO AUTOMATED QA PASSED: Distinct licensed/CLIP-screened photos; correct 9:16, source, font, MP4 and music.")

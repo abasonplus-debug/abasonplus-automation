@@ -98,6 +98,7 @@ jobs:
             output/*.mp4
             output/slide_*.png
             output/thumbnail.png
+            output/thumbnail_upload.jpg
             output/metadata.json
             output/mobile_qa_contact_sheet.jpg
             output/mobile_qa_notes.json
@@ -130,7 +131,7 @@ jobs:
             -F "caption=<output/caption.txt" \
             -F "first_comment=<output/first_comment.txt" \
             -F "first_comment_json=<output/first_comment_json.txt" \
-            -F "thumbnail=@output/thumbnail.png;type=image/png" \
+            -F "thumbnail=@output/thumbnail_upload.jpg;type=image/jpeg" \
             -F "description=<output/description.txt" \
             -F "tiktok_caption=<output/tiktok_caption.txt" \
             -F "tiktok_post_key=abasonplus-tiktok-$(TZ=Europe/Berlin date +%F)" \

@@ -330,7 +330,14 @@ for i, slide in enumerate(slides):
           'latin_fallback_font':LATIN_FONT.name,'source':photo_credits[-1]}
     validate_style(info)
     frame.save(OUT/f'slide_{i}.png',optimize=True)
-    if i==0:frame.save(OUT/'thumbnail.png',optimize=True)
+    if i==0:
+        frame.save(OUT/'thumbnail.png',optimize=True)
+        # YouTube custom-cover upload limit is 2 MiB; preserve full canvas/font size.
+        for jpeg_quality in (92,85,75,65):
+            frame.save(OUT/'thumbnail_upload.jpg',quality=jpeg_quality,optimize=True)
+            if (OUT/'thumbnail_upload.jpg').stat().st_size<=2_000_000:break
+        if (OUT/'thumbnail_upload.jpg').stat().st_size>2_000_000:
+            raise RuntimeError('Cover exceeds upload size limit at original dimensions')
     quality_results.append(info)
     print(f'Checked slide {i+1}/{len(slides)}: {size}px, centered compact white/gold outline style')
 
