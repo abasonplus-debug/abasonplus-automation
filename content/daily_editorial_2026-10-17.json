@@ -15,23 +15,23 @@
   "story": {
     "title": "একই দাগের জমি যাচাই",
     "hook": "একই দাগে খাস জমি? আগে ৪টি দেখুন",
-    "cover_query": "9:16 real professional photo of a Bangladeshi land surveyor reviewing plot boundaries, bright open sky in spacious upper half",
+    "cover_query": "land surveyor using total station in green field under bright open sky, portrait professional photograph",
     "tips": [
       {
         "text": "ব্যক্তি অংশের সীমানা আলাদা করুন",
-        "query": "9:16 real professional photo of marked rural land boundaries with survey stakes, bright open sky in spacious upper area"
+        "query": "farm field separated by a fence under bright open sky, portrait professional photograph"
       },
       {
         "text": "রেকর্ড, ম্যাপ ও দলিল মিলিয়ে নিন",
-        "query": "9:16 real professional photo of hands comparing land records and a cadastral map, bright plain wall in spacious upper area"
+        "query": "property paperwork on desk by bright window, portrait professional photograph with spacious upper wall"
       },
       {
         "text": "সব পক্ষ নিয়ে মাঠের মাপ দেখুন",
-        "query": "9:16 real professional photo of surveyor and landowners inspecting a plot, bright open sky in spacious upper area"
+        "query": "people measuring farm field under bright open sky, portrait professional photograph with spacious upper sky"
       },
       {
         "text": "সরকারি অংশে অধিকার হয় না",
-        "query": "9:16 real professional photo of a lawyer explaining a land boundary document, bright uncluttered office wall in upper area"
+        "query": "person reading property paperwork at bright desk, portrait professional photograph with spacious upper wall"
       }
     ],
     "source_url": "https://www.bssnews.net/bangla/news/345716",
