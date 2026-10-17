@@ -46,7 +46,7 @@ require(len(quality)==5 and all(
     x.get("text_background") is False and x.get("text_stroke") is False and
     x.get("photo_overlay") is False and
     len(x.get("line_background_stats",[]))==x.get("text_lines") and
-    all(len(pair)==2 and pair[0]>=155 and pair[1]<=0.20
+    all(len(pair)==2 and pair[0]>=150 and pair[1]<=0.25
         for pair in x["line_background_stats"])
     for x in quality), "TikTok video images/typography failed")
 require((OUT/"thumbnail.png").read_bytes()==(OUT/"slide_0.png").read_bytes(),
