@@ -100,13 +100,15 @@ jobs:
           assert meta["date"]==today and tt["date"]==today, "No older stale preview publication"
           assert meta["source_url"]==tt["source_url"] and meta["source_url"].startswith("https://")
           assert meta["slides"]==5 and len(meta["quality"])==5
-          assert meta["style_id"]=="editorial_photo_overlay_v1"
+          assert meta["style_id"]=="compact_white_gold_v2"
+          from scripts.carousel_style import validate_style
+          for quality_record in meta['quality']: validate_style(quality_record)
           assert all(x.get("photo_semantic_qa") and x.get("font_px",0)>=120
              and x.get("main_font_px",0)>=120 and x.get("style_id")==meta["style_id"]
-             and x.get("text_background") is False and x.get("text_stroke") is False
+             and x.get("text_background") is False and x.get("text_stroke") is True
              and x.get("photo_overlay") is False
              and len(x.get("line_background_stats",[]))==x.get("text_lines")
-             and all(len(pair)==2 and pair[0]>=150 and pair[1]<=.25 for pair in x["line_background_stats"])
+             and all(len(pair)==3 and pair[1]<=80 and pair[2]<=45 for pair in x["line_background_stats"])
              for x in meta["quality"])
           assert len({x["source"] for x in meta["quality"]})==5
           video=out/"abasonplus_daily.mp4"
@@ -142,6 +144,7 @@ jobs:
             -F "kind=tiktok_reviewed_publish" \
             -F "review_approved=true" \
             -F "visual_qa_passed=true" \
+            -F "visual_style_id=compact_white_gold_v2" \
             -F "tiktok_publish_approved=true" \
             -F "content_preview_confirmed=true" \
             -F "express_consent_given=true" \
@@ -159,4 +162,3 @@ jobs:
           echo "Verify the resulting Zernio/TikTok platform status and public URL separately."
 # No cron trigger. This workflow is impossible to run on a schedule or repository push.
 # The creator must review that specific completed preview and expressly approve that video.
-

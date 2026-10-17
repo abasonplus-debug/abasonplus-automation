@@ -52,10 +52,12 @@ jobs:
           m=json.loads((p/'metadata.json').read_text(encoding='utf-8'))
           assert m['date']==datetime.datetime.now(zoneinfo.ZoneInfo('Europe/Berlin')).date().isoformat()
           assert m['slides']==5 and len(m['quality'])==5
-          assert m['style_id']=='editorial_photo_overlay_v1'
+          assert m['style_id']=='compact_white_gold_v2'
+          from scripts.carousel_style import validate_style
+          for quality_record in m['quality']: validate_style(quality_record)
           assert len({q['source'] for q in m['quality']})==5
           assert all(q.get('photo_semantic_qa') and q['font_px']>=120 and q.get('main_font_px',0)>=120
-              and q['text_background'] is False and q['text_stroke'] is False
+              and q['text_background'] is False and q['text_stroke'] is True
               and q['photo_overlay'] is False for q in m['quality'])
           caption=(p/'caption.txt').read_text(encoding='utf-8').strip()
           assert 1<=len(caption)<=2200, 'Instagram caption must fit without losing source credits'
@@ -75,7 +77,7 @@ jobs:
             -F "kind=instagram_video" \
             -F "review_approved=true" \
             -F "visual_qa_passed=true" \
-            -F "visual_style_id=editorial_photo_overlay_v1" \
+            -F "visual_style_id=compact_white_gold_v2" \
             -F "video_sha256=$VIDEO_SHA256" \
             -F "caption=<output/caption.txt" \
             -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \

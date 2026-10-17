@@ -2,9 +2,9 @@ name: AbasonPlus Safe Code Validation
 on:
   push:
     branches: [main]
-    paths: ['scripts/**', 'tests/**', 'wordpress*.py', 'content/**', '.github/workflows/**', 'requirements.txt']
+    paths: ['scripts/**', 'tests/**', 'wordpress*.py', 'content/**', '.github/workflows/**', 'requirements.txt', 'config/carousel_style.json', 'CAROUSEL_STYLE_PROMPT_BN.md']
   pull_request:
-    paths: ['scripts/**', 'tests/**', 'wordpress*.py', 'content/**', '.github/workflows/**', 'requirements.txt']
+    paths: ['scripts/**', 'tests/**', 'wordpress*.py', 'content/**', '.github/workflows/**', 'requirements.txt', 'config/carousel_style.json', 'CAROUSEL_STYLE_PROMPT_BN.md']
   workflow_dispatch:
 permissions:
   contents: read

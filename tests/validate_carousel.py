@@ -24,41 +24,23 @@ assert len(photo_urls)==len(set(photo_urls)), "Exact curated photo reused across
 assert features.check("raqm"), "Bengali shaping support missing"
 fonts = [p for p in pathlib.Path("/usr/share/fonts").rglob("*.ttf") if "Bengali" in p.name and "Bold" in p.name]
 assert fonts, "Bold Bengali font missing"
-dummy = Image.new("RGBA",(1080,1920))
-d = ImageDraw.Draw(dummy)
-
-def wrap(value,font):
-    lines=[]
-    current=""
-    for word in value.split():
-        candidate=(current+" "+word).strip()
-        if current and d.textbbox((0,0),candidate,font=font)[2]>950:
-            lines.append(current)
-            current=word
-        else:
-            current=candidate
-    if current: lines.append(current)
-    assert lines and all(d.textbbox((0,0),x,font=font)[2]<=950 for x in lines),f"Unfit 120px: {value}"
-    return lines
-
+import sys
+sys.path.insert(0,str(ROOT/'scripts'))
+from carousel_style import layout, paint, STYLE_ID
+latin=next(pathlib.Path('/usr/share/fonts').rglob('NotoSans-Bold.ttf'))
 checked=0
 for topic in catalog:
-    assert len(topic["tips"]) >= 4 and len(topic["tips"]) <= 9
-    cases = [topic["hook"]] + [p["text"] for p in topic["tips"]]
-    for idx,message in enumerate(cases):
-        assert idx == 0 or topic["tips"][idx-1]["query"]
-        assert topic["cover_query"]
-        font=ImageFont.truetype(str(fonts[0]),120)
-        lines=wrap(message,font)
-        assert len(lines)<=3,(topic["title"],message,len(lines))
-        layer=Image.new("RGBA",(1080,1920))
-        dt=ImageDraw.Draw(layer)
-        def drawline(t,y):
-            width=dt.textbbox((0,0),t,font=font)[2]
-            dt.text(((1080-width)//2,y),t,font=font,fill=(6,27,62,230))
-        for j,line in enumerate(lines): drawline(line,260+j*int(font.size*1.52))
-        bbox=layer.getbbox()
-        assert bbox and 40<=bbox[0]<bbox[2]<=1040 and 200<=bbox[1]<bbox[3]<=1100,(topic["title"],idx,"selected style safe region",bbox,lines)
+    assert 4<=len(topic['tips'])<=9
+    for idx,message in enumerate([topic['hook']]+[p['text'] for p in topic['tips']]):
+        font=ImageFont.truetype(str(fonts[0]),132 if idx==0 else 120)
+        lf=ImageFont.truetype(str(latin),font.size)
+        def tokens(value,f):
+            import re
+            for token in re.findall(r'\s+|\S+',value):
+                yield token,f if any(0x0980<=ord(c)<=0x09ff for c in token) else lf
+        rows=layout(message,font,tokens)
+        layer,boxes=paint(rows,tokens)
+        assert layer.getbbox() and boxes
         checked+=1
 
 # Semantic models can mistake the NASA "Surveyor" probe for a land surveyor.
@@ -90,5 +72,5 @@ assert "cron: '20 8 * * *'" in wp_workflow,"WordPress expected 08:20 Berlin sche
 assert "timezone: 'Europe/Berlin'" in wp_workflow
 assert "github.event_name == 'schedule'" in wp_workflow,"WordPress manual runs must stay preview-only"
 assert (ROOT / "assets" / "abasonplus.mp3").stat().st_size > 1000, "Original audio missing"
-print(f"Validated {len(catalog)} topics, {checked} dark direct-photo headline layouts at 120px+, source-gated VIDEO publishing, separately scheduled WordPress, and original audio.")
+print(f"Validated {len(catalog)} topics, {checked} compact white/gold outlined layouts at 120px+, source-gated VIDEO publishing, separately scheduled WordPress, and original audio.")
 

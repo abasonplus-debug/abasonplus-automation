@@ -66,9 +66,11 @@ jobs:
           assert meta['source_url']==news['source_url']
           assert meta['slides']==5 and len(meta['quality'])==5
           assert meta['verified_on']==news['verified_on']
-          assert meta['style_id']=='editorial_photo_overlay_v1'
+          assert meta['style_id']=='compact_white_gold_v2'
+          from scripts.carousel_style import validate_style
+          for quality_record in meta['quality']: validate_style(quality_record)
           assert all(x['font_px']>=120 and x['style_id']==meta['style_id'] and
-                     x['text_background'] is False and x['text_stroke'] is False and
+                     x['text_background'] is False and x['text_stroke'] is True and
                      x['photo_overlay'] is False and
                      x['logo_position'] in ('bottom_right','omitted_unavailable')
                      for x in meta['quality'])
@@ -115,7 +117,7 @@ jobs:
             -F "kind=video" \
             -F "review_approved=true" \
             -F "visual_qa_passed=true" \
-            -F "visual_style_id=editorial_photo_overlay_v1" \
+            -F "visual_style_id=compact_white_gold_v2" \
             -F "video_sha256=$VIDEO_SHA256" \
             -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
             -F "title=<output/title.txt" \

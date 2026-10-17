@@ -6,12 +6,11 @@ Bangla housing-information carousel, Facebook Reel, YouTube Short, and creator-r
 
 Apply these directions independently to the hook and all four tips. The `text` and `query` fields in the daily editorial brief are the slide-specific copy and matching photographic subject.
 
-1. Use a distinct, relevant, rights-checked real photograph filling a **1080 × 1920** portrait frame. The scene must match that slide's `query`; never imply a stock photograph depicts a specific real project. Record photo source and license.
-2. Place that slide's exact Bengali `text` directly over naturally light space in the image, in the upper portion. Prefer two lines; allow up to three only if needed. Use Noto Sans Bengali Bold at **120 px or larger**, with a real Latin bold fallback where English words occur. Keep the text large, dark navy `#061B3E`, about 90% opacity.
-3. Use **no text box, border, stroke, shadow, gradient, or dark overlay**. Every headline line needs its own measured light/contrast check against the photograph. If no relevant licensed photo passes, stop the release instead of shrinking the type or using an unrelated picture.
-4. A logo, if available, is small in the **bottom-right corner**. Make each slide a separate frame; never reuse a photo or silently replace the owner's music.
+Use **CAROUSEL_STYLE_PROMPT_BN.md** and **config/carousel_style.json** for every image, including the hook. The owner-selected style is **compact_white_gold_v2**: centered compact Bengali text block; 120 px Bold body, 132 px Bold hook; white/gold semantic emphasis; 4 px black outline and close subtle shadow. The no-panel/no-border/no-gradient rules remain. The old navy/no-outline style is retired.
 
-The source, exact text, photo brief, license, 120 px minimum, line contrast, glyph support, MP4 dimensions, music, and duration are release checks in `scripts/create_carousel.py` and `scripts/verify_video_release.py`. Machine semantic screening is a heuristic, not a human aesthetic review.
+The renderer measures actual visible ink/outline/shadow spacing (4 px within a sentence; 10 px between sentences), checks each photograph for readable line regions, and refuses overflow instead of shrinking the font. Each photograph must be distinct, licensed, precisely topic-matched and professionally finished. This remains a free licensed-stock workflow; “final director cut” is visual direction, not a claim of daily AI-generated photography.
+
+Use the actual small logo at bottom right (70–90 px width, 28 px margins), report omission if unavailable, and never invent a wordmark. Aesthetic judgments and automatic subject matching are not guaranteed by machine checks. The renderer, shared style validator, release gate, TikTok packaging and Make gates all enforce the same version. Publishing permissions and schedules remain unchanged.
 
 ## Facebook and YouTube
 

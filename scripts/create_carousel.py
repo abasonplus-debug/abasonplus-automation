@@ -18,6 +18,7 @@ from PIL import Image, ImageDraw, ImageFont, features
 from fontTools.ttLib import TTFont
 from photo_relevance import PhotoRelevanceGuard
 from publication_policy import trusted_source_url, validate_social_copy
+from carousel_style import STYLE_ID, POLICY, layout, paint, photo_stats, readable_photo, validate_style
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "output"
@@ -111,7 +112,7 @@ try:
     logo_path = OUT / "logo.png"
     urlretrieve("https://abasonplus.wordpress.com/wp-content/uploads/2026/10/abasonplus_round_transparent.png", logo_path)
     logo = Image.open(logo_path).convert("RGBA")
-    logo.thumbnail((115, 115))
+    logo.thumbnail((90, 90))
 except Exception as e:
     print("Logo unavailable, continuing without logo:", e)
 
@@ -180,20 +181,9 @@ def subject_guard(query, filename):
     return True
 
 def choose_text_area(picture, placements):
-    """Return the first naturally light upper-image placement for every line."""
-    from PIL import ImageStat
     cropped=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
-    for index, regions in enumerate(placements):
-        acceptable=True
-        for region in regions:
-            area=cropped.crop(region).convert("L")
-            mean=ImageStat.Stat(area).mean[0]
-            dark=sum(area.histogram()[:110])/(area.width*area.height)
-            if mean<150 or dark>0.25:
-                acceptable=False
-                break
-        if acceptable:
-            return index
+    for index,regions in enumerate(placements):
+        if readable_photo(photo_stats(cropped,regions)):return index
     return None
 
 def image_for(query, slide_index, placements):
@@ -308,108 +298,40 @@ def image_for(query, slide_index, placements):
             print(f"Photo search failed {phrase!r}: {str(exc)[:120]}",flush=True)
     return None
 
-# Independent full-bleed frames; selected editorial photo overlay style.
-STYLE_ID = "editorial_photo_overlay_v1"
-INK = (6, 27, 62, 230)  # dark navy, approximately 90% opacity
-def fit_lines(draw, value, fnt, limit=950):
-    lines=[]
-    current=""
-    for word in value.split():
-        candidate=(current+" "+word).strip()
-        if current and mixed_text_width(draw,candidate,fnt)>limit:
-            lines.append(current)
-            current=word
-        else:
-            current=candidate
-    if current: lines.append(current)
-    if not lines or any(mixed_text_width(draw,line,fnt)>limit for line in lines):
-        raise RuntimeError(f"Text too long for selected style at {fnt.size}px: {value[:80]}")
-    return lines
-
-def draw_line(draw,line,y,fnt,ink):
-    width=mixed_text_width(draw,line,fnt)
-    x=(1080-width)/2
-    for part, font in mixed_tokens(line,fnt):
-        if not part.isspace():
-            draw.text((x,y),part,font=font,fill=ink)
-        x+=draw.textlength(part,font=font)
-
+# Locked compact style applies independently to every hook and tip image.
 for i, slide in enumerate(slides):
-    layer=Image.new("RGBA",(1080,1920),(0,0,0,0))
-    draw=ImageDraw.Draw(layer)
-    main_font=None
-    lines=[]
-    # Prefer two complete lines over a larger third line that falls on a busy scene.
-    for max_lines in (2,3):
-        for size in range(210,119,-10):
-            candidate_font=ImageFont.truetype(str(FONT),size)
-            try: candidate_lines=fit_lines(draw,slide["main"],candidate_font)
-            except RuntimeError: continue
-            if len(candidate_lines)<=max_lines:
-                lines=candidate_lines
-                main_font=candidate_font
-                break
-        if main_font is not None: break
-    if main_font is None:
-        raise RuntimeError(f"Slide {i+1}: exact wording cannot fit in three lines at 120px+")
-    line_step=int(main_font.size*1.42)
-    design_zone=(40,200,1040,1100)
-    placements=[]
-    placement_starts=[]
-    for start_y in (260,340,420,500,580,660):
-        regions=[]
-        for j,line in enumerate(lines):
-            y=start_y+j*line_step
-            width=mixed_text_width(draw,line,main_font)
-            x=int((1080-width)/2)
-            regions.append((max(0,x-24),max(0,y-24),min(1080,int(x+width+24)),min(1920,int(y+main_font.size*1.35))))
-        if regions[-1][3]<=design_zone[3] and regions[0][1]>=design_zone[1]:
-            placements.append(regions)
-            placement_starts.append(start_y)
-    if not placements:
-        raise RuntimeError(f"Slide {i+1}: no 120px+ text placement in the upper photo zone")
-    chosen=image_for(slide["photo"],i,placements)
-    if chosen is None:
-        raise RuntimeError(f"Slide {i+1}: no matching licensed bright full-resolution photo; fail closed")
-    picture,placement_index=chosen
-    text_regions=placements[placement_index]
-    start_y=placement_starts[placement_index]
-    for j,line in enumerate(lines):
-        draw_line(draw,line,start_y+j*line_step,main_font,INK)
-    bbox=layer.getbbox()
-    if bbox is None or bbox[0]<design_zone[0] or bbox[2]>design_zone[2] or bbox[1]<design_zone[1] or bbox[3]>design_zone[3]:
-        raise RuntimeError(f"Slide {i+1}: typography outside upper photo zone: {bbox}")
-    picture=picture.convert("RGBA")
-    # No panel, gradient, outline or shadow. Check each line separately.
-    from PIL import ImageStat
-    line_stats=[]
-    for region in text_regions:
-        luminance=picture.crop(region).convert("L")
-        mean_luma=ImageStat.Stat(luminance).mean[0]
-        dark_fraction=sum(luminance.histogram()[:110])/(luminance.width*luminance.height)
-        line_stats.append((round(mean_luma,2),round(dark_fraction,3)))
-    if any(mean<150 or dark>0.25 for mean,dark in line_stats):
-        raise RuntimeError(f"Slide {i+1}: photo too dark/busy behind navy text; choose a lighter composition")
+    size=POLICY['hook_font_px'] if i==0 else POLICY['body_font_px']
+    main_font=ImageFont.truetype(str(FONT),size,layout_engine=ImageFont.Layout.RAQM)
+    rows=layout(slide['main'],main_font,mixed_tokens)
+    layer,line_boxes=paint(rows,mixed_tokens)
+    regions=[tuple(box) for box in line_boxes]
+    chosen=image_for(slide['photo'],i,[regions])
+    if chosen is None:raise RuntimeError(f'Slide {i+1}: no relevant licensed photo passes readable compact typography')
+    picture,_=chosen
+    picture=picture.convert('RGBA')
+    stats=photo_stats(picture,regions)
+    if not readable_photo(stats):raise RuntimeError('Background too busy behind outlined text')
+    logo_box=None
     if logo:
-        picture.alpha_composite(logo,(1080-logo.width-72,1920-logo.height-210))
-    frame=Image.alpha_composite(picture,layer).convert("RGB")
-    if frame.size!=(1080,1920): raise RuntimeError("Incorrect frame size")
-    frame.save(OUT / f"slide_{i}.png",optimize=True)
-    if i==0:
-        frame.save(OUT / "thumbnail.png",optimize=True)
-    quality_results.append({"slide":i+1,"size":[1080,1920],
-        "font_px":main_font.size,"main_font_px":main_font.size,
-        "style_id":STYLE_ID,"text_opacity":230,"text_color":"#061B3E",
-        "text_lines":len(lines),"text_bbox":list(bbox),"text_start_y":start_y,
-        "text_background":False,"text_stroke":False,"photo_overlay":False,
-        "logo_position":"bottom_right" if logo else "omitted_unavailable",
-        "line_background_stats":line_stats,
-        "actual_ink_bounding_area_fraction":round((bbox[2]-bbox[0])*(bbox[3]-bbox[1])/(1080*1920),3),
-        "photo_semantic_qa":True,
-        "font_glyph_coverage_qa":True,
-        "latin_fallback_font":LATIN_FONT.name,
-        "source":photo_credits[-1]})
-    print(f"Checked slide {i+1}/{len(slides)}: {main_font.size}px, direct navy text, no panel")
+        pos=(1080-logo.width-28,1920-logo.height-28)
+        logo_box=[*pos,pos[0]+logo.width,pos[1]+logo.height]
+        picture.alpha_composite(logo,pos)
+    frame=Image.alpha_composite(picture,layer).convert('RGB')
+    if frame.size!=(1080,1920):raise RuntimeError('Incorrect canvas')
+    bbox=layer.getbbox()
+    info={'slide':i+1,'size':[1080,1920],'font_px':size,'main_font_px':size,
+          'style_id':STYLE_ID,'text_colors':['#FFFFFF','#FFD24A'],'text_opacity':255,
+          'text_lines':len(rows),'text_bbox':list(bbox),'line_ink_boxes':line_boxes,
+          'alignment':'center','compact_spacing_qa':True,
+          'text_background':False,'text_stroke':True,'stroke_px':4,'text_shadow':True,'photo_overlay':False,
+          'logo_position':'bottom_right' if logo else 'omitted_unavailable','logo_box':logo_box,
+          'line_background_stats':stats,'photo_semantic_qa':True,'font_glyph_coverage_qa':True,
+          'latin_fallback_font':LATIN_FONT.name,'source':photo_credits[-1]}
+    validate_style(info)
+    frame.save(OUT/f'slide_{i}.png',optimize=True)
+    if i==0:frame.save(OUT/'thumbnail.png',optimize=True)
+    quality_results.append(info)
+    print(f'Checked slide {i+1}/{len(slides)}: {size}px, centered compact white/gold outline style')
 
 (OUT / "image_credits.txt").write_text("\n".join(photo_credits)+"\n",encoding="utf-8")
 credits = "\n".join(photo_credits)

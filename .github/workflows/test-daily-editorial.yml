@@ -52,14 +52,16 @@ jobs:
           tt=json.loads((out/'tiktok_preview.json').read_text(encoding='utf-8'))
           assert tt['status']=='preview_only' and not tt['posting_enabled']
           assert tt['source_url']==story['source_url'] and tt['format']['width']==1080
-          assert report['style_id']=='editorial_photo_overlay_v1'
+          assert report['style_id']=='compact_white_gold_v2'
+          from scripts.carousel_style import validate_style
+          for quality_record in report['quality']: validate_style(quality_record)
           assert len(report['quality'])==5
           assert len({x['source'] for x in report['quality']})==5
           assert all(x['font_px']>=120 and x['style_id']==report['style_id']
-                     and x['text_background'] is False and x['text_stroke'] is False
+                     and x['text_background'] is False and x['text_stroke'] is True
                      and x['photo_overlay'] is False and x['photo_semantic_qa'] is True
                      and len(x['line_background_stats'])==x['text_lines']
-                     and all(mean>=150 and dark<=.25 for mean,dark in x['line_background_stats'])
+                     and all(len(row)==3 and row[1]<=80 and row[2]<=45 for row in x['line_background_stats'])
                      for x in report['quality'])
           for i in range(5):
               with Image.open(out/f'slide_{i}.png') as im: assert im.size==(1080,1920)

@@ -14,6 +14,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from PIL import Image, ImageStat
 from publication_policy import validate_social_copy
+from carousel_style import STYLE_ID, validate_style
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 OUT=ROOT/"output"
@@ -49,7 +50,7 @@ required(slides==5 and len(brief.get("tips",[]))==4,
          "incorrect carousel story length")
 quality=report.get("quality",[])
 required(len(quality)==5,"missing individual slide QA")
-required(report.get("style_id")=="editorial_photo_overlay_v1",
+required(report.get("style_id")==STYLE_ID,
          "selected carousel style missing")
 sources=set()
 fingerprints=[]
@@ -58,24 +59,7 @@ for n,info in enumerate(quality):
              "incorrect individual slide or dimensions")
     required(info.get("font_px",0)>=120 and info.get("main_font_px",0)>=120,
              "font below agreed minimum")
-    required(info.get("style_id")=="editorial_photo_overlay_v1"
-             and info.get("text_background") is False
-             and info.get("text_stroke") is False
-             and info.get("photo_overlay") is False,
-             "slide differs from direct-photo typography style")
-    required(info.get("text_color")=="#061B3E" and info.get("text_opacity")==230
-             and 1<=info.get("text_lines",0)<=3,
-             "incorrect dark large headline")
-    box=info.get("text_bbox",[])
-    required(len(box)==4 and 40<=box[0]<box[2]<=1040
-             and 200<=box[1]<box[3]<=1100,
-             "headline outside upper photo region")
-    stats=info.get("line_background_stats",[])
-    required(len(stats)==info.get("text_lines") and
-             all(len(row)==2 and row[0]>=150 and row[1]<=0.25 for row in stats),
-             "each headline line must have verified photographic contrast")
-    required(info.get("logo_position") in ("bottom_right","omitted_unavailable"),
-             "logo must be small at lower right")
+    validate_style(info)
     required(info.get("photo_semantic_qa") is True,
              "visual brief was not semantically screened")
     required(info.get("font_glyph_coverage_qa") is True,

@@ -8,13 +8,13 @@ This is the current production specification. README.md describes the live route
 - These are trigger targets. GitHub may delay or drop scheduled runs; rendering and provider processing take additional time.
 - Today's verified editorial is required for both WordPress and video; static article catalogs are available only through an explicit preview flag. Missing or invalid content is held and reported, never invented or relabeled as breaking news.
 
-## Exact visual style
-- Five independent, full-frame 1080×1920 photographs; 9:16, no frame, panel, border, dark overlay, gradient, outline or shadow.
-- Each photograph must match that slide's specific topic and have recorded source, creator and license. Stock imagery must not be presented as an actual named government project.
-- Bengali and Latin text: actual font size at least 120 px, bold dark navy #061B3E, alpha 230/255, directly over naturally light space. Two lines preferred; at most three. Font fallback must cover all glyphs.
-- Each text line is checked for background brightness/contrast. Metadata records actual ink bounding area; no claim that this equals 60% opaque text coverage.
-- If a logo is available, use it small at the bottom right within the platform safe area; otherwise omit it.
-- CLIP relevance checks are heuristic. They cannot guarantee human aesthetic judgment or prove that a photograph depicts a real event.
+## Exact visual style — updated 18 October 2026
+- Every hook/tip image uses the locked `compact_white_gold_v2` contract in config/carousel_style.json and CAROUSEL_STYLE_PROMPT_BN.md. This replaces the old navy, no-outline, upper-zone style.
+- Five independent topic-matched licensed 1080×1920 full-bleed photographs, no frame, panel, border, dark overlay or gradient. Professional restrained photographic finishing; no paid AI generation or fabricated real-event photographs.
+- Centered compact text block, exact copy, Noto Sans Bengali Bold with genuine Latin fallback: body 120 px, hook 132 px. White #FFFFFF with semantic gold #FFD24A keyword emphasis, 4 px black outline, close subtle shadow (2,3 px offset).
+- Measure visible glyph/outline/shadow bounds: target 4 px gaps within a sentence, 10 px between sentences. Never collide, clip or shrink below minimum; overflow holds release. A long legal paragraph is not automatically suitable for the existing three-second slide duration.
+- Photo readability now accounts for outlined text, measuring local clutter for each line. Font, glyph coverage, actual line bounds, centered placement, no overlap, color/outline contract and photo statistics are independently checked. Machine QA is a heuristic, not human aesthetic approval.
+- Use the original logo, width 70–90 px, 28 px from bottom/right. If unavailable, report omission; never invent a replacement. Platform UI can cover a logo this close to the edge.
 
 ## Media and copy
 - Use only assets/abasonplus.mp3 supplied by the owner. The owner's claim of usage rights is not an independent copyright clearance.
