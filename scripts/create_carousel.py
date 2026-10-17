@@ -148,25 +148,37 @@ def search_phrases(query):
     return list(dict.fromkeys(p for p in phrases if p))
 
 def subject_guard(query, filename):
-    """Conservative filename screen: reject unrelated archives, diagrams and scans.
-    Not a substitute for manual visual review of licensed photo content."""
+    """Require subject-specific photo titles before CLIP; reject name collisions."""
     name=filename.lower()
     q=query.lower()
-    if not name.endswith((".jpg",".jpeg",".webp")): return False
+    if not name.endswith((".jpg",".jpeg",".webp")):
+        return False
     blocked=("certificate","membership","historic","cadastral map","old map",
-             "illustration","engraving","diagram","painting","poster",
-             "scan of","newspaper","cartoon","drawing","passport","blueprint")
-    if any(x in name for x in blocked): return False
-    if any(x in q for x in ("advisor","meeting","consultation")):
-        return any(x in name for x in ("meeting","discussion","consultation",
-                   "advisor","consultant","realtor","estate agent","client"))
-    if any(x in q for x in ("document","deed","paper","contract","record","agreement")):
-        return any(x in name for x in ("document","deed","paperwork",
-                   "property contract","agreement","registration","land record",
-                   "title deed","office desk"))
-    if any(x in q for x in ("survey","map","cadastral","boundary")):
-        return any(x in name for x in ("survey","land parcel","boundary",
-                   "field work","measuring","topographic"))
+             "illustration","engraving","diagram","painting","poster","scan of",
+             "newspaper","cartoon","drawing","passport","blueprint",
+             "moon","lunar","apollo","spacecraft","nasa","mars rover",
+             "surveyor 1","surveyor 2","surveyor 3","surveyor 4",
+             "surveyor 5","surveyor 6","surveyor 7")
+    if any(term in name for term in blocked):
+        return False
+    if any(term in q for term in ("survey","cadastral","boundary","total station")):
+        return any(term in name for term in
+                   ("land survey","land-survey","surveyor","surveying instrument",
+                    "total station","theodolite","field survey","cadastral survey",
+                    "property boundary"))
+    if any(term in q for term in ("advisor","meeting","consultation")):
+        return any(term in name for term in
+                   ("meeting","discussion","consultation","advisor",
+                    "consultant","realtor","estate agent","client"))
+    if any(term in q for term in ("document","deed","paper","contract","record","agreement")):
+        return (any(term in name for term in
+                    ("property","real estate","house sale","land deed","title deed",
+                     "contract","agreement","registration"))
+                and any(term in name for term in
+                        ("document","paper","deed","contract","agreement","record","signing")))
+    if any(term in q for term in ("farm","field","fence","farmland","rural")):
+        return any(term in name for term in
+                   ("farm","field","fence","rural","pasture","agricultural","countryside"))
     return True
 
 def choose_text_area(picture, placements):
