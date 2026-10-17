@@ -19,6 +19,18 @@ The source, exact text, photo brief, license, 120 px minimum, line contrast, gly
 
 Make scenario [7968544](https://eu1.make.com/3161815/scenarios/7968544) routes this video to YouTube upload and Facebook Pages Reel. Each branch has its own SHA-256 duplicate key, so one platform's key does not suppress the other's route. The `review_approved` webhook field records this pre-authorized scheduled release after machine QA; it is not evidence of human review. A platform upload failure after its key is reserved needs inspection before retrying that same branch.
 
+## Instagram
+
+Instagram @abasonplus is connected through Zernio account `6ad380c8b835331ad1563a7a`. Make scenario 7968544 modules 17–23 receive the same QA-passed daily MP4 from the 08:45 Europe/Berlin GitHub workflow and publish it as a Reel with share-to-Feed enabled, the first frame as cover, and comments enabled. The original soundtrack remains embedded in the video.
+
+The route checks caption length (1–2,200 characters), visual QA, style, SHA-256 shape and video presence. It checks the independent `abasonplus-instagram-YYYY-MM-DD` record using the Europe/Berlin date, sends the same key as the provider Idempotency-Key, and records accepted publication requests. Provider failure responses raise a Make error. Accepted/processing requests are not proof of publication; the daily audit checks the actual provider platform status and public URL. A failed or ambiguous request needs inspection before retrying.
+
+The first complete transport/publication test reused the exact existing QA-passed artifact from run 39029928876; no new video was generated. Delivery run 39039712606 and Make execution b8523af132154e59a0320809b01834fd succeeded. Provider post `6ad38233fa35a96b9d6d9601` was read back as published on 2026-10-17 at 16:12 Europe/Berlin: https://www.instagram.com/reel/DemS0nVkciB/ . Its daily dedupe record was stored. Tomorrow's unattended run has not yet occurred.
+
+The provider currently holds exactly two social accounts (TikTok and Instagram), within its published two-account free allowance. Do not add a third account or enable paid features. Existing Make/GitHub free limits still apply.
+
+Read-only status checker scenario 8007397 accepts `path` with GET only. Use `/posts/<observed-id>` for output `data`, `/posts` for output `posts`, and `/accounts` for output `accounts`. Its default preserves the previous approved TikTok lookup. The scheduled publication audit includes Instagram.
+
 ## TikTok: review each exact video
 
 The daily job also writes `tiktok_preview.json` and `tiktok_caption.txt` into the same artifact. It never publishes to TikTok on a schedule.
