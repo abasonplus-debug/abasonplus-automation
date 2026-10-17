@@ -57,6 +57,7 @@ jobs:
           PY
       - name: Verify outbound delivery stays blocked without owner authorization
         run: |
+          mkdir -p output
           if python3 wordpress_email_send.py >output/blocked-delivery-check.txt 2>&1; then
             echo 'ERROR: sender should be blocked'; exit 1
           fi
