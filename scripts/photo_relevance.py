@@ -7,6 +7,7 @@ When quality confidence is insufficient, images are rejected (fail closed).
 """
 from functools import lru_cache
 from pathlib import Path
+import os
 from tempfile import TemporaryDirectory
 import numpy as np
 from PIL import Image
@@ -17,8 +18,10 @@ class PhotoRelevanceGuard:
             from fastembed import ImageEmbedding, TextEmbedding
         except ImportError as exc:
             raise RuntimeError("Install fastembed; visual semantic QA is required") from exc
-        self.photo = ImageEmbedding(model_name="Qdrant/clip-ViT-B-32-vision")
-        self.text = TextEmbedding(model_name="Qdrant/clip-ViT-B-32-text")
+        cache=Path(os.getenv("ABASONPLUS_MODEL_CACHE", ".cache/fastembed")).resolve()
+        cache.mkdir(parents=True,exist_ok=True)
+        self.photo = ImageEmbedding(model_name="Qdrant/clip-ViT-B-32-vision",cache_dir=str(cache))
+        self.text = TextEmbedding(model_name="Qdrant/clip-ViT-B-32-text",cache_dir=str(cache))
         self.temp=TemporaryDirectory(prefix="abasonplus-qa-")
         self.index=0
 

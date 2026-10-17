@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/create_carousel.py'
+      - 'scripts/photo_relevance.py'
       - 'content/topics.json'
       - 'tests/validate_carousel.py'
       - 'tests/photo_source_probe.py'
@@ -32,12 +33,19 @@ jobs:
           sudo apt-get install -y -qq fonts-noto-core ffmpeg
           python -m pip install -r requirements.txt
       - name: Compile Python without running publishers
-        run: python -m py_compile scripts/create_carousel.py scripts/verify_video_release.py scripts/prepare_tiktok_preview.py wordpress_publish.py
+        run: python -m py_compile scripts/create_carousel.py scripts/photo_relevance.py scripts/verify_video_release.py scripts/prepare_tiktok_preview.py wordpress_publish.py
       - name: Validate topics, typography and paused publishing
         run: python tests/validate_carousel.py
       - name: Read-only photo source diagnostics
         run: python tests/photo_source_probe.py
+      - name: Restore semantic photo models
+        uses: actions/cache@v4
+        with:
+          path: .cache/fastembed
+          key: abasonplus-clip-v1-${{ runner.os }}
       - name: Render preview locally without any publishing
+        env:
+          ABASONPLUS_MODEL_CACHE: .cache/fastembed
         run: python scripts/create_carousel.py
       - name: Verify preview video, audio and images
         run: |

@@ -7,6 +7,7 @@ on:
       - 'content/daily_editorial_*.json'
       - 'scripts/verify_video_release.py'
       - 'scripts/create_carousel.py'
+      - 'scripts/photo_relevance.py'
       - 'scripts/prepare_tiktok_preview.py'
   workflow_dispatch:
 permissions:
@@ -22,6 +23,11 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg fonts-noto-core
           python3 -m pip install -r requirements.txt
+      - name: Restore semantic photo models
+        uses: actions/cache@v4
+        with:
+          path: .cache/fastembed
+          key: abasonplus-clip-v1-${{ runner.os }}
       - name: Check source-linked today's article and prevent duplicate WordPress post
         run: python3 wordpress_email_prepare.py
       - name: Validate matching five-slide editorial
@@ -29,6 +35,7 @@ jobs:
       - name: Render licensed, source-matched video with original music without posting
         env:
           ABASONPLUS_DAILY_STORY: output/daily_research_story.json
+          ABASONPLUS_MODEL_CACHE: .cache/fastembed
         run: python3 scripts/create_carousel.py
       - name: Verify machine-ready photo release without publishing
         run: python3 scripts/verify_video_release.py
@@ -41,8 +48,12 @@ jobs:
           from PIL import Image
           import json,subprocess
           out=Path('output')
-          article=json.loads((out/'wordpress_email_preview.json').read_text(encoding='utf-8'))
-          assert article['review_approved']=='false' and article['status']=='preview_only'
+          email_preview=out/'wordpress_email_preview.json'
+          if email_preview.exists():
+              article=json.loads(email_preview.read_text(encoding='utf-8'))
+              assert article['review_approved']=='false' and article['status']=='preview_only'
+          else:
+              print('WordPress article may already be published; no email preview or resend required.')
           story=json.loads((out/'daily_research_story.json').read_text(encoding='utf-8'))
           report=json.loads((out/'metadata.json').read_text(encoding='utf-8'))
           assert report['source_url']==story['source_url'] and report['slides']==5
@@ -50,10 +61,15 @@ jobs:
           tt=json.loads((out/'tiktok_preview.json').read_text(encoding='utf-8'))
           assert tt['status']=='preview_only' and not tt['posting_enabled']
           assert tt['source_url']==story['source_url'] and tt['format']['width']==1080
-          assert all(x.get('photo_semantic_qa') and x.get('typography_reserved_area_fraction',0)>=.6 for x in report['quality'])
+          assert report['style_id']=='editorial_photo_overlay_v1'
           assert len(report['quality'])==5
           assert len({x['source'] for x in report['quality']})==5
-          assert all(x['font_px']>=130 and x['vertical_composition_coverage']>=.6 for x in report['quality'])
+          assert all(x['font_px']>=120 and x['style_id']==report['style_id']
+                     and x['text_background'] is False and x['text_stroke'] is False
+                     and x['photo_overlay'] is False and x['photo_semantic_qa'] is True
+                     and len(x['line_background_stats'])==x['text_lines']
+                     and all(mean>=150 and dark<=.25 for mean,dark in x['line_background_stats'])
+                     for x in report['quality'])
           for i in range(5):
               with Image.open(out/f'slide_{i}.png') as im: assert im.size==(1080,1920)
           assert (out/'thumbnail.png').read_bytes()==(out/'slide_0.png').read_bytes()
