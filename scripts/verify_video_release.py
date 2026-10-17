@@ -69,9 +69,10 @@ for n,info in enumerate(quality):
     required(len(box)==4 and 40<=box[0]<box[2]<=1040
              and 200<=box[1]<box[3]<=1100,
              "headline outside upper photo region")
-    required(info.get("background_mean_luminance",0)>=150
-             and info.get("background_dark_fraction",1)<=0.27,
-             "text contrast on photo not verified")
+    stats=info.get("line_background_stats",[])
+    required(len(stats)==info.get("text_lines") and
+             all(len(row)==2 and row[0]>=150 and row[1]<=0.25 for row in stats),
+             "each headline line must have verified photographic contrast")
     required(info.get("logo_position") in ("bottom_right","omitted_unavailable"),
              "logo must be small at lower right")
     required(info.get("photo_semantic_qa") is True,

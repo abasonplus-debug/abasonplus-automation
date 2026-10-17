@@ -1,9 +1,7 @@
 {
-  "enabled": false,
+  "enabled": true,
   "tiktok_account": "@abasonplus",
-  "reason": "Exact 2026-10-16 Land Share video published and verified at https://www.tiktok.com/@abasonplus/video/7697405584689155361; one-time gate closed.",
-  "consent_model": "explicit review of each particular completed MP4, privacy choice and creator interactions; no unattended blanket consent",
-  "last_verified": "2026-10-17",
-  "latest_preview_run": 38923421174,
-  "latest_verified_media_transfer_run": 38915481663
+  "reason": "Reviewed-workflow gate: only the repository owner's explicit per-video workflow_dispatch can deliver a current-day QA-passed MP4 to the Make TikTok route; never cron or automatic video webhook.",
+  "consent_model": "Each exact completed MP4 requires creator review, explicit post consent, rights confirmation, privacy and interaction choices; no unattended TikTok posting.",
+  "last_verified": "2026-10-17"
 }

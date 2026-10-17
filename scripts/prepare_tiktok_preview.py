@@ -38,10 +38,17 @@ require(story.get("source_url","").startswith("https://"),"not grounded in a cit
 require(info.get("slides")==5 and len(story.get("tips",[]))==4,"must be a 5-slide original slideshow")
 require(info.get("visual_approval")=="automated_semantic_qa_only","machine QA provenance not recorded")
 quality=info.get("quality",[])
-require(len(quality)==5 and all(x.get("photo_semantic_qa") and
-            x.get("font_px",0)>=130 and
-            x.get("typography_reserved_area_fraction",0)>=0.60 for x in quality),
-        "TikTok video images/typography failed")
+require(info.get("style_id")=="editorial_photo_overlay_v1","selected visual style missing")
+require(len(quality)==5 and all(
+    x.get("photo_semantic_qa") is True and
+    x.get("font_px",0)>=120 and x.get("main_font_px",0)>=120 and
+    x.get("style_id")==info["style_id"] and
+    x.get("text_background") is False and x.get("text_stroke") is False and
+    x.get("photo_overlay") is False and
+    len(x.get("line_background_stats",[]))==x.get("text_lines") and
+    all(len(pair)==2 and pair[0]>=150 and pair[1]<=0.25
+        for pair in x["line_background_stats"])
+    for x in quality), "TikTok video images/typography failed")
 require((OUT/"thumbnail.png").read_bytes()==(OUT/"slide_0.png").read_bytes(),
         "hook thumbnail not same as first slide")
 probe=json.loads(subprocess.check_output([

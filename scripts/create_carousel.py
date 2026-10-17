@@ -154,7 +154,7 @@ def subject_guard(query, filename):
     if not name.endswith((".jpg",".jpeg",".webp")): return False
     blocked=("certificate","membership","historic","cadastral map","old map",
              "illustration","engraving","diagram","painting","poster",
-             "scan of","newspaper","cartoon","drawing","passport")
+             "scan of","newspaper","cartoon","drawing","passport","blueprint")
     if any(x in name for x in blocked): return False
     if any(x in q for x in ("advisor","meeting","consultation")):
         return any(x in name for x in ("meeting","discussion","consultation",
@@ -168,16 +168,19 @@ def subject_guard(query, filename):
                    "field work","measuring","topographic"))
     return True
 
-def light_text_area(picture):
-    """Reject busy/dark candidate crops before expensive semantic screening."""
+def light_text_area(picture, regions):
+    """Every headline line must sit on naturally light photography."""
     from PIL import ImageStat
     cropped=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
-    area=cropped.crop((65,250,1015,950)).convert("L")
-    mean=ImageStat.Stat(area).mean[0]
-    dark=sum(area.histogram()[:110])/(area.width*area.height)
-    return mean>=150 and dark<=0.27
+    for region in regions:
+        area=cropped.crop(region).convert("L")
+        mean=ImageStat.Stat(area).mean[0]
+        dark=sum(area.histogram()[:110])/(area.width*area.height)
+        if mean<150 or dark>0.25:
+            return False
+    return True
 
-def image_for(query, slide_index):
+def image_for(query, slide_index, text_regions):
     global relevance_guard
     if selected_photos is not None:
         from urllib.parse import urlparse
@@ -198,7 +201,7 @@ def image_for(query, slide_index):
             raise RuntimeError(f"Curated scene {slide_index+1} too small; refusing upscale")
         if item.get("license")!="Pexels Free License":
             raise RuntimeError("Curated photograph licensing is not verified")
-        if not light_text_area(picture):
+        if not light_text_area(picture,text_regions):
             raise RuntimeError(f"Curated scene {slide_index+1} is too dark behind selected navy typography")
         if relevance_guard is None: relevance_guard=PhotoRelevanceGuard()
         if not relevance_guard.approved(picture, query):
@@ -209,6 +212,8 @@ def image_for(query, slide_index):
         picture=ImageOps.autocontrast(picture,cutoff=0.4)
         picture=ImageEnhance.Color(picture).enhance(1.04)
         picture=picture.filter(ImageFilter.UnsharpMask(radius=1.0,percent=50,threshold=3))
+        if not light_text_area(picture,text_regions):
+            raise RuntimeError(f"Curated scene {slide_index+1} lost text contrast after processing")
         print(f"Researched real photograph for slide {slide_index+1}: {item['scene']}",flush=True)
         return picture
 
@@ -248,7 +253,7 @@ def image_for(query, slide_index):
                     print(f"Skipped unreadable photo: {str(e)[:90]}",flush=True)
                     continue
                 if picture.width<1080 or picture.height<1200: continue
-                if not light_text_area(picture):
+                if not light_text_area(picture,text_regions):
                     print(f"Rejected dark text area: {title[:65]}",flush=True)
                     continue
                 if relevance_guard is None:
@@ -256,17 +261,20 @@ def image_for(query, slide_index):
                 if not relevance_guard.approved(picture, query):
                     print(f"Rejected unrelated photograph: {title[:65]}",flush=True)
                     continue
-                used_photo_titles.add(title)
                 attribution=re.sub("<[^>]+>","",meta.get("Artist",{}).get("value","")).strip()[:120]
                 extra=(" | Modified visual distributed under the same CC BY-SA license"
                        if license_name.startswith("CC BY-SA ") else "")
-                photo_credits.append(f"Slide {slide_index+1}: {title} | {attribution or 'Wikimedia contributor'} | {license_name} | {info.get('descriptionurl','')}{extra}")
                 from PIL import ImageEnhance, ImageFilter
                 picture=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
                 picture=ImageOps.autocontrast(picture,cutoff=0.5)
                 picture=ImageEnhance.Color(picture).enhance(1.04)
                 picture=ImageEnhance.Contrast(picture).enhance(1.035)
                 picture=picture.filter(ImageFilter.UnsharpMask(radius=1.2,percent=65,threshold=3))
+                if not light_text_area(picture,text_regions):
+                    print(f"Rejected processed photo with poor text contrast: {title[:65]}",flush=True)
+                    continue
+                used_photo_titles.add(title)
+                photo_credits.append(f"Slide {slide_index+1}: {title} | {attribution or 'Wikimedia contributor'} | {license_name} | {info.get('descriptionurl','')}{extra}")
                 print(f"Selected photo for slide {slide_index+1}: {title}",flush=True)
                 return picture
         except Exception as exc:
@@ -300,40 +308,50 @@ def draw_line(draw,line,y,fnt,ink):
         x+=draw.textlength(part,font=font)
 
 for i, slide in enumerate(slides):
-    picture=image_for(slide["photo"],i)
-    if picture is None:
-        raise RuntimeError(f"Slide {i+1}: no matching licensed full-resolution photo; fail closed")
-    picture=picture.convert("RGBA")
-    layer=Image.new("RGBA",picture.size,(0,0,0,0))
+    layer=Image.new("RGBA",(1080,1920),(0,0,0,0))
     draw=ImageDraw.Draw(layer)
     main_font=None
     lines=[]
-    for size in range(210,119,-10):
-        candidate_font=ImageFont.truetype(str(FONT),size)
-        try: candidate_lines=fit_lines(draw,slide["main"],candidate_font)
-        except RuntimeError: continue
-        if len(candidate_lines)<=3:
-            lines=candidate_lines
-            main_font=candidate_font
-            break
+    # Prefer two complete lines over a larger third line that falls on a busy scene.
+    for max_lines in (2,3):
+        for size in range(210,119,-10):
+            candidate_font=ImageFont.truetype(str(FONT),size)
+            try: candidate_lines=fit_lines(draw,slide["main"],candidate_font)
+            except RuntimeError: continue
+            if len(candidate_lines)<=max_lines:
+                lines=candidate_lines
+                main_font=candidate_font
+                break
+        if main_font is not None: break
     if main_font is None:
         raise RuntimeError(f"Slide {i+1}: exact wording cannot fit in three lines at 120px+")
-    line_step=int(main_font.size*1.52)
+    line_step=int(main_font.size*1.42)
+    text_regions=[]
     for j,line in enumerate(lines):
-        draw_line(draw,line,260+j*line_step,main_font,INK)
+        y=260+j*line_step
+        width=mixed_text_width(draw,line,main_font)
+        x=int((1080-width)/2)
+        text_regions.append((max(0,x-24),max(0,y-24),min(1080,int(x+width+24)),min(1920,int(y+main_font.size*1.35))))
+        draw_line(draw,line,y,main_font,INK)
     bbox=layer.getbbox()
     if bbox is None:
         raise RuntimeError(f"Slide {i+1}: no visible Bengali text")
     design_zone=(40,200,1040,1100)
     if bbox[0]<design_zone[0] or bbox[2]>design_zone[2] or bbox[1]<design_zone[1] or bbox[3]>design_zone[3]:
         raise RuntimeError(f"Slide {i+1}: typography extends outside reserved design zone: text={bbox}, zone={design_zone}")
-    # No panel, gradient, outline or shadow. A naturally light part of the photo
-    # must support dark letters; if not, reject this photo rather than obscuring it.
+    picture=image_for(slide["photo"],i,text_regions)
+    if picture is None:
+        raise RuntimeError(f"Slide {i+1}: no matching licensed bright full-resolution photo; fail closed")
+    picture=picture.convert("RGBA")
+    # No panel, gradient, outline or shadow. Check each line separately.
     from PIL import ImageStat
-    luminance=picture.crop((bbox[0],bbox[1],bbox[2],bbox[3])).convert("L")
-    mean_luma=ImageStat.Stat(luminance).mean[0]
-    dark_fraction=sum(luminance.histogram()[:110])/(luminance.width*luminance.height)
-    if mean_luma<150 or dark_fraction>0.27:
+    line_stats=[]
+    for region in text_regions:
+        luminance=picture.crop(region).convert("L")
+        mean_luma=ImageStat.Stat(luminance).mean[0]
+        dark_fraction=sum(luminance.histogram()[:110])/(luminance.width*luminance.height)
+        line_stats.append((round(mean_luma,2),round(dark_fraction,3)))
+    if any(mean<150 or dark>0.25 for mean,dark in line_stats):
         raise RuntimeError(f"Slide {i+1}: photo too dark/busy behind navy text; choose a lighter composition")
     if logo:
         picture.alpha_composite(logo,(1080-logo.width-72,1920-logo.height-210))
@@ -348,8 +366,7 @@ for i, slide in enumerate(slides):
         "text_lines":len(lines),"text_bbox":list(bbox),
         "text_background":False,"text_stroke":False,"photo_overlay":False,
         "logo_position":"bottom_right" if logo else "omitted_unavailable",
-        "background_mean_luminance":round(mean_luma,2),
-        "background_dark_fraction":round(dark_fraction,3),
+        "line_background_stats":line_stats,
         "actual_ink_bounding_area_fraction":round((bbox[2]-bbox[0])*(bbox[3]-bbox[1])/(1080*1920),3),
         "photo_semantic_qa":True,
         "font_glyph_coverage_qa":True,

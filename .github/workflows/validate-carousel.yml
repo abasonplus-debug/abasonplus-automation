@@ -12,6 +12,8 @@ on:
     paths:
       - 'scripts/create_carousel.py'
       - 'scripts/verify_video_release.py'
+      - 'scripts/prepare_tiktok_preview.py'
+      - '.github/workflows/tiktok-publish-reviewed.yml'
       - 'tests/validate_carousel.py'
       - '.github/workflows/daily-carousel.yml'
       - '.github/workflows/validate-carousel.yml'
@@ -30,7 +32,7 @@ jobs:
           sudo apt-get install -y -qq fonts-noto-core ffmpeg
           python -m pip install -r requirements.txt
       - name: Compile Python without running publishers
-        run: python -m py_compile scripts/create_carousel.py wordpress_publish.py
+        run: python -m py_compile scripts/create_carousel.py scripts/verify_video_release.py scripts/prepare_tiktok_preview.py wordpress_publish.py
       - name: Validate topics, typography and paused publishing
         run: python tests/validate_carousel.py
       - name: Read-only photo source diagnostics
