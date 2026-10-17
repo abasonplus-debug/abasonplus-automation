@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from carousel_style import STYLE_ID, validate_style
 from carousel_timing import validate_timing
+from engagement_pack import hashtags_for, first_comment, hashtag_tokens
 """Generate and validate a TikTok-ready preview package from AbasonPlus slides.
 
 NO TikTok API, publishing, scheduling, Make webhook, or credentials.
@@ -60,7 +61,7 @@ hook=re.sub(r"\s+"," ",str(story.get("hook",""))).strip()
 require(12<=len(hook)<=110,"no readable catchy hook")
 tips=[re.sub(r"\s+"," ",x.get("text","")).strip() for x in story["tips"]]
 require(all(8<=len(t)<=500 for t in tips),"tips are unreadable")
-hashtags=["#AbasonPlus","#আবাসন","#জমি","#বাংলাদেশ","#PropertyTips","#ConstructionTips"]
+hashtags=hashtags_for(story.get("title",hook))
 body=hook+"\n"+"\n".join(f"✅ {tip}" for tip in tips)
 caption=body+"\n\n"+(" ".join(hashtags))
 require(len(caption)<=2200,"TikTok caption above 2200 characters")
@@ -68,7 +69,7 @@ require(len(caption)<=2200,"TikTok caption above 2200 characters")
 status={
  "platform":"tiktok","status":"preview_only",
  "date":local_day,"content_key":"abasonplus-tiktok-"+local_day,
- "title":hook,"caption":caption,
+ "title":hook,"caption":caption,"first_comment":first_comment(hook),
  "hashtags":hashtags,"video_file":"output/abasonplus_daily.mp4",
  "thumbnail_file":"output/thumbnail.png",
  "source_url":story["source_url"],
@@ -83,6 +84,6 @@ status={
  "posting_enabled":False
 }
 (OUT/"tiktok_preview.json").write_text(json.dumps(status,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-print("TIKTOK READY-TO-REVIEW:",local_day,"1080x1920, MP4/AAC, 5 real-photo slides, source, caption and hashtags.")
+print("TIKTOK READY-TO-REVIEW:",local_day,"1080x1920, MP4/AAC, variable real-photo slides, source, caption and hashtags.")
 print("TIKTOK POSTING=DISABLED; user/account and post-specific authorization required.")
 

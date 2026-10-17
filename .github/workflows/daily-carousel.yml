@@ -106,6 +106,9 @@ jobs:
             output/caption.txt
             output/description.txt
             output/tiktok_caption.txt
+            output/first_comment.txt
+            output/first_comment_json.txt
+            output/engagement_pack.json
             output/tiktok_preview.json
           retention-days: 7
       - name: Send ONE daily validated Reel and Short to Make on automatic schedule ONLY
@@ -125,6 +128,9 @@ jobs:
             -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
             -F "title=<output/title.txt" \
             -F "caption=<output/caption.txt" \
+            -F "first_comment=<output/first_comment.txt" \
+            -F "first_comment_json=<output/first_comment_json.txt" \
+            -F "thumbnail=@output/thumbnail.png;type=image/png" \
             -F "description=<output/description.txt" \
             -F "tiktok_caption=<output/tiktok_caption.txt" \
             -F "tiktok_post_key=abasonplus-tiktok-$(TZ=Europe/Berlin date +%F)" \

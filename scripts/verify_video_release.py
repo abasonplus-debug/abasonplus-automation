@@ -16,6 +16,7 @@ from PIL import Image, ImageStat
 from publication_policy import validate_social_copy
 from carousel_style import STYLE_ID, validate_style
 from carousel_timing import validate_timing
+from engagement_pack import validate_pack
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 OUT=ROOT/"output"
@@ -111,6 +112,11 @@ required(brief["source_url"] in expected_description,"source absent from Shorts 
 validate_social_copy(expected_caption, expected_description, (OUT/"title.txt").read_text(encoding="utf-8"))
 required("#AbasonPlus" in expected_caption and "#AbasonPlus" in expected_description,
          "SEO caption or description absent")
+engagement=read_json('engagement_pack.json')
+validate_pack(engagement)
+required(engagement['hook']==brief['hook'] and engagement['caption']==expected_caption and engagement['description']==expected_description,'social package differs from approved story/copy')
+required((OUT/'first_comment.txt').read_text(encoding='utf-8')==engagement['first_comment'],'first comment differs from package')
+required(json.loads((OUT/'first_comment_json.txt').read_text(encoding='utf-8'))==engagement['first_comment'],'comment JSON escaping invalid')
 # This marker is not human aesthetic approval: it records machine QA, explicitly.
 MARKER.write_text("auto_quality_checked="+DATE+"\n",encoding="utf-8")
 print("VIDEO AUTOMATED QA PASSED: Distinct licensed/CLIP-screened photos; correct 9:16, source, font, MP4 and music.")

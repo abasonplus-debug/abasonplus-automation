@@ -158,6 +158,7 @@ jobs:
             -F "rights_confirmed=true" \
             -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
             -F "tiktok_caption=<output/tiktok_caption.txt" \
+            -F "first_comment=<output/first_comment.txt" \
             "$MAKE_WEBHOOK_URL" -o /tmp/make_response.txt
           echo "Make accepted reviewed video; THIS IS NOT PROOF OF PUBLIC TIKTOK POST."
           echo "Verify the resulting Zernio/TikTok platform status and public URL separately."

@@ -53,3 +53,6 @@ Timing correction (owner, 2026-10-18): every image is exactly 2 seconds, never 3
 
 ## Five-platform operations
 See AUTOMATION_OPERATIONS.md for the daily evidence report, narrow pre-delivery retry ceiling, mobile preview guides, freshness review, Free credit reserve and Sunday performance review. TikTok is included in monitoring but still requires exact-video review before uploading.
+
+## Social copy and cover contract
+config/engagement_rules.json locks hook, substantial useful captions/descriptions, one prepared first brand comment, at least five distinct relevant hashtags, the actual hook cover and only the owner-provided MP3. Packaging is verified before release. First-comment/custom-thumbnail writes are new configuration, not a claim of a successful live write; inspect destination results.

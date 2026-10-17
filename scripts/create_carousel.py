@@ -18,6 +18,7 @@ from PIL import Image, ImageDraw, ImageFont, features
 from fontTools.ttLib import TTFont
 from photo_relevance import PhotoRelevanceGuard
 from publication_policy import trusted_source_url, validate_social_copy
+from engagement_pack import hashtags_for, write_pack
 from carousel_timing import SLIDE_SECONDS
 from carousel_style import STYLE_ID, POLICY, layout, paint, photo_stats, readable_photo, validate_style
 
@@ -88,8 +89,7 @@ if not 4<=len(points)<=24:raise RuntimeError("Carousel requires 5-25 slides")
 slides=[{"main":hook,"photo":item["cover_query"],"sub":"জরুরি তথ্য"}]
 slides += [{"main":p["text"],"photo":p["query"],"sub":f"পরামর্শ {i}/{len(points)}"}
            for i,p in enumerate(points,1)]
-hashtags = "#AbasonPlus #আবাসন #PropertyTips #RealEstateBangladesh "
-hashtags += ("#জমি #জমিকেনা" if "জমি" in heading else "#ফ্ল্যাট #HomeBuying" if "ফ্ল্যাট" in heading else "#বাড়ি #HousingTips")
+hashtags = ' '.join(hashtags_for(heading))
 (OUT / "title.txt").write_text(hook if len(hook + " | AbasonPlus") > 100 else hook + " | AbasonPlus",encoding="utf-8")
 (OUT / "caption.txt").write_text(
     f"{hook}\n\n" + "\n".join(f"✅ {i}. {p['text']}" for i,p in enumerate(points,1))
@@ -358,6 +358,7 @@ credits = "\n".join(photo_credits)
 validate_social_copy((OUT/"caption.txt").read_text(encoding="utf-8"),
                      (OUT/"description.txt").read_text(encoding="utf-8"),
                      (OUT/"title.txt").read_text(encoding="utf-8"))
+write_pack(OUT,hook,(OUT/'caption.txt').read_text(encoding='utf-8'),(OUT/'description.txt').read_text(encoding='utf-8'))
 (OUT / "metadata.json").write_text(json.dumps(
     {"date":str(today),"topic":heading,"hook":hook,"slides":len(slides),"slide_seconds":SLIDE_SECONDS,"slide_durations":[SLIDE_SECONDS]*len(slides),"style_id":STYLE_ID,"source_url":item.get("source_url"),"verified_on":item.get("verified_on"),
      "status":"preview_only","visual_approval":"automated_semantic_qa_only","manual_review":"not_performed",

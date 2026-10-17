@@ -1,0 +1,16 @@
+{
+  "hook_required":true,
+  "minimum_distinct_hashtags":5,
+  "hashtag_selection":"topic-relevant; never claim popularity or guaranteed views without evidence",
+  "caption":"hook, useful topic-specific detail, natural question/CTA, relevant hashtags and required attribution; respect platform length",
+  "description":"useful fuller explanation and verified source/date; no filler or invented claims",
+  "first_brand_comment":"prepare for every video; post once on own confirmed publication when platform/account supports it; do not guarantee chronological first position or pinning",
+  "first_comment_max_chars":500,
+  "music":"assets/abasonplus.mp3 only, owner-provided; no substitution or platform catalog overlay",
+  "thumbnail":"actual approved hook slide_0, output/thumbnail.png; 1080x1920; original logo, no misleading hook",
+  "cover_delivery":{"youtube":"attempt custom thumbnail with existing connection; Shorts display/feature support must be checked, fallback first video frame", "instagram":"thumbOffset 0, first approved frame", "tiktok":"video_cover_timestamp_ms 0, first approved frame", "facebook":"first video frame; do not claim independent custom cover uploaded"},
+  "first_comment_delivery":{"facebook":"native first comment after new Reel upload; errors isolated", "youtube":"native commentThreads.insert after new upload; errors isolated", "instagram":"after published readback, use connected provider comment API only if supported", "tiktok":"after exact-video approval and published readback, provider comment API only if supported"},
+  "views_guaranteed":false,
+  "no_paid_services":true,
+  "write_test_status":"No public comment or thumbnail was written while installing this change; next production attempts require status verification."
+}
