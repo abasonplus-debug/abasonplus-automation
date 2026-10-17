@@ -219,8 +219,6 @@ def image_for(query, slide_index, placements):
             raise RuntimeError(f"Curated scene {slide_index+1} too small; refusing upscale")
         if item.get("license")!="Pexels Free License":
             raise RuntimeError("Curated photograph licensing is not verified")
-        if choose_text_area(picture,placements) is None:
-            raise RuntimeError(f"Curated scene {slide_index+1} is too dark behind selected navy typography")
         if relevance_guard is None: relevance_guard=PhotoRelevanceGuard()
         if not relevance_guard.approved(picture, query):
             raise RuntimeError(f"Curated scene {slide_index+1} does not match its visual brief")
@@ -234,6 +232,12 @@ def image_for(query, slide_index, placements):
         if choose_text_area(picture,placements) is None:
             # Processing can darken an otherwise readable natural photograph.
             picture=original_picture
+        if choose_text_area(picture,placements) is None:
+            for factor in (1.12,1.25,1.4):
+                brightened=ImageEnhance.Brightness(original_picture).enhance(factor)
+                if choose_text_area(brightened,placements) is not None:
+                    picture=brightened
+                    break
         if choose_text_area(picture,placements) is None:
             raise RuntimeError(f"Curated scene {slide_index+1} has no readable headline area")
         print(f"Researched real photograph for slide {slide_index+1}: {item['scene']}",flush=True)
