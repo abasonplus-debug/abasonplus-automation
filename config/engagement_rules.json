@@ -17,8 +17,8 @@
   "first_comment_delivery": {
     "facebook": "native first comment after new Reel upload; errors isolated",
     "youtube": "native commentThreads.insert after new upload; errors isolated",
-    "instagram": "after published readback, use connected provider comment API only if supported",
-    "tiktok": "after exact-video approval and published readback, provider comment API only if supported"
+    "instagram": "prepared in preview; auto-comment disabled because account capability read failed",
+    "tiktok": "prepared in preview; auto-comment disabled because account capability read failed"
   },
   "views_guaranteed": false,
   "no_paid_services": true,

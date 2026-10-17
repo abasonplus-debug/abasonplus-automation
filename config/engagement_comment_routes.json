@@ -1,8 +1,63 @@
 {
- "scenario_id":7968544,
- "facebook":{"comment_module":38,"error_handler":41,"trigger":"after a new native Reel upload with prepared first_comment field","live_write_verified":false},
- "youtube":{"cover_module":39,"comment_module":40,"error_handlers":[43,44],"trigger":"after a new native upload, separate cover/comment routes","live_write_verified":false},
- "provider_comment_read":{"module":42,"kind":"audit_comments_read","inputs":["comment_platform","comment_post_id"],"platforms":["instagram","tiktok"],"capability_status":"initial read probe returned HTTP 400; do not infer write permission; inspect next corrected read result"},
- "provider_first_brand_comment":{"kind":"publish_first_comment","inputs":["comment_platform","comment_post_id","platform_publication_verified","comment_owner_approved","first_comment"],"allowed_platforms":["instagram","tiktok"],"requires_verified_own_published_post":true,"requires_successful_comment_capability_read":true,"requires_no_existing_matching_own_comment":true,"max_chars":500,"modules":{"exists":45,"reserve":46,"post":47,"error_handler":48},"dedupe_key":"abasonplus-first-comment-<platform>-<native-post-id>","idempotency_key":"same as dedupe key","live_write_verified":false},
- "constraints":["Only the owner's existing connected accounts","No comments during installation tests","No arbitrary account IDs or methods","No comment on an unapproved TikTok video","No blind retry after reserved/ambiguous comment","No promise of first chronological position or guaranteed views","No new paid service"]
+  "scenario_id": 7968544,
+  "facebook": {
+    "comment_module": 38,
+    "error_handler": 41,
+    "trigger": "after a new native Reel upload with prepared first_comment field",
+    "live_write_verified": false
+  },
+  "youtube": {
+    "cover_module": 39,
+    "comment_module": 40,
+    "error_handlers": [
+      43,
+      44
+    ],
+    "trigger": "after a new native upload, separate cover/comment routes",
+    "live_write_verified": false
+  },
+  "provider_comment_read": {
+    "status": "unavailable_current_integration",
+    "last_probe": "HTTP 400: Invalid input: expected string, received undefined",
+    "faulty_read_module_removed": true,
+    "automatic_posting_enabled": false
+  },
+  "provider_first_brand_comment": {
+    "kind": "publish_first_comment",
+    "inputs": [
+      "comment_platform",
+      "comment_post_id",
+      "platform_publication_verified",
+      "comment_owner_approved",
+      "first_comment"
+    ],
+    "allowed_platforms": [
+      "instagram",
+      "tiktok"
+    ],
+    "requires_verified_own_published_post": true,
+    "requires_successful_comment_capability_read": true,
+    "requires_no_existing_matching_own_comment": true,
+    "max_chars": 500,
+    "modules": {
+      "exists": 45,
+      "reserve": 46,
+      "post": 47,
+      "error_handler": 48
+    },
+    "dedupe_key": "abasonplus-first-comment-<platform>-<native-post-id>",
+    "idempotency_key": "same as dedupe key",
+    "live_write_verified": false,
+    "disabled": true,
+    "pending_reason": "Comment capability read did not succeed; route disabled, comment text remains available in preview"
+  },
+  "constraints": [
+    "Only the owner's existing connected accounts",
+    "No comments during installation tests",
+    "No arbitrary account IDs or methods",
+    "No comment on an unapproved TikTok video",
+    "No blind retry after reserved/ambiguous comment",
+    "No promise of first chronological position or guaranteed views",
+    "No new paid service"
+  ]
 }
