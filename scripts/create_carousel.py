@@ -101,7 +101,7 @@ quality_results = []
 relevance_guard = None
 # Research-backed references are preview candidates, NOT user-approved publications.
 researched_photos=json.loads((ROOT/"content"/"researched_photos.json").read_text(encoding="utf-8"))
-selected_photos=researched_photos.get(heading)
+selected_photos=item.get("photos") or researched_photos.get(heading)
 if selected_photos is not None:
     if len(selected_photos)!=len(slides):
         raise RuntimeError("Research photo manifest does not match slide count")
