@@ -15,7 +15,7 @@ The source, exact text, photo brief, license, 120 px minimum, line contrast, gly
 
 ## Facebook and YouTube
 
-`.github/workflows/daily-carousel.yml` runs daily at **06:45 UTC**. It first requires today's verified editorial file; then renders five slides and a 15-second H.264/AAC MP4, runs release QA, and saves `abasonplus-source-checked-video` as a GitHub Actions artifact for seven days. A scheduled run only sends the QA-passed video and its SHA-256 through the private `MAKE_WEBHOOK_URL`. A manual `workflow_dispatch` is **preview-only**.
+`.github/workflows/daily-carousel.yml` is scheduled daily at **08:45 Europe/Berlin**, after the WordPress job at **08:20 Europe/Berlin**. GitHub Actions can start scheduled runs late, so these are target trigger times rather than guaranteed publish minutes. It first requires today's verified editorial file; then renders five slides and a 15-second H.264/AAC MP4, runs release QA, and saves `abasonplus-source-checked-video` as a GitHub Actions artifact for seven days. A scheduled run only sends the QA-passed video and its SHA-256 through the private `MAKE_WEBHOOK_URL`. A manual `workflow_dispatch` is **preview-only**.
 
 Make scenario [7968544](https://eu1.make.com/3161815/scenarios/7968544) routes this video to YouTube upload and Facebook Pages Reel. Each branch has its own SHA-256 duplicate key, so one platform's key does not suppress the other's route. The `review_approved` webhook field records this pre-authorized scheduled release after machine QA; it is not evidence of human review. A platform upload failure after its key is reserved needs inspection before retrying that same branch.
 
