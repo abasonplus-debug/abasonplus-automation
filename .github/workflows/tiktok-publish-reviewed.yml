@@ -83,11 +83,11 @@ jobs:
           PREVIEW_RUN_ID: ${{ inputs.preview_run_id }}
         run: |
           gh run view "$PREVIEW_RUN_ID" --repo "$GITHUB_REPOSITORY" --json conclusion,name,event \
-            --jq 'select(.conclusion == "success" and .name == "AbasonPlus Live Editorial End-to-End Preview — NO POSTS") | .name' \
-            | grep -F "End-to-End Preview"
+            --jq 'select(.conclusion == "success" and .name == "AbasonPlus Daily Source-Checked Carousel & Video") | .name' \
+            | grep -F "Source-Checked Carousel & Video"
           mkdir -p output
           gh run download "$PREVIEW_RUN_ID" --repo "$GITHUB_REPOSITORY" \
-            -n abasonplus-daily-editorial-preview -D output
+            -n abasonplus-source-checked-video -D output
       - name: Verify video, first-frame hook, current source and authenticity
         run: |
           python3 - <<'PY'
@@ -100,8 +100,14 @@ jobs:
           assert meta["date"]==today and tt["date"]==today, "No older stale preview publication"
           assert meta["source_url"]==tt["source_url"] and meta["source_url"].startswith("https://")
           assert meta["slides"]==5 and len(meta["quality"])==5
-          assert all(x.get("photo_semantic_qa") and x.get("font_px",0)>=130
-             and x.get("typography_reserved_area_fraction",0)>=.6 for x in meta["quality"])
+          assert meta["style_id"]=="editorial_photo_overlay_v1"
+          assert all(x.get("photo_semantic_qa") and x.get("font_px",0)>=120
+             and x.get("main_font_px",0)>=120 and x.get("style_id")==meta["style_id"]
+             and x.get("text_background") is False and x.get("text_stroke") is False
+             and x.get("photo_overlay") is False
+             and len(x.get("line_background_stats",[]))==x.get("text_lines")
+             and all(len(pair)==2 and pair[0]>=155 and pair[1]<=.20 for pair in x["line_background_stats"])
+             for x in meta["quality"])
           assert len({x["source"] for x in meta["quality"]})==5
           video=out/"abasonplus_daily.mp4"
           assert video.is_file() and video.stat().st_size>500_000
@@ -131,6 +137,7 @@ jobs:
           assert status['enabled'] is True, 'TIKTOK POSTING BLOCKED: Zernio direct-post route is not validated yet; no request was sent.'
           PY
           KEY="abasonplus-tiktok-$(TZ=Asia/Dhaka date +%F)"
+          SHA256="$(sha256sum output/abasonplus_daily.mp4 | cut -d ' ' -f1)"
           curl --fail-with-body --silent --show-error --max-time 120 --retry 0 \
             -F "kind=tiktok_reviewed_publish" \
             -F "review_approved=true" \
@@ -143,6 +150,8 @@ jobs:
             -F "tiktok_allow_duet=$TIKTOK_DUET" \
             -F "tiktok_allow_stitch=$TIKTOK_STITCH" \
             -F "tiktok_post_key=$KEY" \
+            -F "video_sha256=$SHA256" \
+            -F "rights_confirmed=true" \
             -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
             -F "tiktok_caption=<output/tiktok_caption.txt" \
             "$MAKE_WEBHOOK_URL" -o /tmp/make_response.txt
