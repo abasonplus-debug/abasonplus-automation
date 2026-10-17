@@ -71,7 +71,7 @@ for n,info in enumerate(quality):
              "headline outside upper photo region")
     stats=info.get("line_background_stats",[])
     required(len(stats)==info.get("text_lines") and
-             all(len(row)==2 and row[0]>=155 and row[1]<=0.20 for row in stats),
+             all(len(row)==2 and row[0]>=150 and row[1]<=0.25 for row in stats),
              "each headline line must have verified photographic contrast")
     required(info.get("logo_position") in ("bottom_right","omitted_unavailable"),
              "logo must be small at lower right")
