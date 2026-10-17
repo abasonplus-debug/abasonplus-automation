@@ -1,21 +1,5 @@
 name: AbasonPlus Live Editorial End-to-End Preview — NO POSTS
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/test-daily-editorial.yml'
-      - 'content/daily_editorial_*.json'
-      - 'scripts/verify_video_release.py'
-      - 'scripts/create_carousel.py'
-      - 'scripts/photo_relevance.py'
-      - 'scripts/prepare_tiktok_preview.py'
-  pull_request:
-    paths:
-      - 'content/daily_editorial_*.json'
-      - 'scripts/create_carousel.py'
-      - 'scripts/photo_relevance.py'
-      - 'scripts/select_video_story.py'
-      - '.github/workflows/test-daily-editorial.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -101,3 +85,4 @@ jobs:
           if-no-files-found: ignore
           retention-days: 3
 # This workflow contains NO webhook, Gmail, WordPress or social publishing calls.
+

@@ -1,6 +1,6 @@
 # AbasonPlus video automation
 
-Bangla housing-information carousel, Facebook Reel, YouTube Short, and creator-reviewed TikTok video. Source: a fresh, cited `content/daily_editorial_YYYY-MM-DD.json` for the current Asia/Dhaka date. Without that file, the daily workflow skips the video.
+Bangla housing-information carousel, Facebook Reel, YouTube Short, and creator-reviewed TikTok video. Source: a fresh, cited `content/daily_editorial_YYYY-MM-DD.json` for the current Europe/Berlin date. Without that file, both daily publication workflows hold. Static article catalogs are explicit preview material only.
 
 ## Each carousel image: locked visual direction
 
@@ -17,7 +17,7 @@ The source, exact text, photo brief, license, 120 px minimum, line contrast, gly
 
 `.github/workflows/daily-carousel.yml` is scheduled daily at **08:45 Europe/Berlin**, after the WordPress job at **08:20 Europe/Berlin**. GitHub Actions can start scheduled runs late, so these are target trigger times rather than guaranteed publish minutes. It first requires today's verified editorial file; then renders five slides and a 15-second H.264/AAC MP4, runs release QA, and saves `abasonplus-source-checked-video` as a GitHub Actions artifact for seven days. A scheduled run only sends the QA-passed video and its SHA-256 through the private `MAKE_WEBHOOK_URL`. A manual `workflow_dispatch` is **preview-only**.
 
-Make scenario [7968544](https://eu1.make.com/3161815/scenarios/7968544) routes this video to YouTube upload and Facebook Pages Reel. Each branch has its own SHA-256 duplicate key, so one platform's key does not suppress the other's route. The `review_approved` webhook field records this pre-authorized scheduled release after machine QA; it is not evidence of human review. A platform upload failure after its key is reserved needs inspection before retrying that same branch.
+Make scenario [7968544](https://eu1.make.com/3161815/scenarios/7968544) routes this video to YouTube upload and Facebook Pages Reel. Each platform has its own Europe/Berlin daily key and a check-before-reserve guard. A duplicate stops only its own branch. The new Facebook/YouTube/WordPress daily guards take effect on 2026-10-18; all three were already published on 2026-10-17, which is held during migration. The `review_approved` webhook field records this pre-authorized scheduled release after machine QA; it is not evidence of human review. A platform upload failure after its key is reserved needs inspection before retrying that same branch.
 
 ## Instagram
 
@@ -45,6 +45,7 @@ The TikTok workflow has **no cron trigger**. Do not reuse an older video's appro
 
 Keep `MAKE_WEBHOOK_URL` in GitHub Actions secrets. Use **AbasonPlus Safe Code Validation** or a manual preview to check code without a social post. The signed-in Make connections for Facebook, YouTube and the TikTok posting provider must remain healthy. The daily source research task targets 05:00 Europe/Berlin and must create today's editorial JSON before the 08:45 Europe/Berlin video workflow; otherwise the video intentionally skips publication. The schedule can start late or be skipped by GitHub Actions, so verify actual publications in the daily audit.
 
-The WordPress job currently uses Post by Email through Make. If WordPress.com or the mail service stops accepting that feature on the free site, the job fails closed and the daily audit reports the failure; do not activate a paid plan. No step is allowed to purchase services or consume a paid trial. TikTok requires review and consent for each exact video; the general standing authorization does not turn that workflow into unattended scheduled posting.
+The WordPress job uses Post by Email on the current free site without plugins. Keep all services within their free limits; the audit reports delivery failures and no paid plan may be activated. No step is allowed to purchase services or consume a paid trial. TikTok requires review and consent for each exact video; the general standing authorization does not turn that workflow into unattended scheduled posting.
 
 Website: https://abasonplus.wordpress.com/
+

@@ -13,10 +13,11 @@ import subprocess
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from PIL import Image, ImageStat
+from publication_policy import validate_social_copy
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 OUT=ROOT/"output"
-DATE=datetime.now(ZoneInfo("Asia/Dhaka")).date().isoformat()
+DATE=datetime.now(ZoneInfo("Europe/Berlin")).date().isoformat()
 MARKER=OUT/"video_qa_passed.txt"
 MARKER.unlink(missing_ok=True)
 
@@ -122,9 +123,11 @@ required((ROOT/"assets"/"abasonplus.mp3").is_file(),"original music asset missin
 expected_caption=(OUT/"caption.txt").read_text(encoding="utf-8")
 expected_description=(OUT/"description.txt").read_text(encoding="utf-8")
 required(brief["source_url"] in expected_description,"source absent from Shorts description")
-required("#AbasonPlus" in expected_caption and expected_description,
+validate_social_copy(expected_caption, expected_description, (OUT/"title.txt").read_text(encoding="utf-8"))
+required("#AbasonPlus" in expected_caption and "#AbasonPlus" in expected_description,
          "SEO caption or description absent")
 # This marker is not human aesthetic approval: it records machine QA, explicitly.
 MARKER.write_text("auto_quality_checked="+DATE+"\n",encoding="utf-8")
 print("VIDEO AUTOMATED QA PASSED: 5 distinct licensed/CLIP-screened photos; correct 9:16, source, font, MP4 and music.")
 print("VISUAL QA REMAINS AUTOMATED HEURISTIC; owner can still request review.")
+

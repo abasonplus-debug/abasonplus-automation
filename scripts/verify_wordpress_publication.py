@@ -7,7 +7,7 @@ acceptance, not publication. Delayed publication is reported as unverified.
 import argparse
 from datetime import datetime,timezone,timedelta
 import html,json,pathlib,re,sys,time
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 from urllib.request import Request,urlopen
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 OUT=ROOT/"output"
@@ -34,15 +34,22 @@ def verify(expected, posts, sending_time):
     for p in posts:
         title=canonical(p.get("title",""))
         slug=str(p.get("slug",""))
-        if title!=wanted_title and slug!=wanted_slug:
+        if slug != wanted_slug or title != wanted_title:
             continue
-        # Avoid a previous-day post with the same headline being mistaken for today's.
-        created=str(p.get("date",""))[:10]
-        sending_day=sending_time.date()
-        acceptable={(sending_day+timedelta(days=shift)).isoformat() for shift in (-1,0,1)}
-        if created not in acceptable:
+        try:
+            created=datetime.fromisoformat(str(p.get("date", "")).replace("Z", "+00:00"))
+            if created.tzinfo is None:
+                created=created.replace(tzinfo=timezone.utc)
+        except ValueError:
             continue
-        if p.get("status") and p["status"]!="publish":
+        if created < sending_time - timedelta(minutes=5):
+            continue
+        if created > datetime.now(timezone.utc) + timedelta(minutes=5):
+            continue
+        if p.get("status") != "publish":
+            continue
+        address=p.get("URL") or p.get("url") or ""
+        if urlparse(address).scheme != "https" or urlparse(address).hostname != "abasonplus.wordpress.com":
             continue
         return {"id":p.get("ID"),"slug":slug,"title":p.get("title"),
                 "url":p.get("URL") or p.get("url"),
@@ -74,3 +81,4 @@ def main():
     raise RuntimeError("PUBLICATION NOT VERIFIED: Make accepted the webhook but WordPress has not confirmed a published post. Manual review required; do NOT blindly resend (duplicate risk).")
 if __name__=="__main__":
     main()
+

@@ -2,22 +2,9 @@ name: AbasonPlus Safe Code Validation
 on:
   push:
     branches: [main]
-    paths:
-      - 'scripts/create_carousel.py'
-      - 'scripts/photo_relevance.py'
-      - 'content/topics.json'
-      - 'tests/validate_carousel.py'
-      - 'tests/photo_source_probe.py'
-      - '.github/workflows/validate-carousel.yml'
+    paths: ['scripts/**', 'tests/**', 'wordpress*.py', 'content/**', '.github/workflows/**', 'requirements.txt']
   pull_request:
-    paths:
-      - 'scripts/create_carousel.py'
-      - 'scripts/verify_video_release.py'
-      - 'scripts/prepare_tiktok_preview.py'
-      - '.github/workflows/tiktok-publish-reviewed.yml'
-      - 'tests/validate_carousel.py'
-      - '.github/workflows/daily-carousel.yml'
-      - '.github/workflows/validate-carousel.yml'
+    paths: ['scripts/**', 'tests/**', 'wordpress*.py', 'content/**', '.github/workflows/**', 'requirements.txt']
   workflow_dispatch:
 permissions:
   contents: read
@@ -34,55 +21,8 @@ jobs:
           python -m pip install -r requirements.txt
       - name: Compile Python without running publishers
         run: python -m py_compile scripts/create_carousel.py scripts/photo_relevance.py scripts/verify_video_release.py scripts/prepare_tiktok_preview.py wordpress_publish.py
-      - name: Validate topics, typography and paused publishing
+      - name: Validate topics, typography and scheduled publishing gates
         run: python tests/validate_carousel.py
-      - name: Read-only photo source diagnostics
-        run: python tests/photo_source_probe.py
-      - name: Restore semantic photo models
-        uses: actions/cache@v4
-        with:
-          path: .cache/fastembed
-          key: abasonplus-clip-v1-${{ runner.os }}
-      - name: Render preview locally without any publishing
-        env:
-          ABASONPLUS_MODEL_CACHE: .cache/fastembed
-        run: python scripts/create_carousel.py
-      - name: Verify preview video, audio and images
-        run: |
-          python - <<'PY'
-          import json, pathlib, subprocess
-          from PIL import Image
-          out=pathlib.Path("output")
-          report=json.loads((out/"metadata.json").read_text(encoding="utf-8"))
-          assert report["status"]=="preview_only"
-          files=list(out.glob("slide_*.png"))
-          assert 5<=len(files)<=10 and len(files)==report["slides"]
-          for p in files:
-              with Image.open(p) as im: assert im.size==(1080,1920),p
-          assert report["style_id"]=="editorial_photo_overlay_v1"
-          assert all(x["font_px"]>=120 and x["style_id"]==report["style_id"] and
-                     x["text_background"] is False and x["text_stroke"] is False and
-                     x["photo_overlay"] is False and
-                     x["logo_position"] in ("bottom_right","omitted_unavailable")
-                     for x in report["quality"])
-          assert (out/"thumbnail.png").read_bytes()==(out/"slide_0.png").read_bytes()
-          meta=json.loads(subprocess.check_output(["ffprobe","-v","error","-show_streams","-show_format","-of","json",str(out/"abasonplus_daily.mp4")]))
-          streams=meta["streams"]
-          assert any(x["codec_type"]=="video" and x["width"]==1080 and x["height"]==1920 for x in streams)
-          assert any(x["codec_type"]=="audio" and x["codec_name"]=="aac" for x in streams)
-          assert float(meta["format"]["duration"])>=len(files)*3-0.5
-          print("Full preview render verified; no publication was attempted.")
-          PY
-      - name: Archive preview in GitHub workflow artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: abasonplus-test-preview
-          path: |
-            output/*.png
-            output/*.mp4
-            output/*.json
-            output/*.txt
-          if-no-files-found: ignore
-          retention-days: 3
-# NO webhook call, NO social upload, NO WordPress publishing in this workflow.
+      - name: Run publication policy regression tests without network or publishing
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+# Static/fixture checks only on code changes; full creative renders use the explicit preview workflow.

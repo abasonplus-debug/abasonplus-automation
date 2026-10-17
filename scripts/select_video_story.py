@@ -3,11 +3,12 @@
 No network, no social publication, no source invention.
 """
 import json, pathlib, sys
+from publication_policy import trusted_source_url, validate_article_html
 from datetime import datetime
 from zoneinfo import ZoneInfo
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 out=ROOT/"output";out.mkdir(exist_ok=True)
-today=datetime.now(ZoneInfo("Asia/Dhaka")).date().isoformat()
+today=datetime.now(ZoneInfo("Europe/Berlin")).date().isoformat()
 f=ROOT/"content"/f"daily_editorial_{today}.json"
 if not f.exists():
     print("NO_CHATGPT_DAILY_EDITORIAL: refusing repeated static carousel")
@@ -16,7 +17,8 @@ data=json.loads(f.read_text(encoding="utf-8"))
 story=data.get("story")
 if data.get("date")!=today or data.get("verified_on")!=today:
     raise RuntimeError("Daily editorial is not verified today")
-if not data.get("source_url","").startswith("https://") or data["source_url"] not in data.get("content",""):
+validate_article_html(data.get("content", ""))
+if not trusted_source_url(data.get("source_url", "")) or data["source_url"] not in data.get("content", ""):
     raise RuntimeError("Source missing or not present in daily article")
 if not isinstance(story,dict) or len(story.get("tips",[]))!=4:
     raise RuntimeError("Need exactly four new, sourced carousel tips")
@@ -46,3 +48,4 @@ story["expires_on"]=today
 p=out/"daily_research_story.json"
 p.write_text(json.dumps(story,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
 print("VALIDATED_DAILY_VIDEO_BRIEF:",today,"source URL recorded; no posts sent")
+

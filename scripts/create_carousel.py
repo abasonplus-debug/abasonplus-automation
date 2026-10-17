@@ -17,6 +17,7 @@ import struct
 from PIL import Image, ImageDraw, ImageFont, features
 from fontTools.ttLib import TTFont
 from photo_relevance import PhotoRelevanceGuard
+from publication_policy import trusted_source_url, validate_social_copy
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "output"
@@ -61,7 +62,7 @@ def mixed_text_width(draw, value, bengali_font):
 catalog = json.loads((ROOT / "content" / "topics.json").read_text(encoding="utf-8"))
 if len(catalog)<10:
     raise RuntimeError("Too few topics")
-today = datetime.now(ZoneInfo("Asia/Dhaka")).date()
+today = datetime.now(ZoneInfo("Europe/Berlin")).date()
 current_catalog=[x for x in catalog if not x.get("expires_on") or today<=date.fromisoformat(x["expires_on"])]
 if len(current_catalog)<10:raise RuntimeError("Outdated carousel catalog")
 daily_story_file=os.getenv("ABASONPLUS_DAILY_STORY","")
@@ -73,10 +74,7 @@ if daily_story_file:
     if date.fromisoformat(item["verified_on"]) != today:
         raise RuntimeError("AI story verified date is not today")
     from urllib.parse import urlparse
-    trusted_hosts={"www.tbsnews.net","www.bssnews.net","bdlaws.minlaw.gov.bd",
-                   "investbangladesh.gov.bd","mohpw.gov.bd","dmtcl.gov.bd",
-                   "hbri.gov.bd","ss.pwd.gov.bd","nsez.gov.bd","nha.gov.bd"}
-    if urlparse(item.get("source_url","")).hostname not in trusted_hosts:
+    if not trusted_source_url(item.get("source_url", "")):
         raise RuntimeError("Daily carousel source not among the approved publishers")
     if item.get("source_kind") not in ("external_news_report","official_law_reference"):
         raise RuntimeError("Carousel was not grounded in an approved factual source")
@@ -90,7 +88,7 @@ slides += [{"main":p["text"],"photo":p["query"],"sub":f"পরামর্শ {i
            for i,p in enumerate(points,1)]
 hashtags = "#AbasonPlus #আবাসন #PropertyTips #RealEstateBangladesh "
 hashtags += ("#জমি #জমিকেনা" if "জমি" in heading else "#ফ্ল্যাট #HomeBuying" if "ফ্ল্যাট" in heading else "#বাড়ি #HousingTips")
-(OUT / "title.txt").write_text(f"{hook} | AbasonPlus #Shorts",encoding="utf-8")
+(OUT / "title.txt").write_text(hook if len(hook + " | AbasonPlus") > 100 else hook + " | AbasonPlus",encoding="utf-8")
 (OUT / "caption.txt").write_text(
     f"{hook}\n\n" + "\n".join(f"✅ {i}. {p['text']}" for i,p in enumerate(points,1))
     + f"\n\nআপনার অভিজ্ঞতা কী? মন্তব্যে জানান।\n\nhttps://abasonplus.wordpress.com/\n\n{hashtags}",
@@ -115,7 +113,7 @@ try:
     logo = Image.open(logo_path).convert("RGBA")
     logo.thumbnail((115, 115))
 except Exception as e:
-    print("Logo unavailable, continuing with wordmark:", e)
+    print("Logo unavailable, continuing without logo:", e)
 
 def centered(draw, text, y, font, color):
     bbox = draw.textbbox((0, 0), text, font=font, direction="ltr")
@@ -421,6 +419,9 @@ credits = "\n".join(photo_credits)
     + f"\n\nhttps://abasonplus.wordpress.com/\n{hashtags} #Shorts"
     + (f"\n\nSource: {item['source_url']}\nVerified: {item.get('verified_on','')}" if item.get("source_url") else "")
     + "\n\nPhoto sources and licenses:\n" + credits,encoding="utf-8")
+validate_social_copy((OUT/"caption.txt").read_text(encoding="utf-8"),
+                     (OUT/"description.txt").read_text(encoding="utf-8"),
+                     (OUT/"title.txt").read_text(encoding="utf-8"))
 (OUT / "metadata.json").write_text(json.dumps(
     {"date":str(today),"topic":heading,"hook":hook,"slides":len(slides),"style_id":STYLE_ID,"source_url":item.get("source_url"),"verified_on":item.get("verified_on"),
      "status":"preview_only","visual_approval":"automated_semantic_qa_only","manual_review":"not_performed",
@@ -450,3 +451,4 @@ subprocess.run([
     str(OUT / "abasonplus_daily.mp4")
 ], cwd=OUT, check=True)
 print("Created PREVIEW ONLY", OUT / "abasonplus_daily.mp4")
+

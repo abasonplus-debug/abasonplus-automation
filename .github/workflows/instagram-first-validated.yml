@@ -1,8 +1,5 @@
 name: AbasonPlus Instagram - First Validated Video
 on:
-  push:
-    paths:
-      - 'config/instagram_first_validated_2026-10-17.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -12,7 +9,8 @@ concurrency:
   cancel-in-progress: false
 jobs:
   publish-existing-video:
-    if: ${{ github.actor == 'abasonplus-debug' }}
+    # Completed one-time delivery retained for audit only.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -52,7 +50,7 @@ jobs:
           import datetime,hashlib,json,pathlib,zoneinfo
           p=pathlib.Path('output')
           m=json.loads((p/'metadata.json').read_text(encoding='utf-8'))
-          assert m['date']==datetime.datetime.now(zoneinfo.ZoneInfo('Asia/Dhaka')).date().isoformat()
+          assert m['date']==datetime.datetime.now(zoneinfo.ZoneInfo('Europe/Berlin')).date().isoformat()
           assert m['slides']==5 and len(m['quality'])==5
           assert m['style_id']=='editorial_photo_overlay_v1'
           assert len({q['source'] for q in m['quality']})==5
@@ -83,3 +81,4 @@ jobs:
             -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
             "$MAKE_WEBHOOK_URL" -o /tmp/instagram-make-response.txt
           echo "Make accepted the Instagram-only request. Verify actual provider publication separately."
+

@@ -1,10 +1,5 @@
 name: AbasonPlus Daily AI Research Preview — NO POSTS
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'scripts/generate_daily_research.py'
-      - '.github/workflows/test-ai-research.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -55,3 +50,4 @@ jobs:
           retention-days: 3
           if-no-files-found: ignore
 # NO email, WordPress, Facebook, YouTube or Make posting step exists.
+

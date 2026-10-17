@@ -14,7 +14,7 @@ import xml.etree.ElementTree as ET
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 OUT=ROOT/"output";OUT.mkdir(exist_ok=True)
-TODAY=datetime.now(ZoneInfo("Asia/Dhaka"))
+TODAY=datetime.now(ZoneInfo("Europe/Berlin"))
 ALLOWED={"www.tbsnews.net","www.bssnews.net","nsez.gov.bd","investbangladesh.gov.bd",
          "dmtcl.gov.bd","hbri.gov.bd","ss.pwd.gov.bd","bdlaws.minlaw.gov.bd",
          "mutation.land.gov.bd","mohpw.gov.bd","nha.gov.bd"}
@@ -234,3 +234,4 @@ def main():
 
 if __name__=="__main__":
     main()
+

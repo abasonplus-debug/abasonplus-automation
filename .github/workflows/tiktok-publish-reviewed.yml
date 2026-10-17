@@ -95,7 +95,7 @@ jobs:
           out=pathlib.Path("output")
           meta=json.loads((out/"metadata.json").read_text(encoding="utf-8"))
           tt=json.loads((out/"tiktok_preview.json").read_text(encoding="utf-8"))
-          today=datetime.datetime.now(zoneinfo.ZoneInfo("Asia/Dhaka")).date().isoformat()
+          today=datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Berlin")).date().isoformat()
           assert tt["status"]=="preview_only" and tt["posting_enabled"] is False
           assert meta["date"]==today and tt["date"]==today, "No older stale preview publication"
           assert meta["source_url"]==tt["source_url"] and meta["source_url"].startswith("https://")
@@ -136,7 +136,7 @@ jobs:
           status=json.loads(Path('config/tiktok_publication_gate.json').read_text())
           assert status['enabled'] is True, 'TIKTOK POSTING BLOCKED: Zernio direct-post route is not validated yet; no request was sent.'
           PY
-          KEY="abasonplus-tiktok-$(TZ=Asia/Dhaka date +%F)"
+          KEY="abasonplus-tiktok-$(TZ=Europe/Berlin date +%F)"
           SHA256="$(sha256sum output/abasonplus_daily.mp4 | cut -d ' ' -f1)"
           curl --fail-with-body --silent --show-error --max-time 120 --retry 0 \
             -F "kind=tiktok_reviewed_publish" \
@@ -159,3 +159,4 @@ jobs:
           echo "Verify the resulting Zernio/TikTok platform status and public URL separately."
 # No cron trigger. This workflow is impossible to run on a schedule or repository push.
 # The creator must review that specific completed preview and expressly approve that video.
+

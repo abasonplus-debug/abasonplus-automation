@@ -1,9 +1,5 @@
 name: AbasonPlus TikTok – First Specifically Approved Post Once
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'config/tiktok_first_approved_2026-10-16.json'
   workflow_dispatch:
 permissions:
   contents: read
@@ -13,6 +9,8 @@ concurrency:
   cancel-in-progress: false
 jobs:
   first-approved-tiktok:
+    # Completed one-time delivery retained for audit only.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 14
     steps:
@@ -78,3 +76,4 @@ jobs:
         if: ${{ steps.gate.outputs.enabled != 'true' }}
         run: echo 'No publication attempted. TikTok publishing route/creator consent gateway must first be verified.'
 # No cron schedule. This exact one-video workflow cannot automatically approve future TikToks.
+

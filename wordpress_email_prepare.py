@@ -3,6 +3,7 @@
 GitHub -> existing Make webhook -> Gmail OAuth -> WordPress secret Post-by-Email address.
 """
 import argparse, html, json, pathlib, re
+from scripts.publication_policy import trusted_source_url, validate_article_html
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
 from html.parser import HTMLParser
@@ -50,6 +51,7 @@ def prepare(post):
     for name in ("slug","title","content"):
         if not isinstance(post.get(name),str) or not post[name].strip():
             raise RuntimeError(f"Missing required post field: {name}")
+    validate_article_html(post["content"])
     slug=post["slug"].strip()
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]{3,100}",slug):
         raise RuntimeError("Invalid slug; delivery BLOCKED")
@@ -73,36 +75,33 @@ def prepare(post):
 
 def main():
     ap=argparse.ArgumentParser()
+    ap.add_argument("--allow-catalog-preview", action="store_true", help="Explicit offline/catalog preview only; production requires today's editorial")
     ap.add_argument("--skip-public-lookup",action="store_true",help="Offline QA only")
     ap.add_argument("--output",default="output/wordpress_email_preview.json")
     args=ap.parse_args()
+    (ROOT/args.output).unlink(missing_ok=True)
     # Research-backed timely articles take priority over the older generic queue.
     researched=json.loads((ROOT/"content"/"researched_wordpress_posts.json").read_text(encoding="utf-8"))
     evergreen=json.loads((ROOT/"wordpress_posts.json").read_text(encoding="utf-8"))
     if not isinstance(researched,list) or not isinstance(evergreen,list):
         raise RuntimeError("Article catalogs must be JSON arrays")
     # First choice: ChatGPT's daily source-checked briefing committed via GitHub app.
-    today=datetime.now(ZoneInfo("Asia/Dhaka")).date()
+    today=datetime.now(ZoneInfo("Europe/Berlin")).date()
     chatgpt_path=ROOT/"content"/("daily_editorial_"+today.isoformat()+".json")
     chatgpt=[]
     if chatgpt_path.is_file():
         entry=json.loads(chatgpt_path.read_text(encoding="utf-8"))
         source=entry.get("source_url","")
-        approved_source_hosts={
-            "bdlaws.minlaw.gov.bd","www.bssnews.net","www.tbsnews.net",
-            "investbangladesh.gov.bd","dmtcl.gov.bd","hbri.gov.bd",
-            "ss.pwd.gov.bd","nsez.gov.bd","nha.gov.bd",
-            "mutation.land.gov.bd","mohpw.gov.bd"
-        }
         if entry.get("date")!=today.isoformat() or entry.get("verified_on")!=today.isoformat():
             raise RuntimeError("ChatGPT daily editorial is stale or incorrectly dated")
-        if urlparse(source).scheme!="https" or urlparse(source).hostname not in approved_source_hosts:
+        if not trusted_source_url(source):
             raise RuntimeError("ChatGPT daily editorial has an unapproved or invalid reference host")
         if source not in entry.get("content",""):
             raise RuntimeError("ChatGPT daily editorial missing in-article source citation")
         if not re.fullmatch(r"ap-[a-z0-9-]{10,95}",entry.get("slug","")):
             raise RuntimeError("ChatGPT daily editorial lacks a valid unique ap- slug")
         body=entry.get("content","")
+        validate_article_html(body)
         if len(body)<1700 or body.count("<h2>")<3 or re.search(r"<\\s*(?:script|iframe|form|object|embed)\\b",body,re.I):
             raise RuntimeError("ChatGPT daily article failed safe HTML structure checks")
         if not isinstance(entry.get("tags"),list) or not 3<=len(entry["tags"])<=8:
@@ -128,14 +127,15 @@ def main():
         src=candidate.get("source_url","")
         if not src.startswith("https://www.tbsnews.net/") or src not in candidate.get("sources",[]):
             raise RuntimeError("Generated article lacks recognized primary publication source")
-        if date.fromisoformat(candidate.get("verified_on"))!=datetime.now(ZoneInfo("Asia/Dhaka")).date():
+        if date.fromisoformat(candidate.get("verified_on"))!=datetime.now(ZoneInfo("Europe/Berlin")).date():
             raise RuntimeError("Generated article is not freshly verified today")
         generated=[candidate]
     known=set() if args.skip_public_lookup else slugs_already_published()
-    today=datetime.now(ZoneInfo("Asia/Dhaka")).date()
+    today=datetime.now(ZoneInfo("Europe/Berlin")).date()
     items=[]
     queued=set()
-    for post in chatgpt+generated+researched+evergreen:
+    candidates = chatgpt if not args.allow_catalog_preview else chatgpt+generated+researched+evergreen
+    for post in candidates:
         slug=post.get("slug","")
         if not slug or slug in known or slug in queued:
             continue
@@ -166,7 +166,7 @@ def main():
         items.append(post)
     item=items[0] if items else None
     if item is None:
-        print("No unpublished reviewed articles; NO email sent")
+        print("No unpublished verified daily editorial; NO email sent")
         return
     payload=prepare(item)
     output=ROOT/args.output
@@ -177,3 +177,4 @@ def main():
 
 if __name__=="__main__":
     main()
+

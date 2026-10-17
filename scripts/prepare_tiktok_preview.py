@@ -31,7 +31,7 @@ require(VIDEO.is_file() and VIDEO.stat().st_size>500_000,"MP4 missing or too sma
 require(AUDIO.is_file() and AUDIO.stat().st_size>1000,"original user-supplied music missing")
 info=json.loads(META.read_text(encoding="utf-8"))
 story=json.loads(STORY.read_text(encoding="utf-8"))
-local_day=datetime.now(ZoneInfo("Asia/Dhaka")).date().isoformat()
+local_day=datetime.now(ZoneInfo("Europe/Berlin")).date().isoformat()
 require(info.get("date")==local_day and story.get("verified_on")==local_day,"story is stale")
 require(info.get("source_url")==story.get("source_url"),"source provenance mismatch")
 require(story.get("source_url","").startswith("https://"),"not grounded in a cited link")
@@ -89,3 +89,4 @@ status={
 (OUT/"tiktok_preview.json").write_text(json.dumps(status,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
 print("TIKTOK READY-TO-REVIEW:",local_day,"1080x1920, MP4/AAC, 5 real-photo slides, source, caption and hashtags.")
 print("TIKTOK POSTING=DISABLED; user/account and post-specific authorization required.")
+
