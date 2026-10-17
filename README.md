@@ -31,6 +31,8 @@ The TikTok workflow has **no cron trigger**. Do not reuse an older video's appro
 
 ## Setup and verification
 
-Keep `MAKE_WEBHOOK_URL` in GitHub Actions secrets. Use **AbasonPlus Safe Code Validation** or a manual preview to check code without a social post. The signed-in Make connections for Facebook, YouTube and the TikTok posting provider must remain healthy. The daily source research task must create today's editorial JSON before 06:45 UTC; otherwise the video intentionally skips publication.
+Keep `MAKE_WEBHOOK_URL` in GitHub Actions secrets. Use **AbasonPlus Safe Code Validation** or a manual preview to check code without a social post. The signed-in Make connections for Facebook, YouTube and the TikTok posting provider must remain healthy. The daily source research task targets 05:00 Europe/Berlin and must create today's editorial JSON before the 08:45 Europe/Berlin video workflow; otherwise the video intentionally skips publication. The schedule can start late or be skipped by GitHub Actions, so verify actual publications in the daily audit.
+
+The WordPress job currently uses Post by Email through Make. If WordPress.com or the mail service stops accepting that feature on the free site, the job fails closed and the daily audit reports the failure; do not activate a paid plan. No step is allowed to purchase services or consume a paid trial. TikTok requires review and consent for each exact video; the general standing authorization does not turn that workflow into unattended scheduled posting.
 
 Website: https://abasonplus.wordpress.com/
