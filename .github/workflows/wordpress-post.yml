@@ -2,7 +2,8 @@ name: AbasonPlus Daily WordPress Post by Email
 # Daily 06:20 UTC automatic WordPress email publication; manual workflow runs preview ONLY.
 on:
   schedule:
-    - cron: '20 6 * * *' # 08:20 CEST / 07:20 CET
+    - cron: '20 8 * * *' # 08:20 Europe/Berlin, summer and winter
+      timezone: 'Europe/Berlin'
   workflow_dispatch:
     inputs:
       preview_only:
