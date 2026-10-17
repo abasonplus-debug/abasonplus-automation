@@ -64,7 +64,7 @@ jobs:
           meta=json.loads((out/'metadata.json').read_text(encoding='utf-8'))
           news=json.loads((out/'daily_research_story.json').read_text(encoding='utf-8'))
           assert meta['source_url']==news['source_url']
-          assert meta['slides']==5 and len(meta['quality'])==5
+          assert 5<=meta['slides']<=25 and len(meta['quality'])==meta['slides']
           assert meta['verified_on']==news['verified_on']
           assert meta['style_id']=='compact_white_gold_v2'
           from scripts.carousel_style import validate_style
@@ -74,16 +74,17 @@ jobs:
                      x['photo_overlay'] is False and
                      x['logo_position'] in ('bottom_right','omitted_unavailable')
                      for x in meta['quality'])
-          assert all((out/f'slide_{i}.png').is_file() for i in range(5))
-          for i in range(5):
+          assert all((out/f'slide_{i}.png').is_file() for i in range(meta['slides']))
+          for i in range(meta['slides']):
               with Image.open(out/f'slide_{i}.png') as im: assert im.size==(1080,1920)
           assert (out/'thumbnail.png').read_bytes()==(out/'slide_0.png').read_bytes()
           vid=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_streams','-show_format','-of','json',str(out/'abasonplus_daily.mp4')]))
           assert any(s['codec_type']=='video' and s['width']==1080 and s['height']==1920 for s in vid['streams'])
           assert any(s['codec_type']=='audio' and s['codec_name']=='aac' for s in vid['streams'])
-          assert float(vid['format']['duration'])>=14
-          assert len((out/'image_credits.txt').read_text(encoding='utf-8').strip().splitlines())==5
-          print('AUTO VIDEO QA PASS: original licensed photos, 5 independent 9:16 slides, real soundtrack.')
+          from scripts.carousel_timing import validate_timing
+          validate_timing(meta, float(vid['format']['duration']))
+          assert len((out/'image_credits.txt').read_text(encoding='utf-8').strip().splitlines())==meta['slides']
+          print('AUTO VIDEO QA PASS: original licensed photos, independent 9:16 slides, exactly 2 seconds per slide, real soundtrack.')
           PY
       - name: Approve release ONLY after separate real-photo and metadata QA
         run: python3 scripts/verify_video_release.py

@@ -47,7 +47,7 @@ jobs:
               print('WordPress article may already be published; no email preview or resend required.')
           story=json.loads((out/'daily_research_story.json').read_text(encoding='utf-8'))
           report=json.loads((out/'metadata.json').read_text(encoding='utf-8'))
-          assert report['source_url']==story['source_url'] and report['slides']==5
+          assert report['source_url']==story['source_url'] and 5<=report['slides']<=25
           assert (out/'video_qa_passed.txt').exists()
           tt=json.loads((out/'tiktok_preview.json').read_text(encoding='utf-8'))
           assert tt['status']=='preview_only' and not tt['posting_enabled']
@@ -55,15 +55,15 @@ jobs:
           assert report['style_id']=='compact_white_gold_v2'
           from scripts.carousel_style import validate_style
           for quality_record in report['quality']: validate_style(quality_record)
-          assert len(report['quality'])==5
-          assert len({x['source'] for x in report['quality']})==5
+          assert len(report['quality'])==report['slides']
+          assert len({x['source'] for x in report['quality']})==report['slides']
           assert all(x['font_px']>=120 and x['style_id']==report['style_id']
                      and x['text_background'] is False and x['text_stroke'] is True
                      and x['photo_overlay'] is False and x['photo_semantic_qa'] is True
                      and len(x['line_background_stats'])==x['text_lines']
                      and all(len(row)==3 and row[1]<=80 and row[2]<=45 for row in x['line_background_stats'])
                      for x in report['quality'])
-          for i in range(5):
+          for i in range(meta['slides']):
               with Image.open(out/f'slide_{i}.png') as im: assert im.size==(1080,1920)
           assert (out/'thumbnail.png').read_bytes()==(out/'slide_0.png').read_bytes()
           meta=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_streams','-of','json',str(out/'abasonplus_daily.mp4')]))

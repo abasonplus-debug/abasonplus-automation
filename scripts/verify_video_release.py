@@ -15,6 +15,7 @@ from zoneinfo import ZoneInfo
 from PIL import Image, ImageStat
 from publication_policy import validate_social_copy
 from carousel_style import STYLE_ID, validate_style
+from carousel_timing import validate_timing
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 OUT=ROOT/"output"
@@ -46,10 +47,10 @@ required(report.get("manual_review")=="not_performed" and
 required(report.get("photo_selection") in ("curated_plus_semantic_screened","commons_semantic_screened"),
          "photographs were not CLIP screened")
 slides=int(report.get("slides",0))
-required(slides==5 and len(brief.get("tips",[]))==4,
+required(5<=slides<=25 and len(brief.get("tips",[]))==slides-1,
          "incorrect carousel story length")
 quality=report.get("quality",[])
-required(len(quality)==5,"missing individual slide QA")
+required(len(quality)==slides,"missing individual slide QA")
 required(report.get("style_id")==STYLE_ID,
          "selected carousel style missing")
 sources=set()
@@ -89,7 +90,7 @@ for i in range(len(fingerprints)):
 required((OUT/"thumbnail.png").read_bytes()==(OUT/"slide_0.png").read_bytes(),
          "thumbnail differs from slide 1")
 credits=(OUT/"image_credits.txt").read_text(encoding="utf-8")
-required(len(credits.strip().splitlines())==5,"incomplete photo attributions")
+required(len(credits.strip().splitlines())==slides,"incomplete photo attributions")
 video=OUT/"abasonplus_daily.mp4"
 required(video.is_file() and video.stat().st_size>500_000,"MP4 missing or incomplete")
 probe=json.loads(subprocess.check_output(
@@ -102,7 +103,7 @@ required(len(v)==1 and v[0].get("codec_name")=="h264" and
          "invalid H.264 1080x1920 video")
 required(len(a)>=1 and a[0].get("codec_name")=="aac","original background music missing")
 duration=float(probe["format"]["duration"])
-required(14.5<=duration<=16.5,"wrong five-slide video duration")
+validate_timing(report,duration)
 required((ROOT/"assets"/"abasonplus.mp3").is_file(),"original music asset missing")
 expected_caption=(OUT/"caption.txt").read_text(encoding="utf-8")
 expected_description=(OUT/"description.txt").read_text(encoding="utf-8")
@@ -112,6 +113,6 @@ required("#AbasonPlus" in expected_caption and "#AbasonPlus" in expected_descrip
          "SEO caption or description absent")
 # This marker is not human aesthetic approval: it records machine QA, explicitly.
 MARKER.write_text("auto_quality_checked="+DATE+"\n",encoding="utf-8")
-print("VIDEO AUTOMATED QA PASSED: 5 distinct licensed/CLIP-screened photos; correct 9:16, source, font, MP4 and music.")
+print("VIDEO AUTOMATED QA PASSED: Distinct licensed/CLIP-screened photos; correct 9:16, source, font, MP4 and music.")
 print("VISUAL QA REMAINS AUTOMATED HEURISTIC; owner can still request review.")
 

@@ -99,7 +99,7 @@ jobs:
           assert tt["status"]=="preview_only" and tt["posting_enabled"] is False
           assert meta["date"]==today and tt["date"]==today, "No older stale preview publication"
           assert meta["source_url"]==tt["source_url"] and meta["source_url"].startswith("https://")
-          assert meta["slides"]==5 and len(meta["quality"])==5
+          assert 5<=meta["slides"]<=25 and len(meta["quality"])==meta["slides"]
           assert meta["style_id"]=="compact_white_gold_v2"
           from scripts.carousel_style import validate_style
           for quality_record in meta['quality']: validate_style(quality_record)
@@ -110,7 +110,7 @@ jobs:
              and len(x.get("line_background_stats",[]))==x.get("text_lines")
              and all(len(pair)==3 and pair[1]<=80 and pair[2]<=45 for pair in x["line_background_stats"])
              for x in meta["quality"])
-          assert len({x["source"] for x in meta["quality"]})==5
+          assert len({x["source"] for x in meta["quality"]})==meta["slides"]
           video=out/"abasonplus_daily.mp4"
           assert video.is_file() and video.stat().st_size>500_000
           assert (out/"thumbnail.png").read_bytes()==(out/"slide_0.png").read_bytes()
@@ -120,7 +120,8 @@ jobs:
           a=[x for x in info["streams"] if x["codec_type"]=="audio"]
           assert len(v)==1 and v[0]["width"]==1080 and v[0]["height"]==1920 and v[0]["codec_name"]=="h264"
           assert len(a)>=1 and a[0]["codec_name"]=="aac"
-          assert 14.5<=float(info["format"]["duration"])<=16.5
+          from scripts.carousel_timing import validate_timing
+          validate_timing(meta, float(info["format"]["duration"]))
           print("INDIVIDUALLY REVIEWED MP4 SHA256:",hashlib.sha256(video.read_bytes()).hexdigest())
           PY
       - name: Deliver ONLY this creator-reviewed video for TikTok (never Facebook/YouTube)
@@ -162,3 +163,4 @@ jobs:
           echo "Verify the resulting Zernio/TikTok platform status and public URL separately."
 # No cron trigger. This workflow is impossible to run on a schedule or repository push.
 # The creator must review that specific completed preview and expressly approve that video.
+

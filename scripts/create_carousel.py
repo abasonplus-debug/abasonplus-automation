@@ -18,6 +18,7 @@ from PIL import Image, ImageDraw, ImageFont, features
 from fontTools.ttLib import TTFont
 from photo_relevance import PhotoRelevanceGuard
 from publication_policy import trusted_source_url, validate_social_copy
+from carousel_timing import SLIDE_SECONDS
 from carousel_style import STYLE_ID, POLICY, layout, paint, photo_stats, readable_photo, validate_style
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -83,7 +84,7 @@ if daily_story_file:
 else:
     item=current_catalog[today.toordinal() % len(current_catalog)]
 heading,hook,points=item["title"],item["hook"],item["tips"]
-if not 4<=len(points)<=9:raise RuntimeError("Carousel requires 5-10 slides")
+if not 4<=len(points)<=24:raise RuntimeError("Carousel requires 5-25 slides")
 slides=[{"main":hook,"photo":item["cover_query"],"sub":"জরুরি তথ্য"}]
 slides += [{"main":p["text"],"photo":p["query"],"sub":f"পরামর্শ {i}/{len(points)}"}
            for i,p in enumerate(points,1)]
@@ -345,13 +346,13 @@ validate_social_copy((OUT/"caption.txt").read_text(encoding="utf-8"),
                      (OUT/"description.txt").read_text(encoding="utf-8"),
                      (OUT/"title.txt").read_text(encoding="utf-8"))
 (OUT / "metadata.json").write_text(json.dumps(
-    {"date":str(today),"topic":heading,"hook":hook,"slides":len(slides),"style_id":STYLE_ID,"source_url":item.get("source_url"),"verified_on":item.get("verified_on"),
+    {"date":str(today),"topic":heading,"hook":hook,"slides":len(slides),"slide_seconds":SLIDE_SECONDS,"slide_durations":[SLIDE_SECONDS]*len(slides),"style_id":STYLE_ID,"source_url":item.get("source_url"),"verified_on":item.get("verified_on"),
      "status":"preview_only","visual_approval":"automated_semantic_qa_only","manual_review":"not_performed",
      "photo_selection":("curated_plus_semantic_screened" if selected_photos else "commons_semantic_screened"),
      "quality":quality_results},
     ensure_ascii=False,indent=2),encoding="utf-8")
 playlist = OUT / "slides.txt"
-slide_seconds=3
+slide_seconds=SLIDE_SECONDS
 duration=len(slides)*slide_seconds
 playlist.write_text("".join(f"file 'slide_{i}.png'\nduration {slide_seconds}\n"
     for i in range(len(slides))) + f"file 'slide_{len(slides)-1}.png'\n",
@@ -367,7 +368,7 @@ subprocess.run([
     "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
     "-f", "concat", "-safe", "0", "-i", str(playlist),
     "-i", str(audio_path),
-    "-t", str(duration), "-r", "30", "-vf", "format=yuv420p",
+    "-t", str(duration), "-r", "30", "-vf", "fps=30,format=yuv420p",
     "-c:v", "libx264", "-preset", "veryfast", "-crf", "24",
     "-c:a", "aac", "-b:a", "192k", "-af", f"afade=t=out:st={max(0,duration-1)}:d=1", "-shortest", "-movflags", "+faststart",
     str(OUT / "abasonplus_daily.mp4")

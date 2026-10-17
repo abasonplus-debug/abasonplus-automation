@@ -20,15 +20,15 @@ if data.get("date")!=today or data.get("verified_on")!=today:
 validate_article_html(data.get("content", ""))
 if not trusted_source_url(data.get("source_url", "")) or data["source_url"] not in data.get("content", ""):
     raise RuntimeError("Source missing or not present in daily article")
-if not isinstance(story,dict) or len(story.get("tips",[]))!=4:
-    raise RuntimeError("Need exactly four new, sourced carousel tips")
+if not isinstance(story,dict) or not 4<=len(story.get("tips",[]))<=24:
+    raise RuntimeError("Need 4–24 sourced carousel text groups; each may contain multiple sentences")
 if story.get("source_url")!=data["source_url"] or story.get("verified_on")!=today:
     raise RuntimeError("Slide and article source/version mismatch")
 photos=story.get("photos")
 if photos is not None:
     from urllib.parse import urlparse
-    if len(photos)!=5 or len({x.get("url") for x in photos})!=5:
-        raise RuntimeError("Five distinct researched photographs required when provided")
+    if len(photos)!=len(story["tips"])+1 or len({x.get("url") for x in photos})!=len(photos):
+        raise RuntimeError("One distinct researched photograph per slide required")
     for photo in photos:
         if (urlparse(photo.get("url","")).hostname!="images.pexels.com"
             or urlparse(photo.get("source","")).hostname!="www.pexels.com"
@@ -37,8 +37,8 @@ if photos is not None:
             or not photo.get("creator") or not photo.get("scene")):
             raise RuntimeError("Invalid researched photographic source or license")
 for x in story["tips"]:
-    if not (8<=len(x.get("text",""))<=88 and 5<=len(x.get("query",""))<=140):
-        raise RuntimeError("One slide has no concise readable Bengali/visual brief")
+    if not (8<=len(x.get("text",""))<=500 and 5<=len(x.get("query",""))<=140):
+        raise RuntimeError("One slide has no valid Bengali text/visual brief")
 if not 12<=len(story.get("hook",""))<=100:
     raise RuntimeError("Hook missing or unsuitable")
 if not 7<=len(story.get("cover_query",""))<=140:

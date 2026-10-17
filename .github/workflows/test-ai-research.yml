@@ -35,7 +35,7 @@ jobs:
           assert article['source_url'].startswith('https://www.tbsnews.net/')
           assert article['source_url'] in article['content']
           assert article['slug'].startswith('ap-')
-          assert len(story['tips'])==4
+          assert 4<=len(story['tips'])<=24
           assert story['source_url']==article['source_url']
           print('LIVE AI RESEARCH PREVIEW validated:',article['title'])
           PY

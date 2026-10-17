@@ -14,7 +14,7 @@ Use the actual small logo at bottom right (70–90 px width, 28 px margins), rep
 
 ## Facebook and YouTube
 
-`.github/workflows/daily-carousel.yml` is scheduled daily at **08:45 Europe/Berlin**, after the WordPress job at **08:20 Europe/Berlin**. GitHub Actions can start scheduled runs late, so these are target trigger times rather than guaranteed publish minutes. It first requires today's verified editorial file; then renders five slides and a 15-second H.264/AAC MP4, runs release QA, and saves `abasonplus-source-checked-video` as a GitHub Actions artifact for seven days. A scheduled run only sends the QA-passed video and its SHA-256 through the private `MAKE_WEBHOOK_URL`. A manual `workflow_dispatch` is **preview-only**.
+`.github/workflows/daily-carousel.yml` is scheduled daily at **08:45 Europe/Berlin**, after the WordPress job at **08:20 Europe/Berlin**. GitHub Actions can start scheduled runs late, so these are target trigger times rather than guaranteed publish minutes. It first requires today's verified editorial file; then renders the story’s 5–25 slides at exactly two seconds each into an H.264/AAC MP4, runs release QA, and saves `abasonplus-source-checked-video` as a GitHub Actions artifact for seven days. A scheduled run only sends the QA-passed video and its SHA-256 through the private `MAKE_WEBHOOK_URL`. A manual `workflow_dispatch` is **preview-only**.
 
 Make scenario [7968544](https://eu1.make.com/3161815/scenarios/7968544) routes this video to YouTube upload and Facebook Pages Reel. Each platform has its own Europe/Berlin daily key and a check-before-reserve guard. A duplicate stops only its own branch. The new Facebook/YouTube/WordPress daily guards take effect on 2026-10-18; all three were already published on 2026-10-17, which is held during migration. The `review_approved` webhook field records this pre-authorized scheduled release after machine QA; it is not evidence of human review. A platform upload failure after its key is reserved needs inspection before retrying that same branch.
 
@@ -48,3 +48,5 @@ The WordPress job uses Post by Email on the current free site without plugins. K
 
 Website: https://abasonplus.wordpress.com/
 
+
+Timing correction (owner, 2026-10-18): every image is exactly 2 seconds, never 3 or 1.5. Multiple sentences per image are allowed; increase slide count as needed within the existing 50-second maximum. Dense text can be difficult to read in two seconds; do not mislabel readability as guaranteed.

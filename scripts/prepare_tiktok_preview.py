@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from carousel_style import STYLE_ID, validate_style
+from carousel_timing import validate_timing
 """Generate and validate a TikTok-ready preview package from AbasonPlus slides.
 
 NO TikTok API, publishing, scheduling, Make webhook, or credentials.
@@ -36,11 +37,11 @@ local_day=datetime.now(ZoneInfo("Europe/Berlin")).date().isoformat()
 require(info.get("date")==local_day and story.get("verified_on")==local_day,"story is stale")
 require(info.get("source_url")==story.get("source_url"),"source provenance mismatch")
 require(story.get("source_url","").startswith("https://"),"not grounded in a cited link")
-require(info.get("slides")==5 and len(story.get("tips",[]))==4,"must be a 5-slide original slideshow")
+require(5<=info.get("slides",0)<=25 and len(story.get("tips",[]))==info["slides"]-1,"slide count and story must match")
 require(info.get("visual_approval")=="automated_semantic_qa_only","machine QA provenance not recorded")
 quality=info.get("quality",[])
 require(info.get("style_id")==STYLE_ID,"selected visual style missing")
-require(len(quality)==5, "Five slide quality records required")
+require(len(quality)==info["slides"], "Quality record required for each slide")
 for x in quality:
     require(x.get('photo_semantic_qa') is True, 'Photo semantic screening missing')
     validate_style(x)
@@ -54,11 +55,11 @@ require(len(video)==1 and video[0].get("codec_name")=="h264" and
         video[0].get("width")==1080 and video[0].get("height")==1920,
         "not a 1080x1920 H264 TikTok video")
 require(len(audio)>0 and audio[0].get("codec_name")=="aac","missing audio track")
-require(14.5 <= float(probe["format"]["duration"]) <= 16.5,"slideshow duration invalid")
+validate_timing(info, float(probe["format"]["duration"]))
 hook=re.sub(r"\s+"," ",str(story.get("hook",""))).strip()
 require(12<=len(hook)<=110,"no readable catchy hook")
 tips=[re.sub(r"\s+"," ",x.get("text","")).strip() for x in story["tips"]]
-require(all(8<=len(t)<=88 for t in tips),"tips are unreadable")
+require(all(8<=len(t)<=500 for t in tips),"tips are unreadable")
 hashtags=["#AbasonPlus","#আবাসন","#জমি","#বাংলাদেশ","#PropertyTips","#ConstructionTips"]
 body=hook+"\n"+"\n".join(f"✅ {tip}" for tip in tips)
 caption=body+"\n\n"+(" ".join(hashtags))
