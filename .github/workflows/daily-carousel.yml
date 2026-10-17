@@ -1,8 +1,8 @@
 name: AbasonPlus Daily Source-Checked Carousel & Video
 on:
   push:
-    paths:
-      - .github/workflows/daily-carousel.yml
+    branches: [main]
+    paths: ['.github/workflows/daily-carousel.yml']
   schedule:
     - cron: '45 6 * * *' # After daily 06:20 UTC WordPress schedule
   workflow_dispatch:
@@ -132,7 +132,7 @@ jobs:
 # Manual dispatch is PREVIEW ONLY. No daily verified story -> NO VIDEO, never fake a live project photo.
 
   tiktok-once:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
