@@ -103,11 +103,13 @@ jobs:
         run: |
           test -n "$MAKE_WEBHOOK_URL" || { echo 'Missing Make webhook; no publication'; exit 1; }
           test -f output/video_qa_passed.txt || { echo 'No automatic photo quality approval; no publication'; exit 1; }
+          VIDEO_SHA256="$(sha256sum output/abasonplus_daily.mp4 | cut -d ' ' -f1)"
           curl --fail-with-body --max-time 120 --retry 0 \
             -F "kind=video" \
             -F "review_approved=true" \
             -F "visual_qa_passed=true" \
             -F "visual_style_id=editorial_photo_overlay_v1" \
+            -F "video_sha256=$VIDEO_SHA256" \
             -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
             -F "title=<output/title.txt" \
             -F "caption=<output/caption.txt" \
