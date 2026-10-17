@@ -143,7 +143,8 @@ def search_phrases(query):
         fallback=["architecture", "architect", "building"]
     else:
         fallback=[words[0], "house", "building"]
-    phrases=[query+" bright daylight",query," ".join(words[:2]), *fallback]
+    subject=re.split(r"\s+under bright|,\s*portrait|\s+with spacious",query,flags=re.I)[0].strip()
+    phrases=[subject+" bright daylight",subject," ".join(words[:3])," ".join(words[:2]), *fallback]
     return list(dict.fromkeys(p for p in phrases if p))
 
 def subject_guard(query, filename):
@@ -168,19 +169,24 @@ def subject_guard(query, filename):
                    "field work","measuring","topographic"))
     return True
 
-def light_text_area(picture, regions):
-    """Every headline line must sit on naturally light photography."""
+def choose_text_area(picture, placements):
+    """Return the first naturally light upper-image placement for every line."""
     from PIL import ImageStat
     cropped=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
-    for region in regions:
-        area=cropped.crop(region).convert("L")
-        mean=ImageStat.Stat(area).mean[0]
-        dark=sum(area.histogram()[:110])/(area.width*area.height)
-        if mean<150 or dark>0.25:
-            return False
-    return True
+    for index, regions in enumerate(placements):
+        acceptable=True
+        for region in regions:
+            area=cropped.crop(region).convert("L")
+            mean=ImageStat.Stat(area).mean[0]
+            dark=sum(area.histogram()[:110])/(area.width*area.height)
+            if mean<150 or dark>0.25:
+                acceptable=False
+                break
+        if acceptable:
+            return index
+    return None
 
-def image_for(query, slide_index, text_regions):
+def image_for(query, slide_index, placements):
     global relevance_guard
     if selected_photos is not None:
         from urllib.parse import urlparse
@@ -201,7 +207,7 @@ def image_for(query, slide_index, text_regions):
             raise RuntimeError(f"Curated scene {slide_index+1} too small; refusing upscale")
         if item.get("license")!="Pexels Free License":
             raise RuntimeError("Curated photograph licensing is not verified")
-        if not light_text_area(picture,text_regions):
+        if choose_text_area(picture,placements) is None:
             raise RuntimeError(f"Curated scene {slide_index+1} is too dark behind selected navy typography")
         if relevance_guard is None: relevance_guard=PhotoRelevanceGuard()
         if not relevance_guard.approved(picture, query):
@@ -212,15 +218,15 @@ def image_for(query, slide_index, text_regions):
         picture=ImageOps.autocontrast(picture,cutoff=0.4)
         picture=ImageEnhance.Color(picture).enhance(1.04)
         picture=picture.filter(ImageFilter.UnsharpMask(radius=1.0,percent=50,threshold=3))
-        if not light_text_area(picture,text_regions):
+        if choose_text_area(picture,placements) is None:
             raise RuntimeError(f"Curated scene {slide_index+1} lost text contrast after processing")
         print(f"Researched real photograph for slide {slide_index+1}: {item['scene']}",flush=True)
-        return picture
+        return picture,choose_text_area(picture,placements)
 
     for phrase in search_phrases(query):
         params=urlencode({"action":"query","generator":"search",
             "gsrsearch":f"filetype:bitmap {phrase}","gsrnamespace":6,
-            "gsrlimit":35,"prop":"imageinfo","iiprop":"url|extmetadata|size",
+            "gsrlimit":50,"prop":"imageinfo","iiprop":"url|extmetadata|size",
             "iiurlwidth":1800,"format":"json"})
         api="https://commons.wikimedia.org/w/api.php?"+params
         try:
@@ -253,7 +259,7 @@ def image_for(query, slide_index, text_regions):
                     print(f"Skipped unreadable photo: {str(e)[:90]}",flush=True)
                     continue
                 if picture.width<1080 or picture.height<1200: continue
-                if not light_text_area(picture,text_regions):
+                if choose_text_area(picture,placements) is None:
                     print(f"Rejected dark text area: {title[:65]}",flush=True)
                     continue
                 if relevance_guard is None:
@@ -270,13 +276,13 @@ def image_for(query, slide_index, text_regions):
                 picture=ImageEnhance.Color(picture).enhance(1.04)
                 picture=ImageEnhance.Contrast(picture).enhance(1.035)
                 picture=picture.filter(ImageFilter.UnsharpMask(radius=1.2,percent=65,threshold=3))
-                if not light_text_area(picture,text_regions):
+                if choose_text_area(picture,placements) is None:
                     print(f"Rejected processed photo with poor text contrast: {title[:65]}",flush=True)
                     continue
                 used_photo_titles.add(title)
                 photo_credits.append(f"Slide {slide_index+1}: {title} | {attribution or 'Wikimedia contributor'} | {license_name} | {info.get('descriptionurl','')}{extra}")
                 print(f"Selected photo for slide {slide_index+1}: {title}",flush=True)
-                return picture
+                return picture,choose_text_area(picture,placements)
         except Exception as exc:
             print(f"Photo search failed {phrase!r}: {str(exc)[:120]}",flush=True)
     return None
@@ -326,22 +332,32 @@ for i, slide in enumerate(slides):
     if main_font is None:
         raise RuntimeError(f"Slide {i+1}: exact wording cannot fit in three lines at 120px+")
     line_step=int(main_font.size*1.42)
-    text_regions=[]
-    for j,line in enumerate(lines):
-        y=260+j*line_step
-        width=mixed_text_width(draw,line,main_font)
-        x=int((1080-width)/2)
-        text_regions.append((max(0,x-24),max(0,y-24),min(1080,int(x+width+24)),min(1920,int(y+main_font.size*1.35))))
-        draw_line(draw,line,y,main_font,INK)
-    bbox=layer.getbbox()
-    if bbox is None:
-        raise RuntimeError(f"Slide {i+1}: no visible Bengali text")
     design_zone=(40,200,1040,1100)
-    if bbox[0]<design_zone[0] or bbox[2]>design_zone[2] or bbox[1]<design_zone[1] or bbox[3]>design_zone[3]:
-        raise RuntimeError(f"Slide {i+1}: typography extends outside reserved design zone: text={bbox}, zone={design_zone}")
-    picture=image_for(slide["photo"],i,text_regions)
-    if picture is None:
+    placements=[]
+    placement_starts=[]
+    for start_y in (260,340,420,500,580,660):
+        regions=[]
+        for j,line in enumerate(lines):
+            y=start_y+j*line_step
+            width=mixed_text_width(draw,line,main_font)
+            x=int((1080-width)/2)
+            regions.append((max(0,x-24),max(0,y-24),min(1080,int(x+width+24)),min(1920,int(y+main_font.size*1.35))))
+        if regions[-1][3]<=design_zone[3] and regions[0][1]>=design_zone[1]:
+            placements.append(regions)
+            placement_starts.append(start_y)
+    if not placements:
+        raise RuntimeError(f"Slide {i+1}: no 120px+ text placement in the upper photo zone")
+    chosen=image_for(slide["photo"],i,placements)
+    if chosen is None:
         raise RuntimeError(f"Slide {i+1}: no matching licensed bright full-resolution photo; fail closed")
+    picture,placement_index=chosen
+    text_regions=placements[placement_index]
+    start_y=placement_starts[placement_index]
+    for j,line in enumerate(lines):
+        draw_line(draw,line,start_y+j*line_step,main_font,INK)
+    bbox=layer.getbbox()
+    if bbox is None or bbox[0]<design_zone[0] or bbox[2]>design_zone[2] or bbox[1]<design_zone[1] or bbox[3]>design_zone[3]:
+        raise RuntimeError(f"Slide {i+1}: typography outside upper photo zone: {bbox}")
     picture=picture.convert("RGBA")
     # No panel, gradient, outline or shadow. Check each line separately.
     from PIL import ImageStat
@@ -363,7 +379,7 @@ for i, slide in enumerate(slides):
     quality_results.append({"slide":i+1,"size":[1080,1920],
         "font_px":main_font.size,"main_font_px":main_font.size,
         "style_id":STYLE_ID,"text_opacity":230,"text_color":"#061B3E",
-        "text_lines":len(lines),"text_bbox":list(bbox),
+        "text_lines":len(lines),"text_bbox":list(bbox),"text_start_y":start_y,
         "text_background":False,"text_stroke":False,"photo_overlay":False,
         "logo_position":"bottom_right" if logo else "omitted_unavailable",
         "line_background_stats":line_stats,
