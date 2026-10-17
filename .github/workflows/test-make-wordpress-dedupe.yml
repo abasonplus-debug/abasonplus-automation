@@ -1,30 +1,34 @@
-name: AbasonPlus WordPress Duplicate Guard Test (NEVER EMAIL)
+name: AbasonPlus Make Approval Gate Regression - NO POSTS
 on:
   push:
     branches: [main]
-    paths:
-      - '.github/workflows/test-make-wordpress-dedupe.yml'
+    paths: ['.github/workflows/test-make-wordpress-dedupe.yml']
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  duplicate-test:
+  reject-unapproved:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Send same PREVIEW ONLY WordPress slug twice - Gmail filter blocks both
+      - name: Send four explicitly unapproved gate probes without media
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
         run: |
           test -n "$MAKE_WEBHOOK_URL"
-          export KEY="qa-duplicate-never-post-${{ github.run_id }}"
-          for attempt in 1 2; do
-            BODY=$(python3 -c 'import json,os; print(json.dumps({"kind":"wordpress_email","review_approved":"true","status":"preview_only","post_key":os.environ["KEY"],"subject":"QA ONLY - DO NOT SEND","html_content":"<p>Do not deliver, status preview_only</p>"}))' )
-            curl --silent --show-error --fail-with-body --max-time 25 \
+          for KIND in video wordpress_email tiktok_reviewed_publish instagram_video; do
+            export KIND
+            python3 - <<'PY' > /tmp/gate-probe.json
+          import json,os
+          print(json.dumps({"kind":os.environ["KIND"],"review_approved":"false",
+            "visual_qa_passed":"false","tiktok_publish_approved":"false",
+            "express_consent_given":"false","content_preview_confirmed":"false",
+            "status":"preview_only","post_key":"AUDIT_NO_POST",
+            "subject":"Unapproved gate probe; never publish"}))
+          PY
+            curl --silent --show-error --fail-with-body --max-time 25 --retry 0 \
               -H 'Content-Type: application/json' \
-              --data "$BODY" "$MAKE_WEBHOOK_URL" >/dev/null
-            echo "Submitted review-approved but preview_only record #$attempt - production Gmail requires status=publish."
-            sleep 5
+              --data-binary @/tmp/gate-probe.json "$MAKE_WEBHOOK_URL" -o /tmp/gate-response.txt
+            echo "Unapproved $KIND probe delivered; inspect Make to confirm zero publishing modules ran."
           done
-          echo "Inspect Make duplicate Data Store manually. NO GMAIL OR WORDPRESS TEST POST."
-# NEVER test with status=publish or a real post recipient.
+# These probes deliberately do not exercise the daily reserve or any publisher.
