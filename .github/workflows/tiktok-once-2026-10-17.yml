@@ -1,0 +1,50 @@
+name: Publish approved TikTok 2026-10-17 once
+on:
+  push:
+    paths:
+      - .github/workflows/tiktok-once-2026-10-17.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  publish:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Download exact reviewed daily artifact
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: 12100455304
+          run-id: 39029928876
+          github-token: ${{ github.token }}
+          path: approved
+      - name: Verify exact MP4 and caption
+        run: |
+          test "$(TZ=Asia/Dhaka date +%F)" = "2026-10-17"
+          test "$(sha256sum approved/abasonplus_daily.mp4 | cut -d ' ' -f1)" = "5c44a64b7d0227aaa230f7df363e45aea9073275803502c3f32dc348aa3a6fb7"
+          test -s approved/tiktok_caption.txt
+          test "$(stat -c %s approved/abasonplus_daily.mp4)" = "1807338"
+      - name: Send explicitly approved Public post with interactions enabled
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: |
+          test -n "$MAKE_WEBHOOK_URL"
+          curl --fail-with-body --max-time 120 --retry 0 \
+            -F "kind=tiktok_reviewed_publish" \
+            -F "review_approved=true" \
+            -F "visual_qa_passed=true" \
+            -F "visual_style_id=editorial_photo_overlay_v1" \
+            -F "tiktok_post_key=abasonplus-tiktok-2026-10-17" \
+            -F "video_sha256=5c44a64b7d0227aaa230f7df363e45aea9073275803502c3f32dc348aa3a6fb7" \
+            -F "video=@approved/abasonplus_daily.mp4;type=video/mp4" \
+            -F "tiktok_caption=<approved/tiktok_caption.txt" \
+            -F "tiktok_publish_approved=true" \
+            -F "content_preview_confirmed=true" \
+            -F "express_consent_given=true" \
+            -F "rights_confirmed=true" \
+            -F "tiktok_privacy_level=PUBLIC_TO_EVERYONE" \
+            -F "tiktok_allow_comment=true" \
+            -F "tiktok_allow_duet=true" \
+            -F "tiktok_allow_stitch=true" \
+            "$MAKE_WEBHOOK_URL"
