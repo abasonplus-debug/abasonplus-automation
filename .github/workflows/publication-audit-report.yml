@@ -1,0 +1,31 @@
+name: AbasonPlus Five-Platform Publication Evidence Report
+on:
+  push:
+    branches: [main]
+    paths: ['audits/daily/*.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  report-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build latest collected evidence report without publishing
+        run: |
+          python - <<'PY'
+          import pathlib,subprocess
+          paths=sorted(pathlib.Path('audits/daily').glob('*.json'))
+          if not paths: raise SystemExit('No verified evidence snapshot collected yet')
+          subprocess.run(['python','scripts/publication_audit.py',str(paths[-1])],check=True)
+          PY
+      - name: Save read-only publication report
+        uses: actions/upload-artifact@v4
+        with:
+          name: abasonplus-five-platform-publication-report
+          path: output/publication-audit/
+          retention-days: 14
+      - name: Display report in workflow summary
+        run: cat output/publication-audit/report.md >> "$GITHUB_STEP_SUMMARY"
+# This workflow has no credentials and cannot publish or retry a publication.

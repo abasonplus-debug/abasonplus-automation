@@ -1,0 +1,72 @@
+{
+  "checked_at": "2026-10-17T22:43:00.806Z",
+  "context": {
+    "fresh_content_ready": null,
+    "exact_tiktok_video_approved": false,
+    "lookup_complete": {
+      "website": false,
+      "facebook": false,
+      "youtube": false,
+      "instagram": true,
+      "tiktok": true
+    }
+  },
+  "evidence": [
+    {
+      "platform": "instagram",
+      "post_id": "18165971263435399",
+      "url": "https://www.instagram.com/reel/DemS0nVkciB/",
+      "status": "published",
+      "published_at": "2026-10-17T14:12:41.953Z",
+      "observed_at": "2026-10-17T22:43:00.806Z",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make read-only checker 8007397; provider post 6ad38233fa35a96b9d6d9601"
+    },
+    {
+      "platform": "tiktok",
+      "post_id": "7697624320675302688",
+      "url": "https://www.tiktok.com/@abasonplus/video/7697624320675302688",
+      "status": "published",
+      "published_at": "2026-10-17T13:13:52.781Z",
+      "observed_at": "2026-10-17T22:43:00.806Z",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make read-only checker 8007397; provider post 6ad3747beb6919fd145e5db0"
+    },
+    {
+      "platform": "tiktok",
+      "post_id": "7697405584689155361",
+      "url": "https://www.tiktok.com/@abasonplus/video/7697405584689155361",
+      "status": "published",
+      "published_at": "2026-10-16T23:05:04.960Z",
+      "observed_at": "2026-10-17T22:43:00.806Z",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make read-only checker 8007397; provider post 6ad2ad8c947c00d1af18fc89"
+    }
+  ],
+  "quota": {
+    "used": 161,
+    "remaining": 839,
+    "days_until_reset": 26,
+    "measured_daily_credits": null,
+    "note": "Read at initial check; two read-only status calls may consume additional credits; no complete-day forecast established."
+  },
+  "quality": {
+    "status": "new_audit_validation_pending",
+    "style_id": "compact_white_gold_v2",
+    "slide_seconds": 2,
+    "actual_logo_available": true,
+    "mobile_preview": "not_generated_for_todays_video_yet",
+    "next_production_cycle": "not_due"
+  },
+  "weekly_metrics": {
+    "status": "unavailable",
+    "note": "Analytics were not queried in this installation; do not treat missing data as zero."
+  },
+  "recovery": {
+    "delivery_attempted": null,
+    "prior_retries": 0
+  }
+}

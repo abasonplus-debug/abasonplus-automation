@@ -99,6 +99,8 @@ jobs:
             output/slide_*.png
             output/thumbnail.png
             output/metadata.json
+            output/mobile_qa_contact_sheet.jpg
+            output/mobile_qa_notes.json
             output/image_credits.txt
             output/title.txt
             output/caption.txt

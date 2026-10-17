@@ -50,3 +50,6 @@ Website: https://abasonplus.wordpress.com/
 
 
 Timing correction (owner, 2026-10-18): every image is exactly 2 seconds, never 3 or 1.5. Multiple sentences per image are allowed; increase slide count as needed within the existing 50-second maximum. Dense text can be difficult to read in two seconds; do not mislabel readability as guaranteed.
+
+## Five-platform operations
+See AUTOMATION_OPERATIONS.md for the daily evidence report, narrow pre-delivery retry ceiling, mobile preview guides, freshness review, Free credit reserve and Sunday performance review. TikTok is included in monitoring but still requires exact-video review before uploading.

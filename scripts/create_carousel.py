@@ -334,6 +334,19 @@ for i, slide in enumerate(slides):
     quality_results.append(info)
     print(f'Checked slide {i+1}/{len(slides)}: {size}px, centered compact white/gold outline style')
 
+# Approximate mobile interface guides: diagnostic artifact only, NEVER publish it.
+qa=Image.new('RGB',(216*min(5,len(slides)),424*((len(slides)+4)//5)),(245,245,245))
+for n in range(len(slides)):
+    tile=Image.open(OUT/f'slide_{n}.png').convert('RGB').resize((216,384),Image.Resampling.LANCZOS)
+    guide=ImageDraw.Draw(tile)
+    guide.rectangle((0,0,215,39),outline='#FF5555',width=2)
+    guide.rectangle((0,314,215,383),outline='#FF5555',width=2)
+    guide.rectangle((180,40,215,313),outline='#FF5555',width=2)
+    x=(n%5)*216;y=(n//5)*424
+    qa.paste(tile,(x,y));ImageDraw.Draw(qa).text((x+4,y+390),f'Slide {n+1}: approximate UI guides',fill='black')
+qa.save(OUT/'mobile_qa_contact_sheet.jpg',quality=90)
+(OUT/'mobile_qa_notes.json').write_text(json.dumps({'status':'generated_not_device_reviewed','approximate_guides':True,'logo_bottom_right_ui_risk':True,'published_asset':False,'note':'UI varies by platform/device/caption. Do not claim a live mobile preview was reviewed.'},indent=2))
+
 (OUT / "image_credits.txt").write_text("\n".join(photo_credits)+"\n",encoding="utf-8")
 credits = "\n".join(photo_credits)
 (OUT / "caption.txt").open("a",encoding="utf-8").write("\n\nছবির উৎস ও লাইসেন্স:\n"+credits)
