@@ -1,0 +1,138 @@
+name: AbasonPlus authorized video recovery 2026-10-18
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/recover-video-2026-10-18.yml']
+permissions:
+  contents: read
+concurrency:
+  group: abasonplus-video-one-source-per-day
+  cancel-in-progress: false
+jobs:
+  source:
+    if: ${{ github.run_attempt == 1 }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require ChatGPT's source-checked editorial for today
+        id: check
+        run: |
+          test "$(TZ=Europe/Berlin date +%F)" = "2026-10-18" || { echo "Expired one-day recovery"; exit 1; }
+          if python3 scripts/select_video_story.py; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "No VERIFIED new editorial. Skipping video instead of recycling old content."
+          fi
+  render-and-publish:
+    needs: source
+    if: ${{ needs.source.outputs.ready == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install free local rendering/photograph QA tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-noto-core
+          python3 -m pip install -r requirements.txt
+      - name: Restore local semantic photo models across scheduled runs
+        uses: actions/cache@v4
+        with:
+          path: .cache/fastembed
+          key: abasonplus-clip-v1-${{ runner.os }}
+      - name: Check new variable-slide news story
+        run: python3 scripts/select_video_story.py
+      - name: Render original 9:16 Bengali slides and music MP4
+        env:
+          ABASONPLUS_DAILY_STORY: output/daily_research_story.json
+          ABASONPLUS_MODEL_CACHE: .cache/fastembed
+        run: python3 scripts/create_carousel.py
+      - name: Verify dimensions, original audio and visual layout before ANY publication
+        run: |
+          python3 - <<'PY'
+          from PIL import Image
+          import json,pathlib,subprocess
+          out=pathlib.Path('output')
+          meta=json.loads((out/'metadata.json').read_text(encoding='utf-8'))
+          news=json.loads((out/'daily_research_story.json').read_text(encoding='utf-8'))
+          assert meta['source_url']==news['source_url']
+          assert 5<=meta['slides']<=25 and len(meta['quality'])==meta['slides']
+          assert meta['verified_on']==news['verified_on']
+          assert meta['style_id']=='compact_white_gold_v2'
+          from scripts.carousel_style import validate_style
+          for quality_record in meta['quality']: validate_style(quality_record)
+          assert all(x['font_px']>=120 and x['style_id']==meta['style_id'] and
+                     x['text_background'] is False and x['text_stroke'] is True and
+                     x['photo_overlay'] is False and
+                     x['logo_position'] in ('bottom_right','omitted_unavailable')
+                     for x in meta['quality'])
+          assert all((out/f'slide_{i}.png').is_file() for i in range(meta['slides']))
+          for i in range(meta['slides']):
+              with Image.open(out/f'slide_{i}.png') as im: assert im.size==(1080,1920)
+          assert (out/'thumbnail.png').read_bytes()==(out/'slide_0.png').read_bytes()
+          vid=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_streams','-show_format','-of','json',str(out/'abasonplus_daily.mp4')]))
+          assert any(s['codec_type']=='video' and s['width']==1080 and s['height']==1920 for s in vid['streams'])
+          assert any(s['codec_type']=='audio' and s['codec_name']=='aac' for s in vid['streams'])
+          from scripts.carousel_timing import validate_timing
+          validate_timing(meta, float(vid['format']['duration']))
+          assert len((out/'image_credits.txt').read_text(encoding='utf-8').strip().splitlines())==meta['slides']
+          print('AUTO VIDEO QA PASS: original licensed photos, independent 9:16 slides, exactly 2 seconds per slide, real soundtrack.')
+          PY
+      - name: Approve release ONLY after separate real-photo and metadata QA
+        run: python3 scripts/verify_video_release.py
+      - name: Prepare TikTok-specific caption and video package (NO TikTok posting)
+        run: python3 scripts/prepare_tiktok_preview.py
+      - name: Save video, slides and license/source QA results
+        uses: actions/upload-artifact@v4
+        with:
+          name: abasonplus-source-checked-video
+          path: |
+            output/*.mp4
+            output/slide_*.png
+            output/thumbnail.png
+            output/thumbnail_upload.jpg
+            output/metadata.json
+            output/mobile_qa_contact_sheet.jpg
+            output/mobile_qa_notes.json
+            output/image_credits.txt
+            output/title.txt
+            output/caption.txt
+            output/description.txt
+            output/tiktok_caption.txt
+            output/first_comment.txt
+            output/first_comment_json.txt
+            output/engagement_pack.json
+            output/tiktok_preview.json
+          retention-days: 7
+      - name: Send ONE daily validated Reel and Short to Make for owner-authorized 18 October recovery ONLY
+        if: ${{ github.event_name == 'push' && github.run_attempt == 1 }}
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: |
+          test -n "$MAKE_WEBHOOK_URL" || { echo 'Missing Make webhook; no publication'; exit 1; }
+          test -f output/video_qa_passed.txt || { echo 'No automatic photo quality approval; no publication'; exit 1; }
+          VIDEO_SHA256="$(sha256sum output/abasonplus_daily.mp4 | cut -d ' ' -f1)"
+          curl --fail-with-body --max-time 120 --retry 0 \
+            -F "kind=video" \
+            -F "review_approved=true" \
+            -F "visual_qa_passed=true" \
+            -F "visual_style_id=compact_white_gold_v2" \
+            -F "video_sha256=$VIDEO_SHA256" \
+            -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
+            -F "title=<output/title.txt" \
+            -F "caption=<output/caption.txt" \
+            -F "first_comment=<output/first_comment.txt" \
+            -F "first_comment_json=<output/first_comment_json.txt" \
+            -F "thumbnail=@output/thumbnail_upload.jpg;type=image/jpeg" \
+            -F "description=<output/description.txt" \
+            -F "tiktok_caption=<output/tiktok_caption.txt" \
+            -F "tiktok_post_key=abasonplus-tiktok-$(TZ=Europe/Berlin date +%F)" \
+            -F "tiktok_publish_approved=false" \
+            "$MAKE_WEBHOOK_URL"
+# One-day recovery only; existing Make per-platform daily deduplication remains mandatory.
+# No WordPress route or TikTok consent; no rerun and no schedule.
+
