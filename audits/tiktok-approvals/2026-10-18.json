@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-18",
+  "approved_at": "2026-10-18T09:45:19+02:00",
+  "approval": "User replied OK to exact displayed YouTube preview 5TRc24LH48w and complete TikTok caption/settings",
+  "preview_run_id": 39108445270,
+  "artifact_id": 12129541125,
+  "video_sha256": "4ec89f4468ef140e711dfa8c0092e0de0044bbcaca0fbe42586da2d56bf83789",
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "account_username": "abasonplus",
+  "privacy_level": "PUBLIC_TO_EVERYONE",
+  "allow_comment": true,
+  "allow_duet": true,
+  "allow_stitch": true,
+  "current_creator_options_verified": true,
+  "rights_basis": "Owner confirmed own supplied soundtrack; original licensed Pexels photo manifest retained",
+  "consent_scope": "This exact completed video, caption and settings only; never future videos"
+}
