@@ -30,6 +30,11 @@ if photos is not None:
     if len(photos)!=len(story["tips"])+1 or len({x.get("url") for x in photos})!=len(photos):
         raise RuntimeError("One distinct researched photograph per slide required")
     for photo in photos:
+        # Research uses source_page; renderer/credits use canonical source.
+        # Conflicting attributions fail closed instead of silently picking one.
+        if photo.get("source") and photo.get("source_page") and photo["source"] != photo["source_page"]:
+            raise RuntimeError("Conflicting photographic source fields")
+        photo["source"] = photo.get("source") or photo.get("source_page", "")
         if (urlparse(photo.get("url","")).hostname!="images.pexels.com"
             or urlparse(photo.get("source","")).hostname!="www.pexels.com"
             or not urlparse(photo["source"]).path.startswith("/photo/")
