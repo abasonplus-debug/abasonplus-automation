@@ -136,3 +136,5 @@ jobs:
 # One-day recovery only; existing Make per-platform daily deduplication remains mandatory.
 # No WordPress route or TikTok consent; no rerun and no schedule.
 
+
+# Recovery revision 2: pre-delivery failure only; tested natural exposure correction.
