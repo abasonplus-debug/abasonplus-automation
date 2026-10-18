@@ -9,7 +9,7 @@ class WorkflowContracts(unittest.TestCase):
         return yaml.load((ROOT/'.github/workflows'/name).read_text(), Loader=yaml.BaseLoader)
 
     def test_daily_local_schedules_and_manual_publication_gate(self):
-        for name,cron in [('daily-carousel.yml','45 8 * * *'),('wordpress-post.yml','20 8 * * *'),('official-source-monitor.yml','35 7 * * *')]:
+        for name,cron in [('daily-carousel.yml','0 2 * * *'),('wordpress-post.yml','0 2 * * *'),('official-source-monitor.yml','15 1 * * *')]:
             d=self.load(name)
             self.assertEqual(d['on']['schedule'],[{'cron':cron,'timezone':'Europe/Berlin'}])
         d=self.load('daily-carousel.yml')

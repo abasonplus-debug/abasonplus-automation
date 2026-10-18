@@ -4,7 +4,7 @@ This is the current production specification. README.md describes the live route
 
 ## Daily flow and date
 - Use Europe/Berlin for the publication day, filenames, dedupe and schedules, including daylight saving changes.
-- ChatGPT Daily Research targets 05:00; source monitor 07:35; WordPress 08:20; Facebook/YouTube/Instagram video workflow 08:45.
+- ChatGPT Daily Research targets 00:30; source monitor 01:15; WordPress 02:00; Facebook/YouTube/Instagram video workflow 02:00.
 - These are trigger targets. GitHub may delay or drop scheduled runs; rendering and provider processing take additional time.
 - Today's verified editorial is required for both WordPress and video; static article catalogs are available only through an explicit preview flag. Missing or invalid content is held and reported, never invented or relabeled as breaking news.
 

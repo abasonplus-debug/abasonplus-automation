@@ -1,7 +1,7 @@
 name: AbasonPlus Daily Source-Checked Carousel & Video
 on:
   schedule:
-    - cron: '45 8 * * *' # After 08:20 local WordPress schedule
+    - cron: '0 2 * * *' # Owner-selected daily 02:00 Europe/Berlin video trigger
       timezone: 'Europe/Berlin'
   workflow_dispatch:
     inputs:

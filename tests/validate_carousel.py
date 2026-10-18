@@ -58,7 +58,7 @@ assert guard("property paperwork","Real estate property agreement documents.jpg"
 
 # Only scheduled and sourced, QA-passed video uploads may publish.
 video_workflow=(ROOT/".github/workflows/daily-carousel.yml").read_text(encoding="utf-8")
-assert "cron: '45 8 * * *'" in video_workflow,"Unexpected scheduled video time"
+assert "cron: '0 2 * * *'" in video_workflow,"Unexpected scheduled video time"
 assert "timezone: 'Europe/Berlin'" in video_workflow
 assert "needs.source.outputs.ready == 'true'" in video_workflow,"Video missing fresh daily editorial gate"
 assert "if: ${{ github.event_name == 'schedule' }}" in video_workflow,"Manual video workflow must be preview-only"
@@ -68,7 +68,7 @@ assert "python3 scripts/verify_video_release.py" in video_workflow,"Independent 
 assert '-F "visual_qa_passed=true"' in video_workflow,"Make video QA approval mapping missing"
 # Owner explicitly enabled ONLY WordPress Post by Email, scheduled once daily.
 wp_workflow=(ROOT/".github/workflows/wordpress-post.yml").read_text(encoding="utf-8")
-assert "cron: '20 8 * * *'" in wp_workflow,"WordPress expected 08:20 Berlin schedule"
+assert "cron: '0 2 * * *'" in wp_workflow,"WordPress expected 02:00 Berlin schedule"
 assert "timezone: 'Europe/Berlin'" in wp_workflow
 assert "github.event_name == 'schedule'" in wp_workflow,"WordPress manual runs must stay preview-only"
 assert (ROOT / "assets" / "abasonplus.mp3").stat().st_size > 1000, "Original audio missing"
