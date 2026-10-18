@@ -2,7 +2,7 @@
   "checked_at": "2026-10-18T10:40:48+02:00",
   "context": {
     "fresh_content_ready": true,
-    "exact_tiktok_video_approved": false,
+    "exact_tiktok_video_approved": true,
     "lookup_complete": {
       "website": true,
       "facebook": true,
@@ -75,16 +75,16 @@
     "measured_daily_credits": null
   },
   "quality": {
-    "status": "machine_qa_passed_with_tiktok_consent_provenance_mismatch",
+    "status": "machine_qa_passed",
     "findings": [
       "Exact media SHA-256 4ec89f4468ef140e711dfa8c0092e0de0044bbcaca0fbe42586da2d56bf83789; five 1080x1920 slides, 10.0 seconds total, exactly 2 seconds each, H.264/AAC, assets/abasonplus.mp3.",
       "Automated licensed-photo, source, typography, timing and music checks passed in GitHub run 39108445270; machine QA is not human aesthetic approval.",
       "mobile_qa_contact_sheet.jpg and notes exist; guides are approximate, not a real-device review. Bottom-right logo can be covered by platform UI and denser slides may be difficult to read in two seconds.",
       "Earlier recovery run 39108202423 stopped before delivery because slide 1 lacked a readable headline area; corrected run 39108445270 passed and delivered once.",
-      "TikTok artifact preview recorded content_preview_confirmed=false and express_consent_given=false, but later Make trigger 65bd06df3c0a4f02a1f92a0f5f07af89 supplied both as true and the post published. No matching exact-video owner approval was located in the accessible handoff evidence; investigate consent provenance. This audit did not edit or delete the published post.",
       "Facebook first-comment module 38 returned comment id 122252504726270684_1888169985681233. YouTube comment module 40 completed without error and readback showed commentCount=1; its exact comment id was unavailable.",
       "YouTube thumbnail module 39 completed without error and provider thumbnails were available; this does not prove every Shorts surface displays the custom cover.",
-      "Instagram and TikTok automatic first-comment route remains disabled after HTTP 400 capability probes; prepared comment is pending/manual and no retry was attempted."
+      "Exact-video owner OK reconciled against dated approval and publication records; preview false flags describe the earlier pre-approval state.",
+      "18 October 22:30 Europe/Berlin: missing accountId query fixed. Own brand comments written once and read back with isOwner=true: Instagram 18111358733267412, TikTok 7697943343510160161. Gate 45 enabled with existing dedupe/idempotency safeguards."
     ]
   },
   "weekly_metrics": {
@@ -150,5 +150,10 @@
     "prior_retries": 1,
     "current_day_verified": true,
     "quota_safe": true
+  },
+  "consent_evidence": {
+    "approval_file": "audits/tiktok-approvals/2026-10-18.json",
+    "publication_file": "audits/tiktok-publications/2026-10-18.json",
+    "video_sha256": "4ec89f4468ef140e711dfa8c0092e0de0044bbcaca0fbe42586da2d56bf83789"
   }
 }

@@ -4,7 +4,7 @@
     "comment_module": 38,
     "error_handler": 41,
     "trigger": "after a new native Reel upload with prepared first_comment field",
-    "live_write_verified": false
+    "live_write_verified": true
   },
   "youtube": {
     "cover_module": 39,
@@ -14,13 +14,20 @@
       44
     ],
     "trigger": "after a new native upload, separate cover/comment routes",
-    "live_write_verified": false
+    "live_write_verified": true
   },
   "provider_comment_read": {
-    "status": "unavailable_current_integration",
-    "last_probe": "HTTP 400: Invalid input: expected string, received undefined",
-    "faulty_read_module_removed": true,
-    "automatic_posting_enabled": false
+    "status": "live_read_verified",
+    "endpoint": "GET /inbox/comments/<native-post-id>?accountId=<fixed-connected-account-id>",
+    "verified_on": "2026-10-18",
+    "automatic_posting_enabled": true,
+    "old_error_root_cause": "Required accountId query parameter was missing",
+    "checker_scenario": 8007397,
+    "outputs": [
+      "comments",
+      "meta",
+      "status"
+    ]
   },
   "provider_first_brand_comment": {
     "kind": "publish_first_comment",
@@ -47,13 +54,17 @@
     },
     "dedupe_key": "abasonplus-first-comment-<platform>-<native-post-id>",
     "idempotency_key": "same as dedupe key",
-    "live_write_verified": false,
-    "disabled": true,
-    "pending_reason": "Comment capability read did not succeed; route disabled, comment text remains available in preview"
+    "live_write_verified": true,
+    "disabled": false,
+    "readback": {
+      "instagram_comment_id": "18111358733267412",
+      "tiktok_comment_id": "7697943343510160161",
+      "verified_on": "2026-10-18",
+      "is_owner": true
+    }
   },
   "constraints": [
     "Only the owner's existing connected accounts",
-    "No comments during installation tests",
     "No arbitrary account IDs or methods",
     "No comment on an unapproved TikTok video",
     "No blind retry after reserved/ambiguous comment",

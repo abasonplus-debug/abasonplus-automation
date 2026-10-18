@@ -12,5 +12,8 @@
   "comments": true,
   "duet": true,
   "stitch": true,
-  "first_brand_comment": "pending_manual_not_posted"
+  "first_brand_comment": "published_verified",
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "first_comment_id": "7697943343510160161",
+  "caption_sha256": "c2f804270739f20cafea90b979b366844c1359f67a1193c3a1a6f1eab69dd6ed"
 }

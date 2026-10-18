@@ -91,7 +91,18 @@ def markdown(report):
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('snapshot');ap.add_argument('--output',default='output/publication-audit');args=ap.parse_args()
-    report=build(json.loads(Path(args.snapshot).read_text()));out=Path(args.output);out.mkdir(parents=True,exist_ok=True)
+    snapshot=json.loads(Path(args.snapshot).read_text())
+    root=Path(__file__).resolve().parents[1]
+    day=localday(snapshot['checked_at'])
+    approval=root/'audits/tiktok-approvals'/f'{day}.json'
+    publication=root/'audits/tiktok-publications'/f'{day}.json'
+    if approval.is_file() and publication.is_file():
+        from tiktok_approval import reconcile
+        try:
+            snapshot=reconcile(snapshot,json.loads(approval.read_text()),json.loads(publication.read_text()))
+        except (ValueError,KeyError,TypeError):
+            snapshot.setdefault('quality',{}).setdefault('findings',[]).append('Exact-video consent records could not be reconciled; inspect, never infer approval.')
+    report=build(snapshot);out=Path(args.output);out.mkdir(parents=True,exist_ok=True)
     (out/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     (out/'report.md').write_text(markdown(report));print(markdown(report))
 if __name__=='__main__':main()

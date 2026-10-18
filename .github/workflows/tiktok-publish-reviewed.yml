@@ -82,16 +82,22 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PREVIEW_RUN_ID: ${{ inputs.preview_run_id }}
         run: |
-          gh run view "$PREVIEW_RUN_ID" --repo "$GITHUB_REPOSITORY" --json conclusion,name,event \
-            --jq 'select(.conclusion == "success" and .name == "AbasonPlus Daily Source-Checked Carousel & Video") | .name' \
-            | grep -F "Source-Checked Carousel & Video"
+          gh run view "$PREVIEW_RUN_ID" --repo "$GITHUB_REPOSITORY" --json conclusion,name,event,headBranch \
+            --jq 'select(.conclusion == "success" and .headBranch == "main" and (.name == "AbasonPlus Daily Source-Checked Carousel & Video" or (.name | test("^AbasonPlus authorized video recovery [0-9-]+$")))) | .name' \
+            | grep -E "^AbasonPlus (Daily Source-Checked Carousel & Video|authorized video recovery [0-9-]+)$"
           mkdir -p output
           gh run download "$PREVIEW_RUN_ID" --repo "$GITHUB_REPOSITORY" \
             -n abasonplus-source-checked-video -D output
       - name: Verify video, first-frame hook, current source and authenticity
+        env:
+          PREVIEW_RUN_ID: ${{ inputs.preview_run_id }}
+          TIKTOK_PRIVACY: ${{ inputs.privacy }}
+          TIKTOK_COMMENTS: ${{ inputs.allow_comments }}
+          TIKTOK_DUET: ${{ inputs.allow_duet }}
+          TIKTOK_STITCH: ${{ inputs.allow_stitch }}
         run: |
           python3 - <<'PY'
-          import hashlib,json,pathlib,datetime,zoneinfo,subprocess
+          import hashlib,json,pathlib,datetime,zoneinfo,subprocess,os
           out=pathlib.Path("output")
           meta=json.loads((out/"metadata.json").read_text(encoding="utf-8"))
           tt=json.loads((out/"tiktok_preview.json").read_text(encoding="utf-8"))
@@ -113,6 +119,12 @@ jobs:
           assert len({x["source"] for x in meta["quality"]})==meta["slides"]
           video=out/"abasonplus_daily.mp4"
           assert video.is_file() and video.stat().st_size>500_000
+          from scripts.tiktok_approval import validate_approval
+          approval=json.loads(pathlib.Path("audits/tiktok-approvals",today+".json").read_text())
+          validate_approval(approval,today,hashlib.sha256(video.read_bytes()).hexdigest(),(out/"tiktok_caption.txt").read_text(),os.environ["PREVIEW_RUN_ID"])
+          assert approval["privacy_level"]==os.environ["TIKTOK_PRIVACY"]
+          for field,env in (("allow_comment","TIKTOK_COMMENTS"),("allow_duet","TIKTOK_DUET"),("allow_stitch","TIKTOK_STITCH")):
+              assert str(approval[field]).lower()==os.environ[env], "Settings changed since owner OK"
           assert (out/"thumbnail.png").read_bytes()==(out/"slide_0.png").read_bytes()
           assert (out/"tiktok_caption.txt").read_text(encoding="utf-8").strip()
           info=json.loads(subprocess.check_output(["ffprobe","-v","error","-show_streams","-show_format","-of","json",str(video)]))

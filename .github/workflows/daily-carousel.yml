@@ -28,8 +28,11 @@ jobs:
           if python3 scripts/select_video_story.py; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
+            code=$?
             echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "No VERIFIED new editorial. Skipping video instead of recycling old content."
+            echo "::error::Daily editorial unavailable or invalid (exit $code); no video published."
+            echo "## Video blocked before rendering — source validation failed" >> "$GITHUB_STEP_SUMMARY"
+            exit "$code"
           fi
   render-and-publish:
     needs: source

@@ -7,10 +7,14 @@ def hashtag_tokens(text):
 
 def hashtags_for(topic):
     tags=['#AbasonPlus','#আবাসন','#RealEstateBangladesh']
-    if any(x in topic for x in ('আইন','দলিল','খতিয়ান','খতিয়ান')):tags+=['#ভূমিআইন','#জমিরদলিল','#LandRecords']
-    elif 'জমি' in topic or 'Land' in topic:tags+=['#জমি','#জমিকেনা','#PropertyTips']
+    topic=unicodedata.normalize('NFC',str(topic)).casefold()
+    if any(x in topic for x in ('টানেল','সেতু','মেট্রো','সড়ক','সড়ক','মহাসড়ক','মহাসড়ক','অবকাঠামো','tunnel','bridge','infrastructure')):tags+=['#অবকাঠামো','#সরকারিপ্রকল্প','#Infrastructure']
+    elif any(x in topic for x in ('আইন','দলিল','খতিয়ান','খতিয়ান','law','deed')):tags+=['#ভূমিআইন','#জমিরদলিল','#LandRecords']
+    elif 'জমি' in topic or 'land' in topic:tags+=['#জমি','#জমিকেনা','#PropertyTips']
     elif any(x in topic for x in ('নির্মাণ','সিমেন্ট','রড','ইট')):tags+=['#নির্মাণ','#BuildingMaterials','#ConstructionTips']
-    else:tags+=['#ফ্ল্যাট','#HomeBuying','#PropertyTips']
+    elif any(x in topic for x in ('ফ্ল্যাট','বাড়ি','বাড়ি','বাড়ী','বাড়ী','apartment','homebuying')):tags+=['#ফ্ল্যাট','#HomeBuying','#PropertyTips']
+    elif any(x in topic for x in ('প্রকল্প','সরকারি','government','project')):tags+=['#সরকারিপ্রকল্প','#জনসচেতনতা','#বাংলাদেশ']
+    else:tags+=['#বাংলাদেশ','#জনসচেতনতা','#BangladeshUpdates']
     return tags
 
 def first_comment(hook):
