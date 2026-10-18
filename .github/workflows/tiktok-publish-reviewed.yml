@@ -55,6 +55,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg
+          python3 -m pip install 'Pillow>=11,<13'
       - name: Verify individual video consent and metadata selections
         env:
           PREVIEW_CONFIRMED: ${{ inputs.preview_confirmed }}
