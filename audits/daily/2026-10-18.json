@@ -1,10 +1,10 @@
 {
-  "checked_at": "2026-10-17T22:49:05.512Z",
+  "checked_at": "2026-10-18T10:40:48+02:00",
   "context": {
-    "fresh_content_ready": null,
+    "fresh_content_ready": true,
     "exact_tiktok_video_approved": false,
     "lookup_complete": {
-      "website": false,
+      "website": true,
       "facebook": true,
       "youtube": true,
       "instagram": true,
@@ -13,73 +13,79 @@
   },
   "evidence": [
     {
-      "platform": "instagram",
-      "post_id": "18165971263435399",
-      "url": "https://www.instagram.com/reel/DemS0nVkciB/",
+      "platform": "website",
+      "post_id": "54",
+      "url": "https://abasonplus.wordpress.com/2026/10/18/ap-karnaphuli-tunnel-review-2026-10-18/",
       "status": "published",
-      "published_at": "2026-10-17T14:12:41.953Z",
-      "observed_at": "2026-10-17T22:43:00.806Z",
+      "published_at": "2026-10-18T06:58:17+00:00",
+      "observed_at": "2026-10-18T06:58:47+00:00",
       "verification": "platform_readback",
       "identity_matched": true,
-      "source_reference": "Make read-only checker 8007397; provider post 6ad38233fa35a96b9d6d9601"
-    },
-    {
-      "platform": "tiktok",
-      "post_id": "7697624320675302688",
-      "url": "https://www.tiktok.com/@abasonplus/video/7697624320675302688",
-      "status": "published",
-      "published_at": "2026-10-17T13:13:52.781Z",
-      "observed_at": "2026-10-17T22:43:00.806Z",
-      "verification": "platform_readback",
-      "identity_matched": true,
-      "source_reference": "Make read-only checker 8007397; provider post 6ad3747beb6919fd145e5db0"
-    },
-    {
-      "platform": "tiktok",
-      "post_id": "7697405584689155361",
-      "url": "https://www.tiktok.com/@abasonplus/video/7697405584689155361",
-      "status": "published",
-      "published_at": "2026-10-16T23:05:04.960Z",
-      "observed_at": "2026-10-17T22:43:00.806Z",
-      "verification": "platform_readback",
-      "identity_matched": true,
-      "source_reference": "Make read-only checker 8007397; provider post 6ad2ad8c947c00d1af18fc89"
-    },
-    {
-      "platform": "youtube",
-      "post_id": "oyeBE_FwFhs",
-      "url": "https://www.youtube.com/watch?v=oyeBE_FwFhs",
-      "status": "published",
-      "published_at": "2026-10-17T11:47:14Z",
-      "identity_matched": true,
-      "source_reference": "YouTube API readback via Make module 33",
-      "observed_at": "2026-10-17T22:49:05.512Z",
-      "verification": "platform_readback"
+      "source_reference": "GitHub WordPress run 39105912491 artifact 12127944029; public verification result for site 257973809"
     },
     {
       "platform": "facebook",
-      "post_id": "1079641431533649",
-      "url": "https://www.facebook.com/reel/1079641431533649/",
+      "post_id": "1412951121001904",
+      "url": "https://www.facebook.com/reel/1412951121001904/",
       "status": "published",
-      "published_at": "2026-10-17T11:46:55.000Z",
+      "published_at": "2026-10-18T07:40:13+00:00",
+      "observed_at": "2026-10-18T07:41:27+00:00",
+      "verification": "platform_readback",
       "identity_matched": true,
-      "source_reference": "Facebook GetVideo via fixed Page Make module 34",
-      "observed_at": "2026-10-17T22:49:05.512Z",
-      "verification": "platform_readback"
+      "source_reference": "Make 7968544 uploader module 4 and fixed Page readback module 34; execution b66bd39bbc50433188268a6e1c431029"
+    },
+    {
+      "platform": "youtube",
+      "post_id": "5TRc24LH48w",
+      "url": "https://www.youtube.com/watch?v=5TRc24LH48w",
+      "status": "published",
+      "published_at": "2026-10-18T07:40:22+00:00",
+      "observed_at": "2026-10-18T07:41:19+00:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make 7968544 YouTube uploader execution 4999bcd4a670426babe914e42b0a1aea and bounded API read module 33 execution 8fde5fd6c6fd4da0975d5aeced76cb21"
+    },
+    {
+      "platform": "instagram",
+      "post_id": "18125598260490045",
+      "url": "https://www.instagram.com/reel/DeoK9KRCGFq/",
+      "status": "published",
+      "published_at": "2026-10-18T07:42:30.967+00:00",
+      "observed_at": "2026-10-18T10:40:48+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make GET-only checker 8007397 /posts execution 3fb746345ab447de9fe8b6f1da828037; provider post 6ad477ffbc156942d54e40a5"
+    },
+    {
+      "platform": "tiktok",
+      "post_id": "7697911217029008673",
+      "url": "https://www.tiktok.com/@abasonplus/video/7697911217029008673",
+      "status": "published",
+      "published_at": "2026-10-18T07:47:14.582+00:00",
+      "observed_at": "2026-10-18T10:40:48+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make GET-only checker 8007397 /posts execution 3fb746345ab447de9fe8b6f1da828037; provider post 6ad4796bd235deb3e9cf67b3"
     }
   ],
   "quota": {
-    "used": 174,
-    "remaining": 826,
+    "used": 223,
+    "remaining": 777,
     "days_until_reset": 26,
     "measured_daily_credits": null
   },
   "quality": {
-    "status": "25_tests_and_previous_ci_passed",
-    "style_id": "compact_white_gold_v2",
-    "slide_seconds": 2,
-    "actual_logo_available": true,
-    "mobile_preview": "not_generated_for_todays_video_yet"
+    "status": "machine_qa_passed_with_tiktok_consent_provenance_mismatch",
+    "findings": [
+      "Exact media SHA-256 4ec89f4468ef140e711dfa8c0092e0de0044bbcaca0fbe42586da2d56bf83789; five 1080x1920 slides, 10.0 seconds total, exactly 2 seconds each, H.264/AAC, assets/abasonplus.mp3.",
+      "Automated licensed-photo, source, typography, timing and music checks passed in GitHub run 39108445270; machine QA is not human aesthetic approval.",
+      "mobile_qa_contact_sheet.jpg and notes exist; guides are approximate, not a real-device review. Bottom-right logo can be covered by platform UI and denser slides may be difficult to read in two seconds.",
+      "Earlier recovery run 39108202423 stopped before delivery because slide 1 lacked a readable headline area; corrected run 39108445270 passed and delivered once.",
+      "TikTok artifact preview recorded content_preview_confirmed=false and express_consent_given=false, but later Make trigger 65bd06df3c0a4f02a1f92a0f5f07af89 supplied both as true and the post published. No matching exact-video owner approval was located in the accessible handoff evidence; investigate consent provenance. This audit did not edit or delete the published post.",
+      "Facebook first-comment module 38 returned comment id 122252504726270684_1888169985681233. YouTube comment module 40 completed without error and readback showed commentCount=1; its exact comment id was unavailable.",
+      "YouTube thumbnail module 39 completed without error and provider thumbnails were available; this does not prove every Shorts surface displays the custom cover.",
+      "Instagram and TikTok automatic first-comment route remains disabled after HTTP 400 capability probes; prepared comment is pending/manual and no retry was attempted."
+    ]
   },
   "weekly_metrics": {
     "status": "partial_observation_not_weekly_trend",
@@ -90,20 +96,59 @@
         "observed_at": "2026-10-17T22:49:05.512Z",
         "view_count": 255,
         "like_count": 1,
-        "comment_count": 1
+        "comment_count": 1,
+        "note": "Prior-day point observation from the existing audit snapshot; not a seven-day trend."
+      },
+      {
+        "platform": "youtube",
+        "post_id": "5TRc24LH48w",
+        "observed_at": "2026-10-18T07:41:19+00:00",
+        "view_count": 0,
+        "like_count": 0,
+        "comment_count": 1,
+        "note": "Early post-publication API snapshot; zeros are observed values at this instant, not a performance conclusion."
+      },
+      {
+        "platform": "instagram",
+        "observed_at": "2026-10-18T08:12:29.234Z",
+        "followers_count": 32,
+        "note": "Account point-in-time snapshot; no seven-day delta available."
+      },
+      {
+        "platform": "tiktok",
+        "observed_at": "2026-10-18T08:06:58.007Z",
+        "followers_count": 59,
+        "account_likes_count": 41,
+        "video_count": 17,
+        "note": "Account point-in-time snapshot; no seven-day delta available."
+      },
+      {
+        "platform": "publication_history",
+        "observed_at": "2026-10-18T10:40:48+02:00",
+        "note": "Accessible provider history confirms Instagram posts on 17 and 18 October and TikTok posts on 16, 17 and 18 October; this is publication evidence, not comparable reach."
       }
     ],
     "unavailable_metrics": [
+      "seven-day reach history",
+      "watch time",
       "retention",
-      "watch_time",
+      "completion rate",
       "shares",
       "saves",
       "clicks",
-      "other_platform_metrics"
+      "Facebook performance metrics",
+      "Instagram post insights",
+      "TikTok per-video insights",
+      "comparable cross-platform view definitions"
     ]
   },
   "recovery": {
-    "delivery_attempted": null,
-    "prior_retries": 0
+    "delivery_attempted": true,
+    "failure_phase": "delivery_completed_and_platform_readback_verified",
+    "transient_failure": false,
+    "github_job_status": "success",
+    "prior_retries": 1,
+    "current_day_verified": true,
+    "quota_safe": true
   }
 }
