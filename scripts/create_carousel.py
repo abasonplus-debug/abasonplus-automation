@@ -222,13 +222,13 @@ def image_for(query, slide_index, placements):
             # Processing can darken an otherwise readable natural photograph.
             picture=original_picture
         if choose_text_area(picture,placements) is None:
-            for factor in (1.12,1.25,1.4):
+            for factor in (0.9,0.8,1.12,1.25,1.4):
                 brightened=ImageEnhance.Brightness(original_picture).enhance(factor)
                 if choose_text_area(brightened,placements) is not None:
                     picture=brightened
                     break
         if choose_text_area(picture,placements) is None:
-            raise RuntimeError(f"Curated scene {slide_index+1} has no readable headline area")
+            raise RuntimeError(f"Curated scene {slide_index+1} has no readable headline area: {photo_stats(picture, placements[0])}")
         print(f"Researched real photograph for slide {slide_index+1}: {item['scene']}",flush=True)
         return picture,choose_text_area(picture,placements)
 
