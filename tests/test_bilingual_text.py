@@ -34,7 +34,7 @@ class MixedFontTest(unittest.TestCase):
                             self.assertIn(ord(char), cmap)
 
     def test_unsupported_fails_closed(self):
-        with self.assertRaisesRegex(RuntimeError, r"U\\+10FFFD"):
+        with self.assertRaisesRegex(RuntimeError, r"U\+10FFFD"):
             list(self.router.tokens("বাংলা\U0010fffd", self.font))
 
 if __name__ == "__main__":
