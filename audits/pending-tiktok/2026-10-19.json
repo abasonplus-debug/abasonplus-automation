@@ -1,6 +1,6 @@
 {
   "date": "2026-10-19",
-  "status": "awaiting_video_review",
+  "status": "approved_and_published",
   "preview_run_id": 39182310394,
   "artifact_id": 12156831161,
   "video_sha256": "e64646d8093dc18cee1846d5e95d11b64890f617ee51e4a140a92cf11fb72cd2",
@@ -33,5 +33,10 @@
   "creator_can_post_more": true,
   "content_preview_confirmed": false,
   "express_consent_given": false,
-  "approval_scope": "Owner OK must refer to this exact displayed video, caption, comment and settings; no future consent."
+  "approval_scope": "Owner OK must refer to this exact displayed video, caption, comment and settings; no future consent.",
+  "published_post_id": "7698177087416421664",
+  "published_url": "https://www.tiktok.com/@abasonplus/video/7698177087416421664",
+  "approval_file": "audits/tiktok-approvals/2026-10-19.json",
+  "publication_file": "audits/tiktok-publications/2026-10-19.json",
+  "future_consent": false
 }

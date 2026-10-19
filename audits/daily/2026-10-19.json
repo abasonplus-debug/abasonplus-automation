@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-10-19T02:53:05.480169+02:00",
+  "checked_at": "2026-10-19T03:01:40.058740+02:00",
   "context": {
     "fresh_content_ready": true,
-    "exact_tiktok_video_approved": false,
+    "exact_tiktok_video_approved": true,
     "lookup_complete": {
       "website": true,
       "facebook": true,
@@ -58,14 +58,14 @@
     },
     {
       "platform": "tiktok",
-      "post_id": null,
-      "url": null,
-      "status": "awaiting_video_review",
-      "published_at": null,
-      "observed_at": "2026-10-19T02:53:05.480169+02:00",
-      "verification": "pending_owner_review",
-      "identity_matched": false,
-      "source_reference": "Connected account /posts has no current-day TikTok; exact pending preview saved, not approval."
+      "post_id": "7698177087416421664",
+      "url": "https://www.tiktok.com/@abasonplus/video/7698177087416421664",
+      "status": "published",
+      "published_at": "2026-10-19T00:59:20.320Z",
+      "observed_at": "2026-10-19T03:01:40.058740+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Own TikTok native feed plus provider account-specific published status/settings readback; checker executions 1f205b8a8d9a4e369c05d1d0cdf794b5"
     }
   ],
   "quota": {
@@ -77,11 +77,11 @@
   "quality": {
     "status": "machine_qa_passed",
     "findings": [
-      "Bengali/Latin mixed-script runs and dash wrapping fixed; 43 regression tests and 160 catalog layouts passed locally. GitHub validation with 42 tests passed before the final recovery-name regression was added.",
+      "Bengali/Latin mixed-script runs and dash wrapping fixed; 43 regression tests and 160 catalog layouts passed locally. Latest GitHub validation also passed all 43 tests.",
       "Unreadable original cover replaced by sourced Burak Argun rooftop-tree photograph; all five exact slides passed unchanged glyph/photo/release gates.",
       "WordPress post 55 was already published; corrected Subject-folding space in title in place and verified; no article resend. Future email payloads use documented body title directive.",
       "Exact 10-second MP4, five 2-second slides, 132px hook/120px body, original MP3 and original corner logo verified.",
-      "TikTok awaits this video-specific owner review and OK."
+      "Exact-video owner OK reconciled against dated approval and publication records; preview false flags describe the earlier pre-approval state."
     ]
   },
   "weekly_metrics": {
@@ -116,6 +116,13 @@
     "facebook_comment_verification": "Native CreateComment returned ID without errors; separate GET not performed",
     "instagram_comment_id": "18093773555258618",
     "instagram_comment_verification": "Exact own comment read back; isOwner=true; pagination complete",
-    "youtube_custom_cover": "native thumbnail call returned valid image variants; surface display not guaranteed"
+    "youtube_custom_cover": "native thumbnail call returned valid image variants; surface display not guaranteed",
+    "tiktok_comment_id": "7698025954106966817",
+    "tiktok_comment_verification": "Exact prepared brand comment read back with isOwner=true; matching account/post; pagination.hasMore=false"
+  },
+  "consent_evidence": {
+    "approval_file": "audits/tiktok-approvals/2026-10-19.json",
+    "publication_file": "audits/tiktok-publications/2026-10-19.json",
+    "video_sha256": "e64646d8093dc18cee1846d5e95d11b64890f617ee51e4a140a92cf11fb72cd2"
   }
 }
