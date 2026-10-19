@@ -36,4 +36,17 @@ class WorkflowContracts(unittest.TestCase):
                 self.assertNotIn('MAKE_WEBHOOK_URL',step.get('env',{}))
         self.assertEqual(set(self.load('test-daily-editorial.yml')['on']),{'workflow_dispatch'})
 
+    def test_exact_day_recovery_has_no_cron_or_tiktok_consent(self):
+        name='recover-video-2026-10-19.yml'
+        d=self.load(name)
+        self.assertEqual(set(d['on']),{'push'})
+        self.assertEqual(d['on']['push']['paths'],['config/recover-video-2026-10-19.json'])
+        text=(ROOT/'.github/workflows'/name).read_text()
+        self.assertIn("delivery[0]['conclusion']=='skipped'",text)
+        self.assertIn("manifest['date']=='2026-10-19'",text)
+        self.assertIn('tiktok_publish_approved=false',text)
+        self.assertIn("github.run_attempt == 1",text)
+        self.assertIn('scripts/verify_video_release.py',text)
+
 if __name__=='__main__': unittest.main()
+

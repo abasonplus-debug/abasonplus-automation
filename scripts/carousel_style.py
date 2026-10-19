@@ -31,11 +31,18 @@ def layout(text,font,tokens):
     lines=[]
     for group in groups:
         current=''
-        for word in group.split():
-            candidate=(current+' '+word).strip()
+        separator=''
+        # A dash between scripts is a legal line-break opportunity, not one
+        # unbreakable word. Preserve every non-whitespace character and size.
+        for word in re.findall(r'\s+|[^\s—–]+[—–]?|[—–]',group):
+            if word.isspace():
+                separator=' '
+                continue
+            candidate=current+separator+word if current else word
             if current and width(candidate)>928:
                 lines.append((current,False));current=word
             else: current=candidate
+            separator=''
         if current: lines.append((current,True))
     if not lines or len(lines)>10: raise RuntimeError('Exact text does not fit compact 120px+ block; split or shorten only with permission')
     rows=[];cursor=0
@@ -98,3 +105,4 @@ def validate_style(info):
         if not logo or not(70<=logo[2]-logo[0]<=90 and 24<=1080-logo[2]<=32 and 24<=1920-logo[3]<=32):raise ValueError('Logo placement wrong')
     elif info.get('logo_position')!='omitted_unavailable':raise ValueError('Invented logo')
     return True
+

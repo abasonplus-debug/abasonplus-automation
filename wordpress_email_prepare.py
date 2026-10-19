@@ -56,12 +56,15 @@ def prepare(post):
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]{3,100}",slug):
         raise RuntimeError("Invalid slug; delivery BLOCKED")
     title=re.sub(r"[\r\n]"," ",post["title"]).strip()
+    if '[' in title or ']' in title:
+        raise RuntimeError('Posting directive delimiters in title; delivery BLOCKED')
     document=TextContent()
     document.feed(post["content"])
     plain=document.text()
     if len(plain)<250:raise RuntimeError("Article is too short; delivery BLOCKED")
     tags=[re.sub(r"[\[\],\r\n]"," ",str(x)).strip() for x in post.get("tags",[])][:8]
-    directives=f"[slug {slug}]\n[status publish]\n[publicize off]\n[tags {', '.join(tags)}]"
+    # WordPress's documented body title overrides a MIME-folded Subject.
+    directives=f"[title {title}]\n[slug {slug}]\n[status publish]\n[publicize off]\n[tags {', '.join(tags)}]"
     email_body=directives+"\n\n"+plain+"\n\nআরও তথ্য: "+WEBSITE
     html_body="<p>"+html.escape(directives).replace("\n","</p><p>")+"</p>"
     # Keep original reviewed headings and lists for readable SEO-friendly articles.
@@ -107,7 +110,7 @@ def main():
         if not isinstance(entry.get("tags"),list) or not 3<=len(entry["tags"])<=8:
             raise RuntimeError("ChatGPT daily article has invalid tag count")
         story=entry.get("story")
-        if not isinstance(story,dict) or len(story.get("tips",[]))!=4 or story.get("source_url")!=source or story.get("verified_on")!=today.isoformat():
+        if not isinstance(story,dict) or not 4<=len(story.get("tips",[]))<=24 or story.get("source_url")!=source or story.get("verified_on")!=today.isoformat():
             raise RuntimeError("ChatGPT daily slide plan incomplete or out of sync")
         # Validate the fresh ChatGPT package as a separate recognized category.
         # Do NOT imply a human editor approved it; the daily task is automated.
@@ -177,4 +180,5 @@ def main():
 
 if __name__=="__main__":
     main()
+
 

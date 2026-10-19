@@ -53,5 +53,16 @@ class PublicationPolicyTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             prepare({'slug':'ap-safe-slug','title':'তথ্য','content':'<p>'+('তথ্য '*100)+'[delay +2 days]</p>','tags':[]})
 
+    def test_title_body_directive_preserves_bengali_subject_and_blocks_injection(self):
+        title='Eco-Build অনুদান: বাংলাদেশের সবুজ নির্মাণে সুযোগ, সীমা ও যাচাই'
+        post={'slug':'ap-safe-slug','title':title,'content':'<p>'+('তথ্য '*100)+'</p>','tags':[]}
+        result=prepare(post)
+        self.assertTrue(result['content'].startswith('[title '+title+']\n'))
+        self.assertIn('[title '+title+']',result['html_content'])
+        self.assertEqual(result['subject'],title)
+        for invalid in ('শিরোনাম [status private]', 'শিরোনাম]'):
+            with self.assertRaises(RuntimeError):prepare(dict(post,title=invalid))
+
 if __name__ == '__main__':
     unittest.main()
+

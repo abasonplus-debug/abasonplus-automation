@@ -15,7 +15,7 @@ import subprocess
 import wave
 import struct
 from PIL import Image, ImageDraw, ImageFont, features
-from fontTools.ttLib import TTFont
+from bilingual_text import BilingualText
 from photo_relevance import PhotoRelevanceGuard
 from publication_policy import trusted_source_url, validate_social_copy
 from engagement_pack import hashtags_for, write_pack
@@ -35,28 +35,7 @@ if not features.check("raqm"):
 LATIN_FONT = next((p for p in Path("/usr/share/fonts").rglob("NotoSans-Bold.ttf")), None)
 if not LATIN_FONT:
     raise RuntimeError("Install fonts-noto-core: NotoSans-Bold.ttf is required for bilingual hooks")
-BN_CMAP = TTFont(str(FONT)).getBestCmap()
-LATIN_CMAP = TTFont(str(LATIN_FONT)).getBestCmap()
-LATIN_FONTS = {}
-def latin_font(size):
-    if size not in LATIN_FONTS:
-        LATIN_FONTS[size] = ImageFont.truetype(str(LATIN_FONT),size)
-    return LATIN_FONTS[size]
-
-def word_font(word, bengali_font):
-    # Keep Bengali combining marks and their base consonants in one shaping run.
-    return bengali_font if any(0x0980 <= ord(c) <= 0x09FF for c in word) else latin_font(bengali_font.size)
-
-def mixed_tokens(value, bengali_font):
-    for token in re.findall(r"\s+|\S+", value):
-        fnt = word_font(token, bengali_font)
-        cmap = BN_CMAP if fnt is bengali_font else LATIN_CMAP
-        missing = [f"U+{ord(ch):04X}" for ch in token
-                   if not ch.isspace() and ord(ch) not in cmap
-                   and ch not in ("\u200c","\u200d")]
-        if missing:
-            raise RuntimeError(f"Unsupported glyphs {missing} in on-screen text; refusing □ boxes: {value[:75]}")
-        yield token,fnt
+mixed_tokens = BilingualText(FONT, LATIN_FONT).tokens
 
 def mixed_text_width(draw, value, bengali_font):
     return sum(draw.textlength(piece,font=fnt) for piece,fnt in mixed_tokens(value,bengali_font))
@@ -395,4 +374,5 @@ subprocess.run([
     str(OUT / "abasonplus_daily.mp4")
 ], cwd=OUT, check=True)
 print("Created PREVIEW ONLY", OUT / "abasonplus_daily.mp4")
+
 
