@@ -37,9 +37,13 @@ jobs:
               with urllib.request.urlopen(req,timeout=25) as r:return json.load(r)
           run=read(base)
           assert run['conclusion']=='failure' and run['run_attempt']==1 and run['head_sha']==manifest['failed_head_sha']
-          jobs=read(base+'/jobs')['jobs']
-          delivery=[s for j in jobs for s in j['steps'] if s['name'].startswith('Send ONE daily validated')]
-          assert len(delivery)==1 and delivery[0]['conclusion']=='skipped', 'Delivery may have begun; STOP'
+          for run_id in [manifest['failed_run_id']]+manifest.get('blocked_recovery_runs',[]):
+              url='https://api.github.com/repos/'+os.environ['GITHUB_REPOSITORY']+'/actions/runs/'+str(run_id)
+              previous=read(url)
+              assert previous['status']=='completed' and previous['conclusion']=='failure'
+              jobs=read(url+'/jobs')['jobs']
+              delivery=[s for j in jobs for s in (j.get('steps') or []) if s['name'].startswith('Send ONE daily validated')]
+              assert (len(delivery)==1 and delivery[0]['conclusion']=='skipped') or (not delivery and any(j['name']=='render-and-publish' and j['conclusion']=='skipped' for j in jobs)), 'Delivery may have begun; STOP'
           print('Exact owner-authorized recovery verified; existing Make daily reservations still apply; no TikTok publication.')
           PYCODE
       - name: Require ChatGPT's source-checked editorial for today
