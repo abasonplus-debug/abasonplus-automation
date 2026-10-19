@@ -4,6 +4,7 @@
   "owner_instruction": "সব ঠিক করো। 19 October 2026; repair and recover the failed current-day publication only.",
   "failed_run_id": 39180444026,
   "failed_head_sha": "90359ab96194a6c14ac48a8115f6ef28b07701d5",
-  "editorial_sha256": "56967373c2655678d9815e9401082e16c383ba093a0f906a733ec799466932af",
-  "tiktok_publish_approved": false
+  "editorial_sha256": "d11bb23f93cdf13e517192e6d7f73af2f0b8dd049690b20c90a4be826b1303f3",
+  "tiktok_publish_approved": false,
+  "recovery_revision": 2
 }
