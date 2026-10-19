@@ -10,5 +10,11 @@
   "blocked_recovery_runs": [
     39181764519,
     39181858983
-  ]
+  ],
+  "status": "completed_archived_no_replay",
+  "published_recovery_run_id": 39182310394,
+  "video_sha256": "e64646d8093dc18cee1846d5e95d11b64890f617ee51e4a140a92cf11fb72cd2",
+  "youtube_id": "JQKQ8S83_bI",
+  "facebook_id": "2171662733701511",
+  "instagram_id": "18104123363329495"
 }

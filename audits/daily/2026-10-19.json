@@ -1,0 +1,121 @@
+{
+  "checked_at": "2026-10-19T02:53:05.480169+02:00",
+  "context": {
+    "fresh_content_ready": true,
+    "exact_tiktok_video_approved": false,
+    "lookup_complete": {
+      "website": true,
+      "facebook": true,
+      "youtube": true,
+      "instagram": true,
+      "tiktok": true
+    }
+  },
+  "evidence": [
+    {
+      "platform": "website",
+      "post_id": "55",
+      "url": "https://abasonplus.wordpress.com/2026/10/19/ap-green-construction-eco-build-2026-10-19/",
+      "status": "published",
+      "published_at": "2026-10-19T00:19:22Z",
+      "observed_at": "2026-10-19T02:53:05.480169+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "WordPress authenticated post readback and independent public API"
+    },
+    {
+      "platform": "facebook",
+      "post_id": "2171662733701511",
+      "url": "https://www.facebook.com/reel/2171662733701511/",
+      "status": "published",
+      "published_at": "2026-10-19T00:48:14Z",
+      "observed_at": "2026-10-19T02:53:05.480169+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make execution 0d431670ef1742efa7a92ae8d80775bc module 34: published=true, ready, public; actual URL decoded from returned embed href"
+    },
+    {
+      "platform": "youtube",
+      "post_id": "JQKQ8S83_bI",
+      "url": "https://www.youtube.com/shorts/JQKQ8S83_bI",
+      "status": "published",
+      "published_at": "2026-10-19T00:48:27Z",
+      "observed_at": "2026-10-19T02:53:05.480169+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make execution 6c17971ec362453aaebdb448711b14f4 module 33: processed/public/succeeded, correct channel"
+    },
+    {
+      "platform": "instagram",
+      "post_id": "18104123363329495",
+      "url": "https://www.instagram.com/reel/DeqAfZTEnQP/",
+      "status": "published",
+      "published_at": "2026-10-19T00:49:46.553Z",
+      "observed_at": "2026-10-19T02:53:05.480169+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Connected-account GET /posts/6ad568f20714297449f47d4a: account 6ad380c8b835331ad1563a7a published"
+    },
+    {
+      "platform": "tiktok",
+      "post_id": null,
+      "url": null,
+      "status": "awaiting_video_review",
+      "published_at": null,
+      "observed_at": "2026-10-19T02:53:05.480169+02:00",
+      "verification": "pending_owner_review",
+      "identity_matched": false,
+      "source_reference": "Connected account /posts has no current-day TikTok; exact pending preview saved, not approval."
+    }
+  ],
+  "quota": {
+    "used": 270,
+    "remaining": 730,
+    "days_until_reset": 25,
+    "measured_daily_credits": null
+  },
+  "quality": {
+    "status": "machine_qa_passed",
+    "findings": [
+      "Bengali/Latin mixed-script runs and dash wrapping fixed; 43 regression tests and 160 catalog layouts passed locally. GitHub validation with 42 tests passed before the final recovery-name regression was added.",
+      "Unreadable original cover replaced by sourced Burak Argun rooftop-tree photograph; all five exact slides passed unchanged glyph/photo/release gates.",
+      "WordPress post 55 was already published; corrected Subject-folding space in title in place and verified; no article resend. Future email payloads use documented body title directive.",
+      "Exact 10-second MP4, five 2-second slides, 132px hook/120px body, original MP3 and original corner logo verified.",
+      "TikTok awaits this video-specific owner review and OK."
+    ]
+  },
+  "weekly_metrics": {
+    "status": "not_due",
+    "observations": [],
+    "unavailable_metrics": [
+      "No daily performance forecast made during incident recovery."
+    ]
+  },
+  "recovery": {
+    "delivery_attempted": true,
+    "failure_phase": "original_render_before_delivery_and_wordpress_title_verification",
+    "transient_failure": false,
+    "github_job_status": "success",
+    "prior_retries": 0,
+    "current_day_verified": true,
+    "quota_safe": true,
+    "owner_authorized_repair": true,
+    "original_failed_run": 39180444026,
+    "blocked_recovery_runs": [
+      39181764519,
+      39181858983
+    ],
+    "published_recovery_run": 39182310394,
+    "make_execution": "37ffab876d9d4262af161e7b5fd1a9a1",
+    "video_sha256": "e64646d8093dc18cee1846d5e95d11b64890f617ee51e4a140a92cf11fb72cd2"
+  },
+  "engagement": {
+    "youtube_comment_id": "UgwCEHLnxcwW7PTcSSh4AaABAg",
+    "youtube_comment_verification": "Create returned own-channel public comment; API statistics commentCount 1",
+    "facebook_comment_id": "122252593952270684_2698514063904280",
+    "facebook_comment_verification": "Native CreateComment returned ID without errors; separate GET not performed",
+    "instagram_comment_id": "18093773555258618",
+    "instagram_comment_verification": "Exact own comment read back; isOwner=true; pagination complete",
+    "youtube_custom_cover": "native thumbnail call returned valid image variants; surface display not guaranteed"
+  }
+}

@@ -39,8 +39,8 @@ class WorkflowContracts(unittest.TestCase):
     def test_exact_day_recovery_has_no_cron_or_tiktok_consent(self):
         name='recover-video-2026-10-19.yml'
         d=self.load(name)
-        self.assertEqual(set(d['on']),{'push'})
-        self.assertEqual(d['on']['push']['paths'],['config/recover-video-2026-10-19.json'])
+        self.assertEqual(set(d['on']),{'workflow_dispatch'})
+        self.assertEqual(d['jobs']['source']['if'],'${{ false }}')
         text=(ROOT/'.github/workflows'/name).read_text()
         self.assertIn("delivery[0]['conclusion']=='skipped'",text)
         self.assertIn("manifest['date']=='2026-10-19'",text)

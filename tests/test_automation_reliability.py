@@ -61,4 +61,15 @@ class Reliability(unittest.TestCase):
         workflow=yaml.load(text,Loader=yaml.BaseLoader)
         self.assertEqual(set(workflow['on']),{'workflow_dispatch'})
 
+    def test_exact_published_recovery_name_is_accepted_without_widening_consent(self):
+        import re
+        text=(ROOT/'.github/workflows/tiktok-publish-reviewed.yml').read_text()
+        pattern=re.search(r'test\("(\^AbasonPlus .*?)"\)',text).group(1)
+        self.assertRegex('AbasonPlus Authorized Video Recovery 2026-10-19',pattern)
+        self.assertRegex('AbasonPlus authorized video recovery 2026-10-19',pattern)
+        self.assertNotRegex('AbasonPlus unrelated video 2026-10-19',pattern)
+        self.assertIn('validate_approval(approval,today',text)
+        self.assertIn('Settings changed since owner OK',text)
+
 if __name__=="__main__":unittest.main()
+

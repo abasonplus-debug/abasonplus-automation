@@ -1,8 +1,6 @@
 name: AbasonPlus Authorized Video Recovery 2026-10-19
 on:
-  push:
-    branches: [main]
-    paths: ['config/recover-video-2026-10-19.json']
+  workflow_dispatch:
 permissions:
   contents: read
   actions: read
@@ -11,7 +9,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   source:
-    if: ${{ github.actor == 'abasonplus-debug' && github.run_attempt == 1 }}
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 4
     outputs:

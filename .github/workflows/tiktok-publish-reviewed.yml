@@ -84,8 +84,8 @@ jobs:
           PREVIEW_RUN_ID: ${{ inputs.preview_run_id }}
         run: |
           gh run view "$PREVIEW_RUN_ID" --repo "$GITHUB_REPOSITORY" --json conclusion,name,event,headBranch \
-            --jq 'select(.conclusion == "success" and .headBranch == "main" and (.name == "AbasonPlus Daily Source-Checked Carousel & Video" or (.name | test("^AbasonPlus authorized video recovery [0-9-]+$")))) | .name' \
-            | grep -E "^AbasonPlus (Daily Source-Checked Carousel & Video|authorized video recovery [0-9-]+)$"
+            --jq 'select(.conclusion == "success" and .headBranch == "main" and (.name == "AbasonPlus Daily Source-Checked Carousel & Video" or (.name | test("^AbasonPlus (authorized video recovery|Authorized Video Recovery) [0-9-]+$")))) | .name' \
+            | grep -E "^AbasonPlus (Daily Source-Checked Carousel & Video|(authorized video recovery|Authorized Video Recovery) [0-9-]+)$"
           mkdir -p output
           gh run download "$PREVIEW_RUN_ID" --repo "$GITHUB_REPOSITORY" \
             -n abasonplus-source-checked-video -D output
@@ -177,4 +177,5 @@ jobs:
           echo "Verify the resulting Zernio/TikTok platform status and public URL separately."
 # No cron trigger. This workflow is impossible to run on a schedule or repository push.
 # The creator must review that specific completed preview and expressly approve that video.
+
 
