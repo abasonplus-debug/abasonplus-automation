@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   source:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 4
     outputs:
       ready: ${{ steps.check.outputs.ready }}
@@ -37,7 +37,7 @@ jobs:
   render-and-publish:
     needs: source
     if: ${{ needs.source.outputs.ready == 'true' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
@@ -51,6 +51,8 @@ jobs:
         with:
           path: .cache/fastembed
           key: abasonplus-clip-v1-${{ runner.os }}
+      - name: Check mixed Bengali and Latin glyph routing (NO POSTS)
+        run: python3 -m unittest discover -s tests -p 'test_bilingual_text.py' -v
       - name: Check new variable-slide news story
         run: python3 scripts/select_video_story.py
       - name: Render original 9:16 Bengali slides and music MP4
@@ -122,6 +124,11 @@ jobs:
         run: |
           test -n "$MAKE_WEBHOOK_URL" || { echo 'Missing Make webhook; no publication'; exit 1; }
           test -f output/video_qa_passed.txt || { echo 'No automatic photo quality approval; no publication'; exit 1; }
+          VIDEO_BYTES="$(wc -c < output/abasonplus_daily.mp4)"
+          if [ "$VIDEO_BYTES" -gt 5000000 ]; then
+            echo "::error::Video exceeds Make free 5 MB webhook limit: ${VIDEO_BYTES} bytes; NO POSTS"
+            exit 1
+          fi
           VIDEO_SHA256="$(sha256sum output/abasonplus_daily.mp4 | cut -d ' ' -f1)"
           curl --fail-with-body --max-time 120 --retry 0 \
             -F "kind=video" \
