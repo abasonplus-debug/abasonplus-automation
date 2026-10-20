@@ -1,6 +1,6 @@
 {
   "date": "2026-10-20",
-  "status": "approved_ready_for_prefilled_manual_dispatch",
+  "status": "approved_and_published",
   "preview_run_id": 39347549614,
   "artifact_id": 12231208615,
   "video_sha256": "3057daf5da08f2356c4ded84efe65f758f676972af9ea84868d2e815648288ba",
@@ -60,14 +60,13 @@
     "logo_bottom_right_ui_risk": true,
     "dense_text_two_second_readability_not_guaranteed": true
   },
-  "timing_note": "Owner explicitly approved this exact previously rendered 5 x 2-second artifact. New renders remain 3 seconds. No re-render or transfer occurred.",
+  "timing_note": "The owner-approved existing 5 x 2-second artifact was published once. New renders retain the 3-second rule. No new creative or repeat publication was made.",
   "soundtrack": "assets/abasonplus.mp3",
   "rights_basis": "Previously owner-confirmed original soundtrack; distinct Pexels photos and credits retained in the completed artifact.",
   "future_consent": false,
   "approval_file": "audits/tiktok-approvals/2026-10-20.json",
   "approved_at": "2026-10-20T02:41:03+02:00",
-  "blocker": "Browser control cannot dispatch. Existing reviewed workflow form now prefills the exact 20 October approved run and strings; interactions use fixed choices. Owner still must start workflow_dispatch. No transfer has begun.",
-  "delivery_attempted": false,
+  "delivery_attempted": true,
   "validation": {
     "local_tests_passed": 50,
     "github_ci_run_id": 39349467603,
@@ -79,5 +78,20 @@
   "approval_remains_valid_for_exact_artifact": true,
   "prefilled_form_commit": "49d72b53a59bdf641d805e9fda05d42c06d81538",
   "prefilled_form_verified": true,
-  "manual_dispatch_still_required": true
+  "manual_dispatch_still_required": false,
+  "published_post_id": "7698556960320326945",
+  "published_url": "https://www.tiktok.com/@abasonplus/video/7698556960320326945",
+  "publication_file": "audits/tiktok-publications/2026-10-20.json",
+  "published_at": "2026-10-20T01:33:22.163Z",
+  "publication_workflow_run_id": 39353988628,
+  "first_brand_comment": {
+    "id": "7698411211981243169",
+    "text": "রংপুরে ভবন তুলবেন? আগে অনুমোদন!\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/",
+    "status": "published",
+    "is_owner": true,
+    "published_at": "2026-10-20T01:35:28.000Z",
+    "verification": "exact own comment readback with matching account/post and complete pagination",
+    "write_execution_id": "51e1b393d48e4f2bbd6972b1843f64f5",
+    "read_execution_id": "591d33d2f2194af0a1cca1ff52329a0b"
+  }
 }
