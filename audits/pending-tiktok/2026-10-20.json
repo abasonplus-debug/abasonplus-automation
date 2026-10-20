@@ -1,6 +1,6 @@
 {
   "date": "2026-10-20",
-  "status": "awaiting_video_review",
+  "status": "approved_waiting_workflow_dispatch",
   "preview_run_id": 39347549614,
   "artifact_id": 12231208615,
   "video_sha256": "3057daf5da08f2356c4ded84efe65f758f676972af9ea84868d2e815648288ba",
@@ -47,8 +47,8 @@
     "brand_organic",
     "brand_content"
   ],
-  "content_preview_confirmed": false,
-  "express_consent_given": false,
+  "content_preview_confirmed": true,
+  "express_consent_given": true,
   "posting_enabled": false,
   "approval_scope": "Only an explicit owner OK after viewing this exact video, caption, first comment and settings approves this artifact. No future consent. Changes invalidate pending consent.",
   "qa": {
@@ -60,8 +60,12 @@
     "logo_bottom_right_ui_risk": true,
     "dense_text_two_second_readability_not_guaranteed": true
   },
-  "timing_note": "This existing artifact was produced under the two-second contract before timing commit 35dffd3f9347695aa3de7aa8437e7c426e4a3c7a. New renders use three seconds. No regeneration, resend or approval has occurred.",
+  "timing_note": "Owner explicitly approved this exact previously rendered 5 x 2-second artifact. New renders remain 3 seconds. No re-render or transfer occurred.",
   "soundtrack": "assets/abasonplus.mp3",
   "rights_basis": "Previously owner-confirmed original soundtrack; distinct Pexels photos and credits retained in the completed artifact.",
-  "future_consent": false
+  "future_consent": false,
+  "approval_file": "audits/tiktok-approvals/2026-10-20.json",
+  "approved_at": "2026-10-20T02:41:03+02:00",
+  "blocker": "Connected GitHub tools do not expose workflow_dispatch. No direct webhook publishing bypass was used.",
+  "workflow_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/workflows/tiktok-publish-reviewed.yml"
 }
