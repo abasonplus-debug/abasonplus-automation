@@ -1,6 +1,6 @@
 {
   "date": "2026-10-20",
-  "status": "approved_waiting_workflow_dispatch",
+  "status": "approved_awaiting_github_sign_in",
   "preview_run_id": 39347549614,
   "artifact_id": 12231208615,
   "video_sha256": "3057daf5da08f2356c4ded84efe65f758f676972af9ea84868d2e815648288ba",
@@ -66,6 +66,12 @@
   "future_consent": false,
   "approval_file": "audits/tiktok-approvals/2026-10-20.json",
   "approved_at": "2026-10-20T02:41:03+02:00",
-  "blocker": "Connected GitHub tools do not expose workflow_dispatch. No direct webhook publishing bypass was used.",
-  "workflow_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/workflows/tiktok-publish-reviewed.yml"
+  "blocker": "Reviewed workflow dispatch awaits authenticated owner browser session. No delivery or provider submission has begun.",
+  "workflow_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/workflows/tiktok-publish-reviewed.yml",
+  "delivery_attempted": false,
+  "validation": {
+    "local_tests_passed": 50,
+    "github_ci_run_id": 39349467603,
+    "github_ci_conclusion": "success"
+  }
 }
