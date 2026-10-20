@@ -1,6 +1,6 @@
 {
   "date": "2026-10-20",
-  "status": "approved_awaiting_github_sign_in",
+  "status": "approved_held_at_dispatch_input_validation",
   "preview_run_id": 39347549614,
   "artifact_id": 12231208615,
   "video_sha256": "3057daf5da08f2356c4ded84efe65f758f676972af9ea84868d2e815648288ba",
@@ -66,12 +66,15 @@
   "future_consent": false,
   "approval_file": "audits/tiktok-approvals/2026-10-20.json",
   "approved_at": "2026-10-20T02:41:03+02:00",
-  "blocker": "Reviewed workflow dispatch awaits authenticated owner browser session. No delivery or provider submission has begun.",
-  "workflow_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/workflows/tiktok-publish-reviewed.yml",
+  "blocker": "Owner dispatch 39353373598 stopped before artifact download/delivery: interaction inputs were capitalized True (validator requires true/false); preview_run_id contained the preview consent phrase instead of numeric 39347549614. A corrected new manual dispatch is needed; rerunning this job retains invalid inputs.",
   "delivery_attempted": false,
   "validation": {
     "local_tests_passed": 50,
     "github_ci_run_id": 39349467603,
     "github_ci_conclusion": "success"
-  }
+  },
+  "failed_dispatch_run_id": 39353373598,
+  "failed_dispatch_job_id": 118402512515,
+  "failed_dispatch_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/runs/39353373598",
+  "approval_remains_valid_for_exact_artifact": true
 }
