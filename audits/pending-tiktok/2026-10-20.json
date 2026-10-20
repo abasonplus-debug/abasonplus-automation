@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-20",
+  "status": "awaiting_video_review",
+  "preview_run_id": 39347549614,
+  "artifact_id": 12231208615,
+  "video_sha256": "3057daf5da08f2356c4ded84efe65f758f676972af9ea84868d2e815648288ba",
+  "caption_sha256": "e86f96a532457cb87587686d6d61f617d8eeb96e2d82914d3f74e67273baef91",
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "account_username": "abasonplus",
+  "caption": "রংপুরে ভবন তুলবেন? আগে অনুমোদন!\n✅ জমির অবস্থান ও কর্তৃপক্ষের আওতা যাচাই করুন। সব এলাকার নিয়ম এক নয়।\n✅ ফরম কেনা মানেই অনুমোদন নয়। ফরমের মূল্য ও প্রযোজ্য ভ্যাট মিলিয়ে রসিদ রাখুন।\n✅ ভূমি ব্যবহার ছাড়পত্র ও নকশার অনুমোদন যাচাই করুন। অনুমোদনের আগে কাজ শুরু নয়।\n✅ জমি বা ফ্ল্যাটের অগ্রিম দেওয়ার আগে সংশ্লিষ্ট নথি ও নকশা মিলিয়ে নিন।\n\n#AbasonPlus #আবাসন #RealEstateBangladesh #জমি #জমিকেনা #PropertyTips",
+  "first_comment": "রংপুরে ভবন তুলবেন? আগে অনুমোদন!\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/",
+  "settings": {
+    "privacy_level": "PUBLIC_TO_EVERYONE",
+    "allow_comment": true,
+    "allow_duet": true,
+    "allow_stitch": true,
+    "video_made_with_ai": true,
+    "commercialContentType": "none",
+    "video_cover_timestamp_ms": 0
+  },
+  "preview_library_file_id": "libfile_7098b4b00664819191be16bc7c8345ad",
+  "artifact_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/runs/39347549614/artifacts/12231208615",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "codec": "H264",
+    "audio": "AAC",
+    "duration_seconds": 10,
+    "slides": 5,
+    "slide_seconds": 2
+  },
+  "prepared_at": "2026-10-20T02:40:17+02:00",
+  "creator_options_verified": true,
+  "creator_options_execution_id": "52108cb605564bd488cbab8fe3806f1d",
+  "creator_can_post_more": true,
+  "creator_supported_privacy_levels": [
+    "PUBLIC_TO_EVERYONE"
+  ],
+  "creator_supported_interactions": {
+    "allow_comment": true,
+    "allow_duet": true,
+    "allow_stitch": true
+  },
+  "creator_supported_commercial_content_types": [
+    "none",
+    "brand_organic",
+    "brand_content"
+  ],
+  "content_preview_confirmed": false,
+  "express_consent_given": false,
+  "posting_enabled": false,
+  "approval_scope": "Only an explicit owner OK after viewing this exact video, caption, first comment and settings approves this artifact. No future consent. Changes invalidate pending consent.",
+  "qa": {
+    "artifact_machine_qa_passed": true,
+    "actual_mp4_hash_verified": true,
+    "caption_hash_verified": true,
+    "contact_sheet_reviewed": true,
+    "real_device_review": false,
+    "logo_bottom_right_ui_risk": true,
+    "dense_text_two_second_readability_not_guaranteed": true
+  },
+  "timing_note": "This existing artifact was produced under the two-second contract before timing commit 35dffd3f9347695aa3de7aa8437e7c426e4a3c7a. New renders use three seconds. No regeneration, resend or approval has occurred.",
+  "soundtrack": "assets/abasonplus.mp3",
+  "rights_basis": "Previously owner-confirmed original soundtrack; distinct Pexels photos and credits retained in the completed artifact.",
+  "future_consent": false
+}
