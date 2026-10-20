@@ -2,38 +2,61 @@ name: AbasonPlus TikTok – Publish One Reviewed Video
 on:
   workflow_dispatch:
     inputs:
+      # These defaults mirror the ALREADY SAVED exact owner OK for 20 October.
+      # Defaults do not grant consent: the dated approval, hashes, source run,
+      # owner actor, settings, current-day QA and Make reservation remain mandatory.
+      # A later day's post requires its own separate exact-video approval record.
       preview_run_id:
-        description: 'GitHub run ID containing the exact video you have watched'
+        description: 'অনুমোদিত ভিডিওর run ID: ২০ অক্টোবর ২০২৬'
         required: true
         type: string
+        default: '39347549614'
       preview_confirmed:
-        description: 'After watching the video, type exactly: I_REVIEWED_THIS_VIDEO'
+        description: 'এই নির্দিষ্ট ভিডিও দেখার সংরক্ষিত অনুমোদন'
         required: true
         type: string
+        default: 'I_REVIEWED_THIS_VIDEO'
       express_consent:
-        description: 'To publish this exact video, type exactly: I_CONSENT_TO_THIS_TIKTOK_POST'
+        description: 'এই নির্দিষ্ট TikTok পোস্ট প্রকাশের সংরক্ষিত সম্মতি'
         required: true
         type: string
+        default: 'I_CONSENT_TO_THIS_TIKTOK_POST'
       privacy:
-        description: 'Available creator privacy option: type PUBLIC_TO_EVERYONE'
+        description: 'দর্শক: সবার জন্য Public'
         required: true
-        type: string
+        type: choice
+        default: 'PUBLIC_TO_EVERYONE'
+        options:
+          - 'PUBLIC_TO_EVERYONE'
       allow_comments:
-        description: 'Individually choose true or false for TikTok comments'
+        description: 'Comments ON: true; OFF: false'
         required: true
-        type: string
+        type: choice
+        default: 'true'
+        options:
+          - 'true'
+          - 'false'
       allow_duet:
-        description: 'Individually choose true or false for TikTok Duet'
+        description: 'Duet ON: true; OFF: false'
         required: true
-        type: string
+        type: choice
+        default: 'true'
+        options:
+          - 'true'
+          - 'false'
       allow_stitch:
-        description: 'Individually choose true or false for TikTok Stitch'
+        description: 'Stitch ON: true; OFF: false'
         required: true
-        type: string
+        type: choice
+        default: 'true'
+        options:
+          - 'true'
+          - 'false'
       rights_confirmed:
-        description: 'Confirm photo and soundtrack usage rights: type I_OWN_OR_HAVE_RIGHTS'
+        description: 'ছবি ও অডিও ব্যবহারের আগে নিশ্চিত করা অধিকার'
         required: true
         type: string
+        default: 'I_OWN_OR_HAVE_RIGHTS'
 
 permissions:
   contents: read
