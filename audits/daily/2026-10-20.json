@@ -1,0 +1,234 @@
+{
+  "checked_at": "2026-10-20T11:16:35+02:00",
+  "context": {
+    "fresh_content_ready": true,
+    "exact_tiktok_video_approved": true,
+    "lookup_complete": {
+      "website": true,
+      "facebook": true,
+      "youtube": true,
+      "instagram": true,
+      "tiktok": true
+    }
+  },
+  "evidence": [
+    {
+      "platform": "website",
+      "post_id": "57",
+      "url": "https://abasonplus.wordpress.com/2026/10/20/ap-rangpur-building-approval-2026-10-20/",
+      "status": "published",
+      "published_at": "2026-10-20T00:22:50Z",
+      "observed_at": "2026-10-20T11:16:35+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "WordPress.com site 257973809 posts.get 57; exact slug/title and source URL matched editorial"
+    },
+    {
+      "platform": "facebook",
+      "post_id": "1187418170388469",
+      "url": "https://www.facebook.com/reel/1187418170388469/",
+      "status": "published",
+      "published_at": "2026-10-20T00:27:01.000Z",
+      "observed_at": "2026-10-20T11:13:48+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make 7968544 execution 574f0a85856c4342a3ca67b580655f86 module 34 cycle 1; fixed Page 293664680487578; uploader module 4 ID matched"
+    },
+    {
+      "platform": "youtube",
+      "post_id": "7-Nbsl948d8",
+      "url": "https://www.youtube.com/watch?v=7-Nbsl948d8",
+      "status": "published",
+      "published_at": "2026-10-20T00:27:13Z",
+      "observed_at": "2026-10-20T11:13:41+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make 7968544 execution e46604100ca34c42b6b4246163bc8015 module 33 cycle 1; uploader module 3 and channel matched"
+    },
+    {
+      "platform": "tiktok",
+      "post_id": "7698556960320326945",
+      "url": "https://www.tiktok.com/@abasonplus/video/7698556960320326945",
+      "status": "published",
+      "published_at": "2026-10-20T01:33:22.163Z",
+      "observed_at": "2026-10-20T11:16:35+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "GET-only checker 8007397 execution 4c54439c4bbc4f788f1de8159d6ea710 /posts; provider 6ad6c4ce1fb3eb94388dcb42; exact current-day caption and account 6ad22ddb280aa6cf7d25310d matched"
+    },
+    {
+      "platform": "instagram",
+      "post_id": "17939209668389502",
+      "url": "https://www.instagram.com/reel/Desi3PeCC9m/",
+      "status": "published",
+      "published_at": "2026-10-20T00:28:19.870Z",
+      "observed_at": "2026-10-20T11:16:35+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "GET-only checker 8007397 execution 4c54439c4bbc4f788f1de8159d6ea710 /posts; provider 6ad6b57b1541b9676f8514ce; exact current-day caption and account 6ad380c8b835331ad1563a7a matched"
+    }
+  ],
+  "quota": {
+    "used": 380,
+    "remaining": 620,
+    "days_until_reset": 24,
+    "measured_daily_credits": null,
+    "plan": "Free",
+    "auto_purchase_enabled": false,
+    "reserve_credits": 100,
+    "next_reset_at": "2026-11-12T23:55:07+01:00",
+    "forecast_status": "unverified",
+    "forecast_reason": "A complete organization-wide day of credits was not measured; partial-day usage is not extrapolated.",
+    "provider_accounts": 2,
+    "provider_free_allowance": 2,
+    "active_make_scenarios": 2
+  },
+  "quality": {
+    "status": "machine_qa_passed_with_advisories",
+    "findings": [
+      "Exact current-day editorial, WordPress slug/title/source, video uploader IDs and fixed destination accounts matched. Source notice dated 2026-09-30, forms available from 2026-10-04, BSS report dated 2026-10-19; verification date is 2026-10-20.",
+      "Original current-day artifact 12231208615 from successful run 39347549614 is 5 slides x 2 seconds = 10 seconds, rendered before the timing update. Existing exact owner approval was reconciled; no rerender or resend. NEW renders use exactly 3 seconds and 5-16 slides.",
+      "Downloaded exact MP4 SHA-256 3057daf5da08f2356c4ded84efe65f758f676972af9ea84868d2e815648288ba matched saved approval and publication; ffprobe H.264/AAC, 1080x1920, 30 fps, duration 10.000 seconds, 1224515 bytes, below 5 MiB.",
+      "Artifact metadata shows hook 132px, body 120px Bold, compact_white_gold_v2, white/gold, 4px outline/close shadow, glyph and compact-spacing checks passed, distinct licensed Pexels photos, original soundtrack verified in render logs.",
+      "mobile_qa_contact_sheet.jpg and mobile_qa_notes.json reviewed. Approximate UI guides only, no real-device review. Bottom-right original logo may be covered by platform UI; dense 5-7-line text is not guaranteed readable in two seconds.",
+      "Hook cover matches slide_0 pixels; 1080x1920 JPEG upload was 214496 bytes. YouTube thumbnail module 39 returned success; display on all Shorts surfaces was not independently verified.",
+      "WordPress/source/video/reviewed-TikTok jobs succeeded; render/release/delivery steps were not skipped. WordPress and video triggers started about 22 and 25 minutes after 02:00 Berlin.",
+      "Make execution summaries were warning, but inspected modules had zero errors and no reported errorCycles; no failure handler ran in today's WordPress, video or TikTok delivery. Do not interpret warning summary alone as failed publication.",
+      "First comments: YouTube own/public comment returned; Facebook native comment ID returned, separate comment readback not performed. Instagram comment written once in this audit after complete empty comment read and account capability check, then independently read back isOwner=true. TikTok existing exact own comment was read back; neither TikTok video nor comment was repeated.",
+      "Non-blocking dependency warnings remain: WordPress/report checkout v4 and a url.parse deprecation; renderer Pillow getdata deprecation. No code or scenario changes were made by this audit.",
+      "Bounded readbacks verify expected post IDs; Facebook/YouTube entire historical feeds were not scanned for unknown duplicates. Existing independent daily reservations and provider idempotency were preserved."
+    ]
+  },
+  "weekly_metrics": {
+    "status": "not_due_tuesday",
+    "observations": [
+      {
+        "platform": "youtube",
+        "post_id": "7-Nbsl948d8",
+        "observed_at": "2026-10-20T11:13:41+02:00",
+        "views": 185,
+        "likes": 1,
+        "comments": 1,
+        "note": "Single observation only; no trend or cross-platform comparison."
+      }
+    ],
+    "unavailable_metrics": [
+      "retention",
+      "watch_time",
+      "shares",
+      "saves",
+      "clicks",
+      "complete_seven_day_series"
+    ]
+  },
+  "recovery": {
+    "delivery_attempted": true,
+    "failure_phase": null,
+    "transient_failure": false,
+    "github_job_status": "success",
+    "prior_retries": 0,
+    "current_day_verified": true,
+    "quota_safe": true,
+    "published": true,
+    "retry_performed": false,
+    "reason": "All five expected destinations published. Failed manual-input TikTok run 39353373598 was already resolved by successful run 39353988628; no retry or resend."
+  },
+  "creative_identity": {
+    "date": "2026-10-20",
+    "slug": "ap-rangpur-building-approval-2026-10-20",
+    "video_run_id": 39347549614,
+    "video_head_sha": "42856e301eaebdcdb62ef8d9e3953dd18d5d3b62",
+    "artifact_id": 12231208615,
+    "video_sha256": "3057daf5da08f2356c4ded84efe65f758f676972af9ea84868d2e815648288ba",
+    "caption_sha256": "e86f96a532457cb87587686d6d61f617d8eeb96e2d82914d3f74e67273baef91",
+    "actual_slide_seconds": 2,
+    "slide_count": 5,
+    "new_render_slide_seconds": 3
+  },
+  "consent_evidence": {
+    "approval_file": "audits/tiktok-approvals/2026-10-20.json",
+    "publication_file": "audits/tiktok-publications/2026-10-20.json",
+    "approved_at": "2026-10-20T02:41:03+02:00",
+    "future_consent": false,
+    "validation": "scripts/tiktok_approval.py validate_approval and reconcile passed using actual downloaded MP4 and exact caption"
+  },
+  "engagement": {
+    "youtube": {
+      "first_comment_id": "UgxZ_3hXO6jOGVjfA5V4AaABAg",
+      "status": "native_returned_own_public",
+      "execution_id": "52af6498ea464ffb917edb7ae4d576ac",
+      "comment_module": 40,
+      "cover_module": 39,
+      "cover_status": "native_api_success"
+    },
+    "facebook": {
+      "first_comment_id": "122252709722270684_1102317732547978",
+      "status": "native_returned_separate_readback_not_performed",
+      "execution_id": "52af6498ea464ffb917edb7ae4d576ac",
+      "comment_module": 38
+    },
+    "instagram": {
+      "first_comment_id": "18078463187749531",
+      "status": "published_verified",
+      "is_owner": true,
+      "post_id": "17939209668389502",
+      "account_id": "6ad380c8b835331ad1563a7a",
+      "write_execution_id": "64dbb74693e149d8b50f7fbd16da4ad0",
+      "read_execution_id": "4ce682781fa048e99559657835d00ebe",
+      "pagination_complete": true,
+      "comment_attempts_this_audit": 1
+    },
+    "tiktok": {
+      "first_comment_id": "7698411211981243169",
+      "status": "published_verified",
+      "is_owner": true,
+      "read_execution_id": "fe479f5133e1466582fed62919e4d566",
+      "pagination_complete": true,
+      "comment_attempts_this_audit": 0
+    }
+  },
+  "account_health": {
+    "instagram": {
+      "active": true,
+      "needs_reconnection": false
+    },
+    "tiktok": {
+      "active": true,
+      "needs_reconnection": false,
+      "access_token_expires_at": "2026-10-20T21:55:12+02:00",
+      "refresh_behavior": "not_independently_verified; active account is not reported disconnected"
+    }
+  },
+  "guard_evidence": {
+    "make_sequential_not_blocked": true,
+    "incomplete_executions": 0,
+    "video_execution": "52af6498ea464ffb917edb7ae4d576ac",
+    "website_execution": "277521bb945c4c8d8e29504b8c9a5b70",
+    "tiktok_execution": "8deea2521d814134815ee7b26bcb280e",
+    "daily_guard_modules": {
+      "youtube": [
+        24,
+        5
+      ],
+      "facebook": [
+        25,
+        16
+      ],
+      "website": [
+        26,
+        7
+      ],
+      "instagram": [
+        17,
+        22
+      ],
+      "tiktok": [
+        13
+      ]
+    },
+    "instagram_daily_key": "abasonplus-instagram-2026-10-20",
+    "reservation_deletion_performed": false
+  },
+  "no_video_or_article_publication_performed": true,
+  "authorized_first_brand_comment_written": true
+}
