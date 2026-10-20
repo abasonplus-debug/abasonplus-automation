@@ -91,6 +91,7 @@ jobs:
             -n abasonplus-source-checked-video -D output
       - name: Verify video, first-frame hook, current source and authenticity
         env:
+          GH_TOKEN: ${{ github.token }}
           PREVIEW_RUN_ID: ${{ inputs.preview_run_id }}
           TIKTOK_PRIVACY: ${{ inputs.privacy }}
           TIKTOK_COMMENTS: ${{ inputs.allow_comments }}
@@ -133,8 +134,15 @@ jobs:
           a=[x for x in info["streams"] if x["codec_type"]=="audio"]
           assert len(v)==1 and v[0]["width"]==1080 and v[0]["height"]==1920 and v[0]["codec_name"]=="h264"
           assert len(a)>=1 and a[0]["codec_name"]=="aac"
-          from scripts.carousel_timing import validate_timing
-          validate_timing(meta, float(info["format"]["duration"]))
+          # Historical, exact-owner-approved artifacts retain the policy used to render them.
+          # Never execute historical source: inspect its literal SLIDE_SECONDS assignment only.
+          import base64
+          repo=os.environ["GITHUB_REPOSITORY"]
+          run=json.loads(subprocess.check_output(["gh","api",f"repos/{repo}/actions/runs/{os.environ['PREVIEW_RUN_ID']}"]))
+          policy=json.loads(subprocess.check_output(["gh","api",f"repos/{repo}/contents/scripts/carousel_timing.py?ref={run['head_sha']}"]))
+          from scripts.reviewed_video_timing import validate_reviewed_timing
+          validate_reviewed_timing(meta,float(info["format"]["duration"]),approval,run,
+                                  base64.b64decode(policy["content"]).decode("utf-8"))
           print("INDIVIDUALLY REVIEWED MP4 SHA256:",hashlib.sha256(video.read_bytes()).hexdigest())
           PY
       - name: Deliver ONLY this creator-reviewed video for TikTok (never Facebook/YouTube)
