@@ -1,6 +1,6 @@
 {
   "date": "2026-10-20",
-  "status": "approved_held_at_dispatch_input_validation",
+  "status": "approved_ready_for_prefilled_manual_dispatch",
   "preview_run_id": 39347549614,
   "artifact_id": 12231208615,
   "video_sha256": "3057daf5da08f2356c4ded84efe65f758f676972af9ea84868d2e815648288ba",
@@ -66,7 +66,7 @@
   "future_consent": false,
   "approval_file": "audits/tiktok-approvals/2026-10-20.json",
   "approved_at": "2026-10-20T02:41:03+02:00",
-  "blocker": "Owner dispatch 39353373598 stopped before artifact download/delivery: interaction inputs were capitalized True (validator requires true/false); preview_run_id contained the preview consent phrase instead of numeric 39347549614. A corrected new manual dispatch is needed; rerunning this job retains invalid inputs.",
+  "blocker": "Browser control cannot dispatch. Existing reviewed workflow form now prefills the exact 20 October approved run and strings; interactions use fixed choices. Owner still must start workflow_dispatch. No transfer has begun.",
   "delivery_attempted": false,
   "validation": {
     "local_tests_passed": 50,
@@ -76,5 +76,8 @@
   "failed_dispatch_run_id": 39353373598,
   "failed_dispatch_job_id": 118402512515,
   "failed_dispatch_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/runs/39353373598",
-  "approval_remains_valid_for_exact_artifact": true
+  "approval_remains_valid_for_exact_artifact": true,
+  "prefilled_form_commit": "49d72b53a59bdf641d805e9fda05d42c06d81538",
+  "prefilled_form_verified": true,
+  "manual_dispatch_still_required": true
 }
