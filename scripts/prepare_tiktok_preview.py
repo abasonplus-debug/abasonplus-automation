@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from carousel_style import STYLE_ID, validate_style
-from carousel_timing import validate_timing
+from carousel_timing import validate_timing, MIN_SLIDES, MAX_SLIDES
 from engagement_pack import hashtags_for, first_comment, hashtag_tokens
 """Generate and validate a TikTok-ready preview package from AbasonPlus slides.
 
@@ -38,7 +38,7 @@ local_day=datetime.now(ZoneInfo("Europe/Berlin")).date().isoformat()
 require(info.get("date")==local_day and story.get("verified_on")==local_day,"story is stale")
 require(info.get("source_url")==story.get("source_url"),"source provenance mismatch")
 require(story.get("source_url","").startswith("https://"),"not grounded in a cited link")
-require(5<=info.get("slides",0)<=25 and len(story.get("tips",[]))==info["slides"]-1,"slide count and story must match")
+require(MIN_SLIDES<=info.get("slides",0)<=MAX_SLIDES and len(story.get("tips",[]))==info["slides"]-1,"slide count and story must match")
 require(info.get("visual_approval")=="automated_semantic_qa_only","machine QA provenance not recorded")
 quality=info.get("quality",[])
 require(info.get("style_id")==STYLE_ID,"selected visual style missing")

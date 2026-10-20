@@ -12,7 +12,7 @@ from zoneinfo import ZoneInfo
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 class PhotoSourceContract(unittest.TestCase):
-    def run_selector(self, photos):
+    def run_selector(self, photos, tip_count=4):
         today = datetime.now(ZoneInfo("Europe/Berlin")).date().isoformat()
         source = "https://www.bssnews.net/others/435855"
         payload = {
@@ -21,23 +21,32 @@ class PhotoSourceContract(unittest.TestCase):
             "story": {"source_url": source, "verified_on": today,
                       "hook": "আজকের প্রকল্প বিষয়ে কী যাচাই করবেন?",
                       "cover_query": "professional photograph of a modern road tunnel",
-                      "tips": [{"text": "প্রকল্পের সরকারি নথি যাচাই করুন।", "query": "professional construction photograph"} for _ in range(4)],
+                      "tips": [{"text": "প্রকল্পের সরকারি নথি যাচাই করুন।", "query": "professional construction photograph"} for _ in range(tip_count)],
                       "photos": photos}}
         with tempfile.TemporaryDirectory() as tmp:
             root = pathlib.Path(tmp)
             (root / "scripts").mkdir()
             (root / "content").mkdir()
-            for name in ("select_video_story.py", "publication_policy.py"):
+            for name in ("select_video_story.py", "publication_policy.py", "carousel_timing.py"):
                 (root / "scripts" / name).write_bytes((ROOT / "scripts" / name).read_bytes())
             (root / "content" / ("daily_editorial_" + today + ".json")).write_text(json.dumps(payload))
             result = subprocess.run([sys.executable, str(root / "scripts/select_video_story.py")], capture_output=True, text=True)
             output = root / "output/daily_research_story.json"
             return result, json.loads(output.read_text()) if output.exists() else None
 
-    def photos(self, key):
+    def photos(self, key, count=5):
         return [{key: "https://www.pexels.com/photo/tunnel-" + str(i) + "/",
                  "url": "https://images.pexels.com/photos/" + str(i) + "/photo.jpeg",
-                 "license": "Pexels Free License", "creator": "Fixture", "scene": "Road tunnel"} for i in range(5)]
+                 "license": "Pexels Free License", "creator": "Fixture", "scene": "Road tunnel"} for i in range(count)]
+
+    def test_three_second_slide_limit_rejects_over_fifty_seconds(self):
+        result, story = self.run_selector(self.photos("source_page", 16), tip_count=15)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(len(story["tips"])+1, 16)
+        result, story = self.run_selector(self.photos("source_page", 17), tip_count=16)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Need 4–15", result.stderr)
+        self.assertIsNone(story)
 
     def test_research_source_page_normalized_for_renderer(self):
         result, story = self.run_selector(self.photos("source_page"))

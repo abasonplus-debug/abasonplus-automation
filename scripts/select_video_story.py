@@ -4,6 +4,7 @@ No network, no social publication, no source invention.
 """
 import json, pathlib, sys
 from publication_policy import trusted_source_url, validate_article_html
+from carousel_timing import MIN_SLIDES, MAX_SLIDES
 from datetime import datetime
 from zoneinfo import ZoneInfo
 ROOT=pathlib.Path(__file__).resolve().parents[1]
@@ -20,8 +21,8 @@ if data.get("date")!=today or data.get("verified_on")!=today:
 validate_article_html(data.get("content", ""))
 if not trusted_source_url(data.get("source_url", "")) or data["source_url"] not in data.get("content", ""):
     raise RuntimeError("Source missing or not present in daily article")
-if not isinstance(story,dict) or not 4<=len(story.get("tips",[]))<=24:
-    raise RuntimeError("Need 4–24 sourced carousel text groups; each may contain multiple sentences")
+if not isinstance(story,dict) or not MIN_SLIDES-1<=len(story.get("tips",[]))<=MAX_SLIDES-1:
+    raise RuntimeError("Need 4–15 sourced carousel text groups; each may contain multiple sentences")
 if story.get("source_url")!=data["source_url"] or story.get("verified_on")!=today:
     raise RuntimeError("Slide and article source/version mismatch")
 photos=story.get("photos")

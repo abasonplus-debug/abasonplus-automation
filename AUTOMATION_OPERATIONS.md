@@ -1,6 +1,6 @@
 # AbasonPlus: publication checks and limited recovery
 
-Applies to website, Facebook, YouTube, Instagram and TikTok. The owner's fixed compact white/gold design, real logo and exactly two seconds per image remain unchanged.
+Applies to website, Facebook, YouTube, Instagram and TikTok. The owner's fixed compact white/gold design, real logo and exactly three seconds per image apply (owner update 20 October 2026); keep 5–16 slides and the 50-second ceiling. Historical artifacts retain their recorded timing and are never resent merely for this update.
 
 ## Daily evidence
 The task performs lightweight GitHub checks at 09:00 and 10:00 Europe/Berlin and the full audit at 11:00. Early checks do not repeat Make/platform reads; notify on actual failure/hold, or hand over a ready exact TikTok preview once. Execution time and phone push delivery are not guaranteed. The full audit collects platform evidence into audits/daily/YYYY-MM-DD.json. The publication-audit-report workflow produces an artifact and workflow summary using scripts/publication_audit.py. It never uploads content. Platform status must come from the destination/provider readback, with matched identity, real post ID, publication time and HTTPS destination URL. Make acceptance, job success and provider processing are not publication. Older-day posts never satisfy today's slot. Before the scheduled time a slot is not overdue. TikTok awaiting exact video review is reported separately from missing/failed publication.

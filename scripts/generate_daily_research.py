@@ -131,7 +131,7 @@ SCHEMA={"type":"object","additionalProperties":False,"properties":{
      "type":"object","additionalProperties":False,"properties":{
        "heading":{"type":"string"},"text":{"type":"string"}},"required":["heading","text"]}},
  "hook":{"type":"string"},"cover_query":{"type":"string"},
- "tips":{"type":"array","minItems":4,"maxItems":24,"items":{
+ "tips":{"type":"array","minItems":4,"maxItems":15,"items":{
      "type":"object","additionalProperties":False,"properties":{
        "text":{"type":"string"},"query":{"type":"string"}},"required":["text","query"]}},
  "tags":{"type":"array","minItems":3,"maxItems":6,"items":{"type":"string"}}
@@ -146,7 +146,7 @@ def request_local_ai(source):
       "Clearly distinguish actual progress, proposals and risks. Four sections: what actually happened, "
       "what it means for housing/land, risks and limitations, 4 actionable checks. "
       "Write sections ~130-280 Bengali characters each, intro ~150-250 characters. "
-      "For carousel, one Bengali hook and 4–24 useful slide text groups as needed; multiple complete sentences per image are allowed. Every slide is exactly 2 seconds. "
+      "For carousel, one Bengali hook and 4–15 useful slide text groups as needed; multiple complete sentences per image are allowed. Every slide is exactly 3 seconds, with at most 16 slides and 50 seconds total. "
       "English photo queries must describe generic symbolic REAL professional photographs, "
       "never pretend a stock photo depicts the named government project. "
       "Return JSON matching the exact schema only. "
@@ -169,7 +169,7 @@ def request_local_ai(source):
 
 def quality(source, story):
     if set(story)!=set(SCHEMA["required"]):raise RuntimeError("AI output schema mismatch")
-    if len(story["sections"])!=4 or not 4<=len(story["tips"])<=24:raise RuntimeError("Need four sections and 4–24 slide text groups")
+    if len(story["sections"])!=4 or not 4<=len(story["tips"])<=15:raise RuntimeError("Need four sections and 4–15 slide text groups")
     longparts=[story["title"],story["intro"],story["hook"]]
     for s in story["sections"]:longparts.extend([s["heading"],s["text"]])
     for s in story["tips"]:longparts.append(s["text"])

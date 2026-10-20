@@ -19,7 +19,7 @@ from bilingual_text import BilingualText
 from photo_relevance import PhotoRelevanceGuard
 from publication_policy import trusted_source_url, validate_social_copy
 from engagement_pack import hashtags_for, write_pack
-from carousel_timing import SLIDE_SECONDS
+from carousel_timing import SLIDE_SECONDS, MIN_SLIDES, MAX_SLIDES
 from carousel_style import STYLE_ID, POLICY, layout, paint, photo_stats, readable_photo, validate_style
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -64,7 +64,7 @@ if daily_story_file:
 else:
     item=current_catalog[today.toordinal() % len(current_catalog)]
 heading,hook,points=item["title"],item["hook"],item["tips"]
-if not 4<=len(points)<=24:raise RuntimeError("Carousel requires 5-25 slides")
+if not MIN_SLIDES-1<=len(points)<=MAX_SLIDES-1:raise RuntimeError("Carousel requires 5–16 slides at three seconds each")
 slides=[{"main":hook,"photo":item["cover_query"],"sub":"জরুরি তথ্য"}]
 slides += [{"main":p["text"],"photo":p["query"],"sub":f"পরামর্শ {i}/{len(points)}"}
            for i,p in enumerate(points,1)]

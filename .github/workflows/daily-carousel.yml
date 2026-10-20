@@ -69,7 +69,8 @@ jobs:
           meta=json.loads((out/'metadata.json').read_text(encoding='utf-8'))
           news=json.loads((out/'daily_research_story.json').read_text(encoding='utf-8'))
           assert meta['source_url']==news['source_url']
-          assert 5<=meta['slides']<=25 and len(meta['quality'])==meta['slides']
+          from scripts.carousel_timing import MIN_SLIDES, MAX_SLIDES
+          assert MIN_SLIDES<=meta['slides']<=MAX_SLIDES and len(meta['quality'])==meta['slides']
           assert meta['verified_on']==news['verified_on']
           assert meta['style_id']=='compact_white_gold_v2'
           from scripts.carousel_style import validate_style
@@ -89,7 +90,7 @@ jobs:
           from scripts.carousel_timing import validate_timing
           validate_timing(meta, float(vid['format']['duration']))
           assert len((out/'image_credits.txt').read_text(encoding='utf-8').strip().splitlines())==meta['slides']
-          print('AUTO VIDEO QA PASS: original licensed photos, independent 9:16 slides, exactly 2 seconds per slide, real soundtrack.')
+          print('AUTO VIDEO QA PASS: original licensed photos, independent 9:16 slides, exactly 3 seconds per slide, real soundtrack.')
           PY
       - name: Approve release ONLY after separate real-photo and metadata QA
         run: python3 scripts/verify_video_release.py
