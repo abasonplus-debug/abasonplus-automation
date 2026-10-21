@@ -1,9 +1,9 @@
 {
   "date": "2026-10-21",
-  "status": "pending_review_with_visual_hold",
-  "preview_run_id": 39520963248,
-  "artifact_id": 12310768754,
-  "video_sha256": "d3af583e12510f5329853b50e052c07247e26df5c4029b4e966e1d9ebb775579",
+  "status": "pending_review",
+  "preview_run_id": 39537990870,
+  "artifact_id": 12318213555,
+  "video_sha256": "2445f5670bfdaa7772645532c872a9a3cf6a72cfef2329c646db16bf34d9d6d3",
   "caption_sha256": "59b313969d496b983c7aec1652499332a0e9b1959ca6e16bcf43079525978cef",
   "account_id": "6ad22ddb280aa6cf7d25310d",
   "account_username": "abasonplus",
@@ -18,8 +18,8 @@
     "commercialContentType": "none",
     "video_cover_timestamp_ms": 0
   },
-  "preview_library_file_id": "libfile_48d29f915f188191be89d8ccb4d17cd9",
-  "artifact_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/runs/39520963248/artifacts/12310768754",
+  "preview_library_file_id": "libfile_a21a2032c90c81919f250f5c471a137a",
+  "artifact_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/runs/39537990870/artifacts/12318213555",
   "format": {
     "width": 1080,
     "height": 1920,
@@ -30,9 +30,9 @@
     "slides": 5,
     "slide_seconds": 3
   },
-  "prepared_at": "2026-10-21T05:13:45.593619+02:00",
+  "prepared_at": "2026-10-21T05:23:12.318825+02:00",
   "creator_options_verified": true,
-  "creator_options_execution_id": "e970144295f34aa29b6db9d3aa1c6ff3",
+  "creator_options_execution_id": "f57476a28b814693968372636a3cf36f",
   "creator_can_post_more": true,
   "creator_supported_privacy_levels": [
     "PUBLIC_TO_EVERYONE"
@@ -51,7 +51,7 @@
   "express_consent_given": false,
   "posting_enabled": false,
   "future_consent": false,
-  "approval_scope": "Owner has not yet seen this exact preview/caption/comment/settings in this handoff. A later OK cannot override a visual QA hold. Any changed media needs a fresh preview and exact consent.",
+  "approval_scope": "Only an explicit owner OK after viewing this corrected video, complete caption, first comment and settings approves this exact artifact. Prior OKs and the held earlier preview grant no consent. Any changed media/caption/settings invalidates this pending reference.",
   "qa": {
     "artifact_machine_qa_passed": true,
     "actual_mp4_hash_verified": true,
@@ -60,9 +60,17 @@
     "real_device_review": false,
     "logo_bottom_right_ui_risk": true,
     "dense_text_three_second_readability_not_guaranteed": true,
-    "visual_hold": "Slide 3's text instructs comparing stairs, open space, parking and shared facilities, but its stock photo only shows a fire hose reel/extinguisher. Exact text-to-scene matching is not met. Do not publish this preview or treat owner OK as bypassing QA; obtain an authorized corrected render and fresh preview."
+    "visual_hold": null,
+    "visual_scene_correction": "Slide 3 now shows an illuminated stairwell in a parking garage, matching the stairs/shared-access/parking checklist. All 5 slide texts remain unchanged; the published editorial and other platforms were not changed.",
+    "github_code_validation_tests": 83,
+    "github_code_validation_run_id": 39537990955
   },
   "soundtrack": "assets/abasonplus.mp3",
   "rights_basis": "Previously owner-confirmed soundtrack; Pexels credits retained in exact artifact. No claim of independent music clearance.",
-  "delivery_attempted": false
+  "delivery_attempted": false,
+  "supersedes": {
+    "preview_run_id": 39520963248,
+    "video_sha256": "d3af583e12510f5329853b50e052c07247e26df5c4029b4e966e1d9ebb775579",
+    "reason": "Held earlier preview replaced with corrected stairs/parking photograph; old preview must not be published."
+  }
 }
