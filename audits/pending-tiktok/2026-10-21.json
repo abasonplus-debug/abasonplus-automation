@@ -1,6 +1,6 @@
 {
   "date": "2026-10-21",
-  "status": "approved_workflow_dispatched",
+  "status": "published",
   "preview_run_id": 39537990870,
   "artifact_id": 12318213555,
   "video_sha256": "2445f5670bfdaa7772645532c872a9a3cf6a72cfef2329c646db16bf34d9d6d3",
@@ -67,7 +67,7 @@
   },
   "soundtrack": "assets/abasonplus.mp3",
   "rights_basis": "Previously owner-confirmed soundtrack; Pexels credits retained in exact artifact. No claim of independent music clearance.",
-  "delivery_attempted": false,
+  "delivery_attempted": true,
   "supersedes": {
     "preview_run_id": 39520963248,
     "video_sha256": "d3af583e12510f5329853b50e052c07247e26df5c4029b4e966e1d9ebb775579",
@@ -81,5 +81,12 @@
     "run_id": 39542764874,
     "status": "failed_before_delivery",
     "reason": "Missing preview_head_sha in approval record; filled from actual source run. Delivery step skipped."
-  }
+  },
+  "post_id": "7698969980670315808",
+  "url": "https://www.tiktok.com/@abasonplus/video/7698969980670315808?utm_campaign=tt4d_open_api&utm_source=7608030276714774544",
+  "published_at": "2026-10-21T04:15:46.443Z",
+  "github_publish_run_id": 39542976419,
+  "publication_file": "audits/tiktok-publications/2026-10-21.json",
+  "first_comment_status": "published_own_readback_verified",
+  "first_comment_id": "7698778302961648416"
 }
