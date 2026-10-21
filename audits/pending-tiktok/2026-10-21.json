@@ -1,6 +1,6 @@
 {
   "date": "2026-10-21",
-  "status": "pending_review",
+  "status": "approved_pending_owner_workflow_dispatch",
   "preview_run_id": 39537990870,
   "artifact_id": 12318213555,
   "video_sha256": "2445f5670bfdaa7772645532c872a9a3cf6a72cfef2329c646db16bf34d9d6d3",
@@ -47,8 +47,8 @@
     "brand_organic",
     "brand_content"
   ],
-  "content_preview_confirmed": false,
-  "express_consent_given": false,
+  "content_preview_confirmed": true,
+  "express_consent_given": true,
   "posting_enabled": false,
   "future_consent": false,
   "approval_scope": "Only an explicit owner OK after viewing this corrected video, complete caption, first comment and settings approves this exact artifact. Prior OKs and the held earlier preview grant no consent. Any changed media/caption/settings invalidates this pending reference.",
@@ -72,5 +72,8 @@
     "preview_run_id": 39520963248,
     "video_sha256": "d3af583e12510f5329853b50e052c07247e26df5c4029b4e966e1d9ebb775579",
     "reason": "Held earlier preview replaced with corrected stairs/parking photograph; old preview must not be published."
-  }
+  },
+  "approval_file": "audits/tiktok-approvals/2026-10-21.json",
+  "approved_at": "2026-10-21T05:27:05.894335+02:00",
+  "blocker": "Owner-only GitHub workflow has not been dispatched. Cloud browser is signed out; the secure sign-in method request returned declined. No media upload or publication request was sent; do not replay or claim published."
 }
