@@ -1,0 +1,28 @@
+name: CosyVoice3 Bengali Voice Test (FREE ONLY, NO PUBLISH)
+on:
+  push:
+    branches: [experiment/cosyvoice3-bangla-tts-preview]
+    paths:
+      - 'scripts/cosyvoice3_space_one_shot.py'
+      - '.github/workflows/cosyvoice3-one-shot-audio.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  one-time-voice-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install free Gradio client only, without login
+        run: python3 -m pip install --disable-pip-version-check 'gradio_client==2.0.3'
+      - name: Generate Bengali sample with actual CosyVoice3 model
+        run: python3 scripts/cosyvoice3_space_one_shot.py
+      - name: Save sample and diagnostic data only; NEVER post
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosyvoice3-bengali-audio-test
+          path: output/cosyvoice3_test/
+          if-no-files-found: warn
+          retention-days: 2
