@@ -29,5 +29,16 @@
   "make_delivery_execution_id": "13e875ecfaf948f69f9e2956726aa1a5",
   "provider_read_execution_id": "88127a63137b4330ba00f7bafe84f21a",
   "native_read_execution_id": "1782684ed1734ca0984043f2914532d0",
-  "first_comment_status": "write_requested_not_yet_verified"
+  "first_comment_status": "published_own_readback_verified",
+  "first_comment": {
+    "id": "7698778302961648416",
+    "text": "ফ্ল্যাটটি অনুমোদিত নকশা মেনেই তৈরি?\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/",
+    "published_at": "2026-10-21T04:17:26.000Z",
+    "is_owner": true,
+    "account_id": "6ad22ddb280aa6cf7d25310d",
+    "post_id": "7698969980670315808",
+    "pagination_complete": true,
+    "write_execution_id": "0b96513baa4b43f1ad2e3a7fbac616a6",
+    "read_execution_id": "a2ebc8de98b64cfcad1e53424878e6f0"
+  }
 }
