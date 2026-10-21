@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-21",
+  "editorial_sha256": "4a2d9e6e254b728f76cd183949e9a4f497f885d1b9c186f71d416a5834cfa1dc",
+  "slide_index": 2,
+  "expected_original_url": "https://images.pexels.com/photos/189474/pexels-photo-189474.jpeg?cs=srgb&dl=pexels-duncanoluwaseun-189474.jpg&fm=jpg",
+  "query": "real professional vertical photograph of illuminated stairs and shared access in a parking garage",
+  "photo": {
+    "url": "https://images.pexels.com/photos/11921920/pexels-photo-11921920.jpeg?cs=srgb&dl=pexels-jayson-hinrichsen-86844013-11921920.jpg&fm=jpg",
+    "source_page": "https://www.pexels.com/photo/a-stairwell-at-a-parking-garage-11921920/",
+    "creator": "Jayson Hinrichsen",
+    "license": "Pexels Free License",
+    "license_source": "https://www.pexels.com/license/",
+    "page_verified_on": "2026-10-21",
+    "scene": "A modern, illuminated stairwell in an urban parking garage photographed at night.",
+    "scene_match": "A parking-garage stairwell illustrates stairs and shared parking access in the site-versus-plan checklist; illustrative stock, not a Bangladesh project or proof of approval.",
+    "verification": "Pexels source page, creator, free-license label and original images.pexels.com download target verified on 21 October 2026."
+  },
+  "original_preview_run_id": 39520963248,
+  "reason": "Owner requested corrected preview after slide 3 fire-equipment photo did not match the stairs/parking text. Photo-only correction; no article or slide text changes; no posts."
+}
+

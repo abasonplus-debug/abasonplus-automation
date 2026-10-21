@@ -1,5 +1,8 @@
 name: AbasonPlus Daily Source-Checked Carousel & Video
 on:
+  push:
+    branches: [main]
+    paths: ['previews/tiktok/current.json']
   schedule:
     - cron: '0 2 * * *' # Owner-selected daily 02:00 Europe/Berlin video trigger
       timezone: 'Europe/Berlin'
@@ -73,6 +76,9 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_bilingual_text.py' -v
       - name: Check new variable-slide news story
         run: python3 scripts/select_video_story.py
+      - name: Apply owner-requested photo correction to PREVIEW output only
+        if: ${{ github.event_name == 'push' }}
+        run: python3 scripts/apply_preview_photo.py
       - name: Render original 9:16 Bengali slides and music MP4
         env:
           ABASONPLUS_DAILY_STORY: output/daily_research_story.json
@@ -124,6 +130,7 @@ jobs:
             output/thumbnail.png
             output/thumbnail_upload.jpg
             output/metadata.json
+            output/daily_research_story.json
             output/mobile_qa_contact_sheet.jpg
             output/mobile_qa_notes.json
             output/image_credits.txt
