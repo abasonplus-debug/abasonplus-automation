@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '0 2 * * *' # 02:00 Europe/Berlin, summer and winter
       timezone: 'Europe/Berlin'
+    - cron: '23 2 * * *' # Backup ONLY when no earlier scheduled attempt exists today
+      timezone: 'Europe/Berlin'
   workflow_dispatch:
     inputs:
       preview_only:
@@ -12,15 +14,31 @@ on:
         default: 'true'
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: abasonplus-wordpress-email-one-per-day
   cancel-in-progress: false
 jobs:
+  schedule-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    outputs:
+      allowed: ${{ steps.elect.outputs.allowed }}
+      day: ${{ steps.elect.outputs.day }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Elect one scheduled attempt; never replay an existing delivery
+        id: elect
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/schedule_guard.py --workflow wordpress-post.yml
   prepare:
-    runs-on: ubuntu-latest
+    needs: schedule-gate
+    if: ${{ needs.schedule-gate.outputs.allowed == 'true' }}
+    runs-on: ubuntu-24.04
     timeout-minutes: 16
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Check safe email source code
         run: python3 -m py_compile wordpress_email_prepare.py wordpress_email_send.py scripts/verify_wordpress_publication.py
       - name: Prepare next reviewed unpublished article with a public duplicate check
@@ -30,7 +48,7 @@ jobs:
         run: |
           test ! -f output/wordpress_email_preview.json || echo "ready=true" >> "$GITHUB_OUTPUT"
       - name: Save email preview (no publication)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wordpress-postbyemail-preview
           path: output/wordpress_email_preview.json
@@ -42,13 +60,16 @@ jobs:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
           ABASONPLUS_PUBLISH: 'OWNER_APPROVED'
           ABASONPLUS_POST_BY_EMAIL_READY: 'CONFIRMED'
-        run: python3 wordpress_email_send.py
+          ABASONPLUS_RUN_DAY: ${{ needs.schedule-gate.outputs.day }}
+        run: |
+          python3 scripts/schedule_guard.py --check-day "$ABASONPLUS_RUN_DAY"
+          python3 wordpress_email_send.py
       - name: Verify the article is actually published on WordPress, not merely accepted by Make
         if: ${{ github.event_name == 'schedule' && steps.ready.outputs.ready == 'true' }}
         run: python3 scripts/verify_wordpress_publication.py --attempts 6 --interval 35
       - name: Archive send receipt and public post verification result
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: abasonplus-wordpress-publication-audit
           path: |

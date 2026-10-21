@@ -11,7 +11,8 @@ class WorkflowContracts(unittest.TestCase):
     def test_daily_local_schedules_and_manual_publication_gate(self):
         for name,cron in [('daily-carousel.yml','0 2 * * *'),('wordpress-post.yml','0 2 * * *'),('official-source-monitor.yml','15 1 * * *')]:
             d=self.load(name)
-            self.assertEqual(d['on']['schedule'],[{'cron':cron,'timezone':'Europe/Berlin'}])
+            self.assertEqual(d['on']['schedule'][0],{'cron':cron,'timezone':'Europe/Berlin'})
+            self.assertTrue(all(s['timezone']=='Europe/Berlin' for s in d['on']['schedule']))
         d=self.load('daily-carousel.yml')
         self.assertEqual(d['jobs']['render-and-publish']['if'], "${{ needs.source.outputs.ready == 'true' }}")
         for name in ('daily-carousel.yml','wordpress-post.yml'):

@@ -1,0 +1,52 @@
+name: AbasonPlus Missing-Run and Failure Watchdog (NO POSTS)
+on:
+  schedule:
+    - cron: '7 3 * * *' # Independent check after primary and both backup trigger targets
+      timezone: 'Europe/Berlin'
+  workflow_run:
+    workflows:
+      - AbasonPlus Daily Source-Checked Carousel & Video
+      - AbasonPlus Daily WordPress Post by Email
+    types: [completed]
+  push:
+    branches: [main]
+    paths: ['scripts/schedule_guard.py', 'scripts/publication_watchdog.py', '.github/workflows/publication-watchdog.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: abasonplus-publication-alerts
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+      issues: write
+    steps:
+      # Default-branch code only; never execute/download workflow_run artifacts.
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Check absent triggers, held jobs and failed deliveries (NO POSTS)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = schedule ] || [ "$GITHUB_EVENT_NAME" = workflow_run ]; then
+            python3 scripts/publication_watchdog.py --write-alerts
+          else
+            python3 scripts/publication_watchdog.py
+          fi
+      - name: Archive sanitized workflow evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: abasonplus-reliability-watchdog
+          path: output/reliability_watchdog.json
+          if-no-files-found: error
+          retention-days: 7

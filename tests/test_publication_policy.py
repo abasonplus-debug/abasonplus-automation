@@ -46,7 +46,8 @@ class PublicationPolicyTests(unittest.TestCase):
             stale=root/'output/wordpress_email_preview.json'
             stale.write_text('{"post_key":"old"}')
             with patch.object(wp,'ROOT',root), patch('sys.argv',['prepare','--skip-public-lookup']):
-                wp.main()
+                with self.assertRaisesRegex(RuntimeError,'NO_CHATGPT_DAILY_EDITORIAL'):
+                    wp.main()
             self.assertFalse(stale.exists())
 
     def test_email_body_does_not_accept_injected_posting_instructions(self):

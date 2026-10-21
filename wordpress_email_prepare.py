@@ -92,6 +92,8 @@ def main():
     today=datetime.now(ZoneInfo("Europe/Berlin")).date()
     chatgpt_path=ROOT/"content"/("daily_editorial_"+today.isoformat()+".json")
     chatgpt=[]
+    if not chatgpt_path.is_file() and not args.allow_catalog_preview:
+        raise RuntimeError("NO_CHATGPT_DAILY_EDITORIAL: today's editorial missing; publication HELD")
     if chatgpt_path.is_file():
         entry=json.loads(chatgpt_path.read_text(encoding="utf-8"))
         source=entry.get("source_url","")

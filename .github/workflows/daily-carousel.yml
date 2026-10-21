@@ -3,6 +3,8 @@ on:
   schedule:
     - cron: '0 2 * * *' # Owner-selected daily 02:00 Europe/Berlin video trigger
       timezone: 'Europe/Berlin'
+    - cron: '31 2 * * *' # Backup ONLY when no earlier scheduled attempt exists today
+      timezone: 'Europe/Berlin'
   workflow_dispatch:
     inputs:
       preview_only:
@@ -11,11 +13,27 @@ on:
         default: 'true'
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: abasonplus-video-one-source-per-day
   cancel-in-progress: false
 jobs:
+  schedule-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    outputs:
+      allowed: ${{ steps.elect.outputs.allowed }}
+      day: ${{ steps.elect.outputs.day }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Elect one scheduled attempt; never replay an existing delivery
+        id: elect
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/schedule_guard.py --workflow daily-carousel.yml
   source:
+    needs: schedule-gate
+    if: ${{ needs.schedule-gate.outputs.allowed == 'true' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 4
     outputs:
@@ -35,7 +53,7 @@ jobs:
             exit "$code"
           fi
   render-and-publish:
-    needs: source
+    needs: [source, schedule-gate]
     if: ${{ needs.source.outputs.ready == 'true' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 35
@@ -122,7 +140,9 @@ jobs:
         if: ${{ github.event_name == 'schedule' }}
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+          ABASONPLUS_RUN_DAY: ${{ needs.schedule-gate.outputs.day }}
         run: |
+          python3 scripts/schedule_guard.py --check-day "$ABASONPLUS_RUN_DAY"
           test -n "$MAKE_WEBHOOK_URL" || { echo 'Missing Make webhook; no publication'; exit 1; }
           test -f output/video_qa_passed.txt || { echo 'No automatic photo quality approval; no publication'; exit 1; }
           VIDEO_BYTES="$(wc -c < output/abasonplus_daily.mp4)"

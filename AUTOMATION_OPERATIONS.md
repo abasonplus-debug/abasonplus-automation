@@ -35,6 +35,46 @@ For Instagram/TikTok first comments, confirm the exact post is published, read e
 Resolved 18 October 22:30 Europe/Berlin: comment GETs require accountId in the query. Both connected Instagram and TikTok reads succeeded. Gate 45 is enabled; each exact post has datastore reservation and stable idempotency. One owner-approved comment on each current-day post was written and read back with isOwner=true: Instagram 18111358733267412, TikTok 7697943343510160161. Use GET-only checker comments/meta/status outputs and config/engagement_comment_routes.json. Never repeat installation comments or repost a video.
 
 ## Failure visibility and consent evidence
+### Missing-trigger protection — installed 21 October 2026
+
+Primary WordPress and video triggers remain 02:00 Europe/Berlin. The same workflows
+also have backup targets at 02:23 (WordPress) and 02:31 (video). Both primary and
+backup pass scripts/schedule_guard.py under the existing workflow concurrency
+group. Only the first scheduled first-attempt run for that Berlin date proceeds.
+Any earlier run, including failed, cancelled, queued or ambiguous delivery, blocks
+a second attempt. This is missing-trigger recovery, not failed-publication recovery.
+The existing independent Make/platform reservations remain authoritative and are
+never removed. A delayed primary created after the backup cannot deliver again.
+Manual dispatch remains preview only. Scheduled reruns are held for reconciliation.
+The elected Berlin date is checked again immediately before any transfer; crossing
+midnight holds release. DST repeated 02:00 hours share the same daily election.
+
+publication-watchdog.yml checks both publishing workflows separately at 03:07
+Europe/Berlin and after either workflow completes. It distinguishes no trigger,
+queued/running, held/skipped delivery, failed delivery and completed transfer.
+It never treats a successful source job or Make receipt as published. Missing
+editorial now raises an error in WordPress preparation instead of silently ending
+green. The watchdog only reads workflow evidence and upserts one GitHub alert
+issue per date, including actual run links. Identical alerts do not create repeat
+issues/comments. Manual and push watchdog checks are read-only. It never invokes
+Make, uploads media, clears keys, reruns jobs or publishes to TikTok.
+
+The default alert destination is a GitHub issue in this repository. GitHub email
+delivery depends on the owner's notification/subscription settings and is not
+verified by creating an issue. Optional Telegram needs GitHub Actions secrets
+TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID; values must never enter source/logs.
+Telegram sends only when the daily issue is created/updated, with no ambiguous
+send retry. Telegram is not active until these secrets are configured and a real
+message is verified. No Make credits or paid service is required by the watchdog.
+
+Limitations: all GitHub schedules, including backups/watchdog, can be delayed or
+dropped during a GitHub outage. Workflow-run checks cannot detect an event that
+never started. The separate ChatGPT audit must have an enabled task and a verified
+linked chat destination for an independent notification path. At installation its
+new audit task was found paused with conversation_id=null; an update/resume did
+not restore a destination, so it was paused again to avoid wrong-chat delivery.
+Do not describe that notification path as repaired or create duplicate tasks.
+
 Source selection errors now fail the daily workflow before rendering; green success is not used for a blocked source. Manual dispatch stays preview-only. Do not force a held photo/source into publication. GitHub schedule delay remains possible.
 
 Read audits/tiktok-approvals/YYYY-MM-DD.json and audits/tiktok-publications/YYYY-MM-DD.json before diagnosing missing consent. scripts/tiktok_approval.py validates exact date, account, hash and settings. Preview false flags describe the pre-approval state and do not override a later matching real owner OK. Future approvals must include caption_sha256 and preview_run_id; changing media, caption or settings invalidates approval. Never infer consent for another date/video.
