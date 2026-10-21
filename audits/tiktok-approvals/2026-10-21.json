@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-21",
+  "approved_at": "2026-10-21T05:27:05.894335+02:00",
+  "approval": "Owner replied \"Ok k\" immediately after the exact corrected video, complete caption, first brand comment and settings were displayed in the linked main conversation.",
+  "owner_evidence": {
+    "message_text": "Ok k",
+    "context": "Direct reply to corrected preview run 39537990870 with MP4 2445f5670bfdaa7772645532c872a9a3cf6a72cfef2329c646db16bf34d9d6d3; this is the current-day corrected preview, not the earlier held artifact."
+  },
+  "consent_scope": "Only the exact displayed 21 October corrected MP4, caption, first brand comment and settings. No future/unseen videos; any change invalidates approval.",
+  "preview_run_id": 39537990870,
+  "artifact_id": 12318213555,
+  "video_sha256": "2445f5670bfdaa7772645532c872a9a3cf6a72cfef2329c646db16bf34d9d6d3",
+  "caption_sha256": "59b313969d496b983c7aec1652499332a0e9b1959ca6e16bcf43079525978cef",
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "account_username": "abasonplus",
+  "privacy_level": "PUBLIC_TO_EVERYONE",
+  "allow_comment": true,
+  "allow_duet": true,
+  "allow_stitch": true,
+  "video_made_with_ai": true,
+  "commercialContentType": "none",
+  "video_cover_timestamp_ms": 0,
+  "first_comment": "ফ্ল্যাটটি অনুমোদিত নকশা মেনেই তৈরি?\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/",
+  "rights_basis": "Previously owner-confirmed soundtrack; Pexels credits retained in exact artifact. No claim of independent music clearance.",
+  "preview_library_file_id": "libfile_a21a2032c90c81919f250f5c471a137a",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "codec": "H264",
+    "audio": "AAC",
+    "duration_seconds": 15,
+    "slides": 5,
+    "slide_seconds": 3
+  },
+  "posting_approval": true,
+  "future_consent": false,
+  "duplicate_lookup": {
+    "execution_id": "aee27c2a3e084978b92d8015ea6bce7f",
+    "current_day_tiktok_post_found": false,
+    "checked_before_delivery": true
+  }
+}
