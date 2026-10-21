@@ -1,0 +1,19 @@
+name: CosyVoice3 Bengali TTS Safe Preview (NO PUBLISH)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate-offline-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout experiment branch
+        uses: actions/checkout@v4
+      - name: Verify local code without model downloads or payment
+        run: |
+          python3 scripts/cosyvoice3_audio.py --self-check
+          python3 -m unittest discover -s tests -p 'test_*cosyvoice3*.py' -v
+      - name: Prevent accidental publication
+        run: |
+          echo 'Offline checks only. No model installed, no voice cloned, no MP4 posted.' >> "$GITHUB_STEP_SUMMARY"
