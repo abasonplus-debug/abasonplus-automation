@@ -118,6 +118,17 @@ class ScheduleReliability(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, 'pagination'):
                 api.collection('/actions/runs', 'workflow_runs')
 
+    def test_real_date_range_query_is_accepted_by_route_validation(self):
+        api = GitHub(token='fixture')
+        response = io.BytesIO(json.dumps({'workflow_runs': [run()]}).encode())
+        with patch('schedule_guard.urlopen', return_value=response) as request:
+            rows = api.runs('daily-carousel.yml', date(2026, 10, 21))
+            self.assertEqual(len(rows), 1)
+            self.assertIn('created=', request.call_args.args[0].full_url)
+            self.assertIn('..', request.call_args.args[0].full_url)
+        with self.assertRaises(ValueError):
+            api.request('/../outside')
+
     def test_unauthorized_response_never_retried_or_printed(self):
         api = GitHub(token='test')
         with patch('schedule_guard.urlopen', side_effect=HTTPError('secret-url', 403, '', {}, None)) as req:

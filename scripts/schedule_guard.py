@@ -41,7 +41,8 @@ class GitHub:
 
     def request(self, path, method='GET', body=None):
         # Callers supply repository-relative fixed API routes, never arbitrary hosts.
-        if not path.startswith('/') or path.startswith('//') or '..' in path:
+        route = path.partition('?')[0]
+        if not route.startswith('/') or route.startswith('//') or '..' in route:
             raise ValueError('Invalid repository API route')
         url = 'https://api.github.com/repos/' + REPOSITORY + path
         headers = {'Authorization': 'Bearer ' + self.token,
