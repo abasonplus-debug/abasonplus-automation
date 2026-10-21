@@ -39,5 +39,7 @@
     "execution_id": "aee27c2a3e084978b92d8015ea6bce7f",
     "current_day_tiktok_post_found": false,
     "checked_before_delivery": true
-  }
+  },
+  "preview_head_sha": "d266e35e659b9f703bcb89a5f9b54402e1f070d0",
+  "provenance_verified_from": "https://github.com/abasonplus-debug/abasonplus-automation/actions/runs/39537990870"
 }
