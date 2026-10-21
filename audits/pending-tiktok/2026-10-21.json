@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-21",
+  "status": "pending_review_with_visual_hold",
+  "preview_run_id": 39520963248,
+  "artifact_id": 12310768754,
+  "video_sha256": "d3af583e12510f5329853b50e052c07247e26df5c4029b4e966e1d9ebb775579",
+  "caption_sha256": "59b313969d496b983c7aec1652499332a0e9b1959ca6e16bcf43079525978cef",
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "account_username": "abasonplus",
+  "caption": "ফ্ল্যাটটি অনুমোদিত নকশা মেনেই তৈরি?\n✅ অনুমোদিত নকশার নম্বর, জমির পরিচয় ও ফ্ল্যাটের অবস্থান মিলিয়ে নিন।\n✅ সাইটে সিঁড়ি, খোলা জায়গা, পার্কিং ও সাধারণ সুবিধা নকশার সঙ্গে তুলনা করুন।\n✅ অনুমোদিত ব্যবহার আবাসিক নাকি বাণিজ্যিক—কাগজ দেখে নিশ্চিত হন।\n✅ চুক্তিতে নকশার রেফারেন্স, পরিবর্তনের নিয়ম ও প্রতিকারের শর্ত লিখিত রাখুন।\n\n#AbasonPlus #আবাসন #RealEstateBangladesh #নির্মাণ #BuildingMaterials #ConstructionTips",
+  "first_comment": "ফ্ল্যাটটি অনুমোদিত নকশা মেনেই তৈরি?\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/",
+  "settings": {
+    "privacy_level": "PUBLIC_TO_EVERYONE",
+    "allow_comment": true,
+    "allow_duet": true,
+    "allow_stitch": true,
+    "video_made_with_ai": true,
+    "commercialContentType": "none",
+    "video_cover_timestamp_ms": 0
+  },
+  "preview_library_file_id": "libfile_48d29f915f188191be89d8ccb4d17cd9",
+  "artifact_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/runs/39520963248/artifacts/12310768754",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "codec": "H264",
+    "audio": "AAC",
+    "duration_seconds": 15,
+    "slides": 5,
+    "slide_seconds": 3
+  },
+  "prepared_at": "2026-10-21T05:13:45.593619+02:00",
+  "creator_options_verified": true,
+  "creator_options_execution_id": "e970144295f34aa29b6db9d3aa1c6ff3",
+  "creator_can_post_more": true,
+  "creator_supported_privacy_levels": [
+    "PUBLIC_TO_EVERYONE"
+  ],
+  "creator_supported_interactions": {
+    "allow_comment": true,
+    "allow_duet": true,
+    "allow_stitch": true
+  },
+  "creator_supported_commercial_content_types": [
+    "none",
+    "brand_organic",
+    "brand_content"
+  ],
+  "content_preview_confirmed": false,
+  "express_consent_given": false,
+  "posting_enabled": false,
+  "future_consent": false,
+  "approval_scope": "Owner has not yet seen this exact preview/caption/comment/settings in this handoff. A later OK cannot override a visual QA hold. Any changed media needs a fresh preview and exact consent.",
+  "qa": {
+    "artifact_machine_qa_passed": true,
+    "actual_mp4_hash_verified": true,
+    "caption_hash_verified": true,
+    "contact_sheet_reviewed": true,
+    "real_device_review": false,
+    "logo_bottom_right_ui_risk": true,
+    "dense_text_three_second_readability_not_guaranteed": true,
+    "visual_hold": "Slide 3's text instructs comparing stairs, open space, parking and shared facilities, but its stock photo only shows a fire hose reel/extinguisher. Exact text-to-scene matching is not met. Do not publish this preview or treat owner OK as bypassing QA; obtain an authorized corrected render and fresh preview."
+  },
+  "soundtrack": "assets/abasonplus.mp3",
+  "rights_basis": "Previously owner-confirmed soundtrack; Pexels credits retained in exact artifact. No claim of independent music clearance.",
+  "delivery_attempted": false
+}
