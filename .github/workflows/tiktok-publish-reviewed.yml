@@ -2,15 +2,15 @@ name: AbasonPlus TikTok – Publish One Reviewed Video
 on:
   workflow_dispatch:
     inputs:
-      # These defaults mirror the ALREADY SAVED exact owner OK for 20 October.
+      # These defaults mirror the ALREADY SAVED exact owner OK for 21 October.
       # Defaults do not grant consent: the dated approval, hashes, source run,
       # owner actor, settings, current-day QA and Make reservation remain mandatory.
       # A later day's post requires its own separate exact-video approval record.
       preview_run_id:
-        description: 'অনুমোদিত ভিডিওর run ID: ২০ অক্টোবর ২০২৬'
+        description: 'অনুমোদিত ভিডিওর run ID: ২১ অক্টোবর ২০২৬'
         required: true
         type: string
-        default: '39347549614'
+        default: '39537990870'
       preview_confirmed:
         description: 'এই নির্দিষ্ট ভিডিও দেখার সংরক্ষিত অনুমোদন'
         required: true
