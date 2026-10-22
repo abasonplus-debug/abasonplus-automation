@@ -2,7 +2,7 @@ name: CosyVoice3 Daily Slide Narration Integration QA (NO POSTS)
 on:
   push:
     branches: [feature/cosyvoice3-dan-mason-daily-voiceover]
-    paths: ['.github/workflows/cosyvoice3-daily-qa.yml']
+    paths: ['.github/workflows/cosyvoice3-daily-qa.yml', 'scripts/cosyvoice3_daily_voiceover.py', 'tests/test_cosyvoice3_daily_voiceover.py']
   workflow_dispatch:
 permissions:
   contents: read
