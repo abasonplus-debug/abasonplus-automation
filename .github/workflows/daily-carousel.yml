@@ -59,7 +59,7 @@ jobs:
     needs: [source, schedule-gate]
     if: ${{ needs.source.outputs.ready == 'true' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 55
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v7
       - name: Install free local rendering/photograph QA tools
@@ -85,7 +85,7 @@ jobs:
           ABASONPLUS_MODEL_CACHE: .cache/fastembed
         run: python3 scripts/create_carousel.py
       - name: Generate full slide-by-slide Bengali voice with selected CosyVoice3 Deep Male (fail closed)
-        timeout-minutes: 35
+        timeout-minutes: 150
         run: python3 scripts/cosyvoice3_daily_voiceover.py
       - name: Verify dimensions, exact narrated text, and visual layout before ANY publication
         run: |
@@ -164,7 +164,9 @@ jobs:
           VIDEO_BYTES="$(wc -c < output/abasonplus_daily.mp4)"
           THUMB_BYTES="$(wc -c < output/thumbnail_upload.jpg)"
           if [ "$((VIDEO_BYTES + THUMB_BYTES + 75000))" -gt 5000000 ]; then
-            echo "::error::Video, thumbnail and form fields exceed Make free 5 MB webhook limit; NO POSTS"
+            echo "## Voiceover video rendered in full, but delivery stopped safely" >> "$GITHUB_STEP_SUMMARY"
+            echo "The script-length MP4 is stored as an Actions artifact. The current Make FREE webhook cannot take this payload. Nothing paid or trial was used; nothing posted." >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::Free Make 5MB payload limit reached. Full narrated video is preserved as artifact. NO POSTS and NO PAID SERVICES."
             exit 1
           fi
           VIDEO_SHA256="$(sha256sum output/abasonplus_daily.mp4 | cut -d ' ' -f1)"
