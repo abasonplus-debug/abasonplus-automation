@@ -57,6 +57,8 @@ require(len(video)==1 and video[0].get("codec_name")=="h264" and
         "not a 1080x1920 H264 TikTok video")
 require(len(audio)>0 and audio[0].get("codec_name")=="aac","missing audio track")
 validate_timing(info, float(probe["format"]["duration"]))
+from narration import verify as verify_narration
+verify_narration(info,story,OUT)
 hook=re.sub(r"\s+"," ",str(story.get("hook",""))).strip()
 require(12<=len(hook)<=110,"no readable catchy hook")
 tips=[re.sub(r"\s+"," ",x.get("text","")).strip() for x in story["tips"]]
@@ -76,7 +78,7 @@ status={
  "verification":"machine_qa_passed_not_human_approved",
  "video_sha256":hashlib.sha256(VIDEO.read_bytes()).hexdigest(),
  "caption_sha256":hashlib.sha256(caption.encode("utf-8")).hexdigest(),
- "format":{"width":1080,"height":1920,"fps":30,"codec":"H264","audio":"AAC","duration_seconds":round(float(probe["format"]["duration"]),2)},
+ "format":{"width":1080,"height":1920,"fps":30,"codec":"H264","audio":"AAC","timing_mode":info["timing_mode"],"slides":info["slides"],"slide_durations":info["slide_durations"],"narration_sha256":info["narration"]["sha256"],"duration_seconds":round(float(probe["format"]["duration"]),2)},
  "no_extra_watermark":True,"soundtrack":"assets/abasonplus.mp3",
  "license_and_music_rights_must_be_held_by_owner":True,
  "tiktok_oauth_connected":None,
