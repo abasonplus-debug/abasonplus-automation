@@ -54,7 +54,7 @@ def validate_receipt(receipt, platform, day):
         if isinstance(body.get('data'),dict):body=body['data']
         rows=body.get('posts',body.get('data'))
         require(isinstance(rows,list),'Instagram native posts unavailable')
-        times=[r.get('timestamp') or r.get('created_time') or r.get('publishedAt') or r.get('createdAt') for r in rows]
+        times=[r.get('timestamp') or r.get('created_time') or r.get('publishedAt') or r.get('createdAt') or r.get('createdTime') for r in rows]
     require(isinstance(rows,list) and bool(rows),'Empty native feed cannot prove lookup complete')
     require(all(isinstance(t,str) for t in times),'Native publication timestamp unavailable')
     localdates=[stamp(t).astimezone(ZoneInfo('Europe/Berlin')).date().isoformat() for t in times]
