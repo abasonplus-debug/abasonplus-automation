@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "display_name": "AbasonPlus Deep Male News Voice — Sample 2",
+  "status": "owner_selected_for_daily_voiceover",
+  "engine": "CosyVoice3",
+  "provider_demo": "kawshikbuet17/bengali-cosyvoice3-tts-demo",
+  "reference_voice": "Dan Mason",
+  "reference_source_url": "https://raw.githubusercontent.com/CoisLR/TTS-Reference-Voices/main/voices/dan_mason.flac",
+  "reference_license": "CC0",
+  "language": "bn-BD",
+  "speaking_style": "mature deep male, clear standard Bengali news presenter",
+  "production_enabled": true,
+  "free_only": true,
+  "paid_or_trial_services_allowed": false,
+  "fallback_to_unvoiced_video": false,
+  "source": "https://github.com/CoisLR/TTS-Reference-Voices",
+  "note": "Source demo is free, public and unauthenticated but has no availability guarantee. Fail with no publication on any voice failure."
+}
