@@ -80,3 +80,39 @@ Source selection errors now fail the daily workflow before rendering; green succ
 Read audits/tiktok-approvals/YYYY-MM-DD.json and audits/tiktok-publications/YYYY-MM-DD.json before diagnosing missing consent. scripts/tiktok_approval.py validates exact date, account, hash and settings. Preview false flags describe the pre-approval state and do not override a later matching real owner OK. Future approvals must include caption_sha256 and preview_run_id; changing media, caption or settings invalidates approval. Never infer consent for another date/video.
 
 For first brand comments, after verified current-day publication read GET /inbox/comments/<native-id>?accountId=<fixed-id>. Require status success, matching meta account/post and no matching own comment; if pagination hasMore=true finish checking before writing. Then use bounded kind publish_first_comment once, verify returned ID and own-comment readback, and save evidence. Preserve reservations after ambiguous errors; no blind retries, no DMs or other people's replies. Schedule/audit or the interactive TikTok OK handler performs this once; do not claim comments are instant.
+
+## 22 October reliability correction
+
+The actual 22 October incident was a readable-headline-area failure, not HTTP
+403. The scheduled run started and stopped before every delivery step.
+
+`photo_preflight.py` tests the same exact text/font bounds and each verified photo
+before release, without composing a slide, generating MP4 or calling Make. The
+preflight runs on a daily editorial push and targets 01:15 Berlin. This is photo
+and layout QA only, not completed-media QA. The scheduled release still performs
+all existing final video, audio, source, license, date and duplicate checks.
+
+Recovery is bounded: try seven natural crop positions; require the resulting
+crop itself to pass subject and unchanged readability checks. Up to two optional
+`alternatives` per photograph must have independently researched HTTPS Pexels
+source/creator/license/scene and explicit scene_match. No web search, invented
+attribution or unrelated substitute is used. Exact copy, fonts, logo, duration
+and TikTok consent are unchanged. No alternatives are invented or backfilled
+into already-published editorials by this installation.
+
+Photo GET retries apply only to network errors, 408/429/5xx: three attempts with
+1s/2s backoff. Permanent 403, unsafe redirect, missing license and failed quality
+checks cannot be approved by retry. Exhausted candidates hold release with a
+sanitized per-slide diagnostic artifact. No delivery/send retry was added.
+The Make reservation remains authoritative after transfer or uncertainty.
+
+The existing watchdog observes preflight completion and creates/updates the same
+per-day GitHub issue, including failures before 02:00. Optional Telegram still
+requires TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID; missing credentials mean no
+Telegram delivery. Never claim message delivery based on issue creation.
+
+Remaining limitations: preflight schedules can be late, semantic matching is
+heuristic, final MP4 QA may fail, no platform-specific resend route is installed
+by this change, and no future TikTok approval is inferred. Photo repair cannot
+promise publication when every researched candidate is unsuitable. The owner
+must see exact-video preview/caption/comment/settings and approve each TikTok.
