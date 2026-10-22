@@ -4,7 +4,7 @@ on:
     branches: [main]
     paths: ['content/daily_editorial_*.json']
   schedule:
-    - cron: '15 1 * * *'
+    - cron: '45 0 * * *'
       timezone: Europe/Berlin
   workflow_dispatch:
 permissions:
