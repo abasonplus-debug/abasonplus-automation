@@ -105,6 +105,8 @@ required(len(v)==1 and v[0].get("codec_name")=="h264" and
 required(len(a)>=1 and a[0].get("codec_name")=="aac","original background music missing")
 duration=float(probe["format"]["duration"])
 validate_timing(report,duration)
+from narration import verify as verify_narration
+verify_narration(report,brief,OUT)
 required((ROOT/"assets"/"abasonplus.mp3").is_file(),"original music asset missing")
 expected_caption=(OUT/"caption.txt").read_text(encoding="utf-8")
 expected_description=(OUT/"description.txt").read_text(encoding="utf-8")
