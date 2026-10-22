@@ -45,7 +45,6 @@
     "commercialContentType": "none",
     "video_cover_timestamp_ms": 0
   },
-  "creator_options_checked_at": "2026-10-22T06:28:00Z",
   "creator_options": {
     "nickname": "আবাসন প্লাস",
     "canPostMore": true,
@@ -103,5 +102,11 @@
   "content_preview_confirmed": false,
   "express_consent_given": false,
   "posting_enabled": false,
-  "note": "Exact completed video handed over in the linked main conversation. Pending owner review; not approval. Any media/caption/settings change invalidates a later OK."
+  "note": "Exact completed video handed over in the linked main conversation. Pending owner review; not approval. Any media/caption/settings change invalidates a later OK.",
+  "creator_options_checked_on": "2026-10-22",
+  "creator_options_source": {
+    "scenario_id": 8007397,
+    "execution_id": "397f35c0afd44ef4a796078021325fb3",
+    "path": "/accounts/6ad22ddb280aa6cf7d25310d/tiktok/creator-info"
+  }
 }
