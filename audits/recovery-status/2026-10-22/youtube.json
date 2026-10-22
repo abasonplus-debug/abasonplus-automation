@@ -1,0 +1,146 @@
+{
+  "observed_at": "2026-10-22T07:26:50.068Z",
+  "lookup_scope": "latest_native_entry_in_descending_date_feed",
+  "source_reference": {
+    "scenario_id": 7968544,
+    "execution_id": "4e1b6e426c3e437dab334ab1498d35ac",
+    "cycle": 1,
+    "reservation_module": 49,
+    "native_feed_module": 52
+  },
+  "receipt": {
+    "schema": 1,
+    "platform": "youtube",
+    "identity": "UCKA_4RYtC2ktoclxzWCI1Lg",
+    "date": "2026-10-22",
+    "reserved": false,
+    "data": {
+      "pageInfo": {
+        "totalResults": 12,
+        "resultsPerPage": 12
+      },
+      "items": [
+        {
+          "id": {
+            "videoId": "8GBEZ3IVB94"
+          },
+          "snippet": {
+            "publishedAt": "2026-10-21T00:24:37Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "ফ্ল্যাটটি অনুমোদিত নকশা মেনেই তৈরি? | AbasonPlus"
+          }
+        },
+        {
+          "id": {
+            "videoId": "7-Nbsl948d8"
+          },
+          "snippet": {
+            "publishedAt": "2026-10-20T00:27:13Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "রংপুরে ভবন তুলবেন? আগে অনুমোদন! | AbasonPlus"
+          }
+        },
+        {
+          "id": {
+            "videoId": "JQKQ8S83_bI"
+          },
+          "snippet": {
+            "publishedAt": "2026-10-19T00:48:27Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "২০ মিলিয়ন ইউরোর Eco-Build—নির্মাণখাতে কী বদলাতে পারে? | AbasonPlus"
+          }
+        },
+        {
+          "id": {
+            "videoId": "5TRc24LH48w"
+          },
+          "snippet": {
+            "publishedAt": "2026-10-18T07:40:22Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "কর্ণফুলী টানেল নিয়ে তদন্ত—এখন কী যাচাই হবে? | AbasonPlus"
+          }
+        },
+        {
+          "id": {
+            "videoId": "oyeBE_FwFhs"
+          },
+          "snippet": {
+            "publishedAt": "2026-10-17T11:47:14Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "একই দাগে খাস জমি? আগে ৪টি দেখুন | AbasonPlus #Shorts"
+          }
+        },
+        {
+          "id": {
+            "videoId": "T6JMmRkw1nc"
+          },
+          "snippet": {
+            "publishedAt": "2026-01-03T02:31:41Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "২০২৬ সালের নতুন নিয়মে ই-নামজারি করার সহজ পদ্ধতি | Abason+ নিউজ #bangladesh #banglanews #abasonplus"
+          }
+        },
+        {
+          "id": {
+            "videoId": "hme0f_QrcDo"
+          },
+          "snippet": {
+            "publishedAt": "2025-12-31T12:44:00Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "এখন থেকে জালিয়াতি রুখতে আসছে ব্লকচেইন প্রযুক্তি!সম্পদ সুরক্ষিত রাখতে ডিজিটাল আপডেটগুলো জেনে নিন।"
+          }
+        },
+        {
+          "id": {
+            "videoId": "ZcfCzxobaz0"
+          },
+          "snippet": {
+            "publishedAt": "2025-12-31T12:43:27Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "এখন থেকে জালিয়াতি রুখতে আসছে ব্লকচেইন প্রযুক্তি!সম্পদ সুরক্ষিত রাখতে ডিজিটাল আপডেটগুলো জেনে নিন।"
+          }
+        },
+        {
+          "id": {
+            "videoId": "RuixIVLHA-0"
+          },
+          "snippet": {
+            "publishedAt": "2025-12-31T12:42:48Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "এখন থেকে জালিয়াতি রুখতে আসছে ব্লকচেইন প্রযুক্তি!সম্পদ সুরক্ষিত রাখতে ডিজিটাল আপডেটগুলো জেনে নিন।"
+          }
+        },
+        {
+          "id": {
+            "videoId": "MEVTmhJFqzQ"
+          },
+          "snippet": {
+            "publishedAt": "2025-12-31T12:44:47Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "আবাসন+"
+          }
+        },
+        {
+          "id": {
+            "videoId": "ceS1ogR5dQQ"
+          },
+          "snippet": {
+            "publishedAt": "2025-10-26T22:45:55Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "26 October 2025"
+          }
+        },
+        {
+          "id": {
+            "videoId": "CAGf2ML1nWQ"
+          },
+          "snippet": {
+            "publishedAt": "2025-10-26T21:30:03Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "26 October 2025"
+          }
+        }
+      ]
+    }
+  }
+}
