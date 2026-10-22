@@ -57,6 +57,8 @@ require(len(video)==1 and video[0].get("codec_name")=="h264" and
         "not a 1080x1920 H264 TikTok video")
 require(len(audio)>0 and audio[0].get("codec_name")=="aac","missing audio track")
 validate_timing(info, float(probe["format"]["duration"]))
+from cosyvoice3_daily_voiceover import verify_voiceover
+verify_voiceover(OUT,story,info)
 hook=re.sub(r"\s+"," ",str(story.get("hook",""))).strip()
 require(12<=len(hook)<=110,"no readable catchy hook")
 tips=[re.sub(r"\s+"," ",x.get("text","")).strip() for x in story["tips"]]
@@ -77,7 +79,7 @@ status={
  "video_sha256":hashlib.sha256(VIDEO.read_bytes()).hexdigest(),
  "caption_sha256":hashlib.sha256(caption.encode("utf-8")).hexdigest(),
  "format":{"width":1080,"height":1920,"fps":30,"codec":"H264","audio":"AAC","duration_seconds":round(float(probe["format"]["duration"]),2)},
- "no_extra_watermark":True,"soundtrack":"assets/abasonplus.mp3",
+ "no_extra_watermark":True,"soundtrack":"owner_music_mixed_under_cosyvoice3_deep_male",
  "license_and_music_rights_must_be_held_by_owner":True,
  "tiktok_oauth_connected":None,
  "recipient_account_verified":None,
