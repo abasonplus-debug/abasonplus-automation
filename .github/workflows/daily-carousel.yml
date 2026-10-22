@@ -59,7 +59,7 @@ jobs:
     needs: [source, schedule-gate]
     if: ${{ needs.source.outputs.ready == 'true' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v7
       - name: Install free local rendering/photograph QA tools
@@ -84,7 +84,10 @@ jobs:
           ABASONPLUS_DAILY_STORY: output/daily_research_story.json
           ABASONPLUS_MODEL_CACHE: .cache/fastembed
         run: python3 scripts/create_carousel.py
-      - name: Verify dimensions, original audio and visual layout before ANY publication
+      - name: Generate full slide-by-slide Bengali voice with selected CosyVoice3 Deep Male (fail closed)
+        timeout-minutes: 35
+        run: python3 scripts/cosyvoice3_daily_voiceover.py
+      - name: Verify dimensions, exact narrated text, and visual layout before ANY publication
         run: |
           python3 - <<'PY'
           from PIL import Image
@@ -113,8 +116,12 @@ jobs:
           assert any(s['codec_type']=='audio' and s['codec_name']=='aac' for s in vid['streams'])
           from scripts.carousel_timing import validate_timing
           validate_timing(meta, float(vid['format']['duration']))
+          import sys
+          sys.path.insert(0, str(pathlib.Path('scripts').resolve()))
+          from cosyvoice3_daily_voiceover import verify_voiceover
+          verify_voiceover(out, news, meta)
           assert len((out/'image_credits.txt').read_text(encoding='utf-8').strip().splitlines())==meta['slides']
-          print('AUTO VIDEO QA PASS: original licensed photos, independent 9:16 slides, exactly 3 seconds per slide, real soundtrack.')
+          print('AUTO VIDEO QA PASS: original licensed photos, 9:16 slides, exact-source Dan Mason CosyVoice3 narration, aligned timing, owner's original background music.')
           PY
       - name: Approve release ONLY after separate real-photo and metadata QA
         run: python3 scripts/verify_video_release.py
@@ -130,6 +137,8 @@ jobs:
             output/thumbnail.png
             output/thumbnail_upload.jpg
             output/metadata.json
+            output/voiceover_manifest.json
+            output/cosyvoice3_narration.wav
             output/daily_research_story.json
             output/mobile_qa_contact_sheet.jpg
             output/mobile_qa_notes.json
@@ -153,8 +162,9 @@ jobs:
           test -n "$MAKE_WEBHOOK_URL" || { echo 'Missing Make webhook; no publication'; exit 1; }
           test -f output/video_qa_passed.txt || { echo 'No automatic photo quality approval; no publication'; exit 1; }
           VIDEO_BYTES="$(wc -c < output/abasonplus_daily.mp4)"
-          if [ "$VIDEO_BYTES" -gt 5000000 ]; then
-            echo "::error::Video exceeds Make free 5 MB webhook limit: ${VIDEO_BYTES} bytes; NO POSTS"
+          THUMB_BYTES="$(wc -c < output/thumbnail_upload.jpg)"
+          if [ "$((VIDEO_BYTES + THUMB_BYTES + 75000))" -gt 5000000 ]; then
+            echo "::error::Video, thumbnail and form fields exceed Make free 5 MB webhook limit; NO POSTS"
             exit 1
           fi
           VIDEO_SHA256="$(sha256sum output/abasonplus_daily.mp4 | cut -d ' ' -f1)"
