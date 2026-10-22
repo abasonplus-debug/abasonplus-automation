@@ -102,13 +102,13 @@ def main():
     bn = next(p for p in fonts.rglob('*.ttf') if 'Bengali' in p.name and 'Bold' in p.name)
     latin = next(fonts.rglob('NotoSans-Bold.ttf'))
     tokens = BilingualText(bn, latin).tokens
-    guard = PhotoRelevanceGuard()
     texts = [story['hook']] + [p['text'] for p in story['tips']]
     queries = [story['cover_query']] + [p['query'] for p in story['tips']]
     report = {'status': 'running', 'no_posts': True, 'slides': []}
     output = root/'output/photo_preflight.json'
     used = set()
     try:
+        guard = PhotoRelevanceGuard()
         for i, (text, query, photo) in enumerate(zip(texts, queries, story['photos'], strict=True)):
             font = ImageFont.truetype(str(bn), POLICY['hook_font_px'] if i == 0 else POLICY['body_font_px'])
             _, boxes = paint(layout(text, font, tokens), tokens)
