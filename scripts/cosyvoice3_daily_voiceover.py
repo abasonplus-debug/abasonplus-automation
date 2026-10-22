@@ -15,9 +15,7 @@ from zoneinfo import ZoneInfo
 import json
 import math
 import os
-import shutil
 import subprocess
-import sys
 import wave
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,7 +27,6 @@ MODEL_ENDPOINT = "/generate_cross_lingual_audio"
 SAMPLE_RATE = 24000
 MIN_SLIDE_SECONDS = 3
 MAX_VIDEO_SECONDS = 50
-TTS_TIMEOUT_SECONDS = 220
 
 def check(condition: bool, message: str) -> None:
     if not condition:
@@ -94,7 +91,7 @@ def validate_segment(path: Path) -> float:
         check(f.getnchannels() == 1 and f.getsampwidth() == 2 and
               f.getframerate() == SAMPLE_RATE, "speech is not PCM16/mono/24k")
         duration = f.getnframes() / SAMPLE_RATE
-        check(0.55 <= duration <= 45, "speech missing or implausibly long")
+        check(0.55 <= duration <= MAX_VIDEO_SECONDS + .1, "speech missing or implausibly long")
         frames = f.readframes(f.getnframes())
     samples = array("h")
     samples.frombytes(frames)
