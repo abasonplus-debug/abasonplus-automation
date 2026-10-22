@@ -109,6 +109,16 @@
           "scene_match": "The verified wetland landscape is an alternative for the waterbody and zoning slide.",
           "page_verified_on": "2026-10-23",
           "verification": "Source page, creator, free-use label and direct photograph inspected; exact final crop/readability remains a pipeline QA requirement."
+        }, {
+          "url": "https://images.pexels.com/photos/29885986/pexels-photo-29885986.jpeg?cs=srgb&dl=pexels-catalin-todosia-876894548-29885986.jpg&fm=jpg",
+          "source_page": "https://www.pexels.com/photo/scenic-wetlands-with-vibrant-vegetation-and-water-29885986/",
+          "creator": "Cătălin Todosia",
+          "license": "Pexels Free License",
+          "license_source": "https://www.pexels.com/license/",
+          "scene": "A wide wetland landscape has reflective water, low vegetation and a large bright blue sky.",
+          "scene_match": "The verified open-sky wetland scene supplies a restrained alternative with a less cluttered text region.",
+          "page_verified_on": "2026-10-23",
+          "verification": "Source page, creator, free-use label and exact direct photograph inspected; automated crop and text-region QA must still pass before delivery."
         }]
       },
       {
@@ -149,8 +159,8 @@
     "previous_accessible_days_checked": 7,
     "repetition_check": "No matching headline, subject or canonical source URL was found in the seven accessible daily editorials from 2026-10-16 through 2026-10-22; older requested daily paths were unavailable.",
     "photo_count": 5,
-    "alternative_photo_count": 5,
-    "photo_note": "All ten image identities are distinct and their Pexels pages/direct targets were inspected. They are illustrative stock photographs, not evidence of specific Bangladesh sites. Final natural 9:16 crop, exact text-region readability, logo safety and render QA must still pass before delivery.",
+    "alternative_photo_count": 6,
+    "photo_note": "All eleven image identities are distinct and their Pexels pages/direct targets were inspected. They are illustrative stock photographs, not evidence of specific Bangladesh sites. Final natural 9:16 crop, exact text-region readability, logo safety and render QA must still pass before delivery.",
     "publication_authorized": false
   }
 }
