@@ -62,6 +62,16 @@ class PhotoRecovery(unittest.TestCase):
         with self.assertRaises(RuntimeError):download(photo()['url'],opener,waits.append)
         self.assertEqual(len(calls),3);self.assertEqual(waits,[1,2])
 
+    def test_onnx_telemetry_disabled_before_model_initialization(self):
+        import ast
+        root=Path(__file__).resolve().parents[1]
+        tree=ast.parse((root/'scripts/photo_relevance.py').read_text())
+        init=next(n for n in ast.walk(tree) if isinstance(n,ast.FunctionDef) and n.name=='__init__')
+        calls=[n for n in ast.walk(init) if isinstance(n,ast.Call)]
+        disable=next(n.lineno for n in calls if isinstance(n.func,ast.Attribute) and n.func.attr=='disable_telemetry_events')
+        embeddings=[n.lineno for n in calls if isinstance(n.func,ast.Name) and n.func.id in ('ImageEmbedding','TextEmbedding')]
+        self.assertTrue(all(disable<n for n in embeddings))
+
     def test_preflight_cannot_publish(self):
         s=(Path(__file__).resolve().parents[1]/'.github/workflows/editorial-photo-preflight.yml').read_text()
         self.assertNotIn('secrets.',s);self.assertNotIn('create_carousel.py',s)
