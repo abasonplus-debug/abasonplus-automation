@@ -16,6 +16,21 @@ def validate_reviewed_timing(meta, duration, approval, source_run, source_policy
     if (created.tzinfo is None
             or created.astimezone(ZoneInfo("Europe/Berlin")).date().isoformat() != approval["date"]):
         raise ValueError("Reviewed timing: source run is not from the approved Berlin date")
+    voice = meta.get('voiceover')
+    if isinstance(voice, dict) and voice.get('complete') is True:
+        # The immutable render-time source must actually support CosyVoice3 timing.
+        constants = {n.value for n in ast.walk(ast.parse(source_policy)) if isinstance(n, ast.Constant) and isinstance(n.value,str)}
+        if 'CosyVoice3' not in constants:
+            raise ValueError('Source policy did not support narrated video')
+        expected = approval.get('format', {})
+        if (expected.get('voiceover') != voice or expected.get('slide_durations') != meta.get('slide_durations')
+                or expected.get('slides') != meta.get('slides')):
+            raise ValueError('Exact narrated timing/voice differs from owner approval')
+        try:
+            from .carousel_timing import validate_timing
+        except ImportError:
+            from carousel_timing import validate_timing
+        return validate_timing(meta, duration)
     values = [node.value.value for node in ast.parse(source_policy).body
               if isinstance(node, ast.Assign) and isinstance(node.value, ast.Constant)
               and any(isinstance(t, ast.Name) and t.id == "SLIDE_SECONDS" for t in node.targets)]

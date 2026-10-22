@@ -137,6 +137,7 @@ jobs:
             output/thumbnail.png
             output/thumbnail_upload.jpg
             output/metadata.json
+            output/narration_segments/slide_*.wav
             output/voiceover_manifest.json
             output/cosyvoice3_narration.wav
             output/daily_research_story.json
@@ -151,6 +152,16 @@ jobs:
             output/first_comment_json.txt
             output/engagement_pack.json
             output/tiktok_preview.json
+          retention-days: 7
+      - name: Preserve failure diagnostics (NO POSTS)
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: abasonplus-failure-diagnostics
+          path: |
+            output/daily_research_story.json
+            output/photo_preflight.json
+          if-no-files-found: warn
           retention-days: 7
       - name: Send ONE daily validated Reel and Short to Make on automatic schedule ONLY
         if: ${{ github.event_name == 'schedule' }}

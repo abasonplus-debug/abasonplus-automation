@@ -80,3 +80,29 @@ Source selection errors now fail the daily workflow before rendering; green succ
 Read audits/tiktok-approvals/YYYY-MM-DD.json and audits/tiktok-publications/YYYY-MM-DD.json before diagnosing missing consent. scripts/tiktok_approval.py validates exact date, account, hash and settings. Preview false flags describe the pre-approval state and do not override a later matching real owner OK. Future approvals must include caption_sha256 and preview_run_id; changing media, caption or settings invalidates approval. Never infer consent for another date/video.
 
 For first brand comments, after verified current-day publication read GET /inbox/comments/<native-id>?accountId=<fixed-id>. Require status success, matching meta account/post and no matching own comment; if pagination hasMore=true finish checking before writing. Then use bounded kind publish_first_comment once, verify returned ID and own-comment readback, and save evidence. Preserve reservations after ambiguous errors; no blind retries, no DMs or other people's replies. Schedule/audit or the interactive TikTok OK handler performs this once; do not claim comments are instant.
+
+
+## 22 October photo recovery and voice integration
+New primary render attempts use bounded natural crop repair with unchanged
+readability thresholds and semantic checks of the resulting crop. Up to two
+optional alternatives per slide require independently verified Pexels source,
+creator, license, scene and topic match. No fabricated or arbitrary substitute.
+Photo GET retries are restricted to transient network/408/429/5xx errors, three
+attempts with 1s/2s backoff. Permanent 403 is not repeatedly requested. Exhausted
+candidates hold release and archive sanitized diagnostics. No send retry or
+reservation removal is introduced.
+
+Editorial pushes and 01:15 Berlin run photo/layout preflight without composing
+slides, synthesizing voice or generating MP4. The existing watchdog includes
+preflight failures before 02:00 and upserts the existing daily issue. Telegram
+still needs TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID; actual delivery remains
+unverified until configured. Preflight is not a substitute for final media QA.
+
+Preserve the newly installed CosyVoice3 Dan Mason owner-selected voice, full
+slide script, narration at 100%, original music at 20%, and measured speech-aligned
+duration. No fixed 15/50-second cap applies to new voiced media. The public free
+TTS demo has no uptime guarantee; synthesis failure must hold and alert rather
+than silently publishing unvoiced media or switching voice. The Make total 5 MB
+payload gate remains. Historical media/approvals are unchanged, and a changed
+video/voice requires a new exact TikTok preview/OK. No platform-specific resend
+route or guaranteed publication is supplied by this correction.

@@ -132,6 +132,18 @@ def main():
         runs = api.runs(workflow, now.date())
         jobs = {int(run['id']): api.jobs(run['id']) for run in runs}
         findings.append(classify(workflow, runs, jobs, now))
+    # Preflight failures need visibility before the 02:00 release boundary.
+    start, end = __import__('schedule_guard').day_window(now.date())
+    preview_runs = api.collection('/actions/workflows/editorial-photo-preflight.yml/runs',
+                                  'workflow_runs', {'created': start.isoformat()+'..'+end.isoformat()})
+    preview_runs = [r for r in preview_runs if start <= stamp(r['created_at']) < end]
+    if preview_runs:
+        latest = max(preview_runs, key=lambda r: int(r['id']))
+        failed = latest.get('status') == 'completed' and latest.get('conclusion') in ('failure', 'timed_out', 'cancelled')
+        findings.append({'workflow': 'editorial-photo-preflight.yml',
+                         'status': 'preflight_held_before_release' if failed else 'preflight_'+latest['status'],
+                         'alert': failed, 'run_ids': [int(latest['id'])],
+                         'platform_publication': 'unverified'})
     alerts = [i for i in findings if i['alert']]
     summary = {'checked_at': now.isoformat(), 'date': now.date().isoformat(),
                'dry_run': dry_run, 'workflow_evidence': findings, 'no_publication_performed': True,
