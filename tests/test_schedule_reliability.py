@@ -142,9 +142,9 @@ class WatchdogTests(unittest.TestCase):
     workflow = 'daily-carousel.yml'
 
     def test_absent_trigger_not_called_failure_before_due_or_during_grace(self):
-        for at in ('2026-10-21T00:59:00+02:00', '2026-10-21T02:20:00+02:00'):
+        for at in ('2026-10-21T00:59:00+02:00', '2026-10-21T01:20:00+02:00'):
             self.assertFalse(classify(self.workflow, [], {}, now(at))['alert'])
-        result = classify(self.workflow, [], {}, now('2026-10-21T03:07:00+02:00'))
+        result = classify(self.workflow, [], {}, now('2026-10-21T02:07:00+02:00'))
         self.assertTrue(result['alert'])
         self.assertEqual(result['status'], 'missing_trigger')
 
