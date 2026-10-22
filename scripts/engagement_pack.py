@@ -6,16 +6,16 @@ def hashtag_tokens(text):
     return set(unicodedata.normalize('NFC',s.rstrip('.,;:!?।')).casefold() for s in re.findall(r'(?<!\S)#[^\s#]+',text))
 
 def hashtags_for(topic):
-    tags=['#AbasonPlus','#আবাসন','#RealEstateBangladesh']
     topic=unicodedata.normalize('NFC',str(topic)).casefold()
-    if any(x in topic for x in ('টানেল','সেতু','মেট্রো','সড়ক','সড়ক','মহাসড়ক','মহাসড়ক','অবকাঠামো','tunnel','bridge','infrastructure')):tags+=['#অবকাঠামো','#সরকারিপ্রকল্প','#Infrastructure']
-    elif any(x in topic for x in ('আইন','দলিল','খতিয়ান','খতিয়ান','law','deed')):tags+=['#ভূমিআইন','#জমিরদলিল','#LandRecords']
-    elif 'জমি' in topic or 'land' in topic:tags+=['#জমি','#জমিকেনা','#PropertyTips']
-    elif any(x in topic for x in ('নির্মাণ','সিমেন্ট','রড','ইট')):tags+=['#নির্মাণ','#BuildingMaterials','#ConstructionTips']
-    elif any(x in topic for x in ('ফ্ল্যাট','বাড়ি','বাড়ি','বাড়ী','বাড়ী','apartment','homebuying')):tags+=['#ফ্ল্যাট','#HomeBuying','#PropertyTips']
-    elif any(x in topic for x in ('প্রকল্প','সরকারি','government','project')):tags+=['#সরকারিপ্রকল্প','#জনসচেতনতা','#বাংলাদেশ']
-    else:tags+=['#বাংলাদেশ','#জনসচেতনতা','#BangladeshUpdates']
-    return tags
+    if any(x in topic for x in ('জলাধার','কৃষিজমি')): specific=['#কৃষিজমি','#নির্মাণঅনুমতি']
+    elif any(x in topic for x in ('টানেল','সেতু','মেট্রো','সড়ক','সড়ক','অবকাঠামো','bridge','tunnel')): specific=['#অবকাঠামো','#সরকারিপ্রকল্প']
+    elif any(x in topic for x in ('আইন','দলিল','খতিয়ান','খতিয়ান','law','deed')): specific=['#ভূমিআইন','#জমিরদলিল']
+    elif 'জমি' in topic or 'land' in topic: specific=['#জমি','#জমিকেনা']
+    elif any(x in topic for x in ('নির্মাণ','সিমেন্ট','রড','ইট')): specific=['#নির্মাণ','#নির্মাণসামগ্রী']
+    elif any(x in topic for x in ('ফ্ল্যাট','বাড়ি','বাড়ি','home')): specific=['#ফ্ল্যাট','#বাড়ি']
+    else: specific=['#জনসচেতনতা','#গুরুত্বপূর্ণতথ্য']
+    # Owner-selected broad audience tags; no measured popularity/reach claim.
+    return specific+['#Bangladesh','#বাংলাদেশ','#Bangla']
 
 def first_comment(hook):
     return f'{hook}\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/'
