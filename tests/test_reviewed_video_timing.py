@@ -59,3 +59,13 @@ class ReviewedTimingTests(unittest.TestCase):
                        "SLIDE_SECONDS=unknown", "SLIDE_SECONDS=True"):
             self.policy = policy
             with self.subTest(policy=policy), self.assertRaises(ValueError): self.check()
+
+    def test_exact_narrated_video_and_changed_voice_consent(self):
+        self.policy = "TIMING_MODE='narration_v1'\nSLIDE_SECONDS=None\n"
+        self.meta = dict(slides=5, slide_seconds=None, timing_mode='narration_v1',
+                         slide_durations=[12]*5, narration=dict(engine='espeak-ng-bn',sha256='b'*64,segment_seconds=[11.6]*5))
+        self.approval['format'] = dict(timing_mode='narration_v1', slides=5,
+                                      slide_durations=[12]*5,narration_sha256='b'*64)
+        self.assertEqual(self.check(60),60)
+        self.approval['format']['narration_sha256']='c'*64
+        with self.assertRaises(ValueError):self.check(60)
