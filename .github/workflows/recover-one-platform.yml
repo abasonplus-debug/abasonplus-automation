@@ -23,6 +23,10 @@ on:
         description: 'Type RECOVER_ONE_PLATFORM'
         required: true
         type: string
+      readback_id:
+        description: 'Optional exact FB/YT native video ID: readback ONLY, keep dry_run true'
+        type: string
+        default: ''
       dry_run:
         description: 'Read-only verification; no delivery'
         type: boolean
@@ -64,6 +68,7 @@ jobs:
           VIDEO_SHA256: ${{ inputs.video_sha256 }}
           RECOVERY_CONFIRMATION: ${{ inputs.confirmation }}
           DRY_RUN: ${{ inputs.dry_run }}
+          READBACK_ID: ${{ inputs.readback_id }}
         run: python3 scripts/recover_one_platform.py
       - name: Archive sanitized outcome even after uncertain transfer
         if: always()
