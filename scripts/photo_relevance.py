@@ -18,6 +18,9 @@ class PhotoRelevanceGuard:
             from fastembed import ImageEmbedding, TextEmbedding
         except ImportError as exc:
             raise RuntimeError("Install fastembed; visual semantic QA is required") from exc
+        # No telemetry/network metrics: only approved model/photo GETs are needed.
+        import onnxruntime
+        onnxruntime.disable_telemetry_events()
         cache=Path(os.getenv("ABASONPLUS_MODEL_CACHE", ".cache/fastembed")).resolve()
         cache.mkdir(parents=True,exist_ok=True)
         self.photo = ImageEmbedding(model_name="Qdrant/clip-ViT-B-32-vision",cache_dir=str(cache))
