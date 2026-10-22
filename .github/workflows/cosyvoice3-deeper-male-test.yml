@@ -1,0 +1,35 @@
+name: CosyVoice3 Deep Male Voice Samples 10s (FREE, NO POST)
+on:
+  push:
+    branches: [experiment/cosyvoice3-bangla-tts-preview]
+    paths: ['.github/workflows/cosyvoice3-deeper-male-test.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deep-male-sample:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        speaker: [dan_mason, dave_chase, clayton_j_smith]
+    steps:
+      - name: Checkout experiment branch
+        uses: actions/checkout@v4
+      - name: Free Gradio + FFmpeg setup
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python3 -m pip install --disable-pip-version-check 'gradio_client==2.0.3'
+      - name: Synthesize genuine CosyVoice3 Bengali male voice
+        run: python3 scripts/cosyvoice3_deeper_male_10s.py ${{ matrix.speaker }}
+      - name: Save unpublished male sample
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosyvoice3-deeper-male-${{ matrix.speaker }}
+          path: output/cosyvoice3_deeper_male/${{ matrix.speaker }}/
+          if-no-files-found: warn
+          retention-days: 2
