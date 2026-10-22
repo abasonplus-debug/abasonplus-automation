@@ -166,6 +166,11 @@ jobs:
           from scripts.reviewed_video_timing import validate_reviewed_timing
           validate_reviewed_timing(meta,float(info["format"]["duration"]),approval,run,
                                   base64.b64decode(policy["content"]).decode("utf-8"))
+          if meta.get('voiceover',{}).get('complete') is True:
+              import sys
+              sys.path.insert(0,str(pathlib.Path('scripts').resolve()))
+              from cosyvoice3_daily_voiceover import verify_voiceover
+              verify_voiceover(out,json.loads((out/'daily_research_story.json').read_text()),meta)
           print("INDIVIDUALLY REVIEWED MP4 SHA256:",hashlib.sha256(video.read_bytes()).hexdigest())
           PY
       - name: Deliver ONLY this creator-reviewed video for TikTok (never Facebook/YouTube)
