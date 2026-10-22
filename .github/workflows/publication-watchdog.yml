@@ -7,6 +7,7 @@ on:
     workflows:
       - AbasonPlus Daily Source-Checked Carousel & Video
       - AbasonPlus Daily WordPress Post by Email
+      - AbasonPlus Editorial Photo Preflight (NO POSTS)
     types: [completed]
   push:
     branches: [main]
