@@ -141,7 +141,7 @@ def render_with_narration(voice_track: Path, music: Path, durations: list[float]
     filters = (f"[1:a]volume=1.05[spoken];"
                f"[2:a]aresample=24000,volume=0.085[bed];"
                f"[spoken][bed]amix=inputs=2:duration=first:dropout_transition=0,"
-               f"afade=t=out:st={max(0,duration-.35):.3f}:d=.35[mixed]")
+               f"afade=t=out:st={max(0,duration-.35):.3f}:d=0.35[mixed]")
     candidate = target.parent / "voiced_candidate.mp4"
     for crf in (28, 30, 32, 34):
         candidate.unlink(missing_ok=True)
