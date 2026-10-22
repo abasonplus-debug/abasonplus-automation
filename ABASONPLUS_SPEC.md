@@ -39,3 +39,7 @@ This is the current production specification. README.md describes the live route
 - The daily audit is read only and reports failed/missing/processing posts. It does not automatically resend ambiguous attempts.
 
 Timing update (owner, 2026-10-20): every image is exactly 3 seconds. This supersedes the former 2-second rule. Keep the 50-second maximum: 5–16 slides, total 15–48 seconds; never make 17 slides (51 seconds). Multiple sentences per image remain allowed. Dense text is not guaranteed readable in three seconds. Historical rendered/published artifacts retain their recorded timing; this change does not authorize re-rendering, resending or approving a different TikTok video.
+
+
+## Owner schedule update — 23 October 2026
+Daily WordPress and Facebook/YouTube/Instagram video trigger target is now 01:00 Europe/Berlin, superseding older 02:00 targets. Research remains 00:30; source monitor and photo preflight are 00:45. Missing-trigger-only backups are WordPress 01:23 and video 01:31; watchdog 02:07. Existing Berlin-day reservations, no replay after an earlier attempt, QA and exact-video TikTok preview/OK remain unchanged. Trigger time is not guaranteed publication completion time.
