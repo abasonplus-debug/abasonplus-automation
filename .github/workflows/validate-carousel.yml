@@ -17,7 +17,7 @@ jobs:
       - name: Install Bengali fonts
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq fonts-noto-core ffmpeg
+          sudo apt-get install -y -qq fonts-noto-core ffmpeg espeak-ng
           python -m pip install -r requirements.txt
       - name: Compile Python without running publishers
         run: python -m py_compile scripts/create_carousel.py scripts/photo_relevance.py scripts/verify_video_release.py scripts/prepare_tiktok_preview.py wordpress_publish.py
