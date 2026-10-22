@@ -1,0 +1,28 @@
+name: CosyVoice3 Legal News Additional Part (FREE ONLY)
+on:
+  push:
+    branches: [experiment/cosyvoice3-bangla-tts-preview]
+    paths: ['.github/workflows/cosyvoice3-news120-extra.yml']
+permissions:
+  contents: read
+jobs:
+  extra-genuine-voice:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Free audio setup
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python3 -m pip install --disable-pip-version-check 'gradio_client==2.0.3'
+      - name: Generate additional actual CosyVoice3 Bengali speech
+        run: python3 scripts/cosyvoice3_news120.py 6
+      - name: Store audio for review without publishing
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosyvoice3-news-part-6
+          path: output/cosyvoice3_news120/segment_07/
+          if-no-files-found: warn
+          retention-days: 2
