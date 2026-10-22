@@ -14,10 +14,8 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 OUT = ROOT / "output" / "cosyvoice3_test"
 OUT.mkdir(parents=True, exist_ok=True)
 SPACE = "kawshikbuet17/bengali-cosyvoice3-tts-demo"
-TEXT = ("স্কুলে যাওয়ার পথে ছেলেটি একটি অসহায় কুকুরকে দেখতে পেল। "
-        "সে কুকুরটিকে খাবার দিল। শুরু হলো নতুন বন্ধুত্ব। "
-        "একটু মমতা, অনেক ভালোবাসা।")
-SOURCE = "https://raw.githubusercontent.com/CoisLR/TTS-Reference-Voices/main/voices/alana_jordan.flac"
+TEXT = "স্বাগতম। আপনি শুনছেন আবাসন প্লাস। জার্মানির গুরুত্বপূর্ণ আইন ও আপনার অধিকার নিয়ে থাকছে আজকের বিশেষ প্রতিবেদন।"
+SOURCE = "https://raw.githubusercontent.com/CoisLR/TTS-Reference-Voices/main/voices/bill_mosley.flac"
 
 print("Free one-off CosyVoice3 model demo. No fees/trial/tokens.", flush=True)
 raw = OUT / "cc0_reference.flac"
@@ -49,9 +47,17 @@ output=result[0] if isinstance(result,(tuple,list)) else result
 path=(output.get("path") or output.get("name")) if isinstance(output,dict) else output
 if not isinstance(path,str) or not pathlib.Path(path).is_file():
     raise RuntimeError("CosyVoice3 returned no speech file")
-mp3=OUT/"boy_and_dog_cosyvoice3.mp3"
+mp3=OUT/"male_news_presenter_cosyvoice3_10s.mp3"
+# Normalize to exactly 10s without chopping any spoken words.
+length=float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",str(path)],text=True).strip())
+if not (4.0 < length < 12.0):
+    raise RuntimeError(f"Unexpected CosyVoice3 narration duration: {length:.2f}s")
+tempo=max(0.90,min(1.18,length/9.65))
 subprocess.run(["ffmpeg","-hide_banner","-loglevel","error","-y","-i",str(path),
-                "-ac","1","-ar","24000","-codec:a","libmp3lame","-qscale:a","3",str(mp3)],check=True,timeout=30)
-assert mp3.is_file() and mp3.stat().st_size>1500
+                "-filter:a",f"atempo={tempo:.5f},apad=whole_dur=10",
+                "-t","10.0","-ac","1","-ar","24000","-codec:a","libmp3lame","-qscale:a","3",str(mp3)],check=True,timeout=30)
+final_duration=float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","default=noprint_wrappers=1:nokey=1",str(mp3)],text=True).strip())
+assert mp3.is_file() and mp3.stat().st_size>1500 and abs(final_duration-10.0)<0.15
+print(f"MALE_NEWS_AUDIO original={length:.2f}s final={final_duration:.2f}s tempo={tempo:.3f}",flush=True)
 (OUT/"script.txt").write_text(TEXT,encoding="utf-8")
 print("COSYVOICE3_AUDIO_SUCCESS",mp3,mp3.stat().st_size,flush=True)
