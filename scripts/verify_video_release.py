@@ -114,8 +114,9 @@ expected_caption=(OUT/"caption.txt").read_text(encoding="utf-8")
 expected_description=(OUT/"description.txt").read_text(encoding="utf-8")
 required(brief["source_url"] in expected_description,"source absent from Shorts description")
 validate_social_copy(expected_caption, expected_description, (OUT/"title.txt").read_text(encoding="utf-8"))
-required("#AbasonPlus" in expected_caption and "#AbasonPlus" in expected_description,
-         "SEO caption or description absent")
+from engagement_pack import hashtag_tokens
+required(len(hashtag_tokens(expected_caption)) == 5 and len(hashtag_tokens(expected_description)) == 5,
+         "Owner five-hashtag caption or description absent")
 engagement=read_json('engagement_pack.json')
 validate_pack(engagement)
 required(engagement['hook']==brief['hook'] and engagement['caption']==expected_caption and engagement['description']==expected_description,'social package differs from approved story/copy')
