@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-23T01:48:02+02:00",
+  "checked_at": "2026-10-23T01:56:00+02:00",
   "context": {
     "fresh_content_ready": true,
     "exact_tiktok_video_approved": false,
@@ -32,10 +32,13 @@
     "note": "Measured before website delivery and one provider status read; current usage may be higher. Free plan, auto-purchase false."
   },
   "quality": {
-    "status": "video_voice_generation_in_progress",
+    "status": "qa_passed_artifact_transfer_blocked",
     "findings": [
-      "Photo/layout render succeeded in preview 39873764285; final voice and release QA pending.",
-      "Hashtag and public photo credit preferences require final caption review before social delivery."
+      "Successful source-checked voiced preview run 39873764285, head 48d7daf5e5f6f860e2f257448ad5c973b66b738b; final QA passed.",
+      "Actual MP4 duration 36.10 seconds, size 3066947 bytes from workflow logs; MP4 SHA-256 unavailable because artifact download blocked by browser security policy. Artifact ZIP digest is not substituted.",
+      "No Facebook, YouTube, Instagram or TikTok upload performed in this owner session.",
+      "Final public social copy must use owner five-tag mix and omit optional Pexels credits; source artifact generated before copy adapter update.",
+      "TikTok requires exact accessible voiced video/caption/comment/settings review and a new OK; prior approvals do not apply."
     ]
   },
   "weekly_metrics": {
@@ -45,11 +48,12 @@
   },
   "recovery": {
     "delivery_attempted": true,
-    "failure_phase": null,
+    "failure_phase": "artifact_retrieval_after_qa",
     "transient_failure": false,
-    "github_job_status": "in_progress",
+    "github_job_status": "success",
     "prior_retries": 0,
     "current_day_verified": true,
-    "quota_safe": true
+    "quota_safe": true,
+    "note": "Website delivered and verified only. Video delivery never started. Status-request collection encountered automatic-review rejection for suspected duplicate webhook POST; no repeat attempted."
   }
 }
