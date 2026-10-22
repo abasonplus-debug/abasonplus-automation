@@ -27,7 +27,7 @@
         "query": "professional aerial photograph of a rural house surrounded by agricultural fields"
       },
       {
-        "text": "জলাধার ও জলাভূমিতে বাণিজ্যিক নির্মাণ নয়। সরকারি নথিতে জমির শ্রেণি ও জোন যাচাই করুন।",
+        "text": "জলাধারে বাণিজ্যিক নির্মাণ নয়। আগে জমির নথি যাচাই করুন।",
         "query": "professional wide photograph of wetland water reeds and open landscape"
       },
       {
@@ -114,15 +114,15 @@
         ]
       },
       {
-        "url": "https://images.pexels.com/photos/32473561/pexels-photo-32473561.jpeg?cs=srgb&dl=pexels-oleksiy-yeshtokyn-2147541276-32473561.jpg&fm=jpg",
-        "source_page": "https://www.pexels.com/photo/serene-wetland-with-lush-vegetation-and-water-32473561/",
-        "creator": "Oleksiy Yeshtokyn",
+        "url": "https://images.pexels.com/photos/35702456/pexels-photo-35702456.jpeg?cs=srgb&dl=pexels-rinoadamo-35702456.jpg&fm=jpg",
+        "source_page": "https://www.pexels.com/photo/moody-misty-wetland-at-dawn-35702456/",
+        "creator": "Rino Adamo",
         "license": "Pexels Free License",
         "license_source": "https://www.pexels.com/license/",
-        "scene": "A sunny wetland contains calm water, reeds, trees and lush green vegetation.",
-        "scene_match": "The natural wetland scene directly illustrates the need to verify waterbody and wetland limits.",
+        "scene": "A misty wetland with still water and reflections at dawn.",
+        "scene_match": "The verified wetland photograph illustrates restrictions on commercial construction in waterbodies.",
         "page_verified_on": "2026-10-23",
-        "verification": "Pexels page, creator, free-use label, scene and direct photograph were inspected; final 9:16 crop/readability remains subject to QA.",
+        "verification": "Pexels source page, creator, free-use label and direct photograph inspected on 23 October; exact text-region preflight must pass.",
         "binary_fetch_verified": true,
         "alternatives": [
           {
