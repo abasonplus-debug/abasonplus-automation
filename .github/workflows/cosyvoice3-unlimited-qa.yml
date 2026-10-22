@@ -1,0 +1,31 @@
+name: CosyVoice3 Full-Script Duration and 100-20 Mix QA (NO POSTS)
+on:
+  push:
+    branches: [feature/script-length-video-music20-voice100]
+    paths:
+      - '.github/workflows/cosyvoice3-unlimited-qa.yml'
+      - 'scripts/cosyvoice3_daily_voiceover.py'
+      - 'scripts/carousel_timing.py'
+      - 'tests/test_cosyvoice3_daily_voiceover.py'
+      - 'tests/test_carousel_timing.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-audio-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install free local FFmpeg and Pillow for offline tests
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python3 -m pip install 'Pillow>=11,<13'
+      - name: Validate updated code and full script duration without TTS API
+        run: |
+          python3 -m py_compile scripts/cosyvoice3_daily_voiceover.py scripts/carousel_timing.py scripts/create_carousel.py scripts/verify_video_release.py
+          python3 -m unittest discover -s tests -p 'test_cosyvoice3_daily_voiceover.py' -v
+          python3 -m unittest discover -s tests -p 'test_carousel_timing.py' -v
+      - name: No new payment or post
+        run: echo 'No paid GPU, no paid/trial service, no account publication; existing free webhook guard remains.' >> "$GITHUB_STEP_SUMMARY"
