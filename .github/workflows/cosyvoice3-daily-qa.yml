@@ -1,0 +1,29 @@
+name: CosyVoice3 Daily Slide Narration Integration QA (NO POSTS)
+on:
+  push:
+    branches: [feature/cosyvoice3-dan-mason-daily-voiceover]
+    paths: ['.github/workflows/cosyvoice3-daily-qa.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  full-offline-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install free local audio and image QA packages only
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python3 -m pip install 'Pillow>=11,<13'
+      - name: Compile all changed scripts
+        run: |
+          python3 -m py_compile scripts/cosyvoice3_daily_voiceover.py scripts/carousel_timing.py scripts/verify_video_release.py scripts/prepare_tiktok_preview.py
+      - name: Exact voice/script safety, media mixing and timing checks
+        run: |
+          python3 -m unittest discover -s tests -p 'test_cosyvoice3_daily_voiceover.py' -v
+          python3 -m unittest discover -s tests -p 'test_carousel_timing.py' -v
+      - name: Explicitly prevent any social publishing
+        run: |
+          echo 'Voice integration QA complete; no social API or webhook was contacted.' >> "$GITHUB_STEP_SUMMARY"
