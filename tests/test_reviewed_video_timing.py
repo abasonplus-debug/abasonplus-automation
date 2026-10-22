@@ -59,3 +59,12 @@ class ReviewedTimingTests(unittest.TestCase):
                        "SLIDE_SECONDS=unknown", "SLIDE_SECONDS=True"):
             self.policy = policy
             with self.subTest(policy=policy), self.assertRaises(ValueError): self.check()
+
+    def test_cosyvoice_script_length_has_no_fifty_second_cap_and_needs_exact_consent(self):
+        self.policy = "SLIDE_SECONDS=3\nVOICE_ENGINE='CosyVoice3'\n"
+        voice = dict(complete=True, engine='CosyVoice3', reference='Dan Mason',narrated_slide_count=5,script_sha256='b'*64)
+        self.meta=dict(slides=5,slide_seconds=3,slide_durations=[12]*5,voiceover=voice)
+        self.approval['format']=dict(slides=5,slide_durations=[12]*5,voiceover=copy.deepcopy(voice))
+        self.assertEqual(self.check(60),60)
+        self.approval['format']['voiceover']['script_sha256']='c'*64
+        with self.assertRaises(ValueError):self.check(60)
