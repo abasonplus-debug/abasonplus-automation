@@ -56,3 +56,27 @@ See AUTOMATION_OPERATIONS.md for the daily evidence report, narrow pre-delivery 
 
 ## Social copy and cover contract
 config/engagement_rules.json locks hook, substantial useful captions/descriptions, one prepared first brand comment, at least five distinct relevant hashtags, the actual hook cover and only the owner-provided MP3. Packaging is verified before release. First-comment/custom-thumbnail writes are new configuration, not a claim of a successful live write; inspect destination results.
+
+
+## Owner superseding update — 22 October 2026
+
+New renders use `narration_v1`, superseding every fixed two/three-second and
+15/50-second editorial rule above. Exact hook plus slide texts are narrated in
+Bengali; each slide lasts its measured WAV segment plus a short pause. Total
+video length is the sum of those segments, not an arbitrary target or truncation.
+The operational bound is 5–64 source-checked slides, with existing caption,
+font/layout, file-size, provider and free quota limits checked separately.
+
+The default voice is local GPL eSpeak NG (`bn`), offline and subscription-free.
+This is synthetic speech, not a promise of natural human narration. The original
+assets/abasonplus.mp3 loops quietly underneath (10% gain); no catalog music is
+substituted. Narration script and WAV SHA-256, measured segment durations and
+padding are independently checked before release and archived with the preview.
+
+Historical media retain their recorded policy. New TikTok exact approval must
+match narration hash, timing_mode and slide_durations as well as MP4/caption,
+source run/commit, settings and rights; changing voice invalidates an earlier OK.
+There is no unattended TikTok upload. No creative is generated merely by a code
+validation run. Make's current 5 MB transport remains fail-closed: a longer
+video that exceeds it needs an independently reviewed transport solution, never
+a blind resend, reduced QA, arbitrary audio cutoff or paid upgrade.
