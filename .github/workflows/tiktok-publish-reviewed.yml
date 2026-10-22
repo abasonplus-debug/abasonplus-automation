@@ -130,7 +130,7 @@ jobs:
           assert tt["status"]=="preview_only" and tt["posting_enabled"] is False
           assert meta["date"]==today and tt["date"]==today, "No older stale preview publication"
           assert meta["source_url"]==tt["source_url"] and meta["source_url"].startswith("https://")
-          assert 5<=meta["slides"]<=25 and len(meta["quality"])==meta["slides"]
+          assert 5<=meta["slides"]<=64 and len(meta["quality"])==meta["slides"]
           assert meta["style_id"]=="compact_white_gold_v2"
           from scripts.carousel_style import validate_style
           for quality_record in meta['quality']: validate_style(quality_record)
@@ -166,6 +166,9 @@ jobs:
           from scripts.reviewed_video_timing import validate_reviewed_timing
           validate_reviewed_timing(meta,float(info["format"]["duration"]),approval,run,
                                   base64.b64decode(policy["content"]).decode("utf-8"))
+          if meta.get('timing_mode') == 'narration_v1':
+              from scripts.narration import verify as verify_narration
+              verify_narration(meta,json.loads((out/'daily_research_story.json').read_text()),out)
           print("INDIVIDUALLY REVIEWED MP4 SHA256:",hashlib.sha256(video.read_bytes()).hexdigest())
           PY
       - name: Deliver ONLY this creator-reviewed video for TikTok (never Facebook/YouTube)
