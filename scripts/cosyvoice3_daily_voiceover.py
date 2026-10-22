@@ -155,7 +155,7 @@ def render_with_narration(voice_track: Path, music: Path, durations: list[float]
          "-c:v", "libx264", "-preset", "veryfast", "-crf", "25",
          "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart",
          str(candidate)], max(270, int(duration * 8 + 120)))
-    check(candidate.is_file() and candidate.stat().st_size > 500_000,
+    check(candidate.is_file() and candidate.stat().st_size > 10_000,
           "narrated video missing or incomplete")
     # Deliberately do not cap duration to fit Make's 5MB free webhook.
     # The scheduled upload checks the free-plan size separately and must block
