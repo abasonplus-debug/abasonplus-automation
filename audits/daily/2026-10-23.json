@@ -1,0 +1,55 @@
+{
+  "checked_at": "2026-10-23T01:48:02+02:00",
+  "context": {
+    "fresh_content_ready": true,
+    "exact_tiktok_video_approved": false,
+    "lookup_complete": {
+      "website": true,
+      "facebook": false,
+      "youtube": false,
+      "instagram": true,
+      "tiktok": true
+    }
+  },
+  "evidence": [
+    {
+      "platform": "website",
+      "post_id": "60",
+      "url": "https://abasonplus.wordpress.com/2026/10/22/ap-agricultural-land-use-check-2026-10-23/",
+      "status": "published",
+      "published_at": "2026-10-22T23:45:51+00:00",
+      "observed_at": "2026-10-23T01:48:02+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "WordPress public REST site 257973809; exact slug/title matched; Make execution 6978627966d34343bf11327ea819498e modules 26/7/8 completed without module errors"
+    }
+  ],
+  "quota": {
+    "used": 543,
+    "remaining": 457,
+    "days_until_reset": 21,
+    "measured_daily_credits": null,
+    "note": "Measured before website delivery and one provider status read; current usage may be higher. Free plan, auto-purchase false."
+  },
+  "quality": {
+    "status": "video_voice_generation_in_progress",
+    "findings": [
+      "Photo/layout render succeeded in preview 39873764285; final voice and release QA pending.",
+      "Hashtag and public photo credit preferences require final caption review before social delivery."
+    ]
+  },
+  "weekly_metrics": {
+    "status": "not_due",
+    "observations": [],
+    "unavailable_metrics": []
+  },
+  "recovery": {
+    "delivery_attempted": true,
+    "failure_phase": null,
+    "transient_failure": false,
+    "github_job_status": "in_progress",
+    "prior_retries": 0,
+    "current_day_verified": true,
+    "quota_safe": true
+  }
+}
