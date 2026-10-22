@@ -143,6 +143,16 @@ jobs:
             output/engagement_pack.json
             output/tiktok_preview.json
           retention-days: 7
+      - name: Preserve diagnostics on pre-delivery failure (NO POSTS)
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: abasonplus-failure-diagnostics
+          path: |
+            output/daily_research_story.json
+            output/photo_preflight.json
+          if-no-files-found: warn
+          retention-days: 7
       - name: Send ONE daily validated Reel and Short to Make on automatic schedule ONLY
         if: ${{ github.event_name == 'schedule' }}
         env:
