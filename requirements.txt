@@ -3,4 +3,4 @@ fastembed>=0.7,<1
 numpy>=1.24,<3
 fonttools>=4.53,<5
 PyYAML>=6,<7
-
+gradio_client==2.0.3
