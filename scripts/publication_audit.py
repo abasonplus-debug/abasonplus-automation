@@ -47,7 +47,7 @@ def classify(platform,day,now,rows,context):
     if published:return {'status':'published_verified','posts':list(published.values()),'action':'do_not_retry'}
     if platform=='tiktok' and not context.get('exact_tiktok_video_approved'):
         return {'status':'awaiting_video_review','posts':[],'action':'do_not_upload_without_exact_review'}
-    scheduled=now.replace(hour=2,minute=0,second=0,microsecond=0)
+    scheduled=now.replace(hour=1,minute=0,second=0,microsecond=0)
     if now<scheduled:return {'status':'not_due','posts':[],'action':'wait_for_schedule'}
     if context.get('fresh_content_ready') is False:return {'status':'held_missing_fresh_content','posts':[],'action':'research_required'}
     if any(r.get('status') in ('publishing','processing','scheduled') for r in valid):
