@@ -179,6 +179,10 @@ def verify_voiceover(out: Path, story: dict, metadata: dict) -> None:
     check(isinstance(voice, dict) and voice.get("engine") == "CosyVoice3"
           and voice.get("reference") == "Dan Mason" and voice.get("complete") is True,
           "not using the owner-selected real CosyVoice3 voice")
+    check(voice.get("voice_gain") == VOICE_GAIN and
+          voice.get("music_gain") == MUSIC_GAIN and
+          voice.get("mix") == "narration_100_music_20_no_amix_normalization",
+          "voice/music mix levels do not match owner-requested 100% / 20%")
     check(voice.get("reference_url") == REFERENCE_URL and
           report.get("source_url") == story.get("source_url") and
           report.get("verified_on") == story.get("verified_on"),
@@ -229,7 +233,11 @@ def main() -> None:
     check(preset.get("reference_source_url") == REFERENCE_URL and
           preset.get("engine") == "CosyVoice3" and
           preset.get("reference_voice") == "Dan Mason" and
-          preset.get("free_only") is True, "voice preset not owner approved")
+          preset.get("free_only") is True and
+          preset.get("paid_or_trial_services_allowed") is False and
+          preset.get("voice_gain") == VOICE_GAIN and
+          preset.get("background_music_gain") == MUSIC_GAIN,
+          "voice/music preset not owner approved as strictly free 100%/20%")
     for i in range(len(texts)):
         check((OUT/f"slide_{i}.png").is_file(), "slide image unavailable before narration")
     temp = OUT / "narration_segments"
