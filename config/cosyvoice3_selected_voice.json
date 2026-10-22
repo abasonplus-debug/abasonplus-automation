@@ -14,5 +14,9 @@
   "paid_or_trial_services_allowed": false,
   "fallback_to_unvoiced_video": false,
   "source": "https://github.com/CoisLR/TTS-Reference-Voices",
-  "note": "Source demo is free, public and unauthenticated but has no availability guarantee. Fail with no publication on any voice failure."
+  "note": "Source demo is free, public and unauthenticated but has no availability guarantee. Fail with no publication on any voice failure.",
+  "voice_gain": 1,
+  "background_music_gain": 0.2,
+  "video_duration_policy": "complete_narrated_script_no_fixed_seconds_cap",
+  "publishing_transport_limit": "Make free webhook payload must remain within its current limit; oversized videos saved as artifacts and not submitted or upgraded to paid."
 }

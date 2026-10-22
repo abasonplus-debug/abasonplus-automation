@@ -11,7 +11,7 @@ import wave
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "scripts"))
 from cosyvoice3_daily_voiceover import (
-    REFERENCE_URL, SPACE, check, source_texts, slide_durations,
+    REFERENCE_URL, SPACE, VOICE_GAIN, MUSIC_GAIN, check, source_texts, slide_durations,
     validate_segment, concat_with_padding, render_with_narration, verify_voiceover,
 )
 from carousel_timing import validate_timing
@@ -58,9 +58,10 @@ class VoiceoverTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"align"):
             validate_timing(meta,sum(times)-1.0)
 
-    def test_fail_closed_for_overlong_speech_or_incomplete_voice(self):
-        with self.assertRaisesRegex(RuntimeError,"50-second"):
-            slide_durations([12]*5)
+    def test_no_old_50_second_cap_and_fail_closed_for_incomplete_voice(self):
+        self.assertGreater(sum(slide_durations([14.0]*5)), 50)
+        self.assertGreater(sum(slide_durations([65.0]*5)), 300)
+        self.assertEqual((VOICE_GAIN, MUSIC_GAIN), (1.0, 0.20))
         with self.assertRaisesRegex(RuntimeError,"slide count"):
             slide_durations([2.0]*4)
         with self.assertRaisesRegex(ValueError,"exactly 3"):
@@ -92,11 +93,39 @@ class VoiceoverTests(unittest.TestCase):
             meta={"slides":5,"slide_seconds":3,"slide_durations":times,
                   "voiceover":{"complete":True,"engine":"CosyVoice3","reference":"Dan Mason",
                                "reference_url":REFERENCE_URL,"narrated_slide_count":5,
-                               "script_sha256":hashlib.sha256("\n".join(texts).encode()).hexdigest()}}
+                               "script_sha256":hashlib.sha256("\n".join(texts).encode()).hexdigest(),
+                               "mix":"narration_100_music_20_no_amix_normalization",
+                               "voice_gain":1.0,"music_gain":0.20}}
             verify_voiceover(out,story,meta)
             (out/"narration_segments"/"slide_02.wav").write_bytes(b"bad")
             with self.assertRaisesRegex(RuntimeError,"missing or altered"):
                 verify_voiceover(out,story,meta)
+
+    def test_music_mix_preserves_unity_voice_and_twenty_percent_background(self):
+        self.assertEqual(VOICE_GAIN,1.0)
+        self.assertEqual(MUSIC_GAIN,0.20)
+        self.assertGreater(VOICE_GAIN,MUSIC_GAIN)
+        self.assertEqual(round(VOICE_GAIN/MUSIC_GAIN),5)
+
+    @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"),"FFmpeg not installed")
+    def test_script_length_over_50_seconds_is_rendered_not_truncated(self):
+        from PIL import Image
+        with tempfile.TemporaryDirectory() as td:
+            out=pathlib.Path(td)
+            durations=[11.0]*5
+            for i in range(5):
+                Image.new("RGB",(96,176),(20+i*20,80,160)).save(out/f"slide_{i}.png")
+            voice=out/"narration.wav"
+            make_wav(voice,55.0)
+            music=out/"music.mp3"
+            subprocess.run(["ffmpeg","-y","-v","error","-f","lavfi",
+                            "-i","sine=frequency=450:duration=3","-q:a","7",
+                            str(music)],check=True,timeout=30)
+            dest=out/"long_script.mp4"
+            sec=render_with_narration(voice,music,durations,dest)
+            self.assertGreater(sec,50.0)
+            self.assertAlmostEqual(sec,55.0,delta=.15)
+            self.assertGreater(dest.stat().st_size,500000)
 
     @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"),"FFmpeg not installed")
     def test_full_video_mixes_actual_pcm_voice_and_music_without_online_service(self):

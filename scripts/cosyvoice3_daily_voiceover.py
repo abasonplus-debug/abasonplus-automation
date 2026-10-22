@@ -3,7 +3,7 @@
 
 Free public Space + CC0 voice reference only. No paid API, fallback synthetic speech,
 secret, post/upload, or account connection. A synthesis or duration failure blocks release.
-Slide display times may grow beyond 3s, but never beyond 50s total.
+Slide duration follows complete spoken text, without a fixed maximum video length.
 """
 from __future__ import annotations
 from array import array
@@ -26,7 +26,8 @@ SPACE = "kawshikbuet17/bengali-cosyvoice3-tts-demo"
 MODEL_ENDPOINT = "/generate_cross_lingual_audio"
 SAMPLE_RATE = 24000
 MIN_SLIDE_SECONDS = 3
-MAX_VIDEO_SECONDS = 50
+VOICE_GAIN = 1.0
+MUSIC_GAIN = 0.20
 
 def check(condition: bool, message: str) -> None:
     if not condition:
@@ -64,12 +65,10 @@ def slide_durations(audio_durations: list[float]) -> list[float]:
     durations = []
     for seconds in audio_durations:
         check(isinstance(seconds, (float, int)) and math.isfinite(seconds)
-              and 0.55 <= seconds <= 45, "incomplete or abnormal TTS segment")
+              and seconds >= 0.55, "incomplete or abnormal TTS segment")
         # 0.30 seconds silence at end. Round up to 30fps frame boundary.
         frames = max(90, math.ceil((seconds + 0.30) * 30))
         durations.append(round(frames / 30, 6))
-    check(sum(durations) <= MAX_VIDEO_SECONDS,
-          "full exact Bengali narration would exceed the 50-second video limit; never speed through or truncate")
     return durations
 
 def get_reference(target: Path) -> None:
@@ -94,7 +93,7 @@ def validate_segment(path: Path) -> float:
         check(f.getnchannels() == 1 and f.getsampwidth() == 2 and
               f.getframerate() == SAMPLE_RATE, "speech is not PCM16/mono/24k")
         duration = f.getnframes() / SAMPLE_RATE
-        check(0.55 <= duration <= MAX_VIDEO_SECONDS + .1, "speech missing or implausibly long")
+        check(duration >= 0.55, "speech missing or implausibly short")
         frames = f.readframes(f.getnframes())
     samples = array("h")
     samples.frombytes(frames)
@@ -137,29 +136,30 @@ def render_with_narration(voice_track: Path, music: Path, durations: list[float]
     check(voice_track.is_file(), "original CosyVoice3 narration track missing")
     playlist = target.parent / "narrated_slides.txt"
     write_slides_playlist(len(durations), durations, playlist)
-    # Music stays far quieter than narration, not the other way around.
-    filters = (f"[1:a]volume=1.05[spoken];"
-               f"[2:a]aresample=24000,volume=0.085[bed];"
-               f"[spoken][bed]amix=inputs=2:duration=first:dropout_transition=0,"
-               f"afade=t=out:st={max(0,duration-.35):.3f}:d=0.35[mixed]")
+    # Explicit linear gains: narration at unity (100%), original music at 0.20 (20%).
+    # normalize=0 prevents amix from unexpectedly halving the voice.
+    # The limiter avoids digital clipping if the mastered music and voice peaks coincide.
+    filters = (f"[1:a]aresample=24000,volume={VOICE_GAIN:.2f}[spoken];"
+               f"[2:a]aresample=24000,volume={MUSIC_GAIN:.2f}[bed];"
+               f"[spoken][bed]amix=inputs=2:duration=first:"
+               f"dropout_transition=0:normalize=0,"
+               f"alimiter=limit=0.98,"
+               f"afade=t=out:st={max(0,duration-0.35):.3f}:d=0.35[mixed]")
     candidate = target.parent / "voiced_candidate.mp4"
-    for crf in (28, 30, 32, 34):
-        candidate.unlink(missing_ok=True)
-        run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
-             "-f", "concat", "-safe", "0", "-i", str(playlist),
-             "-i", str(voice_track), "-stream_loop", "-1", "-i", str(music),
-             "-filter_complex", filters, "-map", "0:v:0", "-map", "[mixed]",
-             "-t", f"{duration:.6f}", "-r", "30", "-vf", "fps=30,format=yuv420p",
-             "-c:v", "libx264", "-preset", "veryfast", "-crf", str(crf),
-             "-c:a", "aac", "-b:a", "96k", "-movflags", "+faststart",
-             str(candidate)], 270)
-        # Leave headroom for multipart thumbnail and metadata in the free 5MB webhook.
-        cover = target.parent / "thumbnail_upload.jpg"
-        max_video = 4_900_000 - (cover.stat().st_size if cover.is_file() else 2_000_000) - 90_000
-        if candidate.stat().st_size <= max_video:
-            break
-    check(candidate.is_file() and candidate.stat().st_size <= max_video,
-          "video + thumbnail may exceed the free Make webhook limit")
+    candidate.unlink(missing_ok=True)
+    run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
+         "-f", "concat", "-safe", "0", "-i", str(playlist),
+         "-i", str(voice_track), "-stream_loop", "-1", "-i", str(music),
+         "-filter_complex", filters, "-map", "0:v:0", "-map", "[mixed]",
+         "-t", f"{duration:.6f}", "-r", "30", "-vf", "fps=30,format=yuv420p",
+         "-c:v", "libx264", "-preset", "veryfast", "-crf", "25",
+         "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart",
+         str(candidate)], max(270, int(duration * 8 + 120)))
+    check(candidate.is_file() and candidate.stat().st_size > 10_000,
+          "narrated video missing or incomplete")
+    # Deliberately do not cap duration to fit Make's 5MB free webhook.
+    # The scheduled upload checks the free-plan size separately and must block
+    # delivery without spending money if the transport rejects the large file.
     checked = probe_duration(candidate)
     check(abs(checked - duration) < .15, "rendered video out of sync with voice")
     ffinfo = json.loads(run(["ffprobe", "-v", "error", "-show_streams",
@@ -179,6 +179,10 @@ def verify_voiceover(out: Path, story: dict, metadata: dict) -> None:
     check(isinstance(voice, dict) and voice.get("engine") == "CosyVoice3"
           and voice.get("reference") == "Dan Mason" and voice.get("complete") is True,
           "not using the owner-selected real CosyVoice3 voice")
+    check(voice.get("voice_gain") == VOICE_GAIN and
+          voice.get("music_gain") == MUSIC_GAIN and
+          voice.get("mix") == "narration_100_music_20_no_amix_normalization",
+          "voice/music mix levels do not match owner-requested 100% / 20%")
     check(voice.get("reference_url") == REFERENCE_URL and
           report.get("source_url") == story.get("source_url") and
           report.get("verified_on") == story.get("verified_on"),
@@ -229,7 +233,11 @@ def main() -> None:
     check(preset.get("reference_source_url") == REFERENCE_URL and
           preset.get("engine") == "CosyVoice3" and
           preset.get("reference_voice") == "Dan Mason" and
-          preset.get("free_only") is True, "voice preset not owner approved")
+          preset.get("free_only") is True and
+          preset.get("paid_or_trial_services_allowed") is False and
+          preset.get("voice_gain") == VOICE_GAIN and
+          preset.get("background_music_gain") == MUSIC_GAIN,
+          "voice/music preset not owner approved as strictly free 100%/20%")
     for i in range(len(texts)):
         check((OUT/f"slide_{i}.png").is_file(), "slide image unavailable before narration")
     temp = OUT / "narration_segments"
@@ -276,7 +284,9 @@ def main() -> None:
         "engine": "CosyVoice3", "reference": "Dan Mason",
         "reference_url": REFERENCE_URL, "complete": True,
         "script_sha256": sha256("\n".join(texts).encode("utf-8")).hexdigest(),
-        "mix": "spoken_primary_original_music_at_0.085",
+        "mix": "narration_100_music_20_no_amix_normalization",
+        "voice_gain": VOICE_GAIN,
+        "music_gain": MUSIC_GAIN,
         "narrated_slide_count": len(texts)}
     validate_timing(meta, duration)
     verify_voiceover(OUT, story, meta)

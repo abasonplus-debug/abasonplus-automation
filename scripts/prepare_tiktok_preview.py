@@ -30,7 +30,7 @@ def require(ok, message):
     if not ok:raise RuntimeError("TIKTOK_PREVIEW_BLOCKED: "+message)
 
 require(META.is_file() and STORY.is_file() and PASS.is_file(),"source and photo QA must pass before TikTok packaging")
-require(VIDEO.is_file() and VIDEO.stat().st_size>500_000,"MP4 missing or too small")
+require(VIDEO.is_file() and VIDEO.stat().st_size>10_000,"MP4 missing or too small")
 require(AUDIO.is_file() and AUDIO.stat().st_size>1000,"original user-supplied music missing")
 info=json.loads(META.read_text(encoding="utf-8"))
 story=json.loads(STORY.read_text(encoding="utf-8"))

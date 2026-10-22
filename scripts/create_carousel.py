@@ -64,7 +64,7 @@ if daily_story_file:
 else:
     item=current_catalog[today.toordinal() % len(current_catalog)]
 heading,hook,points=item["title"],item["hook"],item["tips"]
-if not MIN_SLIDES-1<=len(points)<=MAX_SLIDES-1:raise RuntimeError("Carousel requires 5–16 slides at three seconds each")
+if not MIN_SLIDES-1<=len(points)<=MAX_SLIDES-1:raise RuntimeError("Carousel requires 5–16 valid slides; narration determines their final display durations")
 slides=[{"main":hook,"photo":item["cover_query"],"sub":"জরুরি তথ্য"}]
 slides += [{"main":p["text"],"photo":p["query"],"sub":f"পরামর্শ {i}/{len(points)}"}
            for i,p in enumerate(points,1)]

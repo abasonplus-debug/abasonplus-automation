@@ -1,6 +1,6 @@
 import pathlib,sys,unittest,json
 sys.path.insert(0,str(pathlib.Path(__file__).resolve().parents[1]/'scripts'))
-from carousel_timing import validate_timing,SLIDE_SECONDS,MIN_SLIDES,MAX_SLIDES,MAX_DURATION_SECONDS
+from carousel_timing import validate_timing,SLIDE_SECONDS,MIN_SLIDES,MAX_SLIDES
 
 class TimingTests(unittest.TestCase):
     def test_variable_count_has_fixed_three_seconds(self):
@@ -8,8 +8,16 @@ class TimingTests(unittest.TestCase):
             m=dict(slides=n,slide_seconds=3,slide_durations=[3]*n)
             self.assertEqual(validate_timing(m,n*3),n*3)
         self.assertEqual(MAX_SLIDES,16)
-        self.assertLessEqual(MAX_SLIDES*SLIDE_SECONDS,MAX_DURATION_SECONDS)
-        self.assertGreater((MAX_SLIDES+1)*SLIDE_SECONDS,MAX_DURATION_SECONDS)
+
+    def test_full_script_length_ignores_former_fifty_second_limit(self):
+        for times in ([12.5]*5, [120.0]*5, [45.0]*16):
+            count = len(times)
+            meta = dict(slides=count, slide_seconds=3, slide_durations=times,
+                        voiceover=dict(complete=True, engine="CosyVoice3",
+                                       reference="Dan Mason", narrated_slide_count=count))
+            self.assertEqual(validate_timing(meta, sum(times)),sum(times))
+        with self.assertRaises(ValueError):
+            validate_timing(dict(slides=5,slide_seconds=3,slide_durations=[10]*5),50)
 
     def test_old_or_mixed_slide_timing_is_rejected(self):
         for seconds,ds in ((2,[2]*8),(3,[3]*7+[2]),(3,[1.5]*8),(3,[3]*7+[4])):

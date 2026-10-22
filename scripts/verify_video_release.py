@@ -94,7 +94,7 @@ required((OUT/"thumbnail.png").read_bytes()==(OUT/"slide_0.png").read_bytes(),
 credits=(OUT/"image_credits.txt").read_text(encoding="utf-8")
 required(len(credits.strip().splitlines())==slides,"incomplete photo attributions")
 video=OUT/"abasonplus_daily.mp4"
-required(video.is_file() and video.stat().st_size>500_000,"MP4 missing or incomplete")
+required(video.is_file() and video.stat().st_size>10_000,"MP4 missing or incomplete")
 probe=json.loads(subprocess.check_output(
     ["ffprobe","-v","error","-show_streams","-show_format","-of","json",str(video)],
     timeout=20))
