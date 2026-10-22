@@ -32,8 +32,9 @@
   "missing_logo": "Report omitted_unavailable; never invent a logo or wordmark.",
   "overflow": "Hold; never shrink below minimum, omit conditions or silently change exact text.",
   "applies_to": "Every image, including hook and all tips, across every carousel publishing destination.",
-  "slide_seconds": 3,
+  "slide_seconds": null,
   "min_slides": 5,
-  "max_slides": 16,
-  "timing_updated_on": "2026-10-20"
+  "max_slides": 64,
+  "timing_updated_on": "2026-10-22",
+  "timing_mode": "narration_v1"
 }
