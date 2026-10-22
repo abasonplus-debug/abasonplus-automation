@@ -47,7 +47,20 @@
         "scene_match": "The generic multilane road illustrates a road-conversion question, not a completed Bangladesh project.",
         "page_verified_on": "2026-10-22",
         "verification": "Pexels source page, creator, free-use label, scene description and exact Free download link target verified. Binary retrieval in the research environment returned 403/unavailable; no downloaded-pixel or final-crop review claimed.",
-        "binary_fetch_verified": false
+        "binary_fetch_verified": false,
+        "alternatives": [
+          {
+            "url": "https://images.pexels.com/photos/13787760/pexels-photo-13787760.jpeg?cs=srgb&dl=pexels-flooriefloor-13787760.jpg&fm=jpg",
+            "source_page": "https://www.pexels.com/photo/empty-city-highway-road-13787760/",
+            "creator": "Floor November",
+            "license": "Pexels Free License",
+            "license_source": "https://www.pexels.com/license/",
+            "scene": "Aerial photograph of curving empty urban roads with lane markings and barriers.",
+            "scene_match": "Illustrative road-infrastructure stock for the road-plan hook, not a photograph of the Dhaka–Gazipur project.",
+            "page_verified_on": "2026-10-22",
+            "verification": "Source page, creator and direct download verified; actual photograph inspected; all seven natural crops pass the exact hook layout readability gate. Semantic and final video QA remain required."
+          }
+        ]
       },
       {
         "url": "https://images.pexels.com/photos/12182332/pexels-photo-12182332.jpeg?cs=srgb&dl=pexels-rubenascensao-12182332.jpg&fm=jpg",
