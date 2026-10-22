@@ -151,9 +151,11 @@ def render_with_narration(voice_track: Path, music: Path, durations: list[float]
              "-c:a", "aac", "-b:a", "96k", "-movflags", "+faststart",
              str(candidate)], 270)
         # Leave headroom for multipart thumbnail and metadata in the free 5MB webhook.
-        if candidate.stat().st_size <= 4_450_000:
+        cover = target.parent / "thumbnail_upload.jpg"
+        max_video = 4_900_000 - (cover.stat().st_size if cover.is_file() else 2_000_000) - 90_000
+        if candidate.stat().st_size <= max_video:
             break
-    check(candidate.is_file() and candidate.stat().st_size <= 4_450_000,
+    check(candidate.is_file() and candidate.stat().st_size <= max_video,
           "video + thumbnail may exceed the free Make webhook limit")
     checked = probe_duration(candidate)
     check(abs(checked - duration) < .15, "rendered video out of sync with voice")
