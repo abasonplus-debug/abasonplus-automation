@@ -106,3 +106,7 @@ than silently publishing unvoiced media or switching voice. The Make total 5 MB
 payload gate remains. Historical media/approvals are unchanged, and a changed
 video/voice requires a new exact TikTok preview/OK. No platform-specific resend
 route or guaranteed publication is supplied by this correction.
+
+
+## Owner schedule update — 23 October 2026
+Daily WordPress and Facebook/YouTube/Instagram video trigger target is now 01:00 Europe/Berlin, superseding older 02:00 targets. Research remains 00:30; source monitor and photo preflight are 00:45. Missing-trigger-only backups are WordPress 01:23 and video 01:31; watchdog 02:07. Existing Berlin-day reservations, no replay after an earlier attempt, QA and exact-video TikTok preview/OK remain unchanged. Trigger time is not guaranteed publication completion time.
