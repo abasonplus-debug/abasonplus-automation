@@ -1,0 +1,60 @@
+{
+  "observed_at": "2026-10-22T07:31:08.555Z",
+  "lookup_scope": "latest_native_entry_in_descending_date_feed",
+  "source_reference": {
+    "scenario_id": 7968544,
+    "execution_id": "cd0437efd42546fb9dadf5b06a089776",
+    "cycle": 1,
+    "reservation_module": 50,
+    "native_feed_module": 53
+  },
+  "receipt": {
+    "schema": 1,
+    "platform": "facebook",
+    "identity": "293664680487578",
+    "date": "2026-10-22",
+    "reserved": false,
+    "data": [
+      {
+        "id": "1249276637404269",
+        "created_time": "2026-10-21T00:24:28.000Z"
+      },
+      {
+        "id": "1187418170388469",
+        "created_time": "2026-10-20T00:27:01.000Z"
+      },
+      {
+        "id": "2171662733701511",
+        "created_time": "2026-10-19T00:48:14.000Z"
+      },
+      {
+        "id": "1412951121001904",
+        "created_time": "2026-10-18T07:40:13.000Z"
+      },
+      {
+        "id": "1079641431533649",
+        "created_time": "2026-10-17T11:46:55.000Z"
+      },
+      {
+        "id": "1810329020382199",
+        "created_time": "2026-08-23T18:23:32.000Z"
+      },
+      {
+        "id": "1144960970811339",
+        "created_time": "2026-01-03T02:21:47.000Z"
+      },
+      {
+        "id": "865127193160361",
+        "created_time": "2025-12-31T11:31:11.000Z"
+      },
+      {
+        "id": "883240671067243",
+        "created_time": "2025-12-31T11:16:10.000Z"
+      },
+      {
+        "id": "828149196716252",
+        "created_time": "2025-12-30T18:40:59.000Z"
+      }
+    ]
+  }
+}
