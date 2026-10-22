@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-22",
+  "approved_at": "2026-10-22T07:44:07.524Z",
+  "approval": "Owner replied exact 'Ok' in the linked main conversation immediately after the assistant requested approval for this exact displayed voiced video, caption and settings.",
+  "consent_scope": "Only 2026-10-22 exact preview run 39733806715, matching voiced MP4, caption, first brand comment, voiceover/slide durations and settings. No future content consent.",
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "account_username": "abasonplus",
+  "preview_run_id": 39733806715,
+  "video_sha256": "aaed268aea140409d92225b723179967cde535fdc3191421b53239d5cbfb71a0",
+  "caption_sha256": "6c9572ed65eb11fb78f0acd22c828a68b6d4606a7d708ce83c23dd75abda2146",
+  "privacy_level": "PUBLIC_TO_EVERYONE",
+  "allow_comment": true,
+  "allow_duet": true,
+  "allow_stitch": true,
+  "video_made_with_ai": true,
+  "commercialContentType": "none",
+  "video_cover_timestamp_ms": 0,
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "codec": "H264",
+    "audio": "AAC",
+    "slides": 5,
+    "slide_durations": [
+      3.633333,
+      6.9,
+      7.2,
+      6.566667,
+      5.9
+    ],
+    "voiceover": {
+      "engine": "CosyVoice3",
+      "reference": "Dan Mason",
+      "reference_url": "https://raw.githubusercontent.com/CoisLR/TTS-Reference-Voices/main/voices/dan_mason.flac",
+      "complete": true,
+      "script_sha256": "e0d8b438cea0250393f05119f664ac1523ed35fee1e2b236881250e732f3132d",
+      "mix": "narration_100_music_20_no_amix_normalization",
+      "voice_gain": 1,
+      "music_gain": 0.2,
+      "narrated_slide_count": 5
+    },
+    "duration_seconds": 30.2
+  },
+  "first_comment": "ঢাকা–গাজীপুরে ছয় লেন: কী বদলাবে?\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/"
+}
