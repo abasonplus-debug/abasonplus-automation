@@ -4,9 +4,9 @@ on:
     branches: [main]
     paths: ['previews/tiktok/current.json']
   schedule:
-    - cron: '0 2 * * *' # Owner-selected daily 02:00 Europe/Berlin video trigger
+    - cron: '0 1 * * *' # Owner-selected daily 01:00 Europe/Berlin video trigger
       timezone: 'Europe/Berlin'
-    - cron: '31 2 * * *' # Backup ONLY when no earlier scheduled attempt exists today
+    - cron: '31 1 * * *' # Backup ONLY when no earlier scheduled attempt exists today
       timezone: 'Europe/Berlin'
   workflow_dispatch:
     inputs:
