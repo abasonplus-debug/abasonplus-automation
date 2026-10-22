@@ -16,6 +16,21 @@ def validate_reviewed_timing(meta, duration, approval, source_run, source_policy
     if (created.tzinfo is None
             or created.astimezone(ZoneInfo("Europe/Berlin")).date().isoformat() != approval["date"]):
         raise ValueError("Reviewed timing: source run is not from the approved Berlin date")
+    modes = [node.value.value for node in ast.parse(source_policy).body
+             if isinstance(node, ast.Assign) and isinstance(node.value, ast.Constant)
+             and any(isinstance(t, ast.Name) and t.id == "TIMING_MODE" for t in node.targets)]
+    if modes == ['narration_v1']:
+        try:
+            from .carousel_timing import validate_timing
+        except ImportError:
+            from carousel_timing import validate_timing
+        expected = approval.get('format', {})
+        if (expected.get('timing_mode') != 'narration_v1'
+            or expected.get('slides') != meta.get('slides')
+            or expected.get('slide_durations') != meta.get('slide_durations')
+            or expected.get('narration_sha256') != meta.get('narration', {}).get('sha256')):
+            raise ValueError('Reviewed narration/durations differ from exact owner approval')
+        return validate_timing(meta, duration)
     values = [node.value.value for node in ast.parse(source_policy).body
               if isinstance(node, ast.Assign) and isinstance(node.value, ast.Constant)
               and any(isinstance(t, ast.Name) and t.id == "SLIDE_SECONDS" for t in node.targets)]
