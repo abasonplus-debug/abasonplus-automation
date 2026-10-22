@@ -17,6 +17,7 @@ from publication_policy import validate_social_copy
 from carousel_style import STYLE_ID, validate_style
 from carousel_timing import validate_timing, MIN_SLIDES, MAX_SLIDES
 from engagement_pack import validate_pack
+from cosyvoice3_daily_voiceover import verify_voiceover
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 OUT=ROOT/"output"
@@ -105,6 +106,9 @@ required(len(v)==1 and v[0].get("codec_name")=="h264" and
 required(len(a)>=1 and a[0].get("codec_name")=="aac","original background music missing")
 duration=float(probe["format"]["duration"])
 validate_timing(report,duration)
+required(isinstance(report.get("voiceover"),dict) and report["voiceover"].get("complete") is True,
+         "daily video is missing required Dan Mason CosyVoice3 narration")
+verify_voiceover(OUT,brief,report)
 required((ROOT/"assets"/"abasonplus.mp3").is_file(),"original music asset missing")
 expected_caption=(OUT/"caption.txt").read_text(encoding="utf-8")
 expected_description=(OUT/"description.txt").read_text(encoding="utf-8")
@@ -122,6 +126,6 @@ with Image.open(OUT/'thumbnail_upload.jpg') as cover:
 required(0<(OUT/'thumbnail_upload.jpg').stat().st_size<=2_000_000,'Upload cover too large')
 # This marker is not human aesthetic approval: it records machine QA, explicitly.
 MARKER.write_text("auto_quality_checked="+DATE+"\n",encoding="utf-8")
-print("VIDEO AUTOMATED QA PASSED: Distinct licensed/CLIP-screened photos; correct 9:16, source, font, MP4 and music.")
+print("VIDEO AUTOMATED QA PASSED: Distinct licensed/CLIP-screened photos; correct 9:16, source, font, aligned CosyVoice3 male voice plus music.")
 print("VISUAL QA REMAINS AUTOMATED HEURISTIC; owner can still request review.")
 
