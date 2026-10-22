@@ -61,3 +61,10 @@ class RecoveryTests(unittest.TestCase):
             with self.assertRaises(ValueError):verified_async_receipt(p,'youtube','2026-10-22',now)
             e['observed_at']=now.isoformat();e['source_reference']['native_feed_module']=54;p.write_text(json.dumps(e))
             with self.assertRaises(ValueError):verified_async_receipt(p,'youtube','2026-10-22',now)
+
+    def test_native_instagram_created_time_keeps_current_day_hold(self):
+        r=self.fixture('instagram')
+        r['data']={'status':'success','posts':[{'id':'18022461680926341','createdTime':'2026-10-21T00:26:23.000Z'}]}
+        self.assertFalse(validate_receipt(r,'instagram','2026-10-22')['reserved'])
+        r['data']['posts'][0]['createdTime']='2026-10-22T00:26:23.000Z'
+        with self.assertRaises(ValueError):validate_receipt(r,'instagram','2026-10-22')
