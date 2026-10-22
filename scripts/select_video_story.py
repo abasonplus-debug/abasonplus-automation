@@ -22,7 +22,7 @@ validate_article_html(data.get("content", ""))
 if not trusted_source_url(data.get("source_url", "")) or data["source_url"] not in data.get("content", ""):
     raise RuntimeError("Source missing or not present in daily article")
 if not isinstance(story,dict) or not MIN_SLIDES-1<=len(story.get("tips",[]))<=MAX_SLIDES-1:
-    raise RuntimeError("Need 4–15 sourced carousel text groups; each may contain multiple sentences")
+    raise RuntimeError("Need 4–63 sourced carousel text groups; each may contain multiple sentences")
 if story.get("source_url")!=data["source_url"] or story.get("verified_on")!=today:
     raise RuntimeError("Slide and article source/version mismatch")
 photos=story.get("photos")
