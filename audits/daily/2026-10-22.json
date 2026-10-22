@@ -1,0 +1,132 @@
+{
+  "checked_at": "2026-10-22T07:39:09.195Z",
+  "context": {
+    "fresh_content_ready": true,
+    "exact_tiktok_video_approved": false,
+    "lookup_complete": {
+      "website": true,
+      "facebook": true,
+      "youtube": true,
+      "instagram": true,
+      "tiktok": false
+    }
+  },
+  "evidence": [
+    {
+      "platform": "website",
+      "post_id": "59",
+      "url": "https://abasonplus.wordpress.com/2026/10/22/ap-dhaka-gazipur-brt-six-lane-2026-10-22/",
+      "status": "published",
+      "published_at": "2026-10-22T00:20:21+00:00",
+      "observed_at": "2026-10-22T07:39:09.195Z",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "WordPress public REST site 257973809 post 59"
+    },
+    {
+      "platform": "youtube",
+      "post_id": "fYaZDDMqFvs",
+      "url": "https://www.youtube.com/watch?v=fYaZDDMqFvs",
+      "status": "published",
+      "published_at": "2026-10-22T07:30:47Z",
+      "observed_at": "2026-10-22T07:32:00.184Z",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make 7968544 execution eaadc425a3d64134a124b2c81047e66c module 33 cycle 1"
+    },
+    {
+      "platform": "facebook",
+      "post_id": "1471212341534021",
+      "url": "https://www.facebook.com/reel/1471212341534021/",
+      "status": "published",
+      "published_at": "2026-10-22T07:33:14.000Z",
+      "observed_at": "2026-10-22T07:35:10.664Z",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make 7968544 execution a166c5872a14474f930306c28a5c077b module 34 cycle 1"
+    },
+    {
+      "platform": "instagram",
+      "post_id": "18355902385172319",
+      "url": "https://www.instagram.com/reel/DeyddmgApjv/",
+      "status": "published",
+      "published_at": "2026-10-22T07:36:34.913Z",
+      "observed_at": "2026-10-22T07:39:09.195Z",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Checker 8007397 execution 1792ae72ca6440cb85f682cd9fa4b1ed GET /posts/6ad9bcc93ea7813d51bfb916"
+    },
+    {
+      "platform": "tiktok",
+      "post_id": null,
+      "url": null,
+      "status": "awaiting_video_review",
+      "published_at": null,
+      "observed_at": "2026-10-22T07:39:09.195Z",
+      "verification": "platform_readback",
+      "identity_matched": false,
+      "source_reference": "Pending exact preview 39733806715; current-day approval/publication records absent; no TikTok delivery attempted"
+    }
+  ],
+  "quota": {
+    "used": 528,
+    "remaining": 472,
+    "days_until_reset": 22,
+    "measured_daily_credits": null,
+    "free": true,
+    "auto_purchase": false
+  },
+  "quality": {
+    "status": "automated_qa_passed_with_limitations",
+    "findings": [
+      "Exact voiced preview 39733806715: MP4 SHA256 aaed268aea140409d92225b723179967cde535fdc3191421b53239d5cbfb71a0; 30.20 seconds; CosyVoice3 Dan Mason; narration 100%, original music 20%.",
+      "Mobile overlay/logo coverage and dense-text readability were not tested on a physical phone.",
+      "YouTube uploader returned containsSyntheticMedia=false; do not claim AI disclosure enabled.",
+      "Recovery Instagram parser now accepts actual native createdTime; ten targeted tests and Safe Code Validation run 39741232408 passed."
+    ]
+  },
+  "weekly_metrics": {
+    "status": "not_due",
+    "observations": [],
+    "unavailable_metrics": [
+      "No performance audit in this owner-requested incident publication."
+    ]
+  },
+  "recovery": {
+    "delivery_attempted": true,
+    "failure_phase": "resolved_pre_delivery_photo_layout_and_async_readback",
+    "transient_failure": false,
+    "github_job_status": "success",
+    "prior_retries": 0,
+    "current_day_verified": true,
+    "quota_safe": true,
+    "owner_dispatched_runs": {
+      "youtube": 39740854731,
+      "facebook": 39741193843,
+      "instagram": 39741478940
+    },
+    "duplicate_keys_removed": false,
+    "tiktok_delivery_attempted": false
+  },
+  "comments": {
+    "youtube": {
+      "comment_id": "UgySdRPyramd-32h0514AaABAg",
+      "status": "native_own_public_returned",
+      "source_reference": "d5baa84396724294a8fdde84fd941e69 module40 cycle1"
+    },
+    "facebook": {
+      "comment_id": "122252982290270684_1674590447536603",
+      "status": "native_returned_separate_read_not_performed",
+      "source_reference": "2bda99cdfd5f45b596676df1adb1573f module38 cycle1"
+    },
+    "instagram": {
+      "comment_id": "17991886566063204",
+      "status": "own_readback_verified",
+      "source_reference": "checker 4bd856360c404802992ee6540962cc0f",
+      "pagination_complete": true
+    }
+  },
+  "thumbnail": {
+    "youtube": "native_thumbnail_module39_success"
+  }
+}
