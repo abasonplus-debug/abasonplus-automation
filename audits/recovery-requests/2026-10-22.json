@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-22",
+  "owner_authorized": true,
+  "owner_request_reference": "Owner requested repair/publication arrangements and explicitly said বানাও in the linked main conversation on 22 October 2026.",
+  "failed_run_id": 39699394742,
+  "preview_run_id": 39733806715,
+  "preview_head_sha": "038ccdc95570592b6b4346b7f9e8ff3fcad28935",
+  "video_sha256": "aaed268aea140409d92225b723179967cde535fdc3191421b53239d5cbfb71a0",
+  "editorial_sha256": "a5766238a3607cb5a7e22c11fa5a2d0649fa11046cb74f0e8e9faaa7ffab7e5a",
+  "authorized_platforms": [
+    "youtube",
+    "facebook",
+    "instagram"
+  ],
+  "tiktok_authorized": false,
+  "quota": {
+    "free": true,
+    "remaining": 560,
+    "auto_purchase": false,
+    "observed_at": "2026-10-22T06:35:23.395Z"
+  },
+  "no_reservation_removal": true,
+  "no_ambiguous_retry": true
+}
