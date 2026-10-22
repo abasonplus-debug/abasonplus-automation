@@ -86,7 +86,7 @@ class ScheduleReliability(unittest.TestCase):
 
     def test_day_rechecked_immediately_before_delivery(self):
         check_delivery_day('2026-10-21', now())
-        for expected, at in [('2026-10-20', now()), ('2026-10-21', now('2026-10-21T01:59:00+02:00'))]:
+        for expected, at in [('2026-10-20', now()), ('2026-10-21', now('2026-10-21T00:59:00+02:00'))]:
             with self.assertRaises(RuntimeError):
                 check_delivery_day(expected, at)
 
@@ -142,7 +142,7 @@ class WatchdogTests(unittest.TestCase):
     workflow = 'daily-carousel.yml'
 
     def test_absent_trigger_not_called_failure_before_due_or_during_grace(self):
-        for at in ('2026-10-21T01:59:00+02:00', '2026-10-21T02:20:00+02:00'):
+        for at in ('2026-10-21T00:59:00+02:00', '2026-10-21T02:20:00+02:00'):
             self.assertFalse(classify(self.workflow, [], {}, now(at))['alert'])
         result = classify(self.workflow, [], {}, now('2026-10-21T03:07:00+02:00'))
         self.assertTrue(result['alert'])
@@ -206,9 +206,9 @@ class WiringTests(unittest.TestCase):
         return yaml.load((ROOT/path).read_text(), Loader=yaml.BaseLoader)
 
     def test_backups_and_primary_share_gate_and_serialization(self):
-        for name, cron in [('daily-carousel.yml', '31 2 * * *'), ('wordpress-post.yml', '23 2 * * *')]:
+        for name, cron in [('daily-carousel.yml', '31 1 * * *'), ('wordpress-post.yml', '23 1 * * *')]:
             workflow = self.load('.github/workflows/'+name)
-            self.assertEqual(workflow['on']['schedule'], [{'cron': '0 2 * * *', 'timezone': 'Europe/Berlin'},
+            self.assertEqual(workflow['on']['schedule'], [{'cron': '0 1 * * *', 'timezone': 'Europe/Berlin'},
                                                         {'cron': cron, 'timezone': 'Europe/Berlin'}])
             self.assertEqual(workflow['concurrency']['cancel-in-progress'], 'false')
             self.assertIn('schedule-gate', workflow['jobs'])
@@ -220,7 +220,7 @@ class WiringTests(unittest.TestCase):
 
     def test_watchdog_separate_schedule_and_completion_triggers_never_upload(self):
         w = self.load('.github/workflows/publication-watchdog.yml')
-        self.assertEqual(w['on']['schedule'], [{'cron': '7 3 * * *', 'timezone': 'Europe/Berlin'}])
+        self.assertEqual(w['on']['schedule'], [{'cron': '7 2 * * *', 'timezone': 'Europe/Berlin'}])
         self.assertIn('workflow_run', w['on'])
         self.assertEqual(w['jobs']['check']['permissions']['actions'], 'read')
         source = (ROOT/'scripts/publication_watchdog.py').read_text()
