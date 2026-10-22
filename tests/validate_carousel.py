@@ -63,7 +63,7 @@ assert "timezone: 'Europe/Berlin'" in video_workflow
 assert "needs.source.outputs.ready == 'true'" in video_workflow,"Video missing fresh daily editorial gate"
 assert "if: ${{ github.event_name == 'schedule' }}" in video_workflow,"Manual video workflow must be preview-only"
 assert "python3 scripts/select_video_story.py" in video_workflow,"Mandatory topic-and-source gate missing"
-assert "Verify dimensions, original audio and visual layout" in video_workflow,"Mandatory rendering QA missing"
+assert "validate_timing(meta," in video_workflow and "validate_style(quality_record)" in video_workflow and "verify_voiceover(out, news, meta)" in video_workflow,"Mandatory visual/timing/voice QA missing"
 assert "python3 scripts/verify_video_release.py" in video_workflow,"Independent photo release gate missing"
 assert '-F "visual_qa_passed=true"' in video_workflow,"Make video QA approval mapping missing"
 # Owner explicitly enabled ONLY WordPress Post by Email, scheduled once daily.
