@@ -33,8 +33,11 @@ def check(condition: bool, message: str) -> None:
         raise RuntimeError("COSYVOICE3_RELEASE_BLOCKED: " + message)
 
 def run(command, timeout=120):
-    return subprocess.run(command, check=True, timeout=timeout,
-                          capture_output=True, text=True)
+    try:
+        return subprocess.run(command, check=True, timeout=timeout,
+                              capture_output=True, text=True)
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError("FFmpeg/tool failed: " + (exc.stderr or exc.stdout or "")[-2500:]) from exc
 
 def probe_duration(filename: Path) -> float:
     raw = run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
