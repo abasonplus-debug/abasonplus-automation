@@ -78,7 +78,7 @@ status={
  "verification":"machine_qa_passed_not_human_approved",
  "video_sha256":hashlib.sha256(VIDEO.read_bytes()).hexdigest(),
  "caption_sha256":hashlib.sha256(caption.encode("utf-8")).hexdigest(),
- "format":{"width":1080,"height":1920,"fps":30,"codec":"H264","audio":"AAC","duration_seconds":round(float(probe["format"]["duration"]),2)},
+ "format":{"width":1080,"height":1920,"fps":30,"codec":"H264","audio":"AAC","slides":info["slides"],"slide_durations":info["slide_durations"],"voiceover":info["voiceover"],"duration_seconds":round(float(probe["format"]["duration"]),2)},
  "no_extra_watermark":True,"soundtrack":"owner_music_mixed_under_cosyvoice3_deep_male",
  "license_and_music_rights_must_be_held_by_owner":True,
  "tiktok_oauth_connected":None,
