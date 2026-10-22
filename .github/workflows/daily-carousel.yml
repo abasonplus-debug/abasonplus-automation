@@ -65,7 +65,7 @@ jobs:
       - name: Install free local rendering/photograph QA tools
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg fonts-noto-core
+          sudo apt-get install -y -qq ffmpeg fonts-noto-core espeak-ng
           python3 -m pip install -r requirements.txt
       - name: Restore local semantic photo models across scheduled runs
         uses: actions/cache@v6
@@ -114,7 +114,7 @@ jobs:
           from scripts.carousel_timing import validate_timing
           validate_timing(meta, float(vid['format']['duration']))
           assert len((out/'image_credits.txt').read_text(encoding='utf-8').strip().splitlines())==meta['slides']
-          print('AUTO VIDEO QA PASS: original licensed photos, independent 9:16 slides, exactly 3 seconds per slide, real soundtrack.')
+          print('AUTO VIDEO QA PASS: original licensed photos, independent 9:16 slides, measured script/narration timing, real soundtrack.')
           PY
       - name: Approve release ONLY after separate real-photo and metadata QA
         run: python3 scripts/verify_video_release.py
@@ -129,6 +129,8 @@ jobs:
             output/slide_*.png
             output/thumbnail.png
             output/thumbnail_upload.jpg
+            output/narration.wav
+            output/narration.json
             output/metadata.json
             output/daily_research_story.json
             output/mobile_qa_contact_sheet.jpg
