@@ -121,7 +121,7 @@ jobs:
           from cosyvoice3_daily_voiceover import verify_voiceover
           verify_voiceover(out, news, meta)
           assert len((out/'image_credits.txt').read_text(encoding='utf-8').strip().splitlines())==meta['slides']
-          print('AUTO VIDEO QA PASS: original licensed photos, 9:16 slides, exact-source Dan Mason CosyVoice3 narration, aligned timing, owner's original background music.')
+          print("AUTO VIDEO QA PASS: original licensed photos, 9:16 slides, exact-source Dan Mason CosyVoice3 narration, aligned timing, original background music.")
           PY
       - name: Approve release ONLY after separate real-photo and metadata QA
         run: python3 scripts/verify_video_release.py
@@ -161,6 +161,14 @@ jobs:
           path: |
             output/daily_research_story.json
             output/photo_preflight.json
+            output/*.mp4
+            output/*.wav
+            output/narration_segments/slide_*.wav
+            output/voiceover_manifest.json
+            output/metadata.json
+            output/slide_*.png
+            output/thumbnail*
+            output/*.txt
           if-no-files-found: warn
           retention-days: 7
       - name: Send ONE daily validated Reel and Short to Make on automatic schedule ONLY
