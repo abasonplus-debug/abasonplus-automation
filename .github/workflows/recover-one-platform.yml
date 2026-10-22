@@ -1,0 +1,76 @@
+name: AbasonPlus Recover One Verified Platform
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Exact current Europe/Berlin date YYYY-MM-DD'
+        required: true
+        type: string
+      platform:
+        description: 'One failed destination; never TikTok or website'
+        required: true
+        type: choice
+        options: [youtube, facebook, instagram]
+      preview_run_id:
+        description: 'Successful exact current-day main video preview run'
+        required: true
+        type: string
+      video_sha256:
+        description: 'Actual approved MP4 SHA-256, not artifact ZIP digest'
+        required: true
+        type: string
+      confirmation:
+        description: 'Type RECOVER_ONE_PLATFORM'
+        required: true
+        type: string
+      dry_run:
+        description: 'Read-only verification; no delivery'
+        type: boolean
+        default: true
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: abasonplus-video-one-source-per-day
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Install local independent release checks
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python3 -m pip install Pillow==12.3.0
+      - name: Fetch only the named source-checked video artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIEW_RUN_ID: ${{ inputs.preview_run_id }}
+        run: |
+          mkdir -p output
+          gh run download "$PREVIEW_RUN_ID" --repo "$GITHUB_REPOSITORY" -n abasonplus-source-checked-video -D output
+      - name: Verify current-day source, exact hash, no reservation and native feed before one delivery
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+          RECOVERY_DAY: ${{ inputs.date }}
+          RECOVERY_PLATFORM: ${{ inputs.platform }}
+          PREVIEW_RUN_ID: ${{ inputs.preview_run_id }}
+          VIDEO_SHA256: ${{ inputs.video_sha256 }}
+          RECOVERY_CONFIRMATION: ${{ inputs.confirmation }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: python3 scripts/recover_one_platform.py
+      - name: Archive sanitized outcome even after uncertain transfer
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: abasonplus-single-platform-recovery
+          path: output/recovery_result.json
+          if-no-files-found: warn
+          retention-days: 7
+# No cron, media generation, TikTok upload, key deletion, whole-router replay or upload retry.
