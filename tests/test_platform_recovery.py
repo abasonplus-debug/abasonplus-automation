@@ -1,6 +1,6 @@
 import copy,pathlib,sys,tempfile,unittest
 sys.path.insert(0,str(pathlib.Path(__file__).resolve().parents[1]/'scripts'))
-from recover_one_platform import validate_receipt,multipart,IDENTITIES
+from recover_one_platform import validate_receipt,validate_readback,verified_async_receipt,multipart,IDENTITIES
 class RecoveryTests(unittest.TestCase):
     def fixture(self,p):
         rows={'youtube':{'items':[{'snippet':{'channelId':IDENTITIES['youtube'],'publishedAt':'2026-10-21T04:00:00Z'}}]},
@@ -33,3 +33,31 @@ class RecoveryTests(unittest.TestCase):
         self.assertNotIn('  schedule:',w);self.assertIn('default: true',w)
         self.assertIn('options: [youtube, facebook, instagram]',w)
         self.assertIn('persist-credentials: false',w)
+
+    def test_exact_processed_readback_and_privacy_guard(self):
+        row={'id':'abcdefghijk','snippet':{'channelId':IDENTITIES['youtube'],'title':'বাংলা hook','publishedAt':'2026-10-22T06:00:00Z'},'status':{'privacyStatus':'public','uploadStatus':'processed'},'processingDetails':{'processingStatus':'succeeded'}}
+        receipt={'schema':1,'platform':'youtube_video','data':{'items':[row]}}
+        self.assertEqual(validate_readback(receipt,'youtube','abcdefghijk','2026-10-22','বাংলা hook')['status'],'published')
+        row['status']['privacyStatus']='private'
+        with self.assertRaises(ValueError):validate_readback(receipt,'youtube','abcdefghijk','2026-10-22','বাংলা hook')
+    def test_facebook_relative_link_only_from_actual_ready_public_post(self):
+        row={'id':'123456789','published':True,'status':{'video_status':'ready'},'privacy':{'value':'EVERYONE'},'title':'বাংলা hook','created_time':'2026-10-22T06:00:00Z','permalink_url':'/reel/123456789/'}
+        receipt={'schema':1,'platform':'facebook_video','data':row}
+        self.assertEqual(validate_readback(receipt,'facebook','123456789','2026-10-22','বাংলা hook')['url'],'https://www.facebook.com/reel/123456789/')
+        row['published']=False
+        with self.assertRaises(ValueError):validate_readback(receipt,'facebook','123456789','2026-10-22','বাংলা hook')
+
+    def test_async_snapshot_must_be_fresh_and_trace_actual_modules(self):
+        import json
+        from datetime import datetime
+        from zoneinfo import ZoneInfo
+        now=datetime(2026,10,22,8,0,tzinfo=ZoneInfo('Europe/Berlin'))
+        e={'observed_at':now.isoformat(),'lookup_scope':'latest_native_entry_in_descending_date_feed',
+           'source_reference':{'scenario_id':7968544,'cycle':1,'execution_id':'a'*32,'reservation_module':49,'native_feed_module':52},'receipt':self.fixture('youtube')}
+        with tempfile.TemporaryDirectory() as d:
+            p=pathlib.Path(d)/'snapshot.json';p.write_text(json.dumps(e))
+            self.assertFalse(verified_async_receipt(p,'youtube','2026-10-22',now)['reserved'])
+            e['observed_at']='2026-10-22T07:50:00+02:00';p.write_text(json.dumps(e))
+            with self.assertRaises(ValueError):verified_async_receipt(p,'youtube','2026-10-22',now)
+            e['observed_at']=now.isoformat();e['source_reference']['native_feed_module']=54;p.write_text(json.dumps(e))
+            with self.assertRaises(ValueError):verified_async_receipt(p,'youtube','2026-10-22',now)
