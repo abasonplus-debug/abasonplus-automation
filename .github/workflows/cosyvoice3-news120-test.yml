@@ -1,0 +1,35 @@
+name: CosyVoice3 Bengali Legal News 120s Preview (FREE ONLY)
+on:
+  push:
+    branches: [experiment/cosyvoice3-bangla-tts-preview]
+    paths:
+      - '.github/workflows/cosyvoice3-news120-test.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  genuine-cosyvoice3-voice:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        part: [0, 1, 2, 3, 4, 5]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install free voice client and free audio converter
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python3 -m pip install --disable-pip-version-check 'gradio_client==2.0.3'
+      - name: Generate actual CosyVoice3 Bengali news segment
+        run: python3 scripts/cosyvoice3_news120.py ${{ matrix.part }}
+      - name: Upload voice segment for private review; NEVER publish
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosyvoice3-news-part-${{ matrix.part }}
+          path: output/cosyvoice3_news120/segment_*/
+          if-no-files-found: warn
+          retention-days: 2
