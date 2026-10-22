@@ -21,12 +21,12 @@ class AuditTests(unittest.TestCase):
         report=build(s)
         self.assertEqual(report['platforms']['youtube']['status'],'not_due')
         self.assertEqual(report['platforms']['tiktok']['status'],'awaiting_video_review')
-    def test_two_am_local_publication_boundary(self):
+    def test_one_am_local_publication_boundary(self):
         s=self.snapshot()
-        s['checked_at']='2026-10-19T01:59:59+02:00'
+        s['checked_at']='2026-10-19T00:59:59+02:00'
         for platform in ('website','facebook','youtube','instagram'):
             self.assertEqual(build(s)['platforms'][platform]['status'],'not_due')
-        s['checked_at']='2026-10-19T02:01:00+02:00'
+        s['checked_at']='2026-10-19T01:01:00+02:00'
         for platform in ('website','facebook','youtube','instagram'):
             self.assertNotEqual(build(s)['platforms'][platform]['status'],'not_due')
     def test_only_one_pre_delivery_transient_retry(self):
