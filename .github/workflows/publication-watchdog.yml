@@ -1,7 +1,7 @@
 name: AbasonPlus Missing-Run and Failure Watchdog (NO POSTS)
 on:
   schedule:
-    - cron: '7 3 * * *' # Independent check after primary and both backup trigger targets
+    - cron: '7 2 * * *' # Independent check after primary and both backup trigger targets
       timezone: 'Europe/Berlin'
   workflow_run:
     workflows:
