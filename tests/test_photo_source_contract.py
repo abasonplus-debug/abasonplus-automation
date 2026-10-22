@@ -39,13 +39,13 @@ class PhotoSourceContract(unittest.TestCase):
                  "url": "https://images.pexels.com/photos/" + str(i) + "/photo.jpeg",
                  "license": "Pexels Free License", "creator": "Fixture", "scene": "Road tunnel"} for i in range(count)]
 
-    def test_three_second_slide_limit_rejects_over_fifty_seconds(self):
+    def test_script_driven_slide_count_has_no_old_fifty_second_cap(self):
         result, story = self.run_selector(self.photos("source_page", 16), tip_count=15)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(len(story["tips"])+1, 16)
-        result, story = self.run_selector(self.photos("source_page", 17), tip_count=16)
+        result, story = self.run_selector(self.photos("source_page", 65), tip_count=64)
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("Need 4–15", result.stderr)
+        self.assertIn("Need 4–63", result.stderr)
         self.assertIsNone(story)
 
     def test_research_source_page_normalized_for_renderer(self):
