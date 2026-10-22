@@ -169,47 +169,27 @@ def choose_text_area(picture, placements):
 def image_for(query, slide_index, placements):
     global relevance_guard
     if selected_photos is not None:
-        from urllib.parse import urlparse
-        item=selected_photos[slide_index]
-        url=item["url"]
-        if urlparse(url).hostname!="images.pexels.com":
-            raise RuntimeError("Unapproved photographic host in manifest")
-        if not item["source"].startswith("https://www.pexels.com/photo/"):
-            raise RuntimeError("Missing verified photographer source page")
+        from photo_preflight import select
+        if relevance_guard is None:
+            relevance_guard = PhotoRelevanceGuard()
+        diagnostic = OUT/'photo_preflight.json'
+        records = json.loads(diagnostic.read_text()) if diagnostic.exists() else {'slides': [], 'no_posts': True}
         try:
-            req=Request(url,headers={"User-Agent":"Mozilla/5.0 AbasonPlus preview research"})
-            with urlopen(req,timeout=30) as response:
-                raw=response.read(17_000_000)
-            picture=Image.open(io.BytesIO(raw)).convert("RGB")
-        except Exception as exc:
-            raise RuntimeError(f"Curated scene {slide_index+1} unavailable: {str(exc)[:100]}") from None
-        if min(picture.size)<1600:
-            raise RuntimeError(f"Curated scene {slide_index+1} too small; refusing upscale")
-        if item.get("license")!="Pexels Free License":
-            raise RuntimeError("Curated photograph licensing is not verified")
-        if relevance_guard is None: relevance_guard=PhotoRelevanceGuard()
-        if not relevance_guard.approved(picture, query):
-            raise RuntimeError(f"Curated scene {slide_index+1} does not match its visual brief")
-        photo_credits.append(f"Slide {slide_index+1}: {item['creator']} | {item['license']} | {item['source']} | Cropped and text overlaid")
-        from PIL import ImageEnhance, ImageFilter
-        picture=ImageOps.fit(picture,(1080,1920),method=Image.Resampling.LANCZOS)
-        original_picture=picture.copy()
-        picture=ImageOps.autocontrast(picture,cutoff=0.4)
-        picture=ImageEnhance.Color(picture).enhance(1.04)
-        picture=picture.filter(ImageFilter.UnsharpMask(radius=1.0,percent=50,threshold=3))
-        if choose_text_area(picture,placements) is None:
-            # Processing can darken an otherwise readable natural photograph.
-            picture=original_picture
-        if choose_text_area(picture,placements) is None:
-            for factor in (0.9,0.8,1.12,1.25,1.4):
-                brightened=ImageEnhance.Brightness(original_picture).enhance(factor)
-                if choose_text_area(brightened,placements) is not None:
-                    picture=brightened
-                    break
-        if choose_text_area(picture,placements) is None:
-            raise RuntimeError(f"Curated scene {slide_index+1} has no readable headline area: {photo_stats(picture, placements[0])}")
-        print(f"Researched real photograph for slide {slide_index+1}: {item['scene']}",flush=True)
-        return picture,choose_text_area(picture,placements)
+            picture, placement, chosen, evidence = select(
+                selected_photos[slide_index], placements, query, relevance_guard, used_photo_titles)
+        except (RuntimeError, ValueError) as exc:
+            records['status'] = 'held'
+            records['failed_slide'] = slide_index+1
+            records['reason'] = str(exc)[:1500]
+            diagnostic.write_text(json.dumps(records, ensure_ascii=False, indent=2)+'\n')
+            raise
+        records['slides'].append({'slide': slide_index+1, **evidence})
+        records['status'] = 'photo_checked_not_final_video_qa'
+        diagnostic.write_text(json.dumps(records, ensure_ascii=False, indent=2)+'\n')
+        source = chosen.get('source') or chosen['source_page']
+        photo_credits.append(f"Slide {slide_index+1}: {chosen['creator']} | {chosen['license']} | {source} | Cropped and text overlaid")
+        print('PHOTO_REPAIR_QA: ' + json.dumps({'slide': slide_index+1, **evidence}), flush=True)
+        return picture, placement
 
     for phrase in search_phrases(query):
         params=urlencode({"action":"query","generator":"search",
