@@ -108,6 +108,26 @@ class VoiceoverTests(unittest.TestCase):
         self.assertEqual(round(VOICE_GAIN/MUSIC_GAIN),5)
 
     @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"),"FFmpeg not installed")
+    def test_script_length_over_50_seconds_is_rendered_not_truncated(self):
+        from PIL import Image
+        with tempfile.TemporaryDirectory() as td:
+            out=pathlib.Path(td)
+            durations=[11.0]*5
+            for i in range(5):
+                Image.new("RGB",(96,176),(20+i*20,80,160)).save(out/f"slide_{i}.png")
+            voice=out/"narration.wav"
+            make_wav(voice,55.0)
+            music=out/"music.mp3"
+            subprocess.run(["ffmpeg","-y","-v","error","-f","lavfi",
+                            "-i","sine=frequency=450:duration=3","-q:a","7",
+                            str(music)],check=True,timeout=30)
+            dest=out/"long_script.mp4"
+            sec=render_with_narration(voice,music,durations,dest)
+            self.assertGreater(sec,50.0)
+            self.assertAlmostEqual(sec,55.0,delta=.15)
+            self.assertGreater(dest.stat().st_size,500000)
+
+    @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"),"FFmpeg not installed")
     def test_full_video_mixes_actual_pcm_voice_and_music_without_online_service(self):
         from PIL import Image
         with tempfile.TemporaryDirectory() as td:
