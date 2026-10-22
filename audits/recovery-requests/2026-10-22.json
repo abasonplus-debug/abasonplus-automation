@@ -15,9 +15,9 @@
   "tiktok_authorized": false,
   "quota": {
     "free": true,
-    "remaining": 560,
+    "remaining": 555,
     "auto_purchase": false,
-    "observed_at": "2026-10-22T06:35:23.395Z"
+    "observed_at": "2026-10-22T06:49:49.508Z"
   },
   "no_reservation_removal": true,
   "no_ambiguous_retry": true
