@@ -1,0 +1,46 @@
+name: AbasonPlus Editorial Photo Preflight (NO POSTS)
+on:
+  push:
+    branches: [main]
+    paths: ['content/daily_editorial_*.json']
+  schedule:
+    - cron: '15 1 * * *'
+      timezone: Europe/Berlin
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: abasonplus-editorial-preflight
+  cancel-in-progress: false
+jobs:
+  photo-layout-check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install free photo and font checks
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-noto-core
+          python3 -m pip install -r requirements.txt
+      - uses: actions/cache@v6
+        with:
+          path: .cache/fastembed
+          key: abasonplus-clip-v1-${{ runner.os }}
+      - name: Validate today's editorial (NO POSTS)
+        run: python3 scripts/select_video_story.py
+      - name: Check all photo crops, subjects and exact text bounds (NO POSTS)
+        env:
+          ABASONPLUS_MODEL_CACHE: .cache/fastembed
+        run: python3 scripts/photo_preflight.py
+      - name: Save preflight findings even when held
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: abasonplus-photo-preflight
+          path: output/photo_preflight.json
+          if-no-files-found: warn
+          retention-days: 7
+# No Make secret, publisher, MP4, consent record or delivery step exists here.
