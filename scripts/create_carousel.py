@@ -313,12 +313,13 @@ qa.save(OUT/'mobile_qa_contact_sheet.jpg',quality=90)
 
 (OUT / "image_credits.txt").write_text("\n".join(photo_credits)+"\n",encoding="utf-8")
 credits = "\n".join(photo_credits)
-(OUT / "caption.txt").open("a",encoding="utf-8").write("\n\nছবির উৎস ও লাইসেন্স:\n"+credits)
+public_credits = "" if all("Pexels Free License" in x for x in photo_credits) else "\n\nPhoto sources and licenses:\n" + credits
+(OUT / "caption.txt").open("a",encoding="utf-8").write(public_credits)
 (OUT / "description.txt").write_text(
     f"{hook}\n" + "\n".join(f"{i}. {p['text']}" for i,p in enumerate(points,1))
-    + f"\n\nhttps://abasonplus.wordpress.com/\n{hashtags} #Shorts"
+    + f"\n\nhttps://abasonplus.wordpress.com/\n{hashtags}"
     + (f"\n\nSource: {item['source_url']}\nVerified: {item.get('verified_on','')}" if item.get("source_url") else "")
-    + "\n\nPhoto sources and licenses:\n" + credits,encoding="utf-8")
+    + public_credits,encoding="utf-8")
 validate_social_copy((OUT/"caption.txt").read_text(encoding="utf-8"),
                      (OUT/"description.txt").read_text(encoding="utf-8"),
                      (OUT/"title.txt").read_text(encoding="utf-8"))
