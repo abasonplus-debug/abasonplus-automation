@@ -1,14 +1,14 @@
 {
-  "checked_at": "2026-10-22T07:39:09.195Z",
+  "checked_at": "2026-10-22T07:51:28.685Z",
   "context": {
     "fresh_content_ready": true,
-    "exact_tiktok_video_approved": false,
+    "exact_tiktok_video_approved": true,
     "lookup_complete": {
       "website": true,
       "facebook": true,
       "youtube": true,
       "instagram": true,
-      "tiktok": false
+      "tiktok": true
     }
   },
   "evidence": [
@@ -58,14 +58,14 @@
     },
     {
       "platform": "tiktok",
-      "post_id": null,
-      "url": null,
-      "status": "awaiting_video_review",
-      "published_at": null,
-      "observed_at": "2026-10-22T07:39:09.195Z",
+      "post_id": "7699395990306000160",
+      "url": "https://www.tiktok.com/@abasonplus/video/7699395990306000160?utm_campaign=tt4d_open_api&utm_source=7608030276714774544",
+      "status": "published",
+      "published_at": "2026-10-22T07:48:50.815Z",
+      "observed_at": "2026-10-22T07:51:27.491Z",
       "verification": "platform_readback",
-      "identity_matched": false,
-      "source_reference": "Pending exact preview 39733806715; current-day approval/publication records absent; no TikTok delivery attempted"
+      "identity_matched": true,
+      "source_reference": "Provider checker b4ea7d6e345e43cc8cef7c051cd97980 and native TikTok own feed 27a7706f75974bbfbb9b5392b999a106"
     }
   ],
   "quota": {
@@ -106,7 +106,7 @@
       "instagram": 39741478940
     },
     "duplicate_keys_removed": false,
-    "tiktok_delivery_attempted": false
+    "tiktok_delivery_attempted": true
   },
   "comments": {
     "youtube": {
@@ -124,9 +124,20 @@
       "status": "own_readback_verified",
       "source_reference": "checker 4bd856360c404802992ee6540962cc0f",
       "pagination_complete": true
+    },
+    "tiktok": {
+      "comment_id": "7699115413041070880",
+      "status": "own_readback_verified",
+      "source_reference": "5b5cd2e0f18a407281de62e19d5afb8f",
+      "pagination_complete": true
     }
   },
   "thumbnail": {
     "youtube": "native_thumbnail_module39_success"
+  },
+  "consent_evidence": {
+    "approval_file": "audits/tiktok-approvals/2026-10-22.json",
+    "publication_file": "audits/tiktok-publications/2026-10-22.json",
+    "video_sha256": "aaed268aea140409d92225b723179967cde535fdc3191421b53239d5cbfb71a0"
   }
 }
