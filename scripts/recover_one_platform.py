@@ -61,6 +61,45 @@ def validate_receipt(receipt, platform, day):
     require(all(d<day for d in localdates),'Current-day or future own post exists; hold for reconciliation')
     return {'reserved':False,'recent_rows_checked':len(rows),'latest_observed_day':max(localdates)}
 
+def verified_async_receipt(path, platform, day, now):
+    evidence=json.loads(Path(path).read_text())
+    ref=evidence.get('source_reference',{})
+    require(ref.get('scenario_id')==7968544 and ref.get('cycle')==1
+            and re.fullmatch(r'[a-f0-9]{32}',ref.get('execution_id','')) is not None,'Missing actual Make execution reference')
+    expected={'youtube':(49,52),'facebook':(50,53),'instagram':(51,54)}[platform]
+    require((ref.get('reservation_module'),ref.get('native_feed_module'))==expected,'Wrong reservation/native feed evidence source')
+    age=now-stamp(evidence['observed_at'])
+    require(timedelta(0)<=age<=timedelta(minutes=5),'Native/reservation evidence is older than five minutes')
+    require(evidence.get('lookup_scope')=='latest_native_entry_in_descending_date_feed','Latest-native-entry ordering not verified')
+    receipt=evidence.get('receipt',{})
+    validate_receipt(receipt,platform,day)
+    return receipt
+
+
+def validate_readback(receipt, platform, video_id, day, hook):
+    require(receipt.get('schema')==1 and receipt.get('platform')==platform+'_video','Wrong readback schema/platform')
+    data=decoded(receipt.get('data'))
+    require(isinstance(data,dict),'Missing platform readback')
+    if platform=='youtube':
+        rows=data.get('items',[])
+        require(len(rows)==1 and rows[0].get('id')==video_id,'Exact YouTube ID not found')
+        item=rows[0];snippet=item.get('snippet',{});status=item.get('status',{});processing=item.get('processingDetails',{})
+        require(snippet.get('channelId')==IDENTITIES[platform] and hook in snippet.get('title',''),'YouTube identity/title mismatch')
+        require(status.get('privacyStatus')=='public' and status.get('uploadStatus')=='processed' and processing.get('processingStatus')=='succeeded','YouTube not processed/public/succeeded')
+        published=snippet.get('publishedAt');url='https://www.youtube.com/watch?v='+video_id
+    else:
+        item=data
+        require(str(item.get('id'))==video_id and item.get('published') is True,'Facebook not published or wrong ID')
+        status=item.get('status',{})
+        require(status.get('video_status')=='ready' and item.get('privacy',{}).get('value')=='EVERYONE','Facebook not ready/public')
+        require(hook in (item.get('description','')+item.get('title','')),'Facebook title/source identity mismatch')
+        published=item.get('created_time');url=item.get('permalink_url','')
+        if url.startswith('/') and not url.startswith('//'):url='https://www.facebook.com'+url
+        require(url.startswith('https://www.facebook.com/'),'Facebook returned no public permalink')
+    require(isinstance(published,str) and stamp(published).astimezone(ZoneInfo('Europe/Berlin')).date().isoformat()==day,'Publication is not from today')
+    return {'platform':platform,'post_id':video_id,'status':'published','url':url,'published_at':published,'identity_matched':True,'verification':'platform_readback'}
+
+
 def multipart(fields, files):
     boundary='AbasonPlus'+uuid.uuid4().hex
     body=bytearray()
@@ -113,12 +152,29 @@ def main():
     # Reapply independent source/date/layout/license/audio/timing QA to the artifact.
     subprocess.run(['python3','scripts/verify_video_release.py'],cwd=ROOT,check=True,timeout=120)
     url=os.environ['MAKE_WEBHOOK_URL']
+    readback_id=os.environ.get('READBACK_ID','').strip()
+    if readback_id:
+        require(os.environ.get('DRY_RUN','true')=='true' and platform in ('youtube','facebook'),'Readback is read-only Facebook/YouTube only')
+        require(re.fullmatch(r'[A-Za-z0-9_-]{11}' if platform=='youtube' else r'[0-9]{6,30}',readback_id) is not None,'Invalid native readback ID')
+        try:
+            req=Request(url,data=json.dumps({'kind':'audit_'+platform+'_read','audit_video_id':readback_id}).encode(),headers={'Content-Type':'application/json'},method='POST')
+            with urlopen(req,timeout=90) as response:receipt=json.load(response)
+        except Exception:raise ValueError('Exact platform readback unavailable; publication unverified') from None
+        evidence=validate_readback(receipt,platform,readback_id,day,brief['hook'])
+        (OUT/'recovery_result.json').write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+        print(json.dumps(evidence,ensure_ascii=False));return
     payload={'kind':'publication_status_provider' if platform=='instagram' else 'publication_status_'+platform,
              'audit_date':day,'audit_platform':platform}
     try:
         req=Request(url,data=json.dumps(payload).encode(),headers={'Content-Type':'application/json'},method='POST')
         with urlopen(req,timeout=90) as response: receipt=json.load(response)
-    except Exception: raise ValueError('Read-only status unavailable; no publication sent') from None
+    except Exception:
+        # Sequential Make webhooks can return Accepted before the native GET runs.
+        # Never interpret that as absence/publication: require fresh inspected
+        # execution evidence from the owner session, not a fabricated empty feed.
+        path=ROOT/'audits/recovery-status'/day/(platform+'.json')
+        try:receipt=verified_async_receipt(path,platform,day,datetime.now(ZoneInfo('Europe/Berlin')))
+        except Exception:raise ValueError('Async receipt needs fresh inspected Make reservation/native-feed evidence; no publication sent') from None
     evidence=validate_receipt(receipt,platform,day)
     report={'date':day,'platform':platform,'preview_run_id':run_id,'video_sha256':expected,'status':'checked_no_delivery',**evidence}
     out=OUT/'recovery_result.json';out.write_text(json.dumps(report,indent=2)+'\n')
