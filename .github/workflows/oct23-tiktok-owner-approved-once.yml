@@ -1,0 +1,94 @@
+name: AbasonPlus Owner Approved Oct23 TikTok Video Publish Once FREE
+on:
+  push:
+    branches: [release/owner-approved-oct23-social-once]
+    paths: ['.github/workflows/oct23-tiktok-owner-approved-once.yml']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: abasonplus-tiktok-oct23-owner-approved-single-attempt
+  cancel-in-progress: false
+jobs:
+  tiktok-one-owner-approved-video:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Date, FREE only and no-duplicate guard
+        run: |
+          set -euo pipefail
+          test "$(TZ=Europe/Berlin date +%F)" = "2026-10-23"
+          echo 'Owner approved posting TODAY video to TikTok. Existing account only, no purchases, no trial, no additional accounts.'
+      - name: Restore the exact QA-passed October 23 CosyVoice3 video
+        uses: actions/download-artifact@v4
+        with:
+          repository: abasonplus-debug/abasonplus-automation
+          run-id: 39873764285
+          name: abasonplus-source-checked-video
+          path: tiktok_payload
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify existing video SHA, topic, Bengali script, voice100/music20 and prepare consented TikTok metadata
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json
+          p=Path("tiktok_payload")
+          vid=p/"abasonplus_daily.mp4"
+          meta=json.loads((p/"metadata.json").read_text(encoding="utf-8"))
+          story=json.loads((p/"daily_research_story.json").read_text(encoding="utf-8"))
+          preview=json.loads((p/"tiktok_preview.json").read_text(encoding="utf-8"))
+          expected="d9d8df8b83b614f95df5416c47f29f092df904a65c3d776d6ba35a50aa74521c"
+          assert sha256(vid.read_bytes()).hexdigest()==expected
+          assert 200_000<vid.stat().st_size<4_500_000
+          assert meta["date"]=="2026-10-23" and meta["verified_on"]=="2026-10-23"
+          assert story["verified_on"]=="2026-10-23" and meta["source_url"]==story["source_url"]
+          assert meta["source_url"]=="https://www.bssnews.net/news/353722"
+          assert preview["content_key"]=="abasonplus-tiktok-2026-10-23"
+          assert preview["video_sha256"]==expected
+          assert preview["verification"]=="machine_qa_passed_not_human_approved"
+          assert meta["slides"]==5 and len(story["tips"])==4
+          v=meta["voiceover"]
+          assert v["complete"] is True and v["engine"]=="CosyVoice3" and v["reference"]=="Dan Mason"
+          assert v["voice_gain"]==1.0 and v["music_gain"]==0.20
+          assert len(v["script_sha256"])==64
+          assert 34<float(preview["format"]["duration_seconds"])<40
+          # The owner's instruction in this chat confirms this particular 23 October video.
+          # Preserve all original four paragraphs and requested 2 topical + 3 broad hashtags.
+          tags="#জমি #ভূমিআইন #Bangladesh #BanglaNews #AbasonPlus"
+          caption=story["hook"]+"\n\n"+"\n".join("✅ "+t["text"].strip() for t in story["tips"])+f"\n\n{tags}"
+          assert 10<len(caption)<=2200 and len(tags.split())==5
+          (p/"tiktok_approved_caption.txt").write_text(caption+"\n",encoding="utf-8")
+          print("TIKTOK_APPROVED_PAYLOAD_CONFIRMED original_hash="+expected+
+                " bytes="+str(vid.stat().st_size)+" caption_length="+str(len(caption))+
+                " privacy=PUBLIC_TO_EVERYONE, comment/duet/stitch=ON",flush=True)
+          PY
+      - name: Submit only the exact approved 23 October video to TikTok via existing Zernio FREE connection
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+          test -n "$MAKE_WEBHOOK_URL"
+          test "$(TZ=Europe/Berlin date +%F)" = "2026-10-23"
+          status="$(curl --silent --show-error --max-time 180 --retry 0 -o /tmp/make-tiktok-response.txt -w '%{http_code}' \
+            -F 'kind=tiktok_reviewed_publish' \
+            -F 'tiktok_post_key=abasonplus-tiktok-2026-10-23' \
+            -F 'video_sha256=d9d8df8b83b614f95df5416c47f29f092df904a65c3d776d6ba35a50aa74521c' \
+            -F 'review_approved=true' \
+            -F 'visual_qa_passed=true' \
+            -F 'visual_style_id=compact_white_gold_v2' \
+            -F 'tiktok_publish_approved=true' \
+            -F 'content_preview_confirmed=true' \
+            -F 'express_consent_given=true' \
+            -F 'rights_confirmed=true' \
+            -F 'tiktok_privacy_level=PUBLIC_TO_EVERYONE' \
+            -F 'tiktok_allow_comment=true' \
+            -F 'tiktok_allow_duet=true' \
+            -F 'tiktok_allow_stitch=true' \
+            -F 'video=@tiktok_payload/abasonplus_daily.mp4;type=video/mp4' \
+            -F 'tiktok_caption=<tiktok_payload/tiktok_approved_caption.txt' \
+            "$MAKE_WEBHOOK_URL")"
+          echo "TIKTOK_MAKE_WEBHOOK_HTTP=$status"
+          case "$status" in 200|201|202|204) echo "TIKTOK_MAKE_TRIGGER_ACCEPTED. Verify modules 9/12/13/15 and Zernio final publication." ;; *) echo "::error::TikTok webhook rejected HTTP $status; DO NOT RETRY BLINDLY"; exit 1 ;; esac
+          echo "One explicitly owner-approved TikTok publication request was submitted via existing FREE connection. Never retry blindly or pay." >> "$GITHUB_STEP_SUMMARY"
