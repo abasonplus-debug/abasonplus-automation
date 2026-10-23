@@ -32,5 +32,34 @@
     5.566667,
     6.566667,
     5.466667
-  ]
+  ],
+  "preview_head_sha": "a2949c8e50d49c6fa97be8ac16f5459ec94205bb",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "codec": "H264",
+    "audio": "AAC",
+    "slides": 5,
+    "slide_durations": [
+      4.1,
+      5.9,
+      5.566667,
+      6.566667,
+      5.466667
+    ],
+    "voiceover": {
+      "engine": "CosyVoice3",
+      "reference": "Dan Mason",
+      "reference_url": "https://raw.githubusercontent.com/CoisLR/TTS-Reference-Voices/main/voices/dan_mason.flac",
+      "complete": true,
+      "script_sha256": "6f0d66c0869c88dda7be020fbc6d6a28028c150203c31bcf283106af30580217",
+      "mix": "narration_100_music_20_no_amix_normalization",
+      "voice_gain": 1,
+      "music_gain": 0.2,
+      "narrated_slide_count": 5
+    },
+    "duration_seconds": 27.6
+  },
+  "artifact_id": "12538897222"
 }
