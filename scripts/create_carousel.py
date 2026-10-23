@@ -72,7 +72,7 @@ hashtags = ' '.join(hashtags_for(heading))
 (OUT / "title.txt").write_text(hook if len(hook + " | AbasonPlus") > 100 else hook + " | AbasonPlus",encoding="utf-8")
 (OUT / "caption.txt").write_text(
     f"{hook}\n\n" + "\n".join(f"✅ {i}. {p['text']}" for i,p in enumerate(points,1))
-    + f"\n\nআপনার অভিজ্ঞতা কী? মন্তব্যে জানান।\n\nhttps://abasonplus.wordpress.com/\n\n{hashtags}",
+    + f"\n\nআপনার অভিজ্ঞতা কী? মন্তব্যে জানান। এমন ব্যবহারিক তথ্যের জন্য AbasonPlus অনুসরণ করুন।\n\nAI দিয়ে তৈরি কণ্ঠ ব্যবহার করা হয়েছে।\n\nhttps://abasonplus.wordpress.com/\n\n{hashtags}",
     encoding="utf-8")
 photo_credits = []
 used_photo_titles = set()
@@ -317,7 +317,7 @@ public_credits = "" if all("Pexels Free License" in x for x in photo_credits) el
 (OUT / "caption.txt").open("a",encoding="utf-8").write(public_credits)
 (OUT / "description.txt").write_text(
     f"{hook}\n" + "\n".join(f"{i}. {p['text']}" for i,p in enumerate(points,1))
-    + f"\n\nhttps://abasonplus.wordpress.com/\n{hashtags}"
+    + f"\n\nAI দিয়ে তৈরি কণ্ঠ ব্যবহার করা হয়েছে।\n\nhttps://abasonplus.wordpress.com/\n{hashtags}"
     + (f"\n\nSource: {item['source_url']}\nVerified: {item.get('verified_on','')}" if item.get("source_url") else "")
     + public_credits,encoding="utf-8")
 validate_social_copy((OUT/"caption.txt").read_text(encoding="utf-8"),
