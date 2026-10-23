@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-10-24T01:42:00+02:00",
+  "checked_at": "2026-10-24T01:52:15+02:00",
   "context": {
     "fresh_content_ready": true,
-    "exact_tiktok_video_approved": false,
+    "exact_tiktok_video_approved": true,
     "lookup_complete": {
       "website": true,
       "facebook": true,
@@ -58,14 +58,14 @@
     },
     {
       "platform": "tiktok",
-      "post_id": null,
-      "url": null,
-      "status": "awaiting_video_review",
-      "published_at": null,
-      "observed_at": "2026-10-24T01:41:30+02:00",
+      "post_id": "7700015024613362976",
+      "url": "https://www.tiktok.com/@abasonplus/video/7700015024613362976?utm_campaign=tt4d_open_api&utm_source=7608030276714774544",
+      "status": "published",
+      "published_at": "2026-10-23T23:51:04.893Z",
+      "observed_at": "2026-10-24T01:52:15+02:00",
       "verification": "platform_readback",
-      "identity_matched": false,
-      "source_reference": "Exact current-day approval/publication files absent; no current video in provider feed. Pending preview40039850439."
+      "identity_matched": true,
+      "source_reference": "Provider exact post6adbf2d5a048f6ea3846cae6 published; fixed own-account native feed matching full caption/time."
     }
   ],
   "quota": {
@@ -86,7 +86,8 @@
       "Bottom-right logo mobile UI coverage possible; no physical device review",
       "Facebook native AI toggle unavailable in exposed module; textual AI narration disclosure published",
       "YouTube AI flag true,thumbnail returned,own public commentUgyPrZkNmpRN0LObM5p4AaABAg; Facebook comment122253185150270684_2006549693367706 returned, no separate readback",
-      "Instagram own comment18069484442775311 confirmed matching exact account/post, pagination complete; module47 success."
+      "Instagram own comment18069484442775311 confirmed matching exact account/post, pagination complete; module47 success.",
+      "Exact owner OK reconciled to approved narrated MP4/hash/caption/settings and actual TikTok publication; previous pending preview is no longer awaiting approval."
     ]
   },
   "weekly_metrics": {
