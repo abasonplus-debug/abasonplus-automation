@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-24",
+  "status": "pending_review_not_approved",
+  "preview_run_id": "40039850439",
+  "video_sha256": "d8ba058a07b37a1b94a91f2e90c266f1fb8ad6e25cb96f31895f39cd6384ef79",
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "artifact_id": "12538897222",
+  "artifact_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/runs/40039850439/artifacts/12538897222",
+  "caption_sha256": "b281f12637c240e7f9a10984ed69e33e99b01ad7580ff0d4ef354416179c2655",
+  "settings": {
+    "privacy_level": "PUBLIC_TO_EVERYONE",
+    "allow_comment": true,
+    "allow_duet": true,
+    "allow_stitch": true,
+    "video_made_with_ai": true,
+    "commercialContentType": "none"
+  },
+  "voiceover": {
+    "engine": "CosyVoice3",
+    "reference": "Dan Mason",
+    "voice_gain": 1,
+    "music_gain": 0.2
+  },
+  "slide_durations": [
+    4.1,
+    5.9,
+    5.566667,
+    6.566667,
+    5.466667
+  ],
+  "caption": "অগ্নিনির্বাপক আছে—বের হওয়ার পথ খোলা তো?\n✅ জরুরি সিঁড়ি ও বের হওয়ার পথ দেখুন। বাধা থাকলে লিখিতভাবে সমাধান চান।\n✅ যন্ত্র থাকাই যথেষ্ট নয়। পরীক্ষা ও রক্ষণাবেক্ষণের নথি মিলিয়ে নিন।\n✅ অগ্নিনিরাপত্তা ও কাঠামোর মূল্যায়ন আলাদা। সংশ্লিষ্ট নথি ও বিশেষজ্ঞের মতামত নিন।\n✅ দায়িত্ব ও প্রশিক্ষণের ব্যবস্থা জানুন। নিজেরা বিপজ্জনক আগুনের পরীক্ষা নয়।\n\n#অগ্নিনিরাপত্তা #ভবননিরাপত্তা #Bangladesh #বাংলাদেশ #Bangla",
+  "first_comment": "অগ্নিনির্বাপক আছে—বের হওয়ার পথ খোলা তো?\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/"
+}
