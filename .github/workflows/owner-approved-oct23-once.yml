@@ -1,0 +1,101 @@
+name: OWNER-APPROVED Oct 23 AbasonPlus Publish Once (FREE)
+on:
+  push:
+    branches:
+      - release/owner-approved-oct23-social-once
+    paths:
+      - .github/workflows/owner-approved-oct23-once.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: abasonplus-owner-approved-oct23-one-time-publication
+  cancel-in-progress: false
+jobs:
+  verified-one-time-send:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    steps:
+      - name: Date and no-paid guard
+        run: |
+          set -euo pipefail
+          test "$(TZ=Europe/Berlin date +%F)" = "2026-10-23" || { echo "Wrong day: no upload"; exit 1; }
+          echo "Owner explicitly approved today's social publication. Make FREE only; never pay."
+      - name: Recover exact quality-verified CosyVoice3 video artifact from Oct 23 source run
+        uses: actions/download-artifact@v4
+        with:
+          repository: abasonplus-debug/abasonplus-automation
+          run-id: 39873764285
+          name: abasonplus-source-checked-video
+          path: release_payload
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify original file identity, voice and source; prepare only five public hashtags
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json, subprocess, sys
+          p=Path("release_payload")
+          video=p/"abasonplus_daily.mp4"
+          cover=p/"thumbnail_upload.jpg"
+          meta=json.loads((p/"metadata.json").read_text(encoding="utf-8"))
+          story=json.loads((p/"daily_research_story.json").read_text(encoding="utf-8"))
+          m=sha256(video.read_bytes()).hexdigest()
+          EXPECTED="d9d8df8b83b614f95df5416c47f29f092df904a65c3d776d6ba35a50aa74521c"
+          assert m==EXPECTED, "Source video is not the exact already verified October 23 asset"
+          assert meta["date"]=="2026-10-23" and meta["verified_on"]=="2026-10-23"
+          assert story["verified_on"]=="2026-10-23"
+          assert meta["source_url"]==story["source_url"]=="https://www.bssnews.net/news/353722"
+          assert meta["slides"]==len(story["tips"])+1==5
+          voice=meta["voiceover"]
+          assert voice["engine"]=="CosyVoice3" and voice["reference"]=="Dan Mason"
+          assert voice["complete"] is True and voice["voice_gain"]==1.0 and voice["music_gain"]==0.20
+          assert len(voice["script_sha256"])==64
+          assert 500_000 < video.stat().st_size < 4_500_000
+          assert cover.stat().st_size>1000
+          # Use measured package overhead headroom for Make's current FREE 5 MB webhook.
+          assert video.stat().st_size+cover.stat().st_size+120_000 < 5_000_000, "FREE WEBHOOK LIMIT: NO POST"
+          duration=float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration",
+            "-of","default=noprint_wrappers=1:nokey=1",str(video)],text=True).strip())
+          assert abs(duration-sum(meta["slide_durations"]))<0.16 and 30<duration<60
+          hook=story["hook"].strip()
+          text="\n".join(f"✅ {x['text'].strip()}" for x in story["tips"])
+          tags="#জমি #ভূমিআইন #Bangladesh #BanglaNews #AbasonPlus"
+          caption=f"{hook}\n\n{text}\n\nবিস্তারিত: https://abasonplus.wordpress.com/\n\n{tags}"
+          description=f"{hook}\n\n{text}\n\nসূত্র: {meta['source_url']}\nবিস্তারিত: https://abasonplus.wordpress.com/\n\n{tags}"
+          assert caption.count("#")==5 and len(caption)<=2200
+          (p/"caption_release.txt").write_text(caption+"\n",encoding="utf-8")
+          (p/"description_release.txt").write_text(description+"\n",encoding="utf-8")
+          print("VALIDATED_ORIGINAL_VIDEO:",m,"seconds:",duration,"bytes:",video.stat().st_size,
+                "thumbnail_bytes:",cover.stat().st_size,"five_hashtags:",tags,flush=True)
+          PY
+      - name: Send exactly one owner-approved multipart video to active Make routes for FB, YT and IG (NO TikTok)
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+          test -n "$MAKE_WEBHOOK_URL" || { echo "::error::Make webhook secret missing: no social upload"; exit 1; }
+          test "$(TZ=Europe/Berlin date +%F)" = "2026-10-23" || { echo "::error::Date changed; no upload"; exit 1; }
+          VIDEO_SHA256="d9d8df8b83b614f95df5416c47f29f092df904a65c3d776d6ba35a50aa74521c"
+          status="$(curl --silent --show-error --max-time 240 --retry 0 -o /tmp/make-response.txt -w '%{http_code}' \
+            -F "kind=video" \
+            -F "target_platform=all" \
+            -F "review_approved=true" \
+            -F "visual_qa_passed=true" \
+            -F "visual_style_id=compact_white_gold_v2" \
+            -F "video_sha256=$VIDEO_SHA256" \
+            -F "video=@release_payload/abasonplus_daily.mp4;type=video/mp4" \
+            -F "title=<release_payload/title.txt" \
+            -F "caption=<release_payload/caption_release.txt" \
+            -F "description=<release_payload/description_release.txt" \
+            -F "first_comment=<release_payload/first_comment.txt" \
+            -F "first_comment_json=<release_payload/first_comment_json.txt" \
+            -F "thumbnail=@release_payload/thumbnail_upload.jpg;type=image/jpeg" \
+            -F "tiktok_publish_approved=false" \
+            "$MAKE_WEBHOOK_URL")"
+          echo "Make webhook HTTP status: $status"
+          case "$status" in 200|201|202|204) echo "MAKE_WEBHOOK_ACCEPTED: publication outcome must be verified per-platform" ;; *) echo "::error::Make rejected upload with HTTP $status"; exit 1 ;; esac
+          echo "## Owner-approved October 23 source video sent once" >> "$GITHUB_STEP_SUMMARY"
+          echo "FB, YouTube, Instagram: Check Make execution, native public live links. TikTok not targeted." >> "$GITHUB_STEP_SUMMARY"
+          echo "Source video: SHA-256 $VIDEO_SHA256, 100% Dan Mason CosyVoice3 voice + 20% owner music. FREE only." >> "$GITHUB_STEP_SUMMARY"
