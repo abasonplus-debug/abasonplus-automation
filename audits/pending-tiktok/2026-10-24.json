@@ -1,6 +1,6 @@
 {
   "date": "2026-10-24",
-  "status": "pending_review_not_approved",
+  "status": "approved_and_published",
   "preview_run_id": "40039850439",
   "video_sha256": "d8ba058a07b37a1b94a91f2e90c266f1fb8ad6e25cb96f31895f39cd6384ef79",
   "account_id": "6ad22ddb280aa6cf7d25310d",
@@ -29,5 +29,8 @@
     5.466667
   ],
   "caption": "অগ্নিনির্বাপক আছে—বের হওয়ার পথ খোলা তো?\n✅ জরুরি সিঁড়ি ও বের হওয়ার পথ দেখুন। বাধা থাকলে লিখিতভাবে সমাধান চান।\n✅ যন্ত্র থাকাই যথেষ্ট নয়। পরীক্ষা ও রক্ষণাবেক্ষণের নথি মিলিয়ে নিন।\n✅ অগ্নিনিরাপত্তা ও কাঠামোর মূল্যায়ন আলাদা। সংশ্লিষ্ট নথি ও বিশেষজ্ঞের মতামত নিন।\n✅ দায়িত্ব ও প্রশিক্ষণের ব্যবস্থা জানুন। নিজেরা বিপজ্জনক আগুনের পরীক্ষা নয়।\n\n#অগ্নিনিরাপত্তা #ভবননিরাপত্তা #Bangladesh #বাংলাদেশ #Bangla",
-  "first_comment": "অগ্নিনির্বাপক আছে—বের হওয়ার পথ খোলা তো?\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/"
+  "first_comment": "অগ্নিনির্বাপক আছে—বের হওয়ার পথ খোলা তো?\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/",
+  "publication_record": "audits/tiktok-publications/2026-10-24.json",
+  "approval_record": "audits/tiktok-approvals/2026-10-24.json",
+  "published_post_id": "7700015024613362976"
 }
