@@ -43,3 +43,14 @@ Timing update (owner, 2026-10-20): every image is exactly 3 seconds. This supers
 
 ## Owner schedule update — 23 October 2026
 Daily WordPress and Facebook/YouTube/Instagram video trigger target is now 01:00 Europe/Berlin, superseding older 02:00 targets. Research remains 00:30; source monitor and photo preflight are 00:45. Missing-trigger-only backups are WordPress 01:23 and video 01:31; watchdog 02:07. Existing Berlin-day reservations, no replay after an earlier attempt, QA and exact-video TikTok preview/OK remain unchanged. Trigger time is not guaranteed publication completion time.
+
+## Owner production contract — 24 October 2026 (supersedes older copy/timing rules)
+- Every post needs an attractive factual hook, substantial useful Bengali caption and fuller description within each platform limit; a natural follow/subscribe invitation, without guaranteed reach claims.
+- Exactly FIVE distinct hashtags: TWO selected for the actual subject, THREE broad Bangladesh/Bangla audience tags (#Bangladesh #বাংলাদেশ #Bangla). These audience choices are not verified as the world's most-used tags. No irrelevant trending bait.
+- Prioritise verified current useful news; clearly label useful evergreen guides. Do not repeat an unchanged topic or source.
+- Real licensed professional, topic-matched 9:16 photographs, distinct per slide, with restrained finishing; “premium/final director cut” is an aesthetic target, not a substitute for QA. Original small bottom-right logo, compact white/gold outlined Bold text remains locked.
+- Detailed multi-sentence slide copy is allowed. Use as much useful exact text as fits measured glyph/outline/shadow bounds at the existing minimum font size; hold or split during editorial preparation on overflow, never shrink or omit conditions. Do not add filler merely to make slides dense.
+- Full selected CosyVoice3 Dan Mason narration determines each slide duration (minimum three seconds). NO fixed 15-second target or 50-second overall cap; keep 5–16 images, voice 100%, owner assets/abasonplus.mp3 music 20%, 5MB Make payload and actual provider limits.
+- AI disclosure defaults ON for new media: YouTube containsSyntheticMedia=true; Instagram isAiGenerated=true; TikTok video_made_with_ai=true. Current native Make Facebook upload module exposes no AI-label input; public copy discloses AI narration, and native label status remains unverified. Do not invent a flag.
+- Primary release trigger remains 01:00 Europe/Berlin, missing-trigger-only backups 01:23 WordPress/01:31 video, watchdog 02:07. Rendering/provider processing may finish later; GitHub cron is not an exact-minute SLA.
+- Keep free-only operation, QA, dated source/license evidence, per-platform duplicate reservations, no ambiguous replay and exact-video TikTok preview/OK. Labels and future settings do not retroactively approve or republish existing media.
