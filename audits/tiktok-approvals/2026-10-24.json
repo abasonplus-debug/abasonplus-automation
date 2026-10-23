@@ -1,0 +1,36 @@
+{
+  "privacy_level": "PUBLIC_TO_EVERYONE",
+  "allow_comment": true,
+  "allow_duet": true,
+  "allow_stitch": true,
+  "video_made_with_ai": true,
+  "commercialContentType": "none",
+  "date": "2026-10-24",
+  "approved_at": "2026-10-24T01:46:30+02:00",
+  "preview_run_id": "40039850439",
+  "video_sha256": "d8ba058a07b37a1b94a91f2e90c266f1fb8ad6e25cb96f31895f39cd6384ef79",
+  "caption_sha256": "b281f12637c240e7f9a10984ed69e33e99b01ad7580ff0d4ef354416179c2655",
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "account_username": "abasonplus",
+  "approval": "Owner replied 'Ok' immediately after exact 24 October narrated MP4 preview and statement approving the previously displayed caption/settings.",
+  "consent_scope": "Only run40039850439 exact MP4, original pending caption, first comment, Public/comments/Duet/Stitch/AI ON; one TikTok publication.",
+  "owner_evidence": {
+    "message": "Ok",
+    "context": "Direct response to exact-video TikTok approval handoff in linked main conversation"
+  },
+  "rights_confirmed": true,
+  "first_comment": "অগ্নিনির্বাপক আছে—বের হওয়ার পথ খোলা তো?\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/",
+  "voiceover": {
+    "engine": "CosyVoice3",
+    "reference": "Dan Mason",
+    "voice_gain": 1,
+    "music_gain": 0.2
+  },
+  "slide_durations": [
+    4.1,
+    5.9,
+    5.566667,
+    6.566667,
+    5.466667
+  ]
+}
