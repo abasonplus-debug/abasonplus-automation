@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-10-23T01:56:00+02:00",
+  "checked_at": "2026-10-23T11:06:00+02:00",
   "context": {
     "fresh_content_ready": true,
     "exact_tiktok_video_approved": false,
     "lookup_complete": {
       "website": true,
-      "facebook": false,
-      "youtube": false,
+      "facebook": true,
+      "youtube": true,
       "instagram": true,
       "tiktok": true
     }
@@ -18,27 +18,79 @@
       "url": "https://abasonplus.wordpress.com/2026/10/22/ap-agricultural-land-use-check-2026-10-23/",
       "status": "published",
       "published_at": "2026-10-22T23:45:51+00:00",
-      "observed_at": "2026-10-23T01:48:02+02:00",
+      "observed_at": "2026-10-23T11:06:00+02:00",
       "verification": "platform_readback",
       "identity_matched": true,
-      "source_reference": "WordPress public REST site 257973809; exact slug/title matched; Make execution 6978627966d34343bf11327ea819498e modules 26/7/8 completed without module errors"
+      "source_reference": "Public WordPress REST site 257973809 post 60; publish status, exact current slug/title"
+    },
+    {
+      "platform": "facebook",
+      "post_id": "1584833019547619",
+      "url": "https://www.facebook.com/reel/1584833019547619/",
+      "status": "published",
+      "published_at": "2026-10-23T00:28:53+00:00",
+      "observed_at": "2026-10-23T11:06:00+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make uploader 092daecf4c0040a09a6eedad2c897f2b module 4; GET readback c52ddc1516fe4a369a96f0c00d9cac7d module 34: published=true, ready, EVERYONE, publishing complete; returned relative permalink"
+    },
+    {
+      "platform": "youtube",
+      "post_id": "7ZUu8-0BW6Y",
+      "url": "https://www.youtube.com/watch?v=7ZUu8-0BW6Y",
+      "status": "published",
+      "published_at": "2026-10-23T00:29:13Z",
+      "observed_at": "2026-10-23T11:06:00+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make uploader 092daecf4c0040a09a6eedad2c897f2b module 3; GET readback 7432978473f14816be774028cd4af4d5 module 33: processed/public/succeeded, fixed channel matched"
+    },
+    {
+      "platform": "tiktok",
+      "post_id": "7699657745921805600",
+      "url": "https://www.tiktok.com/@abasonplus/video/7699657745921805600",
+      "status": "published",
+      "published_at": "2026-10-23T00:44:46.767Z",
+      "observed_at": "2026-10-23T11:06:00+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "GET-only checker 8007397, provider post 6adaade7f9fb4f9589ba912b; exact account, caption and current-day timestamp matched"
+    },
+    {
+      "platform": "instagram",
+      "post_id": "18220139683344900",
+      "url": "https://www.instagram.com/reel/De0SYJiEXPW/",
+      "status": "published",
+      "published_at": "2026-10-23T00:38:16.892Z",
+      "observed_at": "2026-10-23T11:06:00+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "GET-only checker 8007397, provider post 6adaaa6d9e900844a63e41a4; exact account, caption and current-day timestamp matched"
     }
   ],
   "quota": {
-    "used": 543,
-    "remaining": 457,
+    "used": 618,
+    "remaining": 382,
     "days_until_reset": 21,
     "measured_daily_credits": null,
-    "note": "Measured before website delivery and one provider status read; current usage may be higher. Free plan, auto-purchase false."
+    "reserve": 100,
+    "plan": "Free",
+    "auto_purchase_enabled": false,
+    "forecast": "unverified: no measured complete-day usage"
   },
   "quality": {
-    "status": "qa_passed_artifact_transfer_blocked",
+    "status": "video_qa_passed_publication_verified_with_operational_gaps",
     "findings": [
-      "Successful source-checked voiced preview run 39873764285, head 48d7daf5e5f6f860e2f257448ad5c973b66b738b; final QA passed.",
-      "Actual MP4 duration 36.10 seconds, size 3066947 bytes from workflow logs; MP4 SHA-256 unavailable because artifact download blocked by browser security policy. Artifact ZIP digest is not substituted.",
-      "No Facebook, YouTube, Instagram or TikTok upload performed in this owner session.",
-      "Final public social copy must use owner five-tag mix and omit optional Pexels credits; source artifact generated before copy adapter update.",
-      "TikTok requires exact accessible voiced video/caption/comment/settings review and a new OK; prior approvals do not apply."
+      "Source preview run 39873764285 final visual and full narration QA passed. Original exact MP4 SHA256 d9d8df8b83b614f95df5416c47f29f092df904a65c3d776d6ba35a50aa74521c independently checked by recovery run 39878291624; 36.10 seconds, 3066947 bytes, CosyVoice3 Dan Mason voice 100%, owner music 20%. No new media created by audit.",
+      "All five current-day destinations verified published. Earlier artifact-transfer blocker is superseded by successful recovery delivery.",
+      "Scheduled daily triggers remain absent in watchdog evidence; open issue https://github.com/abasonplus-debug/abasonplus-automation/issues/14 . Recovery success does not prove cadence repaired.",
+      "Today's TikTok approval and publication repository records return 404. Actual publication is verified, but exact consent reconciliation remains unverified; provider consent flags or workflow labels are not a substitute for explicit owner evidence. Do not request preview approval again for this already-published post or fabricate retroactive approval.",
+      "Published copy uses #জমি #ভূমিআইন #Bangladesh #BanglaNews #AbasonPlus. New 2-topic/3-broad validation change remains local, not live; published posts were not edited.",
+      "Mobile QA contact sheet/notes not available in this audit; no real-device review. Bottom-right logo may be obscured by platform UI; dense text readability is not guaranteed.",
+      "YouTube comment Ugy2CuhG65uNOLd7gYt4AaABAg returned own/public by native create; thumbnail API returned success. Shorts cover appearance is platform-dependent.",
+      "Facebook comment 122253069446270684_1779518883301804 returned by native create; separate comment readback not performed.",
+      "Instagram and TikTok current-post comment GETs succeeded, exact account/post meta matched, hasMore=false, no own comments returned. Prepared comments remain pending; current write capability and exact TikTok comment consent evidence not established in this audit.",
+      "Two connected provider accounts returned active (Instagram/TikTok), within two-account free allowance. Make two active scenarios, Free, auto-purchase disabled."
     ]
   },
   "weekly_metrics": {
@@ -48,12 +100,12 @@
   },
   "recovery": {
     "delivery_attempted": true,
-    "failure_phase": "artifact_retrieval_after_qa",
+    "failure_phase": "publication_complete_operational_reconciliation_pending",
     "transient_failure": false,
     "github_job_status": "success",
     "prior_retries": 0,
     "current_day_verified": true,
     "quota_safe": true,
-    "note": "Website delivered and verified only. Video delivery never started. Status-request collection encountered automatic-review rejection for suspected duplicate webhook POST; no repeat attempted."
+    "note": "No rerun, upload, reservation deletion or comment write performed by this audit. Existing recovered deliveries were read only."
   }
 }
