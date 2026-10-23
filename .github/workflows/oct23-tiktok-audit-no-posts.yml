@@ -1,4 +1,4 @@
-name: AbasonPlus TikTok Oct23 Existing Posts Check (READ ONLY)
+name: AbasonPlus TikTok Oct23 Exact Posted ID Verification (READ ONLY)
 on:
   push:
     branches: [release/owner-approved-oct23-social-once]
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      - name: TikTok native feed and daily reservation, read-only, no uploads
+      - name: TikTok exact Zernio post 6adaade7f9fb4f9589ba912b, read-only, no uploads
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
         run: |
