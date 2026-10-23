@@ -1,21 +1,20 @@
 {
-  "date": "2026-10-21",
-  "editorial_sha256": "4a2d9e6e254b728f76cd183949e9a4f497f885d1b9c186f71d416a5834cfa1dc",
-  "slide_index": 2,
-  "expected_original_url": "https://images.pexels.com/photos/189474/pexels-photo-189474.jpeg?cs=srgb&dl=pexels-duncanoluwaseun-189474.jpg&fm=jpg",
-  "query": "real professional vertical photograph of illuminated stairs and shared access in a parking garage",
+  "date": "2026-10-24",
+  "slide_index": 1,
+  "expected_original_url": "https://images.pexels.com/photos/28281244/pexels-photo-28281244.jpeg?cs=srgb&dl=pexels-jakubzerdzicki-28281244.jpg&fm=jpg",
+  "query": "Real architectural photograph of indoor emergency staircase with exit doors",
   "photo": {
-    "url": "https://images.pexels.com/photos/11921920/pexels-photo-11921920.jpeg?cs=srgb&dl=pexels-jayson-hinrichsen-86844013-11921920.jpg&fm=jpg",
-    "source_page": "https://www.pexels.com/photo/a-stairwell-at-a-parking-garage-11921920/",
-    "creator": "Jayson Hinrichsen",
+    "url": "https://images.pexels.com/photos/28281244/pexels-photo-28281244.jpeg?cs=srgb&dl=pexels-jakubzerdzicki-28281244.jpg&fm=jpg",
+    "source_page": "https://www.pexels.com/photo/concrete-staircase-emergency-exit-door-28281244/",
+    "creator": "Jakub Zerdzicki",
     "license": "Pexels Free License",
-    "license_source": "https://www.pexels.com/license/",
-    "page_verified_on": "2026-10-21",
-    "scene": "A modern, illuminated stairwell in an urban parking garage photographed at night.",
-    "scene_match": "A parking-garage stairwell illustrates stairs and shared parking access in the site-versus-plan checklist; illustrative stock, not a Bangladesh project or proof of approval.",
-    "verification": "Pexels source page, creator, free-license label and original images.pexels.com download target verified on 21 October 2026."
+    "scene": "An indoor concrete stairway with emergency exit doors.",
+    "scene_match": "Shows the staircase and doors discussed by the slide; no claim that pictured doors satisfy local code.",
+    "verified_on": "2026-10-24",
+    "license_evidence": "https://www.pexels.com/license/",
+    "alternatives": []
   },
-  "original_preview_run_id": 39520963248,
-  "reason": "Owner requested corrected preview after slide 3 fire-equipment photo did not match the stairs/parking text. Photo-only correction; no article or slide text changes; no posts."
+  "original_preview_run_id": 40038835732,
+  "reason": "Owner requested completion after pre-delivery DNS failure. Same verified photo, query and exact script; preview only, no publication.",
+  "editorial_sha256": "b2ae698bf64e63aeaa92293c3f70b362c460c985ff99292101767360230fb62a"
 }
-
