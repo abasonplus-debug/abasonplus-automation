@@ -1,0 +1,51 @@
+name: AbasonPlus Oct23 Instagram READ-ONLY publication verification
+on:
+  push:
+    branches:
+      - release/owner-approved-oct23-social-once
+    paths:
+      - .github/workflows/oct23-instagram-read-only.yml
+permissions:
+  contents: read
+jobs:
+  verify-instagram:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Call existing read-only provider account feed via free Make webhook
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+          test -n "$MAKE_WEBHOOK_URL"
+          status="$(curl --silent --show-error --max-time 110 --retry 0 -o /tmp/instagram-audit.json -w '%{http_code}' \
+            -F 'kind=publication_status_provider' \
+            -F 'audit_platform=instagram' \
+            -F 'audit_date=2026-10-23' \
+            "$MAKE_WEBHOOK_URL")"
+          echo "Read-only Instagram audit webhook HTTP status: $status"
+          test "$status" = "200" || { echo "::error::Provider feed audit not accepted"; exit 1; }
+          python3 - <<'PY'
+          import json,pathlib
+          p=pathlib.Path('/tmp/instagram-audit.json')
+          raw=p.read_text(errors='replace')
+          try:
+              result=json.loads(raw)
+          except Exception:
+              print('Instagram audit response is asynchronous or non-JSON. Check Make execution 54.')
+              raise SystemExit(0)
+          matches=[]
+          needle='6adaaa6d9e900844a63e41a4'
+          def walk(obj):
+              if isinstance(obj,dict):
+                  flat=json.dumps(obj,ensure_ascii=False)
+                  if obj.get('_id')==needle or obj.get('id')==needle:
+                      matches.append({k:obj.get(k) for k in ('_id','id','status','url','postUrl','permalink','publishedAt','published_at','platform') if k in obj})
+                  for v in obj.values(): walk(v)
+              elif isinstance(obj,list):
+                  for v in obj: walk(v)
+          walk(result)
+          print("Instagram read-only provider audit: match:",json.dumps(matches,ensure_ascii=False)[:2000],
+                "root_keys:",list(result) if isinstance(result,dict) else "list")
+          PY
+          echo 'READ ONLY status inquiry completed; no publishing attempted.' >> "$GITHUB_STEP_SUMMARY"
