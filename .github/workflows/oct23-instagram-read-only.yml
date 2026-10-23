@@ -1,4 +1,4 @@
-name: AbasonPlus Oct23 Instagram Exact Post READ-ONLY verification
+name: AbasonPlus Oct23 Instagram Owner-Approved Failed Post Retry Once
 on:
   push:
     branches:
@@ -12,18 +12,20 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      - name: Call existing read-only provider account feed via free Make webhook
+      - name: Request retry of exact failed Instagram post without republishing FB or YouTube
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
         run: |
           set -euo pipefail
           test -n "$MAKE_WEBHOOK_URL"
           status="$(curl --silent --show-error --max-time 110 --retry 0 -o /tmp/instagram-audit.json -w '%{http_code}' \
-            -F 'kind=publication_status_provider' \
+            -F 'kind=owner_approved_instagram_retry_oct23_once' \
+            -F 'instagram_post_id=6adaaa6d9e900844a63e41a4' \
+            -F 'owner_review_approved=true' \
             -F 'audit_platform=instagram' \
             -F 'audit_date=2026-10-23' \
             "$MAKE_WEBHOOK_URL")"
-          echo "Exact Instagram Zernio post ID read-only HTTP status: $status"
+          echo "Instagram failed post retry request HTTP status: $status"
           test "$status" = "200" || { echo "::error::Provider feed audit not accepted"; exit 1; }
           python3 - <<'PY'
           import json,pathlib
@@ -32,7 +34,7 @@ jobs:
           try:
               result=json.loads(raw)
           except Exception:
-              print('Instagram audit response is asynchronous or non-JSON. Check Make execution 54.')
+              print('Instagram retry response is asynchronous or non-JSON. Check Make execution 54.')
               raise SystemExit(0)
           matches=[]
           needle='6adaaa6d9e900844a63e41a4'
@@ -45,7 +47,7 @@ jobs:
               elif isinstance(obj,list):
                   for v in obj: walk(v)
           walk(result)
-          print("Instagram read-only provider audit: match:",json.dumps(matches,ensure_ascii=False)[:2000],
+          print("Instagram retry provider response: match:",json.dumps(matches,ensure_ascii=False)[:2000],
                 "root_keys:",list(result) if isinstance(result,dict) else "list")
           PY
-          echo 'READ ONLY status inquiry completed; no publishing attempted.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Exact failed Instagram post retry requested. Verify Make module 54 for result; FB and YouTube untouched.' >> "$GITHUB_STEP_SUMMARY"
