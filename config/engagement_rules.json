@@ -1,7 +1,7 @@
 {
   "hook_required": true,
   "minimum_distinct_hashtags": 5,
-  "hashtag_selection": "topic-relevant; never claim popularity or guaranteed views without evidence",
+  "hashtag_selection": "Exactly two topic-specific tags plus three broad Bangladesh/Bangla audience tags; no verified popularity ranking or guaranteed reach claim.",
   "caption": "hook, useful topic-specific detail, natural question/CTA, relevant hashtags and required attribution; respect platform length",
   "description": "useful fuller explanation and verified source/date; no filler or invented claims",
   "first_brand_comment": "prepare for every video; post once on own confirmed publication when platform/account supports it; do not guarantee chronological first position or pinning",
@@ -22,5 +22,12 @@
   },
   "views_guaranteed": false,
   "no_paid_services": true,
-  "write_test_status": "No public comment or thumbnail was written while installing this change; next production attempts require status verification."
+  "write_test_status": "No public comment or thumbnail was written while installing this change; next production attempts require status verification.",
+  "maximum_distinct_hashtags": 5,
+  "topic_hashtags": 2,
+  "broad_audience_hashtags": [
+    "#Bangladesh",
+    "#বাংলাদেশ",
+    "#Bangla"
+  ]
 }
