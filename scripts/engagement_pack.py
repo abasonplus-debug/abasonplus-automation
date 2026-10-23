@@ -7,7 +7,8 @@ def hashtag_tokens(text):
 
 def hashtags_for(topic):
     topic=unicodedata.normalize('NFC',str(topic)).casefold()
-    if any(x in topic for x in ('জলাধার','কৃষিজমি')): specific=['#কৃষিজমি','#নির্মাণঅনুমতি']
+    if any(x in topic for x in ('অগ্নি','fire safety','fire-safety')): specific=['#অগ্নিনিরাপত্তা','#ভবননিরাপত্তা']
+    elif any(x in topic for x in ('জলাধার','কৃষিজমি')): specific=['#কৃষিজমি','#নির্মাণঅনুমতি']
     elif any(x in topic for x in ('টানেল','সেতু','মেট্রো','সড়ক','সড়ক','অবকাঠামো','bridge','tunnel')): specific=['#অবকাঠামো','#সরকারিপ্রকল্প']
     elif any(x in topic for x in ('আইন','দলিল','খতিয়ান','খতিয়ান','law','deed')): specific=['#ভূমিআইন','#জমিরদলিল']
     elif 'জমি' in topic or 'land' in topic: specific=['#জমি','#জমিকেনা']
@@ -21,8 +22,12 @@ def first_comment(hook):
     return f'{hook}\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/'
 
 def validate_pack(pack):
-    if len(hashtag_tokens(pack['caption']))<5 or len(hashtag_tokens(pack['description']))<5:
-        raise ValueError('Five DISTINCT relevant hashtags required in caption and description')
+    broad=hashtag_tokens('#Bangladesh #বাংলাদেশ #Bangla')
+    for field in ('caption','description'):
+        tokens=hashtag_tokens(pack[field])
+        raw=re.findall(r'(?<!\S)#[^\s#]+',pack[field])
+        if len(raw)!=5 or len(tokens)!=5 or not broad.issubset(tokens):
+            raise ValueError('Exactly two topic tags and three broad audience tags required; no duplicates')
     if not pack['hook'].strip() or not 1<=len(pack['first_comment'])<=500:
         raise ValueError('Hook or first comment missing/too long')
     if pack['music']!='assets/abasonplus.mp3':raise ValueError('Owner music must not be substituted')
