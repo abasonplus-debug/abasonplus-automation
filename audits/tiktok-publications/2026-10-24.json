@@ -18,5 +18,7 @@
   "video_made_with_ai": true,
   "publish_workflow_run_id": "40041843099",
   "native_feed_verified": true,
-  "first_comment_status": "awaiting_readback"
+  "first_comment_status": "verified_own_readback",
+  "first_comment_id": "7699906332765209376",
+  "first_comment_pagination_complete": true
 }
