@@ -17,6 +17,7 @@ import math
 import os
 import subprocess
 import wave
+import time
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "output"
@@ -214,6 +215,27 @@ def verify_voiceover(out: Path, story: dict, metadata: dict) -> None:
           sha256("\n".join(texts).encode("utf-8")).hexdigest(),
           "narration script proof invalid")
 
+
+def connect_client(factory=None, pause=time.sleep):
+    """Retry ONLY read-only Gradio initialization, never synthesis or publication."""
+    import httpx
+    if factory is None:
+        from gradio_client import Client
+        factory = Client
+    for attempt in range(3):
+        try:
+            return factory(SPACE, verbose=False)
+        except (httpx.ConnectError, httpx.ConnectTimeout) as exc:
+            reason = type(exc).__name__
+        except httpx.HTTPStatusError as exc:
+            if exc.request.method != "GET" or exc.response.status_code not in (408, 429, 500, 502, 503, 504):
+                raise
+            reason = "HTTP_" + str(exc.response.status_code)
+        if attempt == 2:
+            raise RuntimeError("COSYVOICE3_RELEASE_BLOCKED: public demo initialization unavailable after 3 read-only attempts; no synthesis, voice substitution or publication") from None
+        print(f"CosyVoice3 read-only connection attempt {attempt+1}/3 failed ({reason}); retry in {2 ** (attempt+1)}s", flush=True)
+        pause(2 ** (attempt+1))
+
 def main() -> None:
     from gradio_client import Client, handle_file
     from carousel_timing import validate_timing
@@ -243,7 +265,7 @@ def main() -> None:
     temp = OUT / "narration_segments"
     temp.mkdir(exist_ok=True)
     ref = get_reference(temp)
-    client = Client(SPACE, verbose=False)
+    client = connect_client()
     files = []
     durations = []
     for i, text in enumerate(texts):
