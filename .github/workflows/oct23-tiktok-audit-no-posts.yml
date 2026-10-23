@@ -1,0 +1,23 @@
+name: AbasonPlus TikTok Oct23 Existing Posts Check (READ ONLY)
+on:
+  push:
+    branches: [release/owner-approved-oct23-social-once]
+    paths: ['.github/workflows/oct23-tiktok-audit-no-posts.yml']
+permissions:
+  contents: read
+jobs:
+  audit-tiktok:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: TikTok native feed and daily reservation, read-only, no uploads
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+          test -n "$MAKE_WEBHOOK_URL"
+          test "$(TZ=Europe/Berlin date +%F)" = "2026-10-23"
+          status="$(curl --silent --show-error --max-time 95 --retry 0 -o /tmp/tiktok-audit-result -w '%{http_code}'             -F 'kind=publication_status_provider'             -F 'audit_platform=tiktok'             -F 'audit_date=2026-10-23'             "$MAKE_WEBHOOK_URL")"
+          echo "TIKTOK_AUDIT_WEBHOOK_HTTP=$status"
+          test "$status" = "200"
+          echo 'TikTok no-publish GET requested; examine Make execution module 54.' >> "$GITHUB_STEP_SUMMARY"
