@@ -1,4 +1,4 @@
-name: AbasonPlus Oct23 Instagram READ-ONLY publication verification
+name: AbasonPlus Oct23 Instagram Exact Post READ-ONLY verification
 on:
   push:
     branches:
@@ -23,7 +23,7 @@ jobs:
             -F 'audit_platform=instagram' \
             -F 'audit_date=2026-10-23' \
             "$MAKE_WEBHOOK_URL")"
-          echo "Read-only Instagram audit webhook HTTP status: $status"
+          echo "Exact Instagram Zernio post ID read-only HTTP status: $status"
           test "$status" = "200" || { echo "::error::Provider feed audit not accepted"; exit 1; }
           python3 - <<'PY'
           import json,pathlib
