@@ -29,5 +29,13 @@
     "#Bangladesh",
     "#বাংলাদেশ",
     "#Bangla"
-  ]
+  ],
+  "ai_disclosure": {
+    "youtube_containsSyntheticMedia": true,
+    "instagram_isAiGenerated": true,
+    "tiktok_video_made_with_ai": true,
+    "facebook_native_label": "not exposed by current Make Facebook Reel module; do not claim native toggle verified",
+    "public_caption": "AI দিয়ে তৈরি কণ্ঠ ব্যবহার করা হয়েছে।"
+  },
+  "content_quality": "Current verified useful facts, meaningful practical detail, attractive factual hook, opportunities and risks; evergreen clearly labelled when fresh news is not verified. No fabricated popularity."
 }
