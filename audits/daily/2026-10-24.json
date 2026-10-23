@@ -1,0 +1,115 @@
+{
+  "checked_at": "2026-10-24T01:41:30+02:00",
+  "context": {
+    "fresh_content_ready": true,
+    "exact_tiktok_video_approved": false,
+    "lookup_complete": {
+      "website": true,
+      "facebook": true,
+      "youtube": true,
+      "instagram": true,
+      "tiktok": true
+    }
+  },
+  "evidence": [
+    {
+      "platform": "website",
+      "post_id": "61",
+      "url": "https://abasonplus.wordpress.com/2026/10/23/ap-fire-safety-exit-check-2026-10-24/",
+      "published_at": "2026-10-23T23:15:24Z",
+      "source_reference": "WordPress public REST exact slug",
+      "status": "published",
+      "observed_at": "2026-10-24T01:41:30+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true
+    },
+    {
+      "platform": "facebook",
+      "post_id": "1443813427933032",
+      "url": "https://www.facebook.com/reel/1443813427933032/",
+      "published_at": "2026-10-23T23:38:50Z",
+      "source_reference": "Make 1bee772118e644e089fa739a3705fa9e module34",
+      "status": "published",
+      "observed_at": "2026-10-24T01:41:30+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true
+    },
+    {
+      "platform": "youtube",
+      "post_id": "mCwBN8lHkWU",
+      "url": "https://www.youtube.com/watch?v=mCwBN8lHkWU",
+      "published_at": "2026-10-23T23:39:07Z",
+      "source_reference": "Make 87c398898ebd473aa9c2cb88e6317955 module33",
+      "status": "published",
+      "observed_at": "2026-10-24T01:41:30+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true
+    },
+    {
+      "platform": "instagram",
+      "post_id": "17932811031410938",
+      "url": "https://www.instagram.com/reel/De2wicMgQ6V/",
+      "published_at": "2026-10-23T23:40:29.131Z",
+      "source_reference": "Checker exact provider post6adbf0312080594f71706ed7",
+      "status": "published",
+      "observed_at": "2026-10-24T01:41:30+02:00",
+      "verification": "platform_readback",
+      "identity_matched": true
+    },
+    {
+      "platform": "tiktok",
+      "post_id": null,
+      "url": null,
+      "status": "awaiting_video_review",
+      "published_at": null,
+      "observed_at": "2026-10-24T01:41:30+02:00",
+      "verification": "platform_readback",
+      "identity_matched": false,
+      "source_reference": "Exact current-day approval/publication files absent; no current video in provider feed. Pending preview40039850439."
+    }
+  ],
+  "quota": {
+    "used": null,
+    "remaining": null,
+    "days_until_reset": null,
+    "measured_daily_credits": null,
+    "last_verified_before_recovery": {
+      "used": 622,
+      "remaining": 378,
+      "plan": "Free",
+      "auto_purchase": false
+    },
+    "forecast": "unverified"
+  },
+  "quality": {
+    "status": "machine_qa_passed_visual_contact_sheet_reviewed",
+    "findings": [
+      "Run40039850439 all final media QA passed, MP4 SHA256d8ba058a07b37a1b94a91f2e90c266f1fb8ad6e25cb96f31895f39cd6384ef79,27.6sec narrated5slides",
+      "CosyVoice3 DNS initialization transient repaired with bounded initialization-only retries. No upload retries.",
+      "Bottom-right logo mobile UI coverage possible; no physical device review",
+      "Facebook native AI toggle unavailable in exposed module; textual AI narration disclosure published",
+      "YouTube AI flag true,thumbnail returned,own public commentUgyPrZkNmpRN0LObM5p4AaABAg; Facebook comment122253185150270684_2006549693367706 returned, no separate readback",
+      "Instagram first-comment result pending reconciliation"
+    ]
+  },
+  "weekly_metrics": {
+    "status": "not_due",
+    "observations": [],
+    "unavailable_metrics": []
+  },
+  "recovery": {
+    "delivery_attempted": true,
+    "failure_phase": "original_tts_client_dns_initialization_before_delivery",
+    "transient_failure": true,
+    "github_job_status": "replacement_preview_success",
+    "prior_retries": 0,
+    "current_day_verified": true,
+    "quota_safe": true,
+    "preview_run_id": "40039850439",
+    "uploads": {
+      "youtube": "5349f178391146e782fe95af7ebf8991",
+      "facebook": "f8c9d434eb8d48f09e619b44a343ec8d",
+      "instagram": "ada48301808d4ebebe0540c147b35813"
+    }
+  }
+}
