@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-24T01:41:30+02:00",
+  "checked_at": "2026-10-24T01:42:00+02:00",
   "context": {
     "fresh_content_ready": true,
     "exact_tiktok_video_approved": false,
@@ -69,17 +69,14 @@
     }
   ],
   "quota": {
-    "used": null,
-    "remaining": null,
-    "days_until_reset": null,
+    "used": 673,
+    "remaining": 327,
+    "days_until_reset": 20,
     "measured_daily_credits": null,
-    "last_verified_before_recovery": {
-      "used": 622,
-      "remaining": 378,
-      "plan": "Free",
-      "auto_purchase": false
-    },
-    "forecast": "unverified"
+    "plan": "Free",
+    "auto_purchase": false,
+    "recovery_reserve": 100,
+    "forecast": "unverified_without_complete_day_measurements"
   },
   "quality": {
     "status": "machine_qa_passed_visual_contact_sheet_reviewed",
@@ -89,7 +86,7 @@
       "Bottom-right logo mobile UI coverage possible; no physical device review",
       "Facebook native AI toggle unavailable in exposed module; textual AI narration disclosure published",
       "YouTube AI flag true,thumbnail returned,own public commentUgyPrZkNmpRN0LObM5p4AaABAg; Facebook comment122253185150270684_2006549693367706 returned, no separate readback",
-      "Instagram first-comment result pending reconciliation"
+      "Instagram own comment18069484442775311 confirmed matching exact account/post, pagination complete; module47 success."
     ]
   },
   "weekly_metrics": {
