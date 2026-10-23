@@ -13,8 +13,8 @@ class Reliability(unittest.TestCase):
             self.assertGreaterEqual(len(set(tags)),5)
             self.assertNotIn("#ফ্ল্যাট",tags)
             self.assertNotIn("#HomeBuying",tags)
-        self.assertIn("#Infrastructure",hashtags_for("কর্ণফুলী টানেল তদন্ত"))
-        self.assertIn("#HomeBuying",hashtags_for("ফ্ল্যাট কেনা"))
+        self.assertIn("#অবকাঠামো",hashtags_for("কর্ণফুলী টানেল তদন্ত"))
+        self.assertIn("#ফ্ল্যাট",hashtags_for("ফ্ল্যাট কেনা"))
 
     def test_source_failure_is_not_green_and_never_sets_ready(self):
         workflow=yaml.load((ROOT/'.github/workflows/daily-carousel.yml').read_text(),Loader=yaml.BaseLoader)
