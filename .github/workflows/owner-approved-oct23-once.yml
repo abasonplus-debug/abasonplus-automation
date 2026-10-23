@@ -29,6 +29,10 @@ jobs:
           name: abasonplus-source-checked-video
           path: release_payload
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install free FFmpeg/ffprobe for media identity and length verification
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
       - name: Verify original file identity, voice and source; prepare only five public hashtags
         run: |
           set -euo pipefail
