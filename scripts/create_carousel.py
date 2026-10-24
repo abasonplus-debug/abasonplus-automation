@@ -68,7 +68,7 @@ if not MIN_SLIDES-1<=len(points)<=MAX_SLIDES-1:raise RuntimeError("Carousel requ
 slides=[{"main":hook,"photo":item["cover_query"],"sub":"জরুরি তথ্য"}]
 slides += [{"main":p["text"],"photo":p["query"],"sub":f"পরামর্শ {i}/{len(points)}"}
            for i,p in enumerate(points,1)]
-hashtags = ' '.join(hashtags_for(heading))
+hashtags = ' '.join(hashtags_for(heading, 'facebook'))
 (OUT / "title.txt").write_text(hook if len(hook + " | AbasonPlus") > 100 else hook + " | AbasonPlus",encoding="utf-8")
 (OUT / "caption.txt").write_text(
     f"{hook}\n\n" + "\n".join(f"✅ {i}. {p['text']}" for i,p in enumerate(points,1))
@@ -317,7 +317,7 @@ public_credits = "" if all("Pexels Free License" in x for x in photo_credits) el
 (OUT / "caption.txt").open("a",encoding="utf-8").write(public_credits)
 (OUT / "description.txt").write_text(
     f"{hook}\n" + "\n".join(f"{i}. {p['text']}" for i,p in enumerate(points,1))
-    + f"\n\nAI দিয়ে তৈরি কণ্ঠ ব্যবহার করা হয়েছে।\n\nhttps://abasonplus.wordpress.com/\n{hashtags}"
+    + f"\n\nAI দিয়ে তৈরি কণ্ঠ ব্যবহার করা হয়েছে।\n\nhttps://abasonplus.wordpress.com/\n{' '.join(hashtags_for(heading, 'youtube'))}"
     + (f"\n\nSource: {item['source_url']}\nVerified: {item.get('verified_on','')}" if item.get("source_url") else "")
     + public_credits,encoding="utf-8")
 validate_social_copy((OUT/"caption.txt").read_text(encoding="utf-8"),
