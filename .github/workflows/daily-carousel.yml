@@ -146,6 +146,7 @@ jobs:
             output/image_credits.txt
             output/title.txt
             output/caption.txt
+            output/instagram_caption.txt
             output/description.txt
             output/tiktok_caption.txt
             output/first_comment.txt
@@ -198,6 +199,7 @@ jobs:
             -F "video=@output/abasonplus_daily.mp4;type=video/mp4" \
             -F "title=<output/title.txt" \
             -F "caption=<output/caption.txt" \
+            -F "instagram_caption=<output/instagram_caption.txt" \
             -F "first_comment=<output/first_comment.txt" \
             -F "first_comment_json=<output/first_comment_json.txt" \
             -F "thumbnail=@output/thumbnail_upload.jpg;type=image/jpeg" \
