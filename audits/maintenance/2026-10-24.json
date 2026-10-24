@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-24",
+  "status": "verified_code_maintenance_complete",
+  "production_commit": "5c4643408acecf6faf0397be3fa10ca43fa7ac64",
+  "validation": {
+    "workflow_run_id": "40043226176",
+    "url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/runs/40043226176",
+    "conclusion": "success",
+    "local_tests": 114,
+    "local_test_result": "OK",
+    "topics": 32,
+    "layouts": 160
+  },
+  "changes": [
+    "Offline exact TikTok approval builder copies immutable preview_head_sha and full voice/timing format; requires explicit current-day owner evidence and exact MP4/caption hashes.",
+    "Archived three completed one-time publisher workflows outside .github/workflows; no historical evidence/reservations deleted.",
+    "Removed stale fixed-duration and schedule statements from production contracts and local research prompt.",
+    "Updated existing research/audit instructions to latest01:00Berlin release/full narration/2topic+3broad tags; kept task cadence and linked destinations unchanged."
+  ],
+  "archived_workflows": [
+    "instagram-first-validated.yml",
+    "tiktok-first-approved-once.yml",
+    "recover-video-2026-10-19.yml"
+  ],
+  "schedule": {
+    "timezone": "Europe/Berlin",
+    "research": "00:30 target",
+    "source_photo_preflight": "00:45",
+    "wordpress_video_primary": "01:00",
+    "wordpress_backup": "01:23 missing-trigger only",
+    "video_backup": "01:31 missing-trigger only",
+    "watchdog": "02:07"
+  },
+  "quota": {
+    "plan": "Free",
+    "used": 688,
+    "remaining": 312,
+    "auto_purchase": false,
+    "recovery_reserve": 100,
+    "forecast": "unverified without complete-day measurements"
+  },
+  "limitations": [
+    "GitHub scheduling and public free TTS uptime cannot be guaranteed.",
+    "TikTok needs each exact preview/owner OK.",
+    "Facebook native AI-label input is unavailable in existing upload module; AI narration is disclosed in public copy.",
+    "Research task remains flexible_schedule; exact-minute delivery not guaranteed. No new tasks or connections created."
+  ],
+  "publication_actions": 0,
+  "media_generation": 0
+}
