@@ -18,7 +18,7 @@ class Reliability(unittest.TestCase):
 
     def test_source_failure_is_not_green_and_never_sets_ready(self):
         workflow=yaml.load((ROOT/'.github/workflows/daily-carousel.yml').read_text(),Loader=yaml.BaseLoader)
-        script=workflow['jobs']['source']['steps'][1]['run']
+        script=next(step['run'] for step in workflow['jobs']['source']['steps'] if step.get('id')=='check')
         for code in (1,3):
             with self.subTest(code=code), tempfile.TemporaryDirectory() as td:
                 root=pathlib.Path(td);(root/'scripts').mkdir()
