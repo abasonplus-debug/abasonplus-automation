@@ -63,7 +63,7 @@ hook=re.sub(r"\s+"," ",str(story.get("hook",""))).strip()
 require(12<=len(hook)<=110,"no readable catchy hook")
 tips=[re.sub(r"\s+"," ",x.get("text","")).strip() for x in story["tips"]]
 require(all(8<=len(t)<=500 for t in tips),"tips are unreadable")
-hashtags=hashtags_for(story.get("title",hook))
+hashtags=hashtags_for(story.get("title",hook), "tiktok")
 body=hook+"\n"+"\n".join(f"✅ {tip}" for tip in tips)
 caption=body+"\n\n"+(" ".join(hashtags))
 require(len(caption)<=2200,"TikTok caption above 2200 characters")
