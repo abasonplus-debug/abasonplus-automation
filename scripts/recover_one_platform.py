@@ -185,6 +185,8 @@ def main():
             'visual_style_id':'compact_white_gold_v2','video_sha256':expected,'tiktok_publish_approved':'false'}
     for key,name in [('title','title.txt'),('caption','caption.txt'),('description','description.txt'),('first_comment','first_comment.txt'),('first_comment_json','first_comment_json.txt')]:
         fields[key]=(OUT/name).read_text()
+    if platform=='instagram':
+        fields['instagram_caption']=(OUT/'instagram_caption.txt').read_text()
     body,boundary=multipart(fields,[('video',video,'video/mp4'),('thumbnail',OUT/'thumbnail_upload.jpg','image/jpeg')])
     report['status']='delivery_started_reconcile_before_any_retry';out.write_text(json.dumps(report,indent=2)+'\n')
     try:
