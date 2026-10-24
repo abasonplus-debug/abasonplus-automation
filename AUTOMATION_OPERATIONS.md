@@ -1,6 +1,6 @@
 # AbasonPlus: publication checks and limited recovery
 
-Applies to website, Facebook, YouTube, Instagram and TikTok. The owner's fixed compact white/gold design, real logo and exactly three seconds per image apply (owner update 20 October 2026); keep 5–16 slides and the 50-second ceiling. Historical artifacts retain their recorded timing and are never resent merely for this update.
+Applies to website, Facebook, YouTube, Instagram and TikTok. The owner's fixed compact white/gold design and real logo apply. New voiced media uses 5–16 slides, each covering its complete measured narration (minimum three seconds); no fixed total duration or 50-second ceiling. Historical artifacts retain their recorded timing and are never resent merely for this update.
 
 ## Daily evidence
 The task performs lightweight GitHub checks at 09:00 and 10:00 Europe/Berlin and the full audit at 11:00. Early checks do not repeat Make/platform reads; notify on actual failure/hold, or hand over a ready exact TikTok preview once. Execution time and phone push delivery are not guaranteed. The full audit collects platform evidence into audits/daily/YYYY-MM-DD.json. The publication-audit-report workflow produces an artifact and workflow summary using scripts/publication_audit.py. It never uploads content. Platform status must come from the destination/provider readback, with matched identity, real post ID, publication time and HTTPS destination URL. Make acceptance, job success and provider processing are not publication. Older-day posts never satisfy today's slot. Before the scheduled time a slot is not overdue. TikTok awaiting exact video review is reported separately from missing/failed publication.
@@ -26,7 +26,7 @@ During Sunday's existing daily audit, review the preceding seven days. Use real 
 The integration is connected, but exact content preview, creator settings and explicit upload consent still apply. General standing permission is not evidence that a future video was previewed. Official guidance: https://developers.tiktok.com/docs/en/content-sharing-guidelines . Keep the reviewed workflow and no unattended TikTok cron. Daily reporting and post-status reconciliation DO include TikTok.
 
 ## Hook, caption, first brand comment, hashtags, cover and music
-Owner instruction 18 October: every video needs a factual compelling hook, useful fuller caption/description, a prepared first brand comment, at least five distinct topic-relevant hashtags, an attractive matching hook cover and ONLY the owner's assets/abasonplus.mp3. scripts/engagement_pack.py validates and stores first_comment.txt, its JSON-escaped form and engagement_pack.json. These are archived with the preview. Do not claim hashtag popularity, viral reach or increased views as guaranteed.
+Owner instruction 18 October: every video needs a factual compelling hook, useful fuller caption/description, a prepared first brand comment, exactly five distinct hashtags: two topic-specific and three broad Bangladesh-audience tags, an attractive matching hook cover and ONLY the owner's assets/abasonplus.mp3. scripts/engagement_pack.py validates and stores first_comment.txt, its JSON-escaped form and engagement_pack.json. These are archived with the preview. Do not claim hashtag popularity, viral reach or increased views as guaranteed.
 
 Facebook uses native CreateComment after the new Reel upload. YouTube attempts the actual hook-cover thumbnail and a top-level comment on separate branches; errors must not stop other destinations. Instagram uses the first frame as cover (thumbOffset=0), TikTok cover offset=0. YouTube Shorts can handle cover display differently; do not claim a successful API write proves that every Shorts surface uses that image.
 
@@ -37,8 +37,8 @@ Resolved 18 October 22:30 Europe/Berlin: comment GETs require accountId in the q
 ## Failure visibility and consent evidence
 ### Missing-trigger protection — installed 21 October 2026
 
-Primary WordPress and video triggers remain 02:00 Europe/Berlin. The same workflows
-also have backup targets at 02:23 (WordPress) and 02:31 (video). Both primary and
+Primary WordPress and video triggers are 01:00 Europe/Berlin. The same workflows
+also have backup targets at 01:23 (WordPress) and 01:31 (video). Both primary and
 backup pass scripts/schedule_guard.py under the existing workflow concurrency
 group. Only the first scheduled first-attempt run for that Berlin date proceeds.
 Any earlier run, including failed, cancelled, queued or ambiguous delivery, blocks
@@ -47,9 +47,9 @@ The existing independent Make/platform reservations remain authoritative and are
 never removed. A delayed primary created after the backup cannot deliver again.
 Manual dispatch remains preview only. Scheduled reruns are held for reconciliation.
 The elected Berlin date is checked again immediately before any transfer; crossing
-midnight holds release. DST repeated 02:00 hours share the same daily election.
+midnight holds release. DST changes preserve the same Berlin-day election.
 
-publication-watchdog.yml checks both publishing workflows separately at 03:07
+publication-watchdog.yml checks both publishing workflows separately at 02:07
 Europe/Berlin and after either workflow completes. It distinguishes no trigger,
 queued/running, held/skipped delivery, failed delivery and completed transfer.
 It never treats a successful source job or Make receipt as published. Missing
@@ -77,7 +77,7 @@ Do not describe that notification path as repaired or create duplicate tasks.
 
 Source selection errors now fail the daily workflow before rendering; green success is not used for a blocked source. Manual dispatch stays preview-only. Do not force a held photo/source into publication. GitHub schedule delay remains possible.
 
-Read audits/tiktok-approvals/YYYY-MM-DD.json and audits/tiktok-publications/YYYY-MM-DD.json before diagnosing missing consent. scripts/tiktok_approval.py validates exact date, account, hash and settings. Preview false flags describe the pre-approval state and do not override a later matching real owner OK. Future approvals must include caption_sha256 and preview_run_id; changing media, caption or settings invalidates approval. Never infer consent for another date/video.
+Read audits/tiktok-approvals/YYYY-MM-DD.json and audits/tiktok-publications/YYYY-MM-DD.json before diagnosing missing consent. scripts/tiktok_approval.py validates exact date, account, hash and settings. Preview false flags describe the pre-approval state and do not override a later matching real owner OK. Future approvals must include caption_sha256, preview_run_id, preview_head_sha and the complete immutable format object (including voiceover and slide_durations); changing media, caption or settings invalidates approval. Never infer consent for another date/video.
 
 For first brand comments, after verified current-day publication read GET /inbox/comments/<native-id>?accountId=<fixed-id>. Require status success, matching meta account/post and no matching own comment; if pagination hasMore=true finish checking before writing. Then use bounded kind publish_first_comment once, verify returned ID and own-comment readback, and save evidence. Preserve reservations after ambiguous errors; no blind retries, no DMs or other people's replies. Schedule/audit or the interactive TikTok OK handler performs this once; do not claim comments are instant.
 
@@ -92,9 +92,9 @@ attempts with 1s/2s backoff. Permanent 403 is not repeatedly requested. Exhauste
 candidates hold release and archive sanitized diagnostics. No send retry or
 reservation removal is introduced.
 
-Editorial pushes and 01:15 Berlin run photo/layout preflight without composing
+Editorial pushes and 00:45 Berlin run photo/layout preflight without composing
 slides, synthesizing voice or generating MP4. The existing watchdog includes
-preflight failures before 02:00 and upserts the existing daily issue. Telegram
+preflight failures before 01:00 and upserts the existing daily issue. Telegram
 still needs TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID; actual delivery remains
 unverified until configured. Preflight is not a substitute for final media QA.
 
@@ -110,3 +110,8 @@ route or guaranteed publication is supplied by this correction.
 
 ## Owner schedule update — 23 October 2026
 Daily WordPress and Facebook/YouTube/Instagram video trigger target is now 01:00 Europe/Berlin, superseding older 02:00 targets. Research remains 00:30; source monitor and photo preflight are 00:45. Missing-trigger-only backups are WordPress 01:23 and video 01:31; watchdog 02:07. Existing Berlin-day reservations, no replay after an earlier attempt, QA and exact-video TikTok preview/OK remain unchanged. Trigger time is not guaranteed publication completion time.
+
+## Exact owner OK record and retired workflows — 24 October 2026
+After the exact preview/OK, use scripts/build_tiktok_approval.py build_approval to assemble the dated record from the actual MP4 hash, original preview JSON, successful source-run metadata, current reviewed creator settings and explicit owner evidence. Copy the complete format object; do not reconstruct voice metadata or omit preview_head_sha. This offline helper cannot publish or grant consent. Save and validate the record before dispatching tiktok-publish-reviewed.yml. No generic or future OK.
+
+Completed historical delivery workflows are archived under archive/workflows, outside GitHub Actions. They cannot be dispatched there; publication/approval evidence remains intact. Keep the current reviewed TikTok workflow, daily publishers, preflight, watchdog, report and bounded recovery workflow. Never delete daily reservations or historical approval/publication records.
