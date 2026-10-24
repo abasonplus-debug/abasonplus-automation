@@ -5,8 +5,12 @@ import yaml
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 
 class WorkflowContracts(unittest.TestCase):
+    def path(self,name):
+        archived=ROOT/'archive/workflows'/name
+        return archived if archived.exists() else ROOT/'.github/workflows'/name
+
     def load(self,name):
-        return yaml.load((ROOT/'.github/workflows'/name).read_text(), Loader=yaml.BaseLoader)
+        return yaml.load(self.path(name).read_text(), Loader=yaml.BaseLoader)
 
     def test_daily_local_schedules_and_manual_publication_gate(self):
         for name,cron in [('daily-carousel.yml','0 1 * * *'),('wordpress-post.yml','0 1 * * *'),('official-source-monitor.yml','45 0 * * *')]:
@@ -24,6 +28,7 @@ class WorkflowContracts(unittest.TestCase):
     def test_tiktok_and_completed_one_time_deliveries_do_not_run_daily(self):
         self.assertNotIn('schedule', self.load('tiktok-publish-reviewed.yml')['on'])
         for name in ('instagram-first-validated.yml','tiktok-first-approved-once.yml'):
+            self.assertFalse((ROOT/'.github/workflows'/name).exists())
             d=self.load(name)
             self.assertNotIn('push', d['on'])
             self.assertTrue(all(j.get('if')=='${{ false }}' for j in d['jobs'].values()))
@@ -42,7 +47,7 @@ class WorkflowContracts(unittest.TestCase):
         d=self.load(name)
         self.assertEqual(set(d['on']),{'workflow_dispatch'})
         self.assertEqual(d['jobs']['source']['if'],'${{ false }}')
-        text=(ROOT/'.github/workflows'/name).read_text()
+        text=self.path(name).read_text()
         self.assertIn("delivery[0]['conclusion']=='skipped'",text)
         self.assertIn("manifest['date']=='2026-10-19'",text)
         self.assertIn('tiktok_publish_approved=false',text)
