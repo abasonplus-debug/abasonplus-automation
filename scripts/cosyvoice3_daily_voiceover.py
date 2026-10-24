@@ -102,6 +102,13 @@ def validate_segment(path: Path) -> float:
     # Reject silent or almost-silent server responses; this is not linguistic QA.
     peak = max(abs(v) for v in samples)
     check(peak >= 300, "speech is silent or too faint")
+    # Technical signal checks, not a claim of intelligible Bengali pronunciation.
+    rms = math.sqrt(sum(v * v for v in samples) / len(samples))
+    clipped = sum(abs(v) >= 32760 for v in samples) / len(samples)
+    dc_offset = abs(sum(samples) / len(samples))
+    check(rms >= 100, "speech has insufficient usable signal")
+    check(clipped <= 0.01, "speech has sustained digital clipping/distortion")
+    check(dc_offset <= 3276, "speech has excessive DC offset")
     return duration
 
 def concat_with_padding(files: list[Path], durations: list[float], output: Path) -> None:
