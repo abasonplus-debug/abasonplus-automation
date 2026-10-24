@@ -38,11 +38,15 @@ jobs:
     needs: schedule-gate
     if: ${{ needs.schedule-gate.outputs.allowed == 'true' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 4
+    timeout-minutes: 55
     outputs:
+      editorial_sha: ${{ steps.wait.outputs.editorial_sha }}
       ready: ${{ steps.check.outputs.ready }}
     steps:
       - uses: actions/checkout@v7
+      - name: Wait for today's missing editorial before preparation (NO POSTS)
+        id: wait
+        run: python3 scripts/wait_daily_editorial.py
       - name: Require ChatGPT's source-checked editorial for today
         id: check
         run: |
@@ -62,6 +66,8 @@ jobs:
     timeout-minutes: 180
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.source.outputs.editorial_sha }}
       - name: Install free local rendering/photograph QA tools
         run: |
           sudo apt-get update -qq
