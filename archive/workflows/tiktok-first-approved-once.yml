@@ -1,0 +1,79 @@
+name: AbasonPlus TikTok – First Specifically Approved Post Once
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: abasonplus-tiktok-first-approved-2026-10-16
+  cancel-in-progress: false
+jobs:
+  first-approved-tiktok:
+    # Completed one-time delivery retained for audit only.
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm production route gate exists and is explicitly enabled
+        id: gate
+        run: |
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          gate=json.loads(Path("config/tiktok_publication_gate.json").read_text())
+          approval=json.loads(Path("config/tiktok_first_approved_2026-10-16.json").read_text())
+          active=gate.get("enabled") is True and approval.get("delivery_enabled") is True
+          with open(os.environ["GITHUB_OUTPUT"],"a") as f:
+              f.write("enabled="+("true" if active else "false")+"\n")
+          print("POSTING_ENABLED=",active,"(must be false until Make TikTok post route is validated)")
+          PY
+      - name: Install free FFmpeg for exact MP4 verification
+        if: ${{ steps.gate.outputs.enabled == 'true' }}
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Download ONLY creator-reviewed original GitHub video
+        if: ${{ steps.gate.outputs.enabled == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run view 38923421174 --repo "$GITHUB_REPOSITORY" --json conclusion,name \
+            --jq 'select(.conclusion == "success" and .name == "AbasonPlus Live Editorial End-to-End Preview — NO POSTS") | .name' \
+            | grep -F 'End-to-End Preview'
+          mkdir -p output
+          gh run download 38923421174 --repo "$GITHUB_REPOSITORY" \
+            -n abasonplus-daily-editorial-preview -D output
+      - name: Validate exact approved video digest, music, format and all 3 ON
+        if: ${{ steps.gate.outputs.enabled == 'true' }}
+        run: python3 scripts/verify_first_approved_tiktok.py
+      - name: Send this exact approved video ONCE to final TikTok Make route
+        if: ${{ steps.gate.outputs.enabled == 'true' }}
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: |
+          test -n "$MAKE_WEBHOOK_URL" || { echo 'Missing authorized Make webhook'; exit 1; }
+          curl --fail-with-body --silent --show-error --retry 0 --max-time 120 \
+            -F 'kind=tiktok_reviewed_publish' \
+            -F 'review_approved=true' \
+            -F 'visual_qa_passed=true' \
+            -F 'tiktok_publish_approved=true' \
+            -F 'content_preview_confirmed=true' \
+            -F 'express_consent_given=true' \
+            -F 'tiktok_privacy_level=PUBLIC_TO_EVERYONE' \
+            -F 'tiktok_allow_comment=true' \
+            -F 'tiktok_allow_duet=true' \
+            -F 'tiktok_allow_stitch=true' \
+            -F 'rights_confirmed=true' \
+            -F 'tiktok_post_key=abasonplus-tiktok-2026-10-16' \
+            -F 'video_sha256=c04ce290b16e620198f625da4d0aa88c1eb698ddb249d23021caa693fa89f116' \
+            -F 'tiktok_source_url=https://bdlaws.minlaw.gov.bd/act-1055/act-chapter-print-1694.html' \
+            -F 'video=@output/abasonplus_daily.mp4;type=video/mp4' \
+            -F 'tiktok_caption=<output/tiktok_caption.txt' \
+            "$MAKE_WEBHOOK_URL" -o /tmp/tiktok_make_result.txt
+          echo 'Make accepted approved video request; verify Zernio/TikTok actual publication status and URL separately.'
+      - name: Report safe HOLD when publishing gate is disabled
+        if: ${{ steps.gate.outputs.enabled != 'true' }}
+        run: echo 'No publication attempted. TikTok publishing route/creator consent gateway must first be verified.'
+# No cron schedule. This exact one-video workflow cannot automatically approve future TikToks.
+
