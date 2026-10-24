@@ -146,7 +146,7 @@ def request_local_ai(source):
       "Clearly distinguish actual progress, proposals and risks. Four sections: what actually happened, "
       "what it means for housing/land, risks and limitations, 4 actionable checks. "
       "Write sections ~130-280 Bengali characters each, intro ~150-250 characters. "
-      "For carousel, one Bengali hook and 4–15 useful slide text groups as needed; multiple complete sentences per image are allowed. Every slide is exactly 3 seconds, with at most 16 slides and 50 seconds total. "
+      "For carousel, one Bengali hook and 4–15 useful slide text groups as needed; multiple complete sentences per image are allowed. Use 5–16 slides. Each voiced slide stays visible for its complete measured narration, minimum 3 seconds; no fixed total duration or 50-second cap. "
       "English photo queries must describe generic symbolic REAL professional photographs, "
       "never pretend a stock photo depicts the named government project. "
       "Return JSON matching the exact schema only. "
