@@ -36,9 +36,11 @@ jobs:
     needs: schedule-gate
     if: ${{ needs.schedule-gate.outputs.allowed == 'true' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 16
+    timeout-minutes: 65
     steps:
       - uses: actions/checkout@v7
+      - name: Wait for today's missing editorial before preparation (NO POSTS)
+        run: python3 scripts/wait_daily_editorial.py
       - name: Check safe email source code
         run: python3 -m py_compile wordpress_email_prepare.py wordpress_email_send.py scripts/verify_wordpress_publication.py
       - name: Prepare next reviewed unpublished article with a public duplicate check
