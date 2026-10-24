@@ -68,7 +68,7 @@ assert "python3 scripts/verify_video_release.py" in video_workflow,"Independent 
 assert '-F "visual_qa_passed=true"' in video_workflow,"Make video QA approval mapping missing"
 # Owner explicitly enabled ONLY WordPress Post by Email, scheduled once daily.
 wp_workflow=(ROOT/".github/workflows/wordpress-post.yml").read_text(encoding="utf-8")
-assert "cron: '0 1 * * *'" in wp_workflow,"WordPress expected 02:00 Berlin schedule"
+assert "cron: '0 1 * * *'" in wp_workflow,"WordPress expected 01:00 Berlin schedule"
 assert "timezone: 'Europe/Berlin'" in wp_workflow
 assert "github.event_name == 'schedule'" in wp_workflow,"WordPress manual runs must stay preview-only"
 assert (ROOT / "assets" / "abasonplus.mp3").stat().st_size > 1000, "Original audio missing"
