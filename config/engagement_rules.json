@@ -1,7 +1,7 @@
 {
   "hook_required": true,
   "minimum_distinct_hashtags": 5,
-  "hashtag_selection": "Exactly two topic-specific tags plus three broad Bangladesh/Bangla audience tags; no verified popularity ranking or guaranteed reach claim.",
+  "hashtag_selection": "Exactly two actual-topic tags plus three platform-specific broad tags; YouTube always includes #Shorts. No verified popularity ranking or guaranteed reach.",
   "caption": "hook, useful topic-specific detail, natural question/CTA, relevant hashtags and required attribution; respect platform length",
   "description": "useful fuller explanation and verified source/date; no filler or invented claims",
   "first_brand_comment": "prepare for every video; post once on own confirmed publication when platform/account supports it; do not guarantee chronological first position or pinning",
@@ -37,5 +37,27 @@
     "facebook_native_label": "not exposed by current Make Facebook Reel module; do not claim native toggle verified",
     "public_caption": "AI দিয়ে তৈরি কণ্ঠ ব্যবহার করা হয়েছে।"
   },
-  "content_quality": "Current verified useful facts, meaningful practical detail, attractive factual hook, opportunities and risks; evergreen clearly labelled when fresh news is not verified. No fabricated popularity."
+  "content_quality": "Current verified useful facts, meaningful practical detail, attractive factual hook, opportunities and risks; evergreen clearly labelled when fresh news is not verified. No fabricated popularity.",
+  "broad_audience_hashtags_by_platform": {
+    "facebook": [
+      "#Bangladesh",
+      "#বাংলাদেশ",
+      "#ReelsBD"
+    ],
+    "youtube": [
+      "#Shorts",
+      "#Bangladesh",
+      "#Bangla"
+    ],
+    "instagram": [
+      "#Bangladesh",
+      "#Bangla",
+      "#Reels"
+    ],
+    "tiktok": [
+      "#Bangladesh",
+      "#বাংলাদেশ",
+      "#BanglaTikTok"
+    ]
+  }
 }
