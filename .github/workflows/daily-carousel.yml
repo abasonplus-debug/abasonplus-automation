@@ -4,7 +4,7 @@ on:
     branches: [main]
     paths: ['previews/tiktok/current.json']
   schedule:
-    - cron: '0 1 * * *' # Owner-selected daily 01:00 Europe/Berlin video trigger
+    - cron: '30 0 * * *' # Owner-selected daily 00:30 Europe/Berlin video trigger
       timezone: 'Europe/Berlin'
     - cron: '31 1 * * *' # Backup ONLY when no earlier scheduled attempt exists today
       timezone: 'Europe/Berlin'
