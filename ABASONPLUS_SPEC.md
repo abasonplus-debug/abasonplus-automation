@@ -53,3 +53,7 @@ Daily WordPress and Facebook/YouTube/Instagram video trigger target is now 01:00
 - AI disclosure defaults ON for new media: YouTube containsSyntheticMedia=true; Instagram isAiGenerated=true; TikTok video_made_with_ai=true. Current native Make Facebook upload module exposes no AI-label input; public copy discloses AI narration, and native label status remains unverified. Do not invent a flag.
 - Primary release trigger remains 01:00 Europe/Berlin, missing-trigger-only backups 01:23 WordPress/01:31 video, watchdog 02:07. Rendering/provider processing may finish later; GitHub cron is not an exact-minute SLA.
 - Keep free-only operation, QA, dated source/license evidence, per-platform duplicate reservations, no ambiguous replay and exact-video TikTok preview/OK. Labels and future settings do not retroactively approve or republish existing media.
+
+
+## Owner superseding schedule — 26 October 2026
+Primary WordPress/Facebook/YouTube/Instagram release trigger: 00:30 Europe/Berlin daily. Research target 00:00; source/photo preflight 00:15. This overrides older times above. Backups remain missing-trigger-only, no replay. TikTok requires exact preview/OK. Trigger time is not a guaranteed publication completion time.
