@@ -2,7 +2,7 @@
   "checked_at": "2026-10-25T02:03:00+02:00",
   "context": {
     "fresh_content_ready": true,
-    "exact_tiktok_video_approved": false,
+    "exact_tiktok_video_approved": true,
     "lookup_complete": {
       "website": true,
       "facebook": true,
@@ -47,15 +47,23 @@
       "verification": "platform_readback",
       "identity_matched": true,
       "source_reference": "checker 8007397 exact provider post 6add46619b2c233b25da57e2"
+    },
+    {
+      "platform": "tiktok",
+      "post_id": "7700389460717948193",
+      "url": "https://www.tiktok.com/@abasonplus/video/7700389460717948193",
+      "status": "published",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "checker 8007397 exact post 6add4761f8d6f3a5617bffae"
     }
   ],
   "quality": {
     "status": "machine_qa_passed",
     "findings": [
       "Exact voiced MP4 run 40144055160 SHA256 fd249560f340401abd7cda1eda941b71298779dee80386829821890d96c86c4a",
-      "TikTok awaiting exact preview review; no approval or publication",
-      "Instagram first brand comment unverified; no write attempted",
-      "No claim of real-device QA"
+      "No claim of real-device QA",
+      "Instagram own first comment 17878604934651198 read back isOwner=true; TikTok first comment pending"
     ]
   },
   "quota": {
