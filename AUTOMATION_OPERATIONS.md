@@ -115,3 +115,7 @@ Daily WordPress and Facebook/YouTube/Instagram video trigger target is now 01:00
 After the exact preview/OK, use scripts/build_tiktok_approval.py build_approval to assemble the dated record from the actual MP4 hash, original preview JSON, successful source-run metadata, current reviewed creator settings and explicit owner evidence. Copy the complete format object; do not reconstruct voice metadata or omit preview_head_sha. This offline helper cannot publish or grant consent. Save and validate the record before dispatching tiktok-publish-reviewed.yml. No generic or future OK.
 
 Completed historical delivery workflows are archived under archive/workflows, outside GitHub Actions. They cannot be dispatched there; publication/approval evidence remains intact. Keep the current reviewed TikTok workflow, daily publishers, preflight, watchdog, report and bounded recovery workflow. Never delete daily reservations or historical approval/publication records.
+
+
+## Owner superseding schedule — 26 October 2026
+Primary WordPress/Facebook/YouTube/Instagram release trigger: 00:30 Europe/Berlin daily. Research target 00:00; source/photo preflight 00:15. This overrides older times above. Backups remain missing-trigger-only, no replay. TikTok requires exact preview/OK. Trigger time is not a guaranteed publication completion time.
