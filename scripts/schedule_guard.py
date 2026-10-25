@@ -100,8 +100,8 @@ def decide(current, runs, now):
         return {'allowed': True, 'day': day, 'reason': 'manual_preview_only'}
     if stamp(current['created_at']).astimezone(BERLIN).date() != local.date():
         raise RuntimeError('Run crossed Berlin midnight; hold stale scheduled delivery')
-    if local.hour < 1:
-        raise RuntimeError('Before owner-selected 01:00 Berlin publication boundary')
+    if (local.hour, local.minute) < (0, 30):
+        raise RuntimeError('Before owner-selected 00:30 Berlin publication boundary')
     if int(current.get('run_attempt', 0)) != 1:
         raise RuntimeError('Scheduled rerun requires incident reconciliation; backup is not a retry')
     matching = [r for r in runs if r.get('event') == 'schedule'
@@ -118,7 +118,7 @@ def decide(current, runs, now):
 
 def check_delivery_day(expected, now=None):
     local = (now or datetime.now(BERLIN)).astimezone(BERLIN)
-    if expected != local.date().isoformat() or local.hour < 1:
+    if expected != local.date().isoformat() or (local.hour, local.minute) < (0, 30):
         raise RuntimeError('Delivery day/time changed since election; hold without sending')
 
 
