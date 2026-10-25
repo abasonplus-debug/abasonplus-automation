@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-25",
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "preview_run_id": "40144055160",
+  "preview_head_sha": "2f9fd5edeebed1703b20dbf2a7f42543b903d1ba",
+  "video_sha256": "fd249560f340401abd7cda1eda941b71298779dee80386829821890d96c86c4a",
+  "caption_sha256": "4757cc7d735a0b5b3385f53b632fe980a8771f06bd032eabca67b7734d44341a",
+  "provider_post_id": "6add4761f8d6f3a5617bffae",
+  "status": "provider_published_native_url_unverified",
+  "platformPostId": "v_pub_url~v2.7700389108803192864",
+  "public_url": null,
+  "settings": {
+    "privacy_level": "PUBLIC_TO_EVERYONE",
+    "allow_comment": true,
+    "allow_duet": true,
+    "allow_stitch": true,
+    "video_made_with_ai": true,
+    "commercialContentType": "brand_organic",
+    "is_brand_organic_post": true,
+    "date": "2026-10-25",
+    "approved_at": "2026-10-25T02:02:23.561185+02:00",
+    "approval": "Owner replied exact \"Ok\" immediately after the 25 October 26-second video, complete caption, first comment and Public/comments/Duet/Stitch/AI/Your Brand settings displayed in this conversation.",
+    "consent_scope": "Only this exact displayed MP4, caption, comment and settings; no future consent.",
+    "account_id": "6ad22ddb280aa6cf7d25310d",
+    "account_username": "abasonplus",
+    "preview_run_id": "40144055160",
+    "preview_head_sha": "2f9fd5edeebed1703b20dbf2a7f42543b903d1ba",
+    "video_sha256": "fd249560f340401abd7cda1eda941b71298779dee80386829821890d96c86c4a",
+    "caption_sha256": "4757cc7d735a0b5b3385f53b632fe980a8771f06bd032eabca67b7734d44341a",
+    "format": {
+      "width": 1080,
+      "height": 1920,
+      "fps": 30,
+      "codec": "H264",
+      "audio": "AAC",
+      "slides": 5,
+      "slide_durations": [
+        3.966667,
+        5.066667,
+        5.433333,
+        5.9,
+        5.633333
+      ],
+      "voiceover": {
+        "engine": "CosyVoice3",
+        "reference": "Dan Mason",
+        "reference_url": "https://raw.githubusercontent.com/CoisLR/TTS-Reference-Voices/main/voices/dan_mason.flac",
+        "complete": true,
+        "script_sha256": "704f27da446fb9565442884ff2cba10b0a776e8352ed2479a3c525eaaca8962b",
+        "mix": "narration_100_music_20_no_amix_normalization",
+        "voice_gain": 1,
+        "music_gain": 0.2,
+        "narrated_slide_count": 5
+      },
+      "duration_seconds": 26
+    },
+    "first_comment": "জমির কাগজে কিউআর কোড থাকলেই নিশ্চিন্ত?\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/"
+  },
+  "note": "Native feed did not yet return new item. Never use v_pub_url identifier as native ID. No retry."
+}
