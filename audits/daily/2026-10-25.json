@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-25T02:03:00+02:00",
+  "checked_at": "2026-10-25T10:57:00+01:00",
   "context": {
     "fresh_content_ready": true,
     "exact_tiktok_video_approved": true,
@@ -19,7 +19,9 @@
       "status": "published",
       "verification": "platform_readback",
       "identity_matched": true,
-      "source_reference": "WordPress public REST matched slug/title"
+      "source_reference": "WordPress public REST matched slug/title",
+      "observed_at": "2026-10-25T02:00:00+02:00",
+      "published_at": null
     },
     {
       "platform": "facebook",
@@ -28,7 +30,9 @@
       "status": "published",
       "verification": "platform_readback",
       "identity_matched": true,
-      "source_reference": "Make 7968544 exact native video GET"
+      "source_reference": "Make 7968544 exact native video GET",
+      "observed_at": "2026-10-25T02:00:00+02:00",
+      "published_at": "2026-10-24T23:58:54Z"
     },
     {
       "platform": "youtube",
@@ -37,7 +41,9 @@
       "status": "published",
       "verification": "platform_readback",
       "identity_matched": true,
-      "source_reference": "Make 7968544 exact native video GET"
+      "source_reference": "Make 7968544 exact native video GET",
+      "observed_at": "2026-10-25T02:00:00+02:00",
+      "published_at": "2026-10-24T23:59:07Z"
     },
     {
       "platform": "instagram",
@@ -46,7 +52,9 @@
       "status": "published",
       "verification": "platform_readback",
       "identity_matched": true,
-      "source_reference": "checker 8007397 exact provider post 6add46619b2c233b25da57e2"
+      "source_reference": "checker 8007397 exact provider post 6add46619b2c233b25da57e2",
+      "observed_at": "2026-10-25T10:57:00+01:00",
+      "published_at": "2026-10-25T00:00:03.886Z"
     },
     {
       "platform": "tiktok",
@@ -55,7 +63,9 @@
       "status": "published",
       "verification": "platform_readback",
       "identity_matched": true,
-      "source_reference": "checker 8007397 exact post 6add4761f8d6f3a5617bffae"
+      "source_reference": "checker 8007397 exact post 6add4761f8d6f3a5617bffae",
+      "observed_at": "2026-10-25T10:57:00+01:00",
+      "published_at": "2026-10-25T00:04:06.285Z"
     }
   ],
   "quality": {
@@ -63,26 +73,37 @@
     "findings": [
       "Exact voiced MP4 run 40144055160 SHA256 fd249560f340401abd7cda1eda941b71298779dee80386829821890d96c86c4a",
       "No claim of real-device QA",
-      "Instagram own first comment 17878604934651198 read back isOwner=true; TikTok first comment pending"
+      "Instagram own first comment 17878604934651198 read back isOwner=true; TikTok first comment pending",
+      "TikTok own-comment GET returned empty with hasMore=false at 2026-10-25T09:56:31Z; write held pending reservation/capability reconciliation.",
+      "Facebook/YouTube readbacks are earlier current-day evidence, not refreshed destination reads. Website publication timestamp unavailable; strict report classification remains unverified.",
+      "Legacy style prompt/config retain fixed timing text; current SPEC overrides with narration-aligned timing.",
+      "Consent record matches media/caption/run/settings, but stored publication schema lacks fields required by reconcile; provenance needs normalization from actual readback.",
+      "Mobile QA contact sheet not reviewed in this audit."
     ]
   },
   "quota": {
-    "used": null,
-    "remaining": null,
-    "days_until_reset": null,
+    "used": 755,
+    "remaining": 245,
+    "days_until_reset": 18,
     "measured_daily_credits": null
   },
   "weekly_metrics": {
-    "status": "not_reviewed",
-    "observations": [],
+    "status": "incomplete",
+    "observations": [
+      "Recent provider feed shows published Instagram/TikTok entries for 21–25 October; not a complete seven-day dataset.",
+      "YouTube observation 2026-10-24T23:59:45Z: views 0, likes 0, comments 1; historical point, not a current trend."
+    ],
     "unavailable_metrics": [
-      "weekly metrics not collected in interactive recovery"
+      "Complete seven-day reach/watch-time/retention/shares/saves/clicks and complete-day credit usage unavailable in this audit."
     ]
   },
   "recovery": {
     "delivery_attempted": true,
-    "failure_phase": "missing editorial before delivery; recovered four destinations",
-    "github_job_status": "preview success",
-    "current_day_verified": true
+    "failure_phase": "Original missing editorial before delivery; later recovery evidence for all five destinations",
+    "transient_failure": false,
+    "github_job_status": "original failed; reviewed preview and TikTok delivery succeeded",
+    "prior_retries": null,
+    "current_day_verified": true,
+    "quota_safe": true
   }
 }
