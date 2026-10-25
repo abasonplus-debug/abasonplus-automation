@@ -1,0 +1,131 @@
+{
+  "platform": "tiktok",
+  "status": "awaiting_video_review",
+  "date": "2026-10-25",
+  "content_key": "abasonplus-tiktok-2026-10-25",
+  "title": "জমির কাগজে কিউআর কোড থাকলেই নিশ্চিন্ত?",
+  "caption": "জমির কাগজে কিউআর কোড থাকলেই নিশ্চিন্ত?\n✅ সরকারি ঠিকানা থেকে ভূমি অ্যাপ নিন। সাধারণ স্ক্যানারে ভরসা নয়।\n✅ কাগজের সঙ্গে যাচাইয়ের তথ্য মিলান। অমিল থাকলে লিখে রাখুন।\n✅ নথি যাচাই মানেই জমি কেনার সব যাচাই শেষ নয়। মূল কাগজ ও বাস্তব জমি দেখুন।\n✅ ওটিপি বা পাসওয়ার্ড কাউকে নয়। অস্পষ্ট ফল হলে সরকারি সহায়তা নিন।\n\n#ভূমিআইন #জমিরদলিল #Bangladesh #বাংলাদেশ #BanglaTikTok",
+  "first_comment": "জমির কাগজে কিউআর কোড থাকলেই নিশ্চিন্ত?\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/",
+  "hashtags": [
+    "#ভূমিআইন",
+    "#জমিরদলিল",
+    "#Bangladesh",
+    "#বাংলাদেশ",
+    "#BanglaTikTok"
+  ],
+  "video_file": "output/abasonplus_daily.mp4",
+  "thumbnail_file": "output/thumbnail.png",
+  "source_url": "https://www.bssnews.net/bangla/national/national-news/274411",
+  "verification": "machine_qa_passed_not_human_approved",
+  "video_sha256": "fd249560f340401abd7cda1eda941b71298779dee80386829821890d96c86c4a",
+  "caption_sha256": "4757cc7d735a0b5b3385f53b632fe980a8771f06bd032eabca67b7734d44341a",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "codec": "H264",
+    "audio": "AAC",
+    "slides": 5,
+    "slide_durations": [
+      3.966667,
+      5.066667,
+      5.433333,
+      5.9,
+      5.633333
+    ],
+    "voiceover": {
+      "engine": "CosyVoice3",
+      "reference": "Dan Mason",
+      "reference_url": "https://raw.githubusercontent.com/CoisLR/TTS-Reference-Voices/main/voices/dan_mason.flac",
+      "complete": true,
+      "script_sha256": "704f27da446fb9565442884ff2cba10b0a776e8352ed2479a3c525eaaca8962b",
+      "mix": "narration_100_music_20_no_amix_normalization",
+      "voice_gain": 1,
+      "music_gain": 0.2,
+      "narrated_slide_count": 5
+    },
+    "duration_seconds": 26
+  },
+  "no_extra_watermark": true,
+  "soundtrack": "owner_music_mixed_under_cosyvoice3_deep_male",
+  "license_and_music_rights_must_be_held_by_owner": true,
+  "tiktok_oauth_connected": null,
+  "recipient_account_verified": null,
+  "express_consent_given": false,
+  "content_preview_confirmed": false,
+  "posting_enabled": false,
+  "preview_run_id": "40144055160",
+  "preview_head_sha": "2f9fd5edeebed1703b20dbf2a7f42543b903d1ba",
+  "creator_settings": {
+    "privacy_level": "PUBLIC_TO_EVERYONE",
+    "allow_comment": true,
+    "allow_duet": true,
+    "allow_stitch": true,
+    "video_made_with_ai": true,
+    "commercialContentType": "brand_organic",
+    "is_brand_organic_post": true
+  },
+  "creator_supported_options": {
+    "data": null,
+    "posts": null,
+    "accounts": null,
+    "comments": null,
+    "meta": null,
+    "pagination": null,
+    "creator": {
+      "nickname": "আবাসন প্লাস",
+      "canPostMore": true,
+      "isVerified": false
+    },
+    "privacyLevels": [
+      {
+        "value": "PUBLIC_TO_EVERYONE",
+        "label": "Public To Everyone"
+      }
+    ],
+    "postingLimits": {
+      "maxVideoDurationSec": 3600,
+      "interactionSettings": {
+        "allow_comment": {
+          "enabled": true,
+          "required": true,
+          "default": false,
+          "label": "Allow Comment"
+        },
+        "allow_duet": {
+          "enabled": true,
+          "required": true,
+          "default": false,
+          "label": "Allow Duet"
+        },
+        "allow_stitch": {
+          "enabled": true,
+          "required": true,
+          "default": false,
+          "label": "Allow Stitch"
+        }
+      }
+    },
+    "commercialContentTypes": [
+      {
+        "value": "none",
+        "label": "No Commercial Content"
+      },
+      {
+        "value": "brand_organic",
+        "label": "Your Brand",
+        "requires": [
+          "is_brand_organic_post"
+        ]
+      },
+      {
+        "value": "brand_content",
+        "label": "Branded Content",
+        "requires": [
+          "brand_partner_promote"
+        ]
+      }
+    ],
+    "status": null
+  }
+}
