@@ -1,6 +1,6 @@
 {
   "platform": "tiktok",
-  "status": "awaiting_video_review",
+  "status": "approved_and_published",
   "date": "2026-10-25",
   "content_key": "abasonplus-tiktok-2026-10-25",
   "title": "জমির কাগজে কিউআর কোড থাকলেই নিশ্চিন্ত?",
@@ -127,5 +127,6 @@
       }
     ],
     "status": null
-  }
+  },
+  "public_url": "https://www.tiktok.com/@abasonplus/video/7700389460717948193"
 }
