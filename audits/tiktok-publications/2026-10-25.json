@@ -6,9 +6,9 @@
   "video_sha256": "fd249560f340401abd7cda1eda941b71298779dee80386829821890d96c86c4a",
   "caption_sha256": "4757cc7d735a0b5b3385f53b632fe980a8771f06bd032eabca67b7734d44341a",
   "provider_post_id": "6add4761f8d6f3a5617bffae",
-  "status": "provider_published_native_url_unverified",
-  "platformPostId": "v_pub_url~v2.7700389108803192864",
-  "public_url": null,
+  "status": "published",
+  "platformPostId": "7700389460717948193",
+  "public_url": "https://www.tiktok.com/@abasonplus/video/7700389460717948193",
   "settings": {
     "privacy_level": "PUBLIC_TO_EVERYONE",
     "allow_comment": true,
@@ -56,5 +56,5 @@
     },
     "first_comment": "জমির কাগজে কিউআর কোড থাকলেই নিশ্চিন্ত?\nআপনার প্রশ্ন বা অভিজ্ঞতা লিখুন। বিস্তারিত: https://abasonplus.wordpress.com/"
   },
-  "note": "Native feed did not yet return new item. Never use v_pub_url identifier as native ID. No retry."
+  "note": "Exact provider readback returned native ID and public URL; no resend"
 }
