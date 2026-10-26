@@ -3,7 +3,7 @@
 No network, no social publication, no source invention.
 """
 import json, pathlib, sys
-from publication_policy import trusted_source_url, validate_article_html
+from publication_policy import trusted_source_url, validate_article_html, require_editorial_ready
 from carousel_timing import MIN_SLIDES, MAX_SLIDES
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -15,6 +15,7 @@ if not f.exists():
     print("NO_CHATGPT_DAILY_EDITORIAL: refusing repeated static carousel")
     sys.exit(3)
 data=json.loads(f.read_text(encoding="utf-8"))
+require_editorial_ready(data, video=True)
 story=data.get("story")
 if data.get("date")!=today or data.get("verified_on")!=today:
     raise RuntimeError("Daily editorial is not verified today")
