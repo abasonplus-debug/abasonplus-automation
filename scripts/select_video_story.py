@@ -26,8 +26,17 @@ if not isinstance(story,dict) or not MIN_SLIDES-1<=len(story.get("tips",[]))<=MA
     raise RuntimeError("Need 4–15 sourced carousel text groups; each may contain multiple sentences")
 if story.get("source_url")!=data["source_url"] or story.get("verified_on")!=today:
     raise RuntimeError("Slide and article source/version mismatch")
+illustrations=story.get("illustrations")
+if illustrations is not None:
+    from illustration_assets import validate_asset
+    if len(illustrations)!=len(story["tips"])+1:
+        raise ValueError("One verified illustration per slide required")
+    for asset in illustrations: validate_asset(asset,ROOT)
+    if len({a["sha256"] for a in illustrations})!=len(illustrations):
+        raise ValueError("Repeated illustration hashes")
+    story["photos"]=illustrations
 photos=story.get("photos")
-if photos is not None:
+if photos is not None and illustrations is None:
     from urllib.parse import urlparse
     if len(photos)!=len(story["tips"])+1 or len({x.get("url") for x in photos})!=len(photos):
         raise RuntimeError("One distinct researched photograph per slide required")

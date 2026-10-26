@@ -17,6 +17,7 @@ from publication_policy import validate_social_copy
 from carousel_style import STYLE_ID, validate_style
 from carousel_timing import validate_timing, MIN_SLIDES, MAX_SLIDES
 from engagement_pack import validate_pack
+from illustration_assets import validate_visual_evidence, validate_asset
 from cosyvoice3_daily_voiceover import verify_voiceover
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
@@ -46,7 +47,7 @@ required(brief.get("source_kind") in ("official_law_reference","external_news_re
 required(report.get("manual_review")=="not_performed" and
          report.get("visual_approval")=="automated_semantic_qa_only",
          "unknown photography review status")
-required(report.get("photo_selection") in ("curated_plus_semantic_screened","commons_semantic_screened"),
+required(report.get("photo_selection") in ("curated_plus_semantic_screened","commons_semantic_screened","illustration_semantic_screened"),
          "photographs were not CLIP screened")
 slides=int(report.get("slides",0))
 required(MIN_SLIDES<=slides<=MAX_SLIDES and len(brief.get("tips",[]))==slides-1,
@@ -63,12 +64,17 @@ for n,info in enumerate(quality):
     required(info.get("font_px",0)>=120 and info.get("main_font_px",0)>=120,
              "font below agreed minimum")
     validate_style(info)
-    required(info.get("photo_semantic_qa") is True,
-             "visual brief was not semantically screened")
+    validate_visual_evidence(info)
+    if info.get("asset_type")=="illustration":
+        asset=brief["illustrations"][n]
+        validate_asset(asset,ROOT)
+        required(info["source"]=="illustration-sha256:"+asset["sha256"] and
+                 info["origin_reference"]==asset["origin_reference"] and
+                 info["rights_evidence"]==asset["rights_evidence"],"illustration provenance changed")
     required(info.get("font_glyph_coverage_qa") is True,
              "Bengali and English font coverage unverified; reject tofu □ boxes")
     credit=info.get("source","")
-    required(bool(credit) and ("Pexels Free License" in credit or
+    required(bool(credit) and (info.get("asset_type")=="illustration" or "Pexels Free License" in credit or
              re.search(r"\b(?:CC0|CC BY|Public Domain)\b",credit,re.I)),
              "no clear approved photographic license attribution")
     required(credit not in sources,"repeated photo credited as different slides")

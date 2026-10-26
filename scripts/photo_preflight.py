@@ -72,6 +72,9 @@ def readable_crop(picture, placements, query, guard):
 
 
 def select(photo, placements, query, guard, used, loader=download):
+    if photo.get("asset_type")=="illustration":
+        from illustration_assets import select_illustration
+        return select_illustration(photo,placements,query,guard,used,Path(__file__).resolve().parents[1])
     failures = []
     for index, p in enumerate(candidates(photo)):
         identity = urlparse(p['url']).path  # query variants cannot bypass distinct-photo checks

@@ -84,7 +84,7 @@ selected_photos=item.get("photos") or researched_photos.get(heading)
 if selected_photos is not None:
     if len(selected_photos)!=len(slides):
         raise RuntimeError("Research photo manifest does not match slide count")
-    if len({x["url"] for x in selected_photos}) != len(selected_photos):
+    if len({x.get("url") or x.get("sha256") for x in selected_photos}) != len(selected_photos):
         raise RuntimeError("Photo manifest repeats an image")
 
 logo = None
@@ -185,6 +185,9 @@ def image_for(query, slide_index, placements):
         records['status'] = 'photo_checked_not_final_video_qa'
         diagnostic.write_text(json.dumps(records, ensure_ascii=False, indent=2)+'\n')
         source = chosen.get('source') or chosen['source_page']
+        if chosen.get("asset_type")=="illustration":
+            photo_credits.append(source)
+            return picture,placement
         photo_credits.append(f"Slide {slide_index+1}: {chosen['creator']} | {chosen['license']} | {source} | Cropped and text overlaid")
         print('PHOTO_REPAIR_QA: '+json.dumps({'slide': slide_index+1, **evidence}), flush=True)
         return picture, placement
@@ -285,6 +288,10 @@ for i, slide in enumerate(slides):
           'logo_position':'bottom_right' if logo else 'omitted_unavailable','logo_box':logo_box,
           'line_background_stats':stats,'photo_semantic_qa':True,'font_glyph_coverage_qa':True,
           'latin_fallback_font':LATIN_FONT.name,'source':photo_credits[-1]}
+    if selected_photos and selected_photos[i].get("asset_type")=="illustration":
+        asset=selected_photos[i]
+        info.update(asset_type="illustration",photo_semantic_qa=False,visual_semantic_qa=True,
+                    rights_evidence=asset["rights_evidence"],origin_reference=asset["origin_reference"])
     validate_style(info)
     frame.save(OUT/f'slide_{i}.png',optimize=True)
     if i==0:
@@ -313,7 +320,7 @@ qa.save(OUT/'mobile_qa_contact_sheet.jpg',quality=90)
 
 (OUT / "image_credits.txt").write_text("\n".join(photo_credits)+"\n",encoding="utf-8")
 credits = "\n".join(photo_credits)
-public_credits = "" if all("Pexels Free License" in x for x in photo_credits) else "\n\nPhoto sources and licenses:\n" + credits
+public_credits = ""  # provenance stays in internal image_credits/metadata
 (OUT / "caption.txt").open("a",encoding="utf-8").write(public_credits)
 (OUT / "description.txt").write_text(
     f"{hook}\n" + "\n".join(f"{i}. {p['text']}" for i,p in enumerate(points,1))
@@ -327,7 +334,7 @@ write_pack(OUT,hook,(OUT/'caption.txt').read_text(encoding='utf-8'),(OUT/'descri
 (OUT / "metadata.json").write_text(json.dumps(
     {"date":str(today),"topic":heading,"hook":hook,"slides":len(slides),"slide_seconds":SLIDE_SECONDS,"slide_durations":[SLIDE_SECONDS]*len(slides),"style_id":STYLE_ID,"source_url":item.get("source_url"),"verified_on":item.get("verified_on"),
      "status":"preview_only","visual_approval":"automated_semantic_qa_only","manual_review":"not_performed",
-     "photo_selection":("curated_plus_semantic_screened" if selected_photos else "commons_semantic_screened"),
+     "photo_selection":("illustration_semantic_screened" if item.get("illustrations") else "curated_plus_semantic_screened" if selected_photos else "commons_semantic_screened"),
      "quality":quality_results},
     ensure_ascii=False,indent=2),encoding="utf-8")
 playlist = OUT / "slides.txt"

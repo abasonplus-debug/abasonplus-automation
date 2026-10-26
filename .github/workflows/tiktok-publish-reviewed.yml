@@ -134,7 +134,9 @@ jobs:
           assert meta["style_id"]=="compact_white_gold_v2"
           from scripts.carousel_style import validate_style
           for quality_record in meta['quality']: validate_style(quality_record)
-          assert all(x.get("photo_semantic_qa") and x.get("font_px",0)>=120
+          from scripts.illustration_assets import validate_visual_evidence
+          for x in meta["quality"]: validate_visual_evidence(x)
+          assert all(x.get("font_px",0)>=120
              and x.get("main_font_px",0)>=120 and x.get("style_id")==meta["style_id"]
              and x.get("text_background") is False and x.get("text_stroke") is True
              and x.get("photo_overlay") is False
