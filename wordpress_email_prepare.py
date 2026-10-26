@@ -3,7 +3,7 @@
 GitHub -> existing Make webhook -> Gmail OAuth -> WordPress secret Post-by-Email address.
 """
 import argparse, html, json, pathlib, re
-from scripts.publication_policy import trusted_source_url, validate_article_html
+from scripts.publication_policy import trusted_source_url, validate_article_html, require_editorial_ready
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
 from html.parser import HTMLParser
@@ -96,6 +96,7 @@ def main():
         raise RuntimeError("NO_CHATGPT_DAILY_EDITORIAL: today's editorial missing; publication HELD")
     if chatgpt_path.is_file():
         entry=json.loads(chatgpt_path.read_text(encoding="utf-8"))
+        require_editorial_ready(entry)
         source=entry.get("source_url","")
         if entry.get("date")!=today.isoformat() or entry.get("verified_on")!=today.isoformat():
             raise RuntimeError("ChatGPT daily editorial is stale or incorrectly dated")
