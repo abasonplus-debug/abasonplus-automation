@@ -27,7 +27,7 @@ def classify(workflow, runs, jobs, now):
     now = now.astimezone(BERLIN)
     relevant = [r for r in runs if r.get('event') == 'schedule'
                 and stamp(r['created_at']).astimezone(BERLIN).date() == now.date()]
-    due = now.replace(hour=1, minute=0, second=0, microsecond=0)
+    due = now.replace(hour=0, minute=30, second=0, microsecond=0)
     base = {'workflow': workflow, 'platform_publication': 'unverified'}
     if now < due:
         return dict(base, status='not_due', alert=False, run_ids=[])
@@ -132,7 +132,7 @@ def main():
         runs = api.runs(workflow, now.date())
         jobs = {int(run['id']): api.jobs(run['id']) for run in runs}
         findings.append(classify(workflow, runs, jobs, now))
-    # Preflight failures need visibility before the 01:00 release boundary.
+    # Preflight failures need visibility before the 00:30 release boundary.
     start, end = __import__('schedule_guard').day_window(now.date())
     preview_runs = api.collection('/actions/workflows/editorial-photo-preflight.yml/runs',
                                   'workflow_runs', {'created': start.isoformat()+'..'+end.isoformat()})
