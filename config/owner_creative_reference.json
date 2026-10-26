@@ -27,6 +27,7 @@
   },
   "timing": "full measured processed narration plus reading time; no fixed total-duration cap",
   "logo": "original small bottom-right",
-  "daily_cartoon_integration_status": "pending; existing photo-only gates remain enforced",
-  "no_future_tiktok_consent": true
+  "daily_cartoon_integration_status": "verified local illustration asset ingestion, semantic/layout QA and release evidence implemented; first real full render pending",
+  "no_future_tiktok_consent": true,
+  "implementation_commit": "4b6e532cd23bfb56b826792d01b697557284d05f"
 }
