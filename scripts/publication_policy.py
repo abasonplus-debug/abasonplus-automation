@@ -52,3 +52,11 @@ def validate_social_copy(caption, description, title):
         raise ValueError("YouTube description must fit 5000 characters")
     if not 1 <= len(title) <= 100:
         raise ValueError("YouTube title must fit 100 characters")
+
+
+def require_editorial_ready(entry, *, video=False):
+    """Honor explicit editorial holds; never relabel a draft as approved."""
+    if entry.get('publication_ready') is False or entry.get('status') in ('draft', 'held', 'pending'):
+        raise ValueError('EDITORIAL_HELD: draft or explicitly not ready for publication')
+    if video and entry.get('video_ready') is False:
+        raise ValueError('VIDEO_HELD: illustration assets/QA or narration incomplete')
