@@ -29,6 +29,7 @@ SAMPLE_RATE = 24000
 MIN_SLIDE_SECONDS = 3
 VOICE_GAIN = 1.0
 MUSIC_GAIN = 0.20
+VOICE_SPEED = 1.1
 
 def check(condition: bool, message: str) -> None:
     if not condition:
@@ -197,6 +198,9 @@ def verify_voiceover(out: Path, story: dict, metadata: dict) -> None:
           "voice source provenance mismatch")
     check(report.get("model") == SPACE and report.get("reference_url") == REFERENCE_URL,
           "unapproved TTS backend or reference voice")
+    speed = voice.get("playback_speed", 1.0)
+    check(speed in (1.0, VOICE_SPEED) and report.get("playback_speed", 1.0) == speed,
+          "narration playback speed evidence mismatch")
     parts = report.get("segments")
     check(isinstance(parts, list) and len(parts) == len(texts), "not every slide was narrated")
     durations = []
@@ -265,7 +269,8 @@ def main() -> None:
           preset.get("free_only") is True and
           preset.get("paid_or_trial_services_allowed") is False and
           preset.get("voice_gain") == VOICE_GAIN and
-          preset.get("background_music_gain") == MUSIC_GAIN,
+          preset.get("background_music_gain") == MUSIC_GAIN and
+          preset.get("playback_speed") == VOICE_SPEED,
           "voice/music preset not owner approved as strictly free 100%/20%")
     for i in range(len(texts)):
         check((OUT/f"slide_{i}.png").is_file(), "slide image unavailable before narration")
@@ -286,7 +291,8 @@ def main() -> None:
               f"no real CosyVoice3 result for slide {i+1}")
         dest = temp/f"slide_{i:02}.wav"
         run(["ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
-             "-i", str(model_audio), "-ac", "1", "-ar", "24000",
+             "-i", str(model_audio), "-af", f"atempo={VOICE_SPEED}",
+             "-ac", "1", "-ar", "24000",
              "-c:a", "pcm_s16le", str(dest)], 50)
         durations.append(validate_segment(dest))
         files.append(dest)
@@ -303,7 +309,8 @@ def main() -> None:
     ]
     manifest = {"engine": "CosyVoice3", "model": SPACE, "reference": "Dan Mason",
                 "reference_url": REFERENCE_URL, "source_url": story["source_url"],
-                "verified_on": story["verified_on"], "segments": segments}
+                "verified_on": story["verified_on"], "playback_speed": VOICE_SPEED,
+                "segments": segments}
     (OUT/"voiceover_manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     duration = render_with_narration(narration, ROOT/"assets"/"abasonplus.mp3",
@@ -316,6 +323,7 @@ def main() -> None:
         "mix": "narration_100_music_20_no_amix_normalization",
         "voice_gain": VOICE_GAIN,
         "music_gain": MUSIC_GAIN,
+        "playback_speed": VOICE_SPEED,
         "narrated_slide_count": len(texts)}
     validate_timing(meta, duration)
     verify_voiceover(OUT, story, meta)
@@ -326,3 +334,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
