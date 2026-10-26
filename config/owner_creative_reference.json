@@ -1,0 +1,32 @@
+{
+  "approved_on": "2026-10-26",
+  "reference_library_file_id": "libfile_42824ac934d881919829065642e17271",
+  "reference_name": "AbasonPlus_Voice_1_1x.mp4",
+  "visual_direction": "coherent cartoon characters and topic-matched illustrative scenes",
+  "text": {
+    "language": "Bengali",
+    "large": true,
+    "bold": true,
+    "clear": true,
+    "multiline_explanatory_sentences": true,
+    "colors": [
+      "white",
+      "gold"
+    ],
+    "dark_outline": true,
+    "no_forced_single_phrase": true,
+    "no_shrinking_to_fit": true,
+    "verify_glyph_bounds_and_contrast": true
+  },
+  "voice": {
+    "engine": "CosyVoice3",
+    "reference": "Dan Mason",
+    "playback_speed": 1.1,
+    "gain": 1,
+    "music_gain": 0.2
+  },
+  "timing": "full measured processed narration plus reading time; no fixed total-duration cap",
+  "logo": "original small bottom-right",
+  "daily_cartoon_integration_status": "pending; existing photo-only gates remain enforced",
+  "no_future_tiktok_consent": true
+}
