@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-26T11:01:46+01:00",
+  "checked_at": "2026-10-26T11:08:00+01:00",
   "context": {
     "fresh_content_ready": false,
     "exact_tiktok_video_approved": false,
@@ -11,7 +11,19 @@
       "tiktok": true
     }
   },
-  "evidence": [],
+  "evidence": [
+    {
+      "platform": "website",
+      "post_id": "63",
+      "url": "https://abasonplus.wordpress.com/2026/10/26/ap-land-share-flat-check-2026-10-26/",
+      "status": "published",
+      "published_at": "2026-10-26T10:07:43+00:00",
+      "observed_at": "2026-10-26T11:08:00+01:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "https://public-api.wordpress.com/rest/v1.1/sites/257973809/posts/63/?fields=ID,status,URL,slug,title,date"
+    }
+  ],
   "quota": {
     "used": 758,
     "remaining": 242,
@@ -28,7 +40,8 @@
       "Both dated TikTok approval/publication files absent. Interactive local 1.1x cartoon video exists but is not a successful GitHub source-checked preview artifact; no generic approval request or upload from audit.",
       "Current-day mobile QA/voice manifest unavailable; local file decode does not establish production visual QA.",
       "Schedule guard/audit due time 00:30 conflicts with watchdog due time 01:00. Audit did not modify scripts.",
-      "Make Free, auto-purchase disabled, 2 active scenarios; provider exactly 2 active accounts, neither needs reconnection. Reserve 100 credits; forecast unverified without measured complete-day usage."
+      "Make Free, auto-purchase disabled, 2 active scenarios; provider exactly 2 active accounts, neither needs reconnection. Reserve 100 credits; forecast unverified without measured complete-day usage.",
+      "Interactive owner-authorized direct WordPress publication 63 verified by public API. This is separate from the failed scheduled email run. Do not resend today's website article. Facebook/YouTube/Instagram/TikTok upload not attempted; manual local video lacks required production artifact and immutable review evidence."
     ]
   },
   "weekly_metrics": {
