@@ -1,0 +1,93 @@
+{
+  "checked_at": "2026-10-27T11:06:12+01:00",
+  "context": {
+    "fresh_content_ready": false,
+    "exact_tiktok_video_approved": false,
+    "lookup_complete": {
+      "website": true,
+      "facebook": false,
+      "youtube": false,
+      "instagram": true,
+      "tiktok": true
+    }
+  },
+  "evidence": [
+    {
+      "platform": "website",
+      "post_id": null,
+      "url": null,
+      "status": "not_found",
+      "published_at": null,
+      "observed_at": "2026-10-27T11:06:12+01:00",
+      "verification": "platform_readback",
+      "identity_matched": false,
+      "source_reference": "WordPress site257973809 posts.list publish; Berlin-day window; total0."
+    },
+    {
+      "platform": "instagram",
+      "post_id": null,
+      "url": null,
+      "status": "not_found",
+      "published_at": null,
+      "observed_at": "2026-10-27T11:06:12+01:00",
+      "verification": "platform_readback",
+      "identity_matched": false,
+      "source_reference": "GET-only checker8007397 /posts pages1–2 total19; account6ad380c8b835331ad1563a7a; no current-day own post."
+    },
+    {
+      "platform": "tiktok",
+      "post_id": null,
+      "url": null,
+      "status": "not_found",
+      "published_at": null,
+      "observed_at": "2026-10-27T11:06:12+01:00",
+      "verification": "platform_readback",
+      "identity_matched": false,
+      "source_reference": "GET-only checker8007397 /posts pages1–2 total19; account6ad22ddb280aa6cf7d25310d; no current-day own post."
+    }
+  ],
+  "quota": {
+    "used": 763,
+    "remaining": 237,
+    "days_until_reset": 17,
+    "measured_daily_credits": null,
+    "plan": "Free",
+    "auto_purchase_enabled": false,
+    "reserve": 100,
+    "provider_active_accounts": 2,
+    "provider_needs_reconnection": false
+  },
+  "quality": {
+    "status": "held_editorial_and_media",
+    "findings": [
+      "Today's editorial remains status=draft, publication_ready=false, video_ready=false; zero actual repository illustration/photo inputs.",
+      "Cartoon ingestion is implemented by4b6e532; the draft's claim that ingestion is unimplemented is stale. Missing actual repository assets and release QA remain real blockers.",
+      "WordPress40422844005 preparation failed with EDITORIAL_HELD; send and verification steps skipped.",
+      "Video40423090279 source failed with EDITORIAL_HELD; render-and-publish skipped; artifacts listing empty.",
+      "Backup40430997268 and40431624992 skipped downstream work under existing-scheduled-attempt no-replay gate. No rerun authorized.",
+      "Main Make7968544 execution list from2026-10-26T23:00Z returned empty; no current native Facebook/YouTube upload IDs. Destination readback cannot be performed without real IDs; both remain unverified.",
+      "Provider /posts pagination complete:19 records,2 pages. No current-day Instagram/TikTok publication. Both fixed accounts active and need no reconnection;2 active accounts match configured free allowance.",
+      "Today's TikTok approval/publication/pending-preview files returned404. No current-day repository QA-passed video available for an exact preview handoff; do not request generic OK.",
+      "Current-day mobile QA contact sheet/notes and voice manifest unavailable because scheduled render did not run. No real-device readability review claimed.",
+      "All3 bounded provider GET executions succeeded, each1credit; inspected modules1/2/3 each errors0. No new-post comment or thumbnail write to verify.",
+      "Source FAQ publication/effective date not supplied; editorial verification date2026-10-27, evergreen educational topic. No breaking-news claim.",
+      "Current Make planFree, auto-purchasefalse, active scenarios2; remaining237credits,100reserved. Complete-day measured usage unavailable; forecast unverified."
+    ]
+  },
+  "weekly_metrics": {
+    "status": "not_due",
+    "observations": [],
+    "unavailable_metrics": [
+      "No weekly review scheduled for Tuesday; no new performance claims."
+    ]
+  },
+  "recovery": {
+    "delivery_attempted": false,
+    "failure_phase": "before_delivery",
+    "transient_failure": false,
+    "github_job_status": "failure",
+    "prior_retries": 0,
+    "current_day_verified": false,
+    "quota_safe": true
+  }
+}
