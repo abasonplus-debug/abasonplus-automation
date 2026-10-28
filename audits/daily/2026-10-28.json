@@ -1,0 +1,181 @@
+{
+  "checked_at": "2026-10-28T11:05:00+01:00",
+  "context": {
+    "fresh_content_ready": true,
+    "exact_tiktok_video_approved": false,
+    "lookup_complete": {
+      "website": true,
+      "facebook": true,
+      "youtube": true,
+      "instagram": true,
+      "tiktok": true
+    }
+  },
+  "evidence": [
+    {
+      "platform": "facebook",
+      "post_id": "1784353729445504",
+      "url": "https://www.facebook.com/reel/1784353729445504/",
+      "status": "published",
+      "identity_matched": true,
+      "page_id": "293664680487578",
+      "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+      "published_at": "2026-10-28T04:02:21.000Z",
+      "source_reference": {
+        "scenario_id": 7968544,
+        "execution_id": "1daece7f819d4420b12e4bedd664eee8",
+        "module_id": 34,
+        "cycle": 1
+      },
+      "observed_at": "2026-10-28T11:05:00+01:00",
+      "verification": "platform_readback"
+    },
+    {
+      "platform": "youtube",
+      "post_id": "AcudQRXGqX4",
+      "url": "https://www.youtube.com/watch?v=AcudQRXGqX4",
+      "status": "published",
+      "identity_matched": true,
+      "channel_id": "UCKA_4RYtC2ktoclxzWCI1Lg",
+      "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+      "published_at": "2026-10-28T04:02:49Z",
+      "source_reference": {
+        "scenario_id": 7968544,
+        "execution_id": "9dfc22a25f7942fb95bb237eface1e59",
+        "module_id": 33,
+        "cycle": 1
+      },
+      "observed_at": "2026-10-28T11:05:00+01:00",
+      "verification": "platform_readback"
+    },
+    {
+      "platform": "instagram",
+      "provider_post_id": "6ae173fbe68ed6ce6871e11b",
+      "post_id": "18117464698825200",
+      "url": "https://www.instagram.com/reel/DfBh4crAqfM/",
+      "status": "published",
+      "identity_matched": true,
+      "account_id": "6ad380c8b835331ad1563a7a",
+      "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+      "published_at": "2026-10-28T04:04:21.373Z",
+      "source_reference": {
+        "scenario_id": 8007397,
+        "execution_id": "bfcaa09b2458487a9e6ff97aa9f6292e",
+        "path": "/posts"
+      },
+      "observed_at": "2026-10-28T11:05:00+01:00",
+      "verification": "platform_readback"
+    },
+    {
+      "platform": "website",
+      "post_id": 64,
+      "url": "https://abasonplus.wordpress.com/2026/10/28/ap-metro-contract-land-buying-checks-2026-10-28/",
+      "status": "published",
+      "identity_matched": true,
+      "published_at": "2026-10-28T04:12:29Z",
+      "source_url_matched": true,
+      "video_link_matched": true,
+      "source_reference": {
+        "service": "wordpress.com",
+        "site_id": "257973809",
+        "operation": "posts.get",
+        "post_id": 64
+      },
+      "observed_at": "2026-10-28T11:05:00+01:00",
+      "verification": "platform_readback"
+    },
+    {
+      "platform": "tiktok",
+      "post_id": null,
+      "url": null,
+      "status": "awaiting_video_review",
+      "published_at": null,
+      "observed_at": "2026-10-28T11:05:00+01:00",
+      "verification": "platform_readback",
+      "identity_matched": false,
+      "source_reference": {
+        "scenario_id": 8007397,
+        "execution_id": "ba8b506910f644f18647981e9d57fe23",
+        "path": "/accounts/6ad22ddb280aa6cf7d25310d/posts",
+        "latest_native_post_date": "2026-10-26",
+        "latest_native_post_id": "7700946326233550102",
+        "approval_record": "absent",
+        "publication_record": "absent",
+        "pending_preview": "audits/pending-tiktok/2026-10-28.json"
+      }
+    }
+  ],
+  "quota": {
+    "used": 870,
+    "remaining": 130,
+    "days_until_reset": 16,
+    "measured_daily_credits": null,
+    "plan": "Free",
+    "auto_purchase": false,
+    "active_scenarios": 2,
+    "provider_accounts": 2,
+    "provider_accounts_active": true,
+    "next_reset": "2026-11-12T22:55:07.048Z",
+    "reserve": 100
+  },
+  "quality": {
+    "status": "passed_with_exact_artifact_resolution_exception; mobile_unreviewed",
+    "findings": [
+      "Exact MP4 56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e; QA run 40629551726: semantic and seven decoded frame checks passed; full 1.2x speech, voice100%, owner music20%.",
+      "Original background resolution exception applies only to this exact owner-reviewed artifact.",
+      "mobile_qa_contact_sheet.jpg/mobile_qa_notes.json unavailable; no real-device readability/UI review. Bottom-right logo may be covered by platform UI.",
+      "Scheduled source/WordPress jobs held on draft editorial; backups skipped by no-replay guard. Later explicit owner-approved social/website delivery succeeded; do not replay.",
+      "Facebook public copy has no AI narration disclosure; native flag unavailable. Instagram AI flag and YouTube containsSyntheticMedia were set. No historical edit performed.",
+      "YouTube embeddable=false; website has verified clickable video link, not verified inline embed.",
+      "TikTok exact preview already handed over; approval/publication records absent, no duplicate handoff/upload.",
+      "YouTube six tags including extra #Shorts; Facebook/Instagram five distinct platform-specific tags."
+    ]
+  },
+  "weekly_metrics": {
+    "status": "not_due_wednesday",
+    "observations": [
+      {
+        "platform": "youtube",
+        "post_id": "AcudQRXGqX4",
+        "observed_at": "2026-10-28T11:05:00+01:00",
+        "views": 3,
+        "likes": 0,
+        "comments": 1
+      }
+    ],
+    "unavailable_metrics": [
+      "retention",
+      "shares",
+      "saves",
+      "clicks",
+      "complete-day credit usage"
+    ],
+    "note": "No trend inferred."
+  },
+  "recovery": {
+    "delivery_attempted": true,
+    "failure_phase": "scheduled_content_hold; later_explicit_publication_verified",
+    "transient_failure": false,
+    "github_job_status": "scheduled_failure; owner_approved_success",
+    "prior_retries": 0,
+    "current_day_verified": true,
+    "quota_safe": true,
+    "published": true
+  },
+  "comments": {
+    "facebook": "122253720038270684_1127536259649698",
+    "youtube": "Ugxjx4ZFNJZ7xMDELyR4AaABAg",
+    "instagram": {
+      "comment_id": "18117789962105509",
+      "status": "read_back_verified_own_comment",
+      "source_execution_id": "3183562ba5d34a3489b6d7dc6a0863ba"
+    },
+    "instagram_readback_execution": "25b16bb94822420d837244ffe73c0a19",
+    "instagram_own_comment_verified": true
+  },
+  "preview_dedupe": {
+    "already_handed_over": true,
+    "run_id": 40629551726,
+    "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e"
+  }
+}
