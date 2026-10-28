@@ -1,6 +1,6 @@
 {
   "date": "2026-10-28",
-  "status": "approved_dispatched_provider_processing",
+  "status": "published_verified",
   "posting_enabled": false,
   "account_id": "6ad22ddb280aa6cf7d25310d",
   "account_username": "abasonplus",
@@ -132,5 +132,9 @@
   "dispatch_run_id": "40674665692",
   "delivery_execution_id": "159682965bd944768f5bc81225980565",
   "provider_post_id": "6ae1d2a41a17744d927edca9",
-  "last_verified_provider_state": "uploading"
+  "last_verified_provider_state": "published",
+  "publication_file": "audits/tiktok-publications/2026-10-28.json",
+  "post_id": "7701668504574922017",
+  "public_url": "https://www.tiktok.com/@abasonplus/video/7701668504574922017",
+  "first_comment_verified": true
 }
