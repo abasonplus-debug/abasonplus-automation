@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-28",
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "account_username": "abasonplus",
+  "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+  "caption_sha256": "b5c8e84ceef18a5aa028ab525bcc26dd284d6c7ecca9851d8d276c87af087829",
+  "preview_run_id": "40629551726",
+  "preview_head_sha": "e452df534971fc73147658be69a207c30836a829",
+  "status": "published",
+  "platform_status": "published",
+  "verification": "account-specific provider readback",
+  "provider_post_id": "6ae1d2a41a17744d927edca9",
+  "post_id": "7701668504574922017",
+  "url": "https://www.tiktok.com/@abasonplus/video/7701668504574922017",
+  "published_at": "2026-10-28T10:48:04.034Z",
+  "privacy": "PUBLIC_TO_EVERYONE",
+  "comments": true,
+  "duet": true,
+  "stitch": true,
+  "video_made_with_ai": true,
+  "commercialContentType": "brand_organic",
+  "is_brand_organic_post": true,
+  "approval_file": "audits/tiktok-approvals/2026-10-28.json",
+  "delivery": {
+    "workflow_run_id": 40674665692,
+    "make_execution_id": "159682965bd944768f5bc81225980565",
+    "all_modules_errors": 0,
+    "attempts": 1
+  },
+  "source_reference": {
+    "checker_scenario": 8007397,
+    "exact_post_execution_id": "ae5d71d3a0c94ca28382a3289177daaf",
+    "native_post_execution_id": "ab372b65504b4b18bde31aabaf8b64e0"
+  },
+  "first_comment": {
+    "id": "7701452296639136544",
+    "text": "প্রকল্পের খবর ও জমির পরিচয় আলাদা করে যাচাই করুন। ব্যক্তিগত দলিল বা পরিচয়পত্র কমেন্টে দেবেন না।",
+    "is_owner": true,
+    "verified": true,
+    "write_execution_id": "0112214f04f94dad933b82e09cfa1ba9",
+    "read_execution_id": "3ec4dedca6a9448e9f627c652de31390"
+  },
+  "observed_at": "2026-10-28T10:50:14.839Z",
+  "quota": {
+    "used": 887,
+    "remaining": 113,
+    "reserve": 100,
+    "free": true,
+    "auto_purchase": false
+  }
+}
