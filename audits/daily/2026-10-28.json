@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-10-28T11:05:00+01:00",
+  "checked_at": "2026-10-28T11:51:00+01:00",
   "context": {
     "fresh_content_ready": true,
-    "exact_tiktok_video_approved": false,
+    "exact_tiktok_video_approved": true,
     "lookup_complete": {
       "website": true,
       "facebook": true,
@@ -86,28 +86,23 @@
     },
     {
       "platform": "tiktok",
-      "post_id": null,
-      "url": null,
-      "status": "awaiting_video_review",
-      "published_at": null,
-      "observed_at": "2026-10-28T11:05:00+01:00",
+      "post_id": "7701668504574922017",
+      "url": "https://www.tiktok.com/@abasonplus/video/7701668504574922017",
+      "status": "published",
+      "published_at": "2026-10-28T10:48:04.034Z",
+      "observed_at": "2026-10-28T10:50:14.839Z",
       "verification": "platform_readback",
-      "identity_matched": false,
+      "identity_matched": true,
       "source_reference": {
-        "scenario_id": 8007397,
-        "execution_id": "ba8b506910f644f18647981e9d57fe23",
-        "path": "/accounts/6ad22ddb280aa6cf7d25310d/posts",
-        "latest_native_post_date": "2026-10-26",
-        "latest_native_post_id": "7700946326233550102",
-        "approval_record": "absent",
-        "publication_record": "absent",
-        "pending_preview": "audits/pending-tiktok/2026-10-28.json"
+        "checker_scenario": 8007397,
+        "exact_post_execution_id": "ae5d71d3a0c94ca28382a3289177daaf",
+        "native_post_execution_id": "ab372b65504b4b18bde31aabaf8b64e0"
       }
     }
   ],
   "quota": {
-    "used": 870,
-    "remaining": 130,
+    "used": 887,
+    "remaining": 113,
     "days_until_reset": 16,
     "measured_daily_credits": null,
     "plan": "Free",
@@ -127,8 +122,8 @@
       "Scheduled source/WordPress jobs held on draft editorial; backups skipped by no-replay guard. Later explicit owner-approved social/website delivery succeeded; do not replay.",
       "Facebook public copy has no AI narration disclosure; native flag unavailable. Instagram AI flag and YouTube containsSyntheticMedia were set. No historical edit performed.",
       "YouTube embeddable=false; website has verified clickable video link, not verified inline embed.",
-      "TikTok exact preview already handed over; approval/publication records absent, no duplicate handoff/upload.",
-      "YouTube six tags including extra #Shorts; Facebook/Instagram five distinct platform-specific tags."
+      "YouTube six tags including extra #Shorts; Facebook/Instagram five distinct platform-specific tags.",
+      "Exact-video owner OK reconciled against dated approval and publication records; preview false flags describe the earlier pre-approval state."
     ]
   },
   "weekly_metrics": {
@@ -154,9 +149,9 @@
   },
   "recovery": {
     "delivery_attempted": true,
-    "failure_phase": "scheduled_content_hold; later_explicit_publication_verified",
+    "failure_phase": null,
     "transient_failure": false,
-    "github_job_status": "scheduled_failure; owner_approved_success",
+    "github_job_status": "all five current-day publications verified; no resend",
     "prior_retries": 0,
     "current_day_verified": true,
     "quota_safe": true,
@@ -171,11 +166,24 @@
       "source_execution_id": "3183562ba5d34a3489b6d7dc6a0863ba"
     },
     "instagram_readback_execution": "25b16bb94822420d837244ffe73c0a19",
-    "instagram_own_comment_verified": true
+    "instagram_own_comment_verified": true,
+    "tiktok": {
+      "id": "7701452296639136544",
+      "text": "প্রকল্পের খবর ও জমির পরিচয় আলাদা করে যাচাই করুন। ব্যক্তিগত দলিল বা পরিচয়পত্র কমেন্টে দেবেন না।",
+      "is_owner": true,
+      "verified": true,
+      "write_execution_id": "0112214f04f94dad933b82e09cfa1ba9",
+      "read_execution_id": "3ec4dedca6a9448e9f627c652de31390"
+    }
   },
   "preview_dedupe": {
     "already_handed_over": true,
     "run_id": 40629551726,
+    "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e"
+  },
+  "consent_evidence": {
+    "approval_file": "audits/tiktok-approvals/2026-10-28.json",
+    "publication_file": "audits/tiktok-publications/2026-10-28.json",
     "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e"
   }
 }
