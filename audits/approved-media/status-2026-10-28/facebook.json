@@ -1,9 +1,9 @@
 {
-  "observed_at": "2026-10-28T03:51:11.529Z",
+  "observed_at": "2026-10-28T03:59:08.843Z",
   "lookup_scope": "latest_native_entry_in_descending_date_feed",
   "source_reference": {
     "scenario_id": 7968544,
-    "execution_id": "65a96012a4844a8aac0c75c68507a23d",
+    "execution_id": "55b453d8766d4aafb77766cc654d388a",
     "cycle": 1,
     "reservation_module": 50,
     "native_feed_module": 53

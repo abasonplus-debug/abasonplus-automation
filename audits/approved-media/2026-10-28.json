@@ -308,8 +308,8 @@
   "quota": {
     "free": true,
     "auto_purchase": false,
-    "remaining": 199,
-    "observed_at": "2026-10-28T03:55:29.816Z"
+    "remaining": 183,
+    "observed_at": "2026-10-28T03:59:37.487Z"
   },
   "tiktok": {
     "publish_authorized": false,
