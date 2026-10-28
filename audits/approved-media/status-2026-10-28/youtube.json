@@ -1,0 +1,32 @@
+{
+  "observed_at": "2026-10-28T03:51:07.113Z",
+  "lookup_scope": "latest_native_entry_in_descending_date_feed",
+  "source_reference": {
+    "scenario_id": 7968544,
+    "execution_id": "11c334b4efa848a199094afe86a4fd28",
+    "cycle": 1,
+    "reservation_module": 49,
+    "native_feed_module": 52
+  },
+  "receipt": {
+    "schema": 1,
+    "platform": "youtube",
+    "date": "2026-10-28",
+    "identity": "UCKA_4RYtC2ktoclxzWCI1Lg",
+    "reserved": false,
+    "data": {
+      "items": [
+        {
+          "id": {
+            "videoId": "RTA9JDfCOoU"
+          },
+          "snippet": {
+            "publishedAt": "2026-10-26T11:50:12Z",
+            "channelId": "UCKA_4RYtC2ktoclxzWCI1Lg",
+            "title": "জমির শেয়ার কিনলেই ফ্ল্যাট নিশ্চিত? টাকা দেওয়ার আগে জানুন— বিস্তারিত ভিডিওতে। #shorts"
+          }
+        }
+      ]
+    }
+  }
+}

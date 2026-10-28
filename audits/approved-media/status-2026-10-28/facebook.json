@@ -1,0 +1,24 @@
+{
+  "observed_at": "2026-10-28T03:51:11.529Z",
+  "lookup_scope": "latest_native_entry_in_descending_date_feed",
+  "source_reference": {
+    "scenario_id": 7968544,
+    "execution_id": "65a96012a4844a8aac0c75c68507a23d",
+    "cycle": 1,
+    "reservation_module": 50,
+    "native_feed_module": 53
+  },
+  "receipt": {
+    "schema": 1,
+    "platform": "facebook",
+    "date": "2026-10-28",
+    "identity": "293664680487578",
+    "reserved": false,
+    "data": [
+      {
+        "id": "2175043207221820",
+        "created_time": "2026-10-26T11:53:13.000Z"
+      }
+    ]
+  }
+}

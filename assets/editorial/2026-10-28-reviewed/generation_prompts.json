@@ -1,0 +1,16 @@
+{
+  "mode": "built-in image generation",
+  "requested_portrait_resolution": "2160x3840; actual output dimensions recorded in provenance",
+  "common": "Premium cinematic Bengali editorial cartoon, man in teal panjabi, woman in navy sari with gold edge; warm light, calm teal central text region; lower-third action; no baked text, logos or watermark; conceptual illustrations, not real event photographs.",
+  "scenes": [
+    "A concerned Bengali couple examining a property offer in the foreground, with an elegant generic elevated metro construction corridor in the distant background; thoughtful expressions; strong cinematic opening composition.",
+    "The same Bengali couple with an over-eager property salesperson gesturing toward a generic unfinished metro viaduct; couple pauses thoughtfully, comparing a blank brochure; no train in operation.",
+    "The same couple with a calm Bengali male engineer in white hard hat, examining a blank construction plan beside an unfinished elevated railway pier; no passengers, no operating train, no real identifiable station.",
+    "The same couple walking along a neighborhood approach road and observing a canal and an intervening large road separating them from a generic station entrance in the distance; clear sensible spatial storytelling.",
+    "The same couple seated with an independent female lawyer in a burgundy sari and male land surveyor in pale blue shirt, examining blank plot diagrams and surveying instruments in a tasteful office.",
+    "The same couple seeking clarification from a neutral public information officer at an unbranded civic desk; blank land map and folder, no seals, no readable paperwork, thoughtful checking expressions.",
+    "The same couple at a refined home desk calmly weighing blank receipts, a calculator and a small model home; responsible decision-making, assured hopeful mood, no money rain."
+  ],
+  "hook_correction": "Removed train vehicles from hook viaduct; empty unfinished structure retained.",
+  "renderer": "Typography composited with Bengali Bold 132px hook / 120px body, white/gold with dark outline, original small bottom-right logo."
+}

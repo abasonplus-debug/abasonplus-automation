@@ -1,0 +1,19 @@
+{
+  "task": "Owner explicitly requested premium video preview, 1.2x news-reading voice",
+  "source_url": "https://www.bssnews.net/bangla/news/354189",
+  "source_publication_date": "2026-10-27",
+  "verified_on": "2026-10-28",
+  "scenes": [
+    "Couple reviewing property offer beside an empty unfinished metro structure",
+    "Couple pauses before salesperson promises",
+    "Engineer explains unfinished rail construction",
+    "Couple inspects walking route, canal and road",
+    "Independent lawyer and surveyor examine plot records",
+    "Public information desk clarifies land status",
+    "Couple compares costs and evidence before advance payment"
+  ],
+  "style": "Polished cinematic Bengali editorial cartoon; teal/navy clothing, warm gold light, same couple; text-free generated backgrounds; renderer typography only",
+  "no_publication": true,
+  "resolution_note": "Generated backgrounds are approximately 940x1672, resized for a 1080x1920 preview; production original-resolution gate is not claimed passed.",
+  "rights_note": "Generated in this authorized ChatGPT image-generation task, not Pexels photographs. Original owner music and logo retained; no independent clearance claim."
+}

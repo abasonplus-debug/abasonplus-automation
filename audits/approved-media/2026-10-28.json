@@ -1,0 +1,319 @@
+{
+  "schema": 1,
+  "date": "2026-10-28",
+  "owner_authorized": true,
+  "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+  "source_url": "https://www.bssnews.net/bangla/news/354189",
+  "owner_evidence": [
+    {
+      "text": "Post করো 5 জায়গায়",
+      "context": "Owner requested publication immediately after the exact completed 1.2x preview was displayed."
+    },
+    {
+      "text": "সম্পূর্ণ করো কাজ",
+      "context": "Owner replied to the specific one-time original-resolution exception question; this is the artifact-scoped exception, not future consent."
+    }
+  ],
+  "native_resolution_exception": {
+    "one_time_only": true,
+    "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+    "background_sha256": [
+      "aa212531e9018a632867ac9985bc2cdc8f837ec684b98c074e0ec8823d06b9d3",
+      "1e10bb69a0b8fd2ee2291f12b991b3f88adcbc010655a0ea9f4d50e3ff48369e",
+      "a449661487d9e936dfe0df7f99888fda7f4bd55fae2ecdca5cb77d4f51420c3d",
+      "f8167e3ddf4bd4f81ba4e18b9cc411ca47c7099111623737aecf861f3fa34a75",
+      "c495a7c04cce9861b9939c548de726f63fe27d13af3ec22c3b729e63b8b12b4f",
+      "7059394d172e2fb8b4f73e141502b2fc54853dbaf575027c54745090b460d2f0",
+      "a2525d0737bd34a34220f1f44bcb3612abe58919af849297cea76190889d1563"
+    ],
+    "recorded_at": "2026-10-28T04:48:15.238752+01:00"
+  },
+  "files": [
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/voice_1.wav",
+      "sha256": "bb4f4bac45b729e63348952409846dbfc23387b8524b3733fb9f26b58f4b64d6",
+      "bytes": 405400
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/background_0.png",
+      "sha256": "aa212531e9018a632867ac9985bc2cdc8f837ec684b98c074e0ec8823d06b9d3",
+      "bytes": 2078954
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/voice_manifest.json",
+      "sha256": "4ec3beaa56630a989c1063c83a9dcd9a64af16112b72db4c88130d1210205106",
+      "bytes": 3984
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/voice_5.wav",
+      "sha256": "910edb637f57500493b69b168ef681fe8306a466efdcc9ff2c4840252cc3defe",
+      "bytes": 435514
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/logo.png",
+      "sha256": "8c1f8ea614b9a4e4223a90d2288288c32b97ab1f27e191756aae81d5d331025b",
+      "bytes": 1015185
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/voice_0.wav",
+      "sha256": "07c3b8ff8a433f7424549d3e8674bb8e6756af159de3fd88c26c9ca734f12c33",
+      "bytes": 129692
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/background_1.png",
+      "sha256": "1e10bb69a0b8fd2ee2291f12b991b3f88adcbc010655a0ea9f4d50e3ff48369e",
+      "bytes": 2026615
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/generation_prompts.json",
+      "sha256": "f74b58ba934761c72596329515fa413e3a86e3706e54d24cc84f7c8216126277",
+      "bytes": 2141
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/background_3.png",
+      "sha256": "f8167e3ddf4bd4f81ba4e18b9cc411ca47c7099111623737aecf861f3fa34a75",
+      "bytes": 2205533
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/video.mp4",
+      "sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+      "bytes": 3600095
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/background_5.png",
+      "sha256": "7059394d172e2fb8b4f73e141502b2fc54853dbaf575027c54745090b460d2f0",
+      "bytes": 1975492
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/background_6.png",
+      "sha256": "a2525d0737bd34a34220f1f44bcb3612abe58919af849297cea76190889d1563",
+      "bytes": 1969645
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/visual_qa.json",
+      "sha256": "cbda26a1dc0e54a38b68dbb2865df8df1779e782ffac8b01a8f02efa914c7de8",
+      "bytes": 13609
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/decoded_frame_qa.json",
+      "sha256": "c4350b888eba2fe912274f6d5fc0e52e970fc0ca5d2dfee24199f77751117abc",
+      "bytes": 880
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/background_4.png",
+      "sha256": "c495a7c04cce9861b9939c548de726f63fe27d13af3ec22c3b729e63b8b12b4f",
+      "bytes": 2038255
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/brief.json",
+      "sha256": "b122bfe8acd72380674425153eb123cf57c5609f72f56e012c814bd7bbe4c4ef",
+      "bytes": 1195
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/script.json",
+      "sha256": "b3bf4b51d4313a6e93ed34f696229d9fa30c510cecb43a97dbec0596f214af1b",
+      "bytes": 2154
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/voice_3.wav",
+      "sha256": "940fa5d839cf0ed6396239aab31c80bac9cee21d1d6646a730952b2ff0323261",
+      "bytes": 410520
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/voice_4.wav",
+      "sha256": "c5c41ffc66157133683ff5df56a77db818fe95476124179323f8eb7ef1861bb9",
+      "bytes": 445508
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/voice_2.wav",
+      "sha256": "86945bdb098962d4cd0d535ea41df87af2866305ea63e4a104af647e78d92b43",
+      "bytes": 519816
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/voice_6.wav",
+      "sha256": "00ecaa2e1ee27470ef63981b4d9789e7270368f0517b1bf21283ddd370b09a6f",
+      "bytes": 355738
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/provenance.json",
+      "sha256": "0e9feb1b9263c8a16269a1211f1d8572a56886e5d15e9764a7b5f1c03c3d7fb3",
+      "bytes": 3362
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/semantic_qa.json",
+      "sha256": "70d76568653c2c59647424cf2f411fa11911583ae316fa0040a8f1fca0f988de",
+      "bytes": 1067
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/background_2.png",
+      "sha256": "a449661487d9e936dfe0df7f99888fda7f4bd55fae2ecdca5cb77d4f51420c3d",
+      "bytes": 2101742
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/Latin-Bold.ttf",
+      "sha256": "3af4869475ef0ea0e5db25d23394a35e7098fcd0b1b88fb05de114c54664df74",
+      "bytes": 648316
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/Bengali-Bold.ttf",
+      "sha256": "5585ea2f53293fab424b1e52c360278a473f4ad22fcb12a7c527313f517b2199",
+      "bytes": 141448
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/scripts/carousel_style.py",
+      "sha256": "999f3789287dce18052cf58605bfb656ad985f189ead58ec6ebacbc8b22c4a62",
+      "bytes": 6085
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/scripts/bilingual_text.py",
+      "sha256": "6ad0df0a2a51b59d1f7fe35d0f0606012bc79cdec5f8ff9c8ed8fb6480a8f497",
+      "bytes": 3013
+    },
+    {
+      "path": "assets/editorial/2026-10-28-reviewed/config/carousel_style.json",
+      "sha256": "6d285126a798976a36fbd3bfb5086d31529101c5216183334b18428d81bb8d06",
+      "bytes": 1176
+    }
+  ],
+  "owner_music_sha256": "0e4447ecf046d867c78aab5e93e013eee0566674a671458df018832ecb34c8ee",
+  "copy": {
+    "caption": "মেট্রোরেলের চুক্তি সই মানেই ট্রেন চালু নয়। জমি কেনার আগে রুট, যাতায়াতের পথ ও জমির নথি যাচাই করুন।\n#অবকাঠামো #সরকারিপ্রকল্প #Bangladesh #বাংলাদেশ #ReelsBD\nউৎস: https://www.bssnews.net/bangla/news/354189",
+    "instagram_caption": "মেট্রোরেলের চুক্তি সই মানেই ট্রেন চালু নয়। জমি কেনার আগে রুট, যাতায়াতের পথ ও জমির নথি যাচাই করুন।\n#অবকাঠামো #সরকারিপ্রকল্প #Bangladesh #Bangla #Reels",
+    "tiktok_caption": "মেট্রোরেলের চুক্তি সই মানেই ট্রেন চালু নয়। জমি কেনার আগে রুট, যাতায়াতের পথ ও জমির নথি যাচাই করুন।\n#অবকাঠামো #সরকারিপ্রকল্প #Bangladesh #বাংলাদেশ #BanglaTikTok",
+    "description": "মেট্রোরেলের চুক্তি সই মানেই ট্রেন চালু নয়। জমি কেনার আগে রুট, যাতায়াতের পথ ও জমির নথি যাচাই করুন।\n#অবকাঠামো #সরকারিপ্রকল্প #Bangladesh #বাংলাদেশ #Bangla #Shorts\nউৎস: https://www.bssnews.net/bangla/news/354189\nসংবাদ: ২৭ অক্টোবর ২০২৬ | যাচাই: ২৮ অক্টোবর ২০২৬",
+    "title": "মেট্রোরেলের চুক্তি সই, পাশের জমি কিনবেন?",
+    "first_comment": "প্রকল্পের খবর ও জমির পরিচয় আলাদা করে যাচাই করুন। ব্যক্তিগত দলিল বা পরিচয়পত্র কমেন্টে দেবেন না।"
+  },
+  "illustrations": [
+    {
+      "asset_path": "assets/editorial/2026-10-28-reviewed/background_0.png",
+      "asset_type": "illustration",
+      "sha256": "aa212531e9018a632867ac9985bc2cdc8f837ec684b98c074e0ec8823d06b9d3",
+      "original_dimensions": [
+        941,
+        1672
+      ],
+      "creator": "ChatGPT image generation",
+      "origin_reference": "Owner-authorized 28 October 2026 ChatGPT video preview; background 1; immutable repository hash recorded",
+      "rights_evidence": "Generated in response to owner creative instruction; owner subsequently requested this exact video be published. No third-party photograph or Pexels license claim.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Couple reviewing property offer beside an empty unfinished metro structure",
+      "scene_match": "Couple reviewing property offer beside an empty unfinished metro structure"
+    },
+    {
+      "asset_path": "assets/editorial/2026-10-28-reviewed/background_1.png",
+      "asset_type": "illustration",
+      "sha256": "1e10bb69a0b8fd2ee2291f12b991b3f88adcbc010655a0ea9f4d50e3ff48369e",
+      "original_dimensions": [
+        941,
+        1672
+      ],
+      "creator": "ChatGPT image generation",
+      "origin_reference": "Owner-authorized 28 October 2026 ChatGPT video preview; background 2; immutable repository hash recorded",
+      "rights_evidence": "Generated in response to owner creative instruction; owner subsequently requested this exact video be published. No third-party photograph or Pexels license claim.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Couple pauses before salesperson promises",
+      "scene_match": "Couple pauses before salesperson promises"
+    },
+    {
+      "asset_path": "assets/editorial/2026-10-28-reviewed/background_2.png",
+      "asset_type": "illustration",
+      "sha256": "a449661487d9e936dfe0df7f99888fda7f4bd55fae2ecdca5cb77d4f51420c3d",
+      "original_dimensions": [
+        941,
+        1672
+      ],
+      "creator": "ChatGPT image generation",
+      "origin_reference": "Owner-authorized 28 October 2026 ChatGPT video preview; background 3; immutable repository hash recorded",
+      "rights_evidence": "Generated in response to owner creative instruction; owner subsequently requested this exact video be published. No third-party photograph or Pexels license claim.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Engineer explains unfinished rail construction",
+      "scene_match": "Engineer explains unfinished rail construction"
+    },
+    {
+      "asset_path": "assets/editorial/2026-10-28-reviewed/background_3.png",
+      "asset_type": "illustration",
+      "sha256": "f8167e3ddf4bd4f81ba4e18b9cc411ca47c7099111623737aecf861f3fa34a75",
+      "original_dimensions": [
+        941,
+        1672
+      ],
+      "creator": "ChatGPT image generation",
+      "origin_reference": "Owner-authorized 28 October 2026 ChatGPT video preview; background 4; immutable repository hash recorded",
+      "rights_evidence": "Generated in response to owner creative instruction; owner subsequently requested this exact video be published. No third-party photograph or Pexels license claim.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Couple inspects walking route, canal and road",
+      "scene_match": "Couple inspects walking route, canal and road"
+    },
+    {
+      "asset_path": "assets/editorial/2026-10-28-reviewed/background_4.png",
+      "asset_type": "illustration",
+      "sha256": "c495a7c04cce9861b9939c548de726f63fe27d13af3ec22c3b729e63b8b12b4f",
+      "original_dimensions": [
+        940,
+        1672
+      ],
+      "creator": "ChatGPT image generation",
+      "origin_reference": "Owner-authorized 28 October 2026 ChatGPT video preview; background 5; immutable repository hash recorded",
+      "rights_evidence": "Generated in response to owner creative instruction; owner subsequently requested this exact video be published. No third-party photograph or Pexels license claim.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Independent lawyer and surveyor examine plot records",
+      "scene_match": "Independent lawyer and surveyor examine plot records"
+    },
+    {
+      "asset_path": "assets/editorial/2026-10-28-reviewed/background_5.png",
+      "asset_type": "illustration",
+      "sha256": "7059394d172e2fb8b4f73e141502b2fc54853dbaf575027c54745090b460d2f0",
+      "original_dimensions": [
+        941,
+        1672
+      ],
+      "creator": "ChatGPT image generation",
+      "origin_reference": "Owner-authorized 28 October 2026 ChatGPT video preview; background 6; immutable repository hash recorded",
+      "rights_evidence": "Generated in response to owner creative instruction; owner subsequently requested this exact video be published. No third-party photograph or Pexels license claim.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Public information desk clarifies land status",
+      "scene_match": "Public information desk clarifies land status"
+    },
+    {
+      "asset_path": "assets/editorial/2026-10-28-reviewed/background_6.png",
+      "asset_type": "illustration",
+      "sha256": "a2525d0737bd34a34220f1f44bcb3612abe58919af849297cea76190889d1563",
+      "original_dimensions": [
+        941,
+        1672
+      ],
+      "creator": "ChatGPT image generation",
+      "origin_reference": "Owner-authorized 28 October 2026 ChatGPT video preview; background 7; immutable repository hash recorded",
+      "rights_evidence": "Generated in response to owner creative instruction; owner subsequently requested this exact video be published. No third-party photograph or Pexels license claim.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Couple compares costs and evidence before advance payment",
+      "scene_match": "Couple compares costs and evidence before advance payment"
+    }
+  ],
+  "quota": {
+    "free": true,
+    "auto_purchase": false,
+    "remaining": 199,
+    "observed_at": "2026-10-28T03:55:29.816Z"
+  },
+  "tiktok": {
+    "publish_authorized": false,
+    "approval_record_created": false,
+    "reason": "Exact caption, comment and current creator settings still require owner preview/OK."
+  }
+}

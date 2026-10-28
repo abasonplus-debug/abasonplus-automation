@@ -78,7 +78,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg
-          python3 -m pip install 'Pillow>=11,<13'
+          python3 -m pip install 'Pillow>=11,<13' 'fastembed==0.9.1' 'fonttools>=4.0'
       - name: Verify individual video consent and metadata selections
         env:
           PREVIEW_CONFIRMED: ${{ inputs.preview_confirmed }}
@@ -171,8 +171,15 @@ jobs:
           if meta.get('voiceover',{}).get('complete') is True:
               import sys
               sys.path.insert(0,str(pathlib.Path('scripts').resolve()))
-              from cosyvoice3_daily_voiceover import verify_voiceover
-              verify_voiceover(out,json.loads((out/'daily_research_story.json').read_text()),meta)
+              if meta.get('release_policy')=='owner_approved_exact_artifact_20261028':
+                  # Recheck the actual pinned media/assets and dated owner exception;
+                  # no blanket 1.2x/upscale exemption and no consent is inferred here.
+                  assert hashlib.sha256(video.read_bytes()).hexdigest()=='56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e'
+                  from approved_media_20261028 import verify
+                  verify(semantic=True)
+              else:
+                  from cosyvoice3_daily_voiceover import verify_voiceover
+                  verify_voiceover(out,json.loads((out/'daily_research_story.json').read_text()),meta)
           print("INDIVIDUALLY REVIEWED MP4 SHA256:",hashlib.sha256(video.read_bytes()).hexdigest())
           PY
       - name: Deliver ONLY this creator-reviewed video for TikTok (never Facebook/YouTube)

@@ -1,0 +1,39 @@
+{
+  "style_id": "compact_white_gold_v2",
+  "approved_on": "2026-10-18",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "body_font_px": 120,
+  "hook_font_px": 132,
+  "colors": [
+    "#FFFFFF",
+    "#FFD24A"
+  ],
+  "outline": {
+    "color": "#101010",
+    "px": 4
+  },
+  "shadow": {
+    "offset": [
+      2,
+      3
+    ],
+    "px": 5
+  },
+  "alignment": "center",
+  "line_visible_gap_px": 4,
+  "sentence_visible_gap_px": 10,
+  "logo_width_px": 90,
+  "logo_edge_margin_px": 28,
+  "photo_direction": "Ultra-realistic, topic-matched licensed photography; professional photographer's final touch and restrained final director cut. Preserve natural lighting and realism; no graphic panel, border or dark gradient. Do not require every scene to be dusk.",
+  "prompt_file": "CAROUSEL_STYLE_PROMPT_BN.md",
+  "missing_logo": "Report omitted_unavailable; never invent a logo or wordmark.",
+  "overflow": "Hold; never shrink below minimum, omit conditions or silently change exact text.",
+  "applies_to": "Every image, including hook and all tips, across every carousel publishing destination.",
+  "slide_seconds": 3,
+  "min_slides": 5,
+  "max_slides": 16,
+  "timing_updated_on": "2026-10-20"
+}

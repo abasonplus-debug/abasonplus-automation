@@ -1,0 +1,89 @@
+name: AbasonPlus Authorized Video Recovery 2026-10-28
+on:
+  push:
+    branches: [main]
+    paths: ['audits/approved-media/dispatch-2026-10-28.json']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: abasonplus-video-one-source-per-day
+  cancel-in-progress: false
+jobs:
+  verify-and-deliver-owner-approved:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Read the explicit dated action; default is verification only
+        id: action
+        run: |
+          python3 - <<'PYCODE'
+          import json,os
+          from pathlib import Path
+          r=json.loads(Path('audits/approved-media/dispatch-2026-10-28.json').read_text())
+          assert r['video_sha256']=='56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e' and r['tiktok_publish'] is False
+          assert r['action'] in ('verify_only','publish_three_social_once')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('publish='+str(r['action']=='publish_three_social_once').lower()+'\n')
+          PYCODE
+      - name: Install only free media checks; no synthesis or purchase
+        run: |
+          if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          python3 -m pip install 'Pillow==12.3.0' 'fonttools>=4.0'
+      - name: Install free semantic model only for the first independent verification
+        if: steps.action.outputs.publish != 'true'
+        run: python3 -m pip install 'fastembed==0.9.1'
+      - name: Independently verify exact hash, source, typography, semantics and full 1.2x speech
+        if: steps.action.outputs.publish != 'true'
+        run: python3 scripts/approved_media_20261028.py verify
+      - name: Require a prior real successful current-day immutable QA artifact
+        if: steps.action.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PYCODE'
+          import json,subprocess,datetime,zoneinfo
+          from pathlib import Path
+          q=json.loads(Path('audits/approved-media/dispatch-2026-10-28.json').read_text())
+          run=json.loads(subprocess.check_output(['gh','api',f"repos/abasonplus-debug/abasonplus-automation/actions/runs/{q['qa_run_id']}"]))
+          assert run['conclusion']=='success' and run['head_branch']=='main' and run['head_sha']==q['qa_head_sha']
+          assert run['name']=='AbasonPlus Authorized Video Recovery 2026-10-28'
+          assert datetime.datetime.fromisoformat(run['created_at'].replace('Z','+00:00')).astimezone(zoneinfo.ZoneInfo('Europe/Berlin')).date().isoformat()=='2026-10-28'
+          subprocess.run(['gh','run','download',str(q['qa_run_id']),'--repo','abasonplus-debug/abasonplus-automation','-n','abasonplus-source-checked-video','-D','output'],check=True)
+          report=json.loads(Path('output/release_qa.json').read_text())
+          assert report['video_sha256']==q['video_sha256'] and len(report['semantic'])==7 and all(x['passed'] for x in report['semantic'])
+          PYCODE
+          python3 scripts/approved_media_20261028.py verify --reuse-local-semantic
+      - name: Archive actual quality-checked immutable video before any delivery
+        if: steps.action.outputs.publish != 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: abasonplus-source-checked-video
+          path: output/
+          if-no-files-found: error
+          retention-days: 7
+      - name: Require fresh native feeds, reservations and free quota
+        if: steps.action.outputs.publish == 'true'
+        run: python3 scripts/approved_media_20261028.py preflight
+      - name: Publish ONLY exact approved Facebook YouTube Instagram video ONCE
+        if: steps.action.outputs.publish == 'true'
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: python3 scripts/approved_media_20261028.py publish
+      - name: Preserve sanitized outcome after every attempted transfer
+        if: always() && steps.action.outputs.publish == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: abasonplus-approved-delivery-20261028
+          path: |
+            output/approved_delivery_receipt.json
+            output/release_qa.json
+          if-no-files-found: warn
+          retention-days: 7
+# No cron, TikTok upload, key deletion, resend or new creative generation.
