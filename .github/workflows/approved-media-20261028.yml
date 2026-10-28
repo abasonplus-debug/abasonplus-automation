@@ -26,8 +26,8 @@ jobs:
           from pathlib import Path
           r=json.loads(Path('audits/approved-media/dispatch-2026-10-28.json').read_text())
           assert r['video_sha256']=='56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e' and r['tiktok_publish'] is False
-          assert r['action'] in ('verify_only','publish_three_social_once')
-          with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('publish='+str(r['action']=='publish_three_social_once').lower()+'\n')
+          assert r['action'] in ('verify_only','publish_three_social_once','publish_website_once')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('publish='+str(r['action']!='verify_only').lower()+'\n'+'website='+str(r['action']=='publish_website_once').lower()+'\n')
           PYCODE
       - name: Install only free media checks; no synthesis or purchase
         run: |
@@ -69,13 +69,21 @@ jobs:
           if-no-files-found: error
           retention-days: 7
       - name: Require fresh native feeds, reservations and free quota
-        if: steps.action.outputs.publish == 'true'
+        if: steps.action.outputs.publish == 'true' && steps.action.outputs.website != 'true'
         run: python3 scripts/approved_media_20261028.py preflight
       - name: Publish ONLY exact approved Facebook YouTube Instagram video ONCE
-        if: steps.action.outputs.publish == 'true'
+        if: steps.action.outputs.publish == 'true' && steps.action.outputs.website != 'true'
         env:
           MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
         run: python3 scripts/approved_media_20261028.py publish
+      - name: Verify exact website article, actual YouTube URL and fresh daily reservation
+        if: steps.action.outputs.website == 'true'
+        run: python3 scripts/approved_media_20261028.py preflight-website
+      - name: Publish ONLY the owner-approved website article ONCE
+        if: steps.action.outputs.website == 'true'
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: python3 scripts/approved_media_20261028.py publish-website
       - name: Preserve sanitized outcome after every attempted transfer
         if: always() && steps.action.outputs.publish == 'true'
         uses: actions/upload-artifact@v7
@@ -84,6 +92,8 @@ jobs:
           path: |
             output/approved_delivery_receipt.json
             output/release_qa.json
+            output/wordpress_send_receipt.json
+            output/wordpress_published_verified.json
           if-no-files-found: warn
           retention-days: 7
 # No cron, TikTok upload, key deletion, resend or new creative generation.

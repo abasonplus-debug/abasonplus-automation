@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-28",
+  "youtube": {
+    "platform": "youtube",
+    "post_id": "AcudQRXGqX4",
+    "url": "https://www.youtube.com/watch?v=AcudQRXGqX4",
+    "status": "published",
+    "identity_matched": true,
+    "channel_id": "UCKA_4RYtC2ktoclxzWCI1Lg",
+    "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+    "published_at": "2026-10-28T04:02:49Z",
+    "source_reference": {
+      "scenario_id": 7968544,
+      "execution_id": "508339d9f89a4226895f6f38f28b0e6e",
+      "module_id": 33,
+      "cycle": 1
+    }
+  },
+  "reservation": {
+    "reserved": false,
+    "observed_at": "2026-10-28T04:09:11.820Z",
+    "source_reference": {
+      "scenario_id": 7968544,
+      "execution_id": "4fff765580f24078b0cef43ca58bcc48",
+      "reservation_module": 66,
+      "cycle": 1
+    }
+  }
+}

@@ -117,11 +117,44 @@ def publish():
     except Exception:raise ValueError('Delivery outcome unconfirmed; never resend') from None
     receipt['status']='request_accepted_publication_unverified';path.write_text(json.dumps(receipt,indent=2));print('Accepted transfer only; reconcile actual platform publication before claiming success.')
 
+def website_preflight():
+    r=request();need((OUT/'video_qa_passed.txt').is_file(),'No exact video QA')
+    q=r['quota'];need(q['free'] is True and q['auto_purchase'] is False and q['remaining']>=150,'Free quota unsafe');need(datetime.now(BERLIN)-datetime.fromisoformat(q['observed_at'])<=timedelta(minutes=15),'Quota evidence stale')
+    d=read(ROOT/'audits/approved-media/website-2026-10-28.json');e=d['reservation'];ref=e['source_reference']
+    need(ref['scenario_id']==7968544 and ref['reservation_module']==66 and ref['cycle']==1 and re.fullmatch('[a-f0-9]{32}',ref['execution_id']),'Missing actual website reservation read')
+    need(e['reserved'] is False and timedelta(0)<=datetime.now(BERLIN)-datetime.fromisoformat(e['observed_at'])<=timedelta(minutes=5),'WordPress reservation exists, unknown or stale')
+    yt=d['youtube'];need(yt['status']=='published' and yt['identity_matched'] is True and yt['video_sha256']==SHA and yt['channel_id']=='UCKA_4RYtC2ktoclxzWCI1Lg','YouTube publication not independently verified')
+    need(re.fullmatch(r'https://www.youtube.com/watch\?v=[A-Za-z0-9_-]{11}',yt['url']) is not None,'Wrong video link')
+    from verify_wordpress_publication import lookup
+    posts=lookup()
+    for post in posts:
+        stamp=datetime.fromisoformat(post['date'].replace('Z','+00:00'))
+        if stamp.tzinfo is None:stamp=stamp.replace(tzinfo=__import__('datetime').timezone.utc)
+        need(stamp.astimezone(BERLIN).date().isoformat()!=DAY,'Current-day website post already exists; no resend')
+    sys.path.insert(0,str(ROOT))
+    from wordpress_email_prepare import prepare
+    article=read(ROOT/'content/daily_editorial_2026-10-28.json');article['content']+='<p>ভিডিও: <a href="'+yt['url']+'">সম্পূর্ণ ভিডিও দেখুন</a></p>'
+    payload=prepare(article);(OUT/'wordpress_email_preview.json').write_text(json.dumps(payload,ensure_ascii=False,indent=2))
+    print('EXACT WEBSITE ARTICLE, YOUTUBE LINK AND DAILY RESERVATION VERIFIED; NO EMAIL SENT')
+
+def website_publish():
+    website_preflight();current();payload=read(OUT/'wordpress_email_preview.json');payload.update(review_approved='true',status='publish');path=OUT/'wordpress_send_receipt.json'
+    receipt={'status':'delivery_started_reconcile_before_any_retry','post_key':payload['post_key'],'sent_utc':datetime.now(__import__('datetime').timezone.utc).isoformat()};path.write_text(json.dumps(receipt,indent=2))
+    try:
+        req=Request(os.environ['MAKE_WEBHOOK_URL'],data=json.dumps(payload,ensure_ascii=False).encode(),headers={'Content-Type':'application/json'},method='POST')
+        with urlopen(req,timeout=60) as response:code=response.status;response.read(4096)
+        need(200<=code<300,'Website transfer rejected')
+    except Exception:raise ValueError('Website delivery response unconfirmed; never resend') from None
+    receipt['status']='make_accepted';path.write_text(json.dumps(receipt,indent=2));print('Website transfer accepted, checking real public post next.')
+    subprocess.run([sys.executable,'scripts/verify_wordpress_publication.py','--attempts','5','--interval','10'],cwd=ROOT,check=True)
+
 if __name__=='__main__':
-    ap=argparse.ArgumentParser();ap.add_argument('mode',choices=['verify','preflight','publish']);ap.add_argument('--reuse-local-semantic',action='store_true');a=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('mode',choices=['verify','preflight','publish','preflight-website','publish-website']);ap.add_argument('--reuse-local-semantic',action='store_true');a=ap.parse_args()
     try:
         if a.mode=='verify':verify(not a.reuse_local_semantic)
         elif a.mode=='preflight':preflight()
+        elif a.mode=='preflight-website':website_preflight()
+        elif a.mode=='publish-website':website_publish()
         else:publish()
     except Exception as exc:
         print('APPROVED PUBLICATION HELD:',str(exc) if isinstance(exc,ValueError) else type(exc).__name__);raise SystemExit(1)

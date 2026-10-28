@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-28",
+  "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+  "qa_run_id": 40629551726,
+  "qa_head_sha": "e452df534971fc73147658be69a207c30836a829",
+  "social_delivery_run_id": 40629935621,
+  "delivery_execution_id": "0760eacab6b54543aa419675e7482c3a",
+  "evidence": [
+    {
+      "platform": "facebook",
+      "post_id": "1784353729445504",
+      "url": "https://www.facebook.com/reel/1784353729445504/",
+      "status": "published",
+      "identity_matched": true,
+      "page_id": "293664680487578",
+      "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+      "published_at": "2026-10-28T04:02:21.000Z",
+      "source_reference": {
+        "scenario_id": 7968544,
+        "execution_id": "e0d54d76d6a34bc09193195ead7985fe",
+        "module_id": 34,
+        "cycle": 1
+      }
+    },
+    {
+      "platform": "youtube",
+      "post_id": "AcudQRXGqX4",
+      "url": "https://www.youtube.com/watch?v=AcudQRXGqX4",
+      "status": "published",
+      "identity_matched": true,
+      "channel_id": "UCKA_4RYtC2ktoclxzWCI1Lg",
+      "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+      "published_at": "2026-10-28T04:02:49Z",
+      "source_reference": {
+        "scenario_id": 7968544,
+        "execution_id": "508339d9f89a4226895f6f38f28b0e6e",
+        "module_id": 33,
+        "cycle": 1
+      }
+    },
+    {
+      "platform": "instagram",
+      "provider_post_id": "6ae173fbe68ed6ce6871e11b",
+      "post_id": "18117464698825200",
+      "url": "https://www.instagram.com/reel/DfBh4crAqfM/",
+      "status": "published",
+      "identity_matched": true,
+      "account_id": "6ad380c8b835331ad1563a7a",
+      "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+      "published_at": "2026-10-28T04:04:21.373Z",
+      "source_reference": {
+        "scenario_id": 8007397,
+        "execution_id": "e001f5bc484a402c844bc91b0c9568b3",
+        "path": "/posts/6ae173fbe68ed6ce6871e11b"
+      }
+    }
+  ],
+  "website": "dispatching_only_after_current_duplicate_check",
+  "tiktok": "pending_exact_caption_settings_review",
+  "comments": {
+    "facebook": "122253720038270684_1127536259649698",
+    "youtube": "Ugxjx4ZFNJZ7xMDELyR4AaABAg"
+  },
+  "youtube_thumbnail_write": "confirmed_returned_sizes; Shorts display can vary"
+}
