@@ -1,6 +1,6 @@
 {
   "date": "2026-10-28",
-  "status": "awaiting_exact_caption_comment_settings_OK",
+  "status": "approved_dispatched_provider_processing",
   "posting_enabled": false,
   "account_id": "6ad22ddb280aa6cf7d25310d",
   "account_username": "abasonplus",
@@ -124,8 +124,13 @@
     "latest_post_date": "2026-10-26",
     "latest_post_id": "7700946326233550102"
   },
-  "approval_record_created": false,
-  "owner_approval_evidence": null,
+  "approval_record_created": true,
+  "owner_approval_evidence": "Owner exact response: \"Tiktok ok\"",
   "notification_identity": "2026-10-28:40629551726:56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
-  "handed_over_in_this_response": true
+  "handed_over_in_this_response": true,
+  "approval_file": "audits/tiktok-approvals/2026-10-28.json",
+  "dispatch_run_id": "40674665692",
+  "delivery_execution_id": "159682965bd944768f5bc81225980565",
+  "provider_post_id": "6ae1d2a41a17744d927edca9",
+  "last_verified_provider_state": "uploading"
 }
