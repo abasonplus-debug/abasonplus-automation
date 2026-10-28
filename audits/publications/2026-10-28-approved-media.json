@@ -53,13 +53,53 @@
         "execution_id": "e001f5bc484a402c844bc91b0c9568b3",
         "path": "/posts/6ae173fbe68ed6ce6871e11b"
       }
+    },
+    {
+      "platform": "website",
+      "post_id": 64,
+      "url": "https://abasonplus.wordpress.com/2026/10/28/ap-metro-contract-land-buying-checks-2026-10-28/",
+      "status": "published",
+      "identity_matched": true,
+      "published_at": "2026-10-28T04:12:29Z",
+      "source_url_matched": true,
+      "video_link_matched": true,
+      "source_reference": {
+        "service": "wordpress.com",
+        "site_id": "257973809",
+        "operation": "posts.get",
+        "post_id": 64
+      }
     }
   ],
-  "website": "dispatching_only_after_current_duplicate_check",
-  "tiktok": "pending_exact_caption_settings_review",
+  "website": "published_verified",
+  "tiktok": "awaiting_exact_caption_comment_settings_OK",
   "comments": {
     "facebook": "122253720038270684_1127536259649698",
-    "youtube": "Ugxjx4ZFNJZ7xMDELyR4AaABAg"
+    "youtube": "Ugxjx4ZFNJZ7xMDELyR4AaABAg",
+    "instagram": {
+      "comment_id": "18117789962105509",
+      "status": "read_back_verified_own_comment",
+      "source_execution_id": "3183562ba5d34a3489b6d7dc6a0863ba"
+    }
   },
-  "youtube_thumbnail_write": "confirmed_returned_sizes; Shorts display can vary"
+  "youtube_thumbnail_write": "confirmed_returned_sizes; Shorts display can vary",
+  "website_delivery_run_id": 40630926925,
+  "website_delivery_execution_id": "3ea09e37906d498e9b8988e50d5f2527",
+  "quota": {
+    "free": true,
+    "auto_purchase": false,
+    "used": 858,
+    "remaining": 142,
+    "reserve": 100,
+    "observed_at": "2026-10-28T04:17:56.056Z"
+  },
+  "platform_states": {
+    "facebook": "published",
+    "youtube": "published",
+    "instagram": "published",
+    "website": "published",
+    "tiktok": "awaiting_exact_preview_OK"
+  },
+  "exact_tiktok_video_approved": false,
+  "native_resolution_exception": "One exact owner-approved MP4 only, linked to audits/approved-media/2026-10-28.json"
 }

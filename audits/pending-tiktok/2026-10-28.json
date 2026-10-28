@@ -1,0 +1,131 @@
+{
+  "date": "2026-10-28",
+  "status": "awaiting_exact_caption_comment_settings_OK",
+  "posting_enabled": false,
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "account_username": "abasonplus",
+  "preview_run_id": "40629551726",
+  "preview_head_sha": "e452df534971fc73147658be69a207c30836a829",
+  "artifact_id": "12790164007",
+  "artifact_run_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/runs/40629551726",
+  "video_url": "https://raw.githubusercontent.com/abasonplus-debug/abasonplus-automation/e452df534971fc73147658be69a207c30836a829/assets/editorial/2026-10-28-reviewed/video.mp4",
+  "library_file_id": "libfile_bac5919842ec819190c013367bd8e42c",
+  "video_sha256": "56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+  "caption": "মেট্রোরেলের চুক্তি সই মানেই ট্রেন চালু নয়। জমি কেনার আগে রুট, যাতায়াতের পথ ও জমির নথি যাচাই করুন।\n#অবকাঠামো #সরকারিপ্রকল্প #Bangladesh #বাংলাদেশ #BanglaTikTok",
+  "caption_sha256": "b5c8e84ceef18a5aa028ab525bcc26dd284d6c7ecca9851d8d276c87af087829",
+  "first_comment": "প্রকল্পের খবর ও জমির পরিচয় আলাদা করে যাচাই করুন। ব্যক্তিগত দলিল বা পরিচয়পত্র কমেন্টে দেবেন না।",
+  "format": {
+    "slides": 7,
+    "slide_seconds": 3,
+    "slide_durations": [
+      3.133333,
+      8.866667,
+      11.233333,
+      8.966667,
+      9.7,
+      9.5,
+      7.833333
+    ],
+    "voiceover": {
+      "engine": "CosyVoice3",
+      "reference": "Dan Mason",
+      "playback_speed": 1.2,
+      "pitch_preserving": true,
+      "voice_gain": 1,
+      "music_gain": 0.2,
+      "slide_durations": [
+        3.133333,
+        8.866667,
+        11.233333,
+        8.966667,
+        9.7,
+        9.5,
+        7.833333
+      ],
+      "segments": [
+        {
+          "slide": 1,
+          "text": "মেট্রোরেলের চুক্তি সই, পাশের জমি কিনবেন?",
+          "seconds": 2.7002916666666668,
+          "audio_sha256": "07c3b8ff8a433f7424549d3e8674bb8e6756af159de3fd88c26c9ca734f12c33"
+        },
+        {
+          "slide": 2,
+          "text": "মেট্রোরেল আসছে, তাই এখনই জমি কিনুন! এমন কথা শুনে টাকা দেবেন? আগে জানুন, নির্মাণের চুক্তি হয়েছে, নাকি সত্যিই ট্রেন চলা শুরু হয়েছে।",
+          "seconds": 8.444208333333334,
+          "audio_sha256": "bb4f4bac45b729e63348952409846dbfc23387b8524b3733fb9f26b58f4b64d6"
+        },
+        {
+          "slide": 3,
+          "text": "২৭ অক্টোবর এমআরটি লাইন-১ ও লাইন-৫ উত্তর রুটের চার নির্মাণ প্যাকেজের চুক্তি হয়েছে। এটি অগ্রগতি। তবে চুক্তি সই মানেই ওই অংশে যাত্রীসেবা চালু নয়।",
+          "seconds": 10.827875,
+          "audio_sha256": "86945bdb098962d4cd0d535ea41df87af2866305ea63e4a104af647e78d92b43"
+        },
+        {
+          "slide": 4,
+          "text": "স্টেশন কাছে বলা হচ্ছে? জমি থেকে প্রবেশপথের বাস্তব রাস্তা দেখুন। মাঝে খাল, দেয়াল বা বড় সড়ক থাকলে যাতায়াতের হিসাব বদলাতে পারে।",
+          "seconds": 8.550875,
+          "audio_sha256": "940fa5d839cf0ed6396239aab31c80bac9cee21d1d6646a730952b2ff0323261"
+        },
+        {
+          "slide": 5,
+          "text": "মৌজা, দাগ, খতিয়ান ও দলিলের তথ্য সংগ্রহ করুন। স্বাধীন আইনজীবী ও সার্ভেয়ারের সাহায্যে মিলিয়ে নিন—কাগজের জমি আর দেখানো জমি একই কি না।",
+          "seconds": 9.279791666666666,
+          "audio_sha256": "c5c41ffc66157133683ff5df56a77db818fe95476124179323f8eb7ef1861bb9"
+        },
+        {
+          "slide": 6,
+          "text": "জমিতে সরকারি স্বার্থ, অধিগ্রহণ বা ব্যবহারের কোনো সীমা আছে কি না নির্দিষ্ট নথি দিয়ে যাচাই করুন। বিক্রেতার কোনো সমস্যা নেই কথাটিই প্রমাণ নয়।",
+          "seconds": 9.071583333333333,
+          "audio_sha256": "910edb637f57500493b69b168ef681fe8306a466efdcc9ff2c4840252cc3defe"
+        },
+        {
+          "slide": 7,
+          "text": "মেট্রো দেরিতে এলেও জমিটি কাজে লাগবে? মোট খরচ সামলাতে পারবেন? আগে হিসাব ও নথি যাচাই, তারপর অগ্রিম।",
+          "seconds": 7.409583333333333,
+          "audio_sha256": "00ecaa2e1ee27470ef63981b4d9789e7270368f0517b1bf21283ddd370b09a6f"
+        }
+      ],
+      "reading_floor_words_per_second": 3,
+      "complete": true,
+      "tempo_filter": "atempo=1.2",
+      "reference_url": "https://raw.githubusercontent.com/CoisLR/TTS-Reference-Voices/main/voices/dan_mason.flac",
+      "reference_sha256": "9f91afd198fe311cb5a3409d950b709dce917447b09faf59b45bc45483e7177e",
+      "source_url": "https://www.bssnews.net/bangla/news/354189",
+      "verified_on": "2026-10-28",
+      "narrated_slide_count": 7,
+      "script_sha256": "2a19fdd26f96e07485aaa201298b4cb3e47fa91b6b6b2b9d5b495cb091b6320f",
+      "mix": "narration_100_music_20_no_amix_normalization"
+    }
+  },
+  "settings": {
+    "privacy_level": "PUBLIC_TO_EVERYONE",
+    "allow_comment": true,
+    "allow_duet": true,
+    "allow_stitch": true,
+    "video_made_with_ai": true,
+    "commercialContentType": "brand_organic",
+    "is_brand_organic_post": true
+  },
+  "creator_info_reference": {
+    "scenario_id": 8007397,
+    "execution_id": "3585208520be460d98dee9f1a36a8337",
+    "privacy_supported": [
+      "PUBLIC_TO_EVERYONE"
+    ],
+    "allow_comment_supported": true,
+    "allow_duet_supported": true,
+    "allow_stitch_supported": true,
+    "max_video_duration_sec": 3600
+  },
+  "native_latest_post_reference": {
+    "scenario_id": 8007397,
+    "execution_id": "de143b5b88a740ebb8eb861a9f99984b",
+    "latest_post_date": "2026-10-26",
+    "latest_post_id": "7700946326233550102"
+  },
+  "approval_record_created": false,
+  "owner_approval_evidence": null,
+  "notification_identity": "2026-10-28:40629551726:56c921431c655997993dcecb5f2e3a7da3de97078a7b88960552112e82d4397e",
+  "handed_over_in_this_response": true
+}
