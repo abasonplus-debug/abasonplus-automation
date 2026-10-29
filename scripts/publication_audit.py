@@ -64,7 +64,7 @@ def quota_report(quota):
     measured=quota.get('measured_daily_credits')
     cost=measured if isinstance(measured,(int,float)) and measured>=0 else None
     needed=round(cost*days,2) if cost is not None else None
-    reserve=max(50,round((used+remaining)*.1))
+    reserve=20  # Owner stop floor, 30 October 2026
     return {'remaining':remaining,'used':used,'days_until_reset':days,'reserve':reserve,
             'projected_need':needed,'status':'insufficient' if needed is not None and remaining<needed+reserve else 'unverified_forecast' if needed is None else 'within_measured_budget',
             'auto_purchase_allowed':False}
