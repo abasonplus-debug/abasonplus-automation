@@ -1,0 +1,131 @@
+{
+  "date": "2026-10-30",
+  "status": "blocked_not_published",
+  "actual_generated_backgrounds": [
+    {
+      "asset_path": "local working copy only: assets/editorial/2026-10-30-held/exec-015ebe2d-42a0-42e0-b4ce-5b0c3c613f81.png",
+      "sha256": "7a9e2a353d19cd35f960d522842dfaa8aade03f2db3eb800d9321aac77ed5789",
+      "dimensions": [
+        941,
+        1672
+      ],
+      "status": "held_below_minimum_original_resolution",
+      "origin": "OpenAI built-in image generation in owner-authorized session 2026-10-30",
+      "contains_text": "not independently verified",
+      "rights_qa": "not released"
+    },
+    {
+      "asset_path": "local working copy only: assets/editorial/2026-10-30-held/exec-291d8ac8-6fbf-43a3-bd31-a6b3cb841634.png",
+      "sha256": "2d74de623a3a7b24e9cafb7aef5b67676335c5033dc64fc719e3633aba1e914e",
+      "dimensions": [
+        941,
+        1672
+      ],
+      "status": "held_below_minimum_original_resolution",
+      "origin": "OpenAI built-in image generation in owner-authorized session 2026-10-30",
+      "contains_text": "not independently verified",
+      "rights_qa": "not released"
+    },
+    {
+      "asset_path": "local working copy only: assets/editorial/2026-10-30-held/exec-537069dc-4973-4685-bc41-0139a1cd759b.png",
+      "sha256": "cabf7f7c96db02b5c3f83528cd91be156eed84aa35fdc874565841f880f3aca4",
+      "dimensions": [
+        941,
+        1672
+      ],
+      "status": "held_below_minimum_original_resolution",
+      "origin": "OpenAI built-in image generation in owner-authorized session 2026-10-30",
+      "contains_text": "not independently verified",
+      "rights_qa": "not released"
+    },
+    {
+      "asset_path": "local working copy only: assets/editorial/2026-10-30-held/exec-7b3fb53c-148a-43d9-bf3f-7ce1f77cc2cf.png",
+      "sha256": "7bd3d46925cf6abe7e33407042560883e73e02a9215e7d4b7436787242f9a501",
+      "dimensions": [
+        941,
+        1672
+      ],
+      "status": "held_below_minimum_original_resolution",
+      "origin": "OpenAI built-in image generation in owner-authorized session 2026-10-30",
+      "contains_text": "not independently verified",
+      "rights_qa": "not released"
+    },
+    {
+      "asset_path": "local working copy only: assets/editorial/2026-10-30-held/exec-9047dfbd-5af4-4b8e-86c8-1a3c8b12e5e8.png",
+      "sha256": "ac0170095ca0f16ff067cb519191ba2abd365712a8497a14f923b984da8b9699",
+      "dimensions": [
+        941,
+        1672
+      ],
+      "status": "held_below_minimum_original_resolution",
+      "origin": "OpenAI built-in image generation in owner-authorized session 2026-10-30",
+      "contains_text": "not independently verified",
+      "rights_qa": "not released"
+    },
+    {
+      "asset_path": "local working copy only: assets/editorial/2026-10-30-held/exec-bd095d40-a4dd-43ee-acd3-d88099cccbf8.png",
+      "sha256": "baae50037eaf3623f4c84c290f2b662dff8a03c4f926082c389c6cc2c7eba90c",
+      "dimensions": [
+        941,
+        1672
+      ],
+      "status": "held_below_minimum_original_resolution",
+      "origin": "OpenAI built-in image generation in owner-authorized session 2026-10-30",
+      "contains_text": "not independently verified",
+      "rights_qa": "not released"
+    },
+    {
+      "asset_path": "local working copy only: assets/editorial/2026-10-30-held/exec-e3f43196-f8d2-4863-bba3-0e1eaab0ef66.png",
+      "sha256": "87ec62715a3659e5f89d8816d6048fcf44c3df2f4159cf77204697bbce336189",
+      "dimensions": [
+        941,
+        1672
+      ],
+      "status": "held_below_minimum_original_resolution",
+      "origin": "OpenAI built-in image generation in owner-authorized session 2026-10-30",
+      "contains_text": "not independently verified",
+      "rights_qa": "not released"
+    },
+    {
+      "asset_path": "local working copy only: assets/editorial/2026-10-30-held/exec-f321a03b-57c2-4443-aa5f-2ad7a586f01e.png",
+      "sha256": "a290af039221e5e29d2243e53d222850bae2788ec266be0eb18c03a23af8300a",
+      "dimensions": [
+        941,
+        1672
+      ],
+      "status": "held_below_minimum_original_resolution",
+      "origin": "OpenAI built-in image generation in owner-authorized session 2026-10-30",
+      "contains_text": "not independently verified",
+      "rights_qa": "not released"
+    }
+  ],
+  "generation_attempts": 8,
+  "minimum_original_resolution": [
+    1080,
+    1920
+  ],
+  "upscaled": false,
+  "qa_passed": false,
+  "make": {
+    "plan": "Free",
+    "used": 891,
+    "remaining": 109,
+    "reserve": 100,
+    "available_above_reserve": 9,
+    "auto_purchase": false
+  },
+  "voice": "CosyVoice3 Dan Mason connected; first processed segment measured 4.987541666666667 seconds; complete voice and final video not ready",
+  "publication": {
+    "website": "not_dispatched",
+    "facebook": "not_dispatched",
+    "youtube": "not_dispatched",
+    "instagram": "not_dispatched",
+    "tiktok": "not_dispatched"
+  },
+  "required_dependencies": [
+    "Original background artwork at minimum 1080x1920 passing provenance and scene checks",
+    "Sufficient free credits above reserve for exact delivery and readback",
+    "Exact new TikTok preview/caption/settings owner OK after QA"
+  ],
+  "no_resend": true
+}
