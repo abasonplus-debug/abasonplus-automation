@@ -1,0 +1,25 @@
+{
+  "observed_at": "2026-10-30T06:59:21.252+00:00",
+  "source_reference": {
+    "scenario_id": 7968544,
+    "execution_id": "51716b60171342218ef3de8d9790439a",
+    "cycle": 1,
+    "reservation_module": 50,
+    "native_feed_module": 53
+  },
+  "lookup_scope": "latest_native_entry_in_descending_date_feed",
+  "receipt": {
+    "schema": 1,
+    "platform": "facebook",
+    "date": "2026-10-30",
+    "identity": "293664680487578",
+    "reserved": false,
+    "data": [
+      {
+        "id": "1784353729445504",
+        "title": "মেট্রোরেলের চুক্তি সই, পাশের জমি কিনবেন?",
+        "created_time": "2026-10-28T04:02:21.000Z"
+      }
+    ]
+  }
+}
