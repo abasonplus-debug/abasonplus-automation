@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-30",
+  "scope": "Only current 2026-10-30 land-service video backgrounds",
+  "owner_evidence": {
+    "assistant_question": "Allow current 941x1672 backgrounds to be upscaled, final Bengali text/video 1080x1920, all other QA preserved?",
+    "owner_reply": "Ok বানাও 9:16,final director cut ও premium"
+  },
+  "native_background_resolution_exception": true,
+  "final_video_resolution": [
+    1080,
+    1920
+  ],
+  "all_other_qa_required": true,
+  "publication_request": "করো 5 জায়গায় post",
+  "tiktok_exact_preview_approval": false
+}
