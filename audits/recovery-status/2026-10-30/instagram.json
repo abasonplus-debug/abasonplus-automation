@@ -1,0 +1,27 @@
+{
+  "observed_at": "2026-10-30T07:00:00.089+00:00",
+  "source_reference": {
+    "scenario_id": 7968544,
+    "execution_id": "4d326b16dfa64e26b3c3949346996f52",
+    "cycle": 1,
+    "reservation_module": 51,
+    "native_feed_module": 54
+  },
+  "lookup_scope": "latest_native_entry_in_descending_date_feed",
+  "receipt": {
+    "schema": 1,
+    "platform": "instagram",
+    "date": "2026-10-30",
+    "identity": "6ad380c8b835331ad1563a7a",
+    "reserved": false,
+    "data": {
+      "status": "success",
+      "posts": [
+        {
+          "id": "18117464698825200",
+          "createdTime": "2026-10-28T04:04:17.000Z"
+        }
+      ]
+    }
+  }
+}
