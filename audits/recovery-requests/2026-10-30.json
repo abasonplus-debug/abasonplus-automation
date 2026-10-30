@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-30",
+  "owner_authorized": true,
+  "owner_evidence": "করো 5 জায়গায় post। কাজ সম্পূর্ণ করে বলবে; Ok বানাও 9:16,final director cut ও premium",
+  "preview_run_id": 40979349214,
+  "qa_head_sha": "5df9abba0c68f98f0d61501670bf1ac4c4c2faee",
+  "video_sha256": "3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136",
+  "editorial_sha256": "a1d18644ac927d0cfca6178b4b3b3834a616dd41b38387add11dfa1d445264ec",
+  "failed_run_id": 40976987225,
+  "quota": {
+    "free": true,
+    "auto_purchase": false,
+    "remaining": 107,
+    "reserve": 20,
+    "max_bounded_single_platform_cost": 20,
+    "observed_at": "2026-10-30T00:24:21.220624+00:00"
+  },
+  "platforms": [
+    "youtube",
+    "facebook",
+    "instagram"
+  ],
+  "tiktok_publish": false
+}
