@@ -72,7 +72,7 @@ require(len(caption)<=2200,"TikTok caption above 2200 characters")
 status={
  "platform":"tiktok","status":"preview_only",
  "date":local_day,"content_key":"abasonplus-tiktok-"+local_day,
- "title":hook,"caption":caption,"first_comment":first_comment(hook),
+ "title":hook,"caption":caption,"first_comment":(OUT/"first_comment.txt").read_text(encoding="utf-8"),
  "hashtags":hashtags,"video_file":"output/abasonplus_daily.mp4",
  "thumbnail_file":"output/thumbnail.png",
  "source_url":story["source_url"],
