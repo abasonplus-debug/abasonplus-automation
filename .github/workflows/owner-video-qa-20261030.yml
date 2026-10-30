@@ -1,0 +1,36 @@
+name: AbasonPlus Exact Owner Video QA 2026-10-30
+on:
+  push:
+    branches: [main]
+    paths: ['audits/approved-media/qa-2026-10-30.json']
+permissions:
+  contents: read
+jobs:
+  verify-exact:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install free independent release checks
+        run: python3 -m pip install Pillow==12.3.0 fonttools numpy
+      - name: Verify immutable archive and extract only safe output files
+        run: |
+          python3 - <<'PY'
+          import hashlib,zipfile,pathlib
+          p=pathlib.Path('assets/editorial/2026-10-30-reviewed/approved-video-package.zip')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='9399dddbf6f6a9c98135df17e64ee1683c6fb1af88526500a9e0b58dd033183d'
+          with zipfile.ZipFile(p) as z:
+              assert all(not pathlib.PurePosixPath(n).is_absolute() and '..' not in pathlib.PurePosixPath(n).parts for n in z.namelist())
+              z.extractall('output')
+          p=pathlib.Path('output/abasonplus_daily.mp4')
+          assert hashlib.sha256(p.read_bytes()).hexdigest()=='3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136'
+          PY
+          python3 scripts/verify_video_release.py
+          python3 scripts/prepare_tiktok_preview.py
+          ffmpeg -v error -i output/abasonplus_daily.mp4 -f null -
+      - uses: actions/upload-artifact@v7
+        with:
+          name: abasonplus-source-checked-video
+          path: output/
+          retention-days: 7
+# Exact current-day QA only. No publishing, synthesis, secrets or cron.
