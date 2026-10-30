@@ -1,7 +1,7 @@
 {
   "date": "2026-10-30",
   "owner_authorized": true,
-  "owner_evidence": "করো 5 জায়গায় post। কাজ সম্পূর্ণ করে বলবে; Ok বানাও 9:16,final director cut ও premium",
+  "owner_evidence": "Owner explicitly requested 30 October prepared Library video publication to Facebook, YouTube and Instagram with existing captions, QA and duplicate checks, free only, reserve20. TikTok only after exact preview/settings consent.",
   "preview_run_id": 40979349214,
   "qa_head_sha": "5df9abba0c68f98f0d61501670bf1ac4c4c2faee",
   "video_sha256": "3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136",
@@ -10,10 +10,10 @@
   "quota": {
     "free": true,
     "auto_purchase": false,
-    "remaining": 107,
+    "remaining": 87,
     "reserve": 20,
     "max_bounded_single_platform_cost": 20,
-    "observed_at": "2026-10-30T00:24:21.220624+00:00"
+    "observed_at": "2026-10-30T06:56:33+00:00"
   },
   "platforms": [
     "youtube",
