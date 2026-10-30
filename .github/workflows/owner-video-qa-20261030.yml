@@ -25,6 +25,7 @@ jobs:
           p=pathlib.Path('output/abasonplus_daily.mp4')
           assert hashlib.sha256(p.read_bytes()).hexdigest()=='3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136'
           PY
+          cp assets/editorial/2026-10-30-reviewed/image_credits.txt output/image_credits.txt
           python3 scripts/verify_video_release.py
           python3 scripts/prepare_tiktok_preview.py
           ffmpeg -v error -i output/abasonplus_daily.mp4 -f null -
