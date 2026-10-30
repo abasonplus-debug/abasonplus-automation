@@ -179,13 +179,6 @@ def main():
         except Exception:
             raise ValueError('Async receipt needs fresh inspected Make reservation/native-feed evidence; no publication sent') from None
     # The full original validation below applies to both routes.
-    if False:
-        # Sequential Make webhooks can return Accepted before the native GET runs.
-        # Never interpret that as absence/publication: require fresh inspected
-        # execution evidence from the owner session, not a fabricated empty feed.
-        path=ROOT/'audits/recovery-status'/day/(platform+'.json')
-        try:receipt=verified_async_receipt(path,platform,day,datetime.now(ZoneInfo('Europe/Berlin')))
-        except Exception:raise ValueError('Async receipt needs fresh inspected Make reservation/native-feed evidence; no publication sent') from None
     evidence=validate_receipt(receipt,platform,day)
     report={'date':day,'platform':platform,'preview_run_id':run_id,'video_sha256':expected,'status':'checked_no_delivery',**evidence}
     out=OUT/'recovery_result.json';out.write_text(json.dumps(report,indent=2)+'\n')
