@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-30",
+  "status": "awaiting_exact_owner_review",
+  "preview_run_id": "40979349214",
+  "preview_head_sha": "5df9abba0c68f98f0d61501670bf1ac4c4c2faee",
+  "artifact_id": null,
+  "video_sha256": "3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136",
+  "caption_sha256": "b5c3387b698790d68231e769d76128c4c99769183b195cad6db688fc189a6db3",
+  "caption": "ভূমিসেবা আটকে গেলে আবেদন, ঘটনার বিবরণ ও রসিদ গুছিয়ে সরকারি সহায়তা নিন। আরও ব্যবহারিক তথ্যের জন্য আবাসন প্লাস অনুসরণ করুন।\n#ভূমিসেবা #অভিযোগ #Bangladesh #বাংলাদেশ #BanglaTikTok",
+  "first_comment": "সমস্যার বিবরণ গুছিয়ে সরকারি সহায়তা নিন। ব্যক্তিগত নথি, পাসওয়ার্ড বা ওটিপি কমেন্টে দেবেন না।",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "codec": "H264",
+    "audio": "AAC",
+    "slides": 7,
+    "slide_durations": [
+      5.3,
+      7.466667,
+      6.433333,
+      6.066667,
+      6.366667,
+      7.3,
+      6.466667
+    ],
+    "voiceover": {
+      "engine": "CosyVoice3",
+      "reference": "Dan Mason",
+      "reference_url": "https://raw.githubusercontent.com/CoisLR/TTS-Reference-Voices/main/voices/dan_mason.flac",
+      "complete": true,
+      "script_sha256": "0285ae36fed340b7392ee76f744bb51881a86ea4c9a7873a02b8e73ccdbc5baa",
+      "mix": "narration_100_music_20_no_amix_normalization",
+      "voice_gain": 1,
+      "music_gain": 0.2,
+      "playback_speed": 1.1,
+      "narrated_slide_count": 7
+    },
+    "duration_seconds": 45.4
+  },
+  "library_file_id": "libfile_116c40bc4698819182b120ccb8abca5d",
+  "preview_url": "https://chatgpt.com/library?file_id=libfile_116c40bc4698819182b120ccb8abca5d&account_id=personal",
+  "qa_run_url": "https://github.com/abasonplus-debug/abasonplus-automation/actions/runs/40979349214",
+  "account_id": "6ad22ddb280aa6cf7d25310d",
+  "account_username": "abasonplus",
+  "settings": {
+    "privacy_level": "PUBLIC_TO_EVERYONE",
+    "allow_comment": true,
+    "allow_duet": true,
+    "allow_stitch": true,
+    "video_made_with_ai": true,
+    "commercialContentType": "brand_organic",
+    "is_brand_organic_post": true
+  },
+  "creator_options_source": {
+    "scenario_id": 8007397,
+    "execution_id": "078f792398934321b7659a7f5bbd29e2"
+  },
+  "owner_approved": false,
+  "posting_enabled": false,
+  "note": "This exact preview handoff is pending, not approval; no prior day's OK applies."
+}
