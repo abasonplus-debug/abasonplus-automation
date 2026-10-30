@@ -1,8 +1,6 @@
 name: AbasonPlus Exact Three Social Dispatch 2026-10-30
 on:
-  push:
-    branches: [main]
-    paths: ['audits/approved-media/social-dispatch-2026-10-30.json']
+  workflow_dispatch: {}
 permissions:
   contents: read
   actions: read
