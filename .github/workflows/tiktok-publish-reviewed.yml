@@ -106,9 +106,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PREVIEW_RUN_ID: ${{ inputs.preview_run_id }}
         run: |
-          gh run view "$PREVIEW_RUN_ID" --repo "$GITHUB_REPOSITORY" --json conclusion,name,event,headBranch \
-            --jq 'select(.conclusion == "success" and .headBranch == "main" and (.name == "AbasonPlus Daily Source-Checked Carousel & Video" or (.name | test("^AbasonPlus (authorized video recovery|Authorized Video Recovery) [0-9-]+$")))) | .name' \
-            | grep -E "^AbasonPlus (Daily Source-Checked Carousel & Video|(authorized video recovery|Authorized Video Recovery) [0-9-]+)$"
+          python3 - <<'PY'
+          import json,os,subprocess
+          run=json.loads(subprocess.check_output(['gh','api',f"repos/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['PREVIEW_RUN_ID']}"]))
+          ordinary=run.get('name')=='AbasonPlus Daily Source-Checked Carousel & Video' or __import__('re').fullmatch(r'AbasonPlus (authorized video recovery|Authorized Video Recovery) [0-9-]+',run.get('name',''))
+          exact=(str(run.get('id'))=='40979349214' and run.get('name')=='AbasonPlus Exact Owner Video QA 2026-10-30' and run.get('path')=='.github/workflows/owner-video-qa-20261030.yml' and run.get('head_sha')=='5df9abba0c68f98f0d61501670bf1ac4c4c2faee')
+          assert run.get('conclusion')=='success' and run.get('head_branch')=='main' and (ordinary or exact), 'Only actual successful immutable approved QA run'
+          if exact:
+              from pathlib import Path
+              approval=json.loads(Path('audits/tiktok-approvals/2026-10-30.json').read_text())
+              assert approval['preview_head_sha']==run['head_sha'] and approval['video_sha256']=='3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136'
+          PY
           mkdir -p output
           gh run download "$PREVIEW_RUN_ID" --repo "$GITHUB_REPOSITORY" \
             -n abasonplus-source-checked-video -D output
