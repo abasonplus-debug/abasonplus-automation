@@ -44,7 +44,8 @@ quality=info.get("quality",[])
 require(info.get("style_id")==STYLE_ID,"selected visual style missing")
 require(len(quality)==info["slides"], "Quality record required for each slide")
 for x in quality:
-    require(x.get('photo_semantic_qa') is True, 'Photo semantic screening missing')
+    from illustration_assets import validate_visual_evidence
+    validate_visual_evidence(x)
     validate_style(x)
 require((OUT/"thumbnail.png").read_bytes()==(OUT/"slide_0.png").read_bytes(),
         "hook thumbnail not same as first slide")
@@ -65,7 +66,7 @@ tips=[re.sub(r"\s+"," ",x.get("text","")).strip() for x in story["tips"]]
 require(all(8<=len(t)<=500 for t in tips),"tips are unreadable")
 hashtags=hashtags_for(story.get("title",hook), "tiktok")
 body=hook+"\n"+"\n".join(f"✅ {tip}" for tip in tips)
-caption=body+"\n\n"+(" ".join(hashtags))
+caption=story.get("tiktok_caption") or body+"\n\n"+(" ".join(hashtags))
 require(len(caption)<=2200,"TikTok caption above 2200 characters")
 (OUT/"tiktok_caption.txt").write_text(caption+"\n",encoding="utf-8")
 status={
