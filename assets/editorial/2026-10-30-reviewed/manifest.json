@@ -1,0 +1,356 @@
+{
+  "title": "ভূমিসেবায় সহায়তা",
+  "hook": "ভূমিসেবা আটকে গেছে? অভিযোগের আগে কী গুছিয়ে রাখবেন?",
+  "cover_query": "Bangladeshi couple outside a public service office holding an application folder",
+  "tips": [
+    {
+      "text": "সেবার নাম, আবেদন নম্বর ও জমার তারিখ লিখুন। একই সমস্যায় নতুন আবেদন করার আগে পুরোনোটির অবস্থা জানুন।",
+      "query": "A Bangladeshi man and woman sitting together sorting application paperwork at a desk"
+    },
+    {
+      "text": "ঠিক কী সমস্যা হয়েছে, সময়সহ লিখুন। বার্তার স্ক্রিনশট ও রসিদ নিজের কাছে সংরক্ষণ করুন।",
+      "query": "Couple reviewing a phone error at home in the evening"
+    },
+    {
+      "text": "কী সমাধান চান, নির্দিষ্ট করে বলুন। অনুমান বা অভিযোগের বদলে যাচাইযোগ্য ঘটনা দিন।",
+      "query": "Man writing a complaint at a library desk with his partner"
+    },
+    {
+      "text": "সরকারি ভূমি তথ্য বাতায়নে সহায়তার নম্বর ১৬১২২। অপরিচিত কলের সরকারি পরিচয় আগে যাচাই করুন।",
+      "query": "A Bangladeshi couple sitting at an outdoor table, a woman talking on her mobile phone and a man using a laptop"
+    },
+    {
+      "text": "ওটিপি বা পাসওয়ার্ড প্রকাশ করবেন না। ব্যক্তিগত নম্বরে টাকা পাঠানোর আগে সরকারি পদ্ধতি ও রসিদ যাচাই করুন।",
+      "query": "A Bangladeshi couple talking with a gray-haired adviser who holds a smartphone showing a padlock symbol beside a window"
+    },
+    {
+      "text": "যোগাযোগের নোট রাখুন। তথ্যসেবা মালিকানার প্রমাণ বা বিরোধের চূড়ান্ত নিষ্পত্তি নয়।",
+      "query": "A Bangladeshi couple and an adviser discussing paperwork together at a wooden table"
+    }
+  ],
+  "source_url": "https://www.land.gov.bd/?lang=bn",
+  "verified_on": "2026-10-30",
+  "photos": [
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-01.png",
+      "sha256": "057cf6bd174edf802b6b95ebec64837f90eea075b9e668edb5d68c38c1938b8f",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-46c6bb50-8df9-457c-8a84-5dfd03a853c0.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Bangladeshi couple outside a public service office holding an application folder",
+      "scene_match": "ভূমিসেবা আটকে গেছে? অভিযোগের আগে কী গুছিয়ে রাখবেন?",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:057cf6bd174edf802b6b95ebec64837f90eea075b9e668edb5d68c38c1938b8f"
+    },
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-02.png",
+      "sha256": "37fb41cab86cc8b73d2c2e3299b8cb9e0115f06d9e09523937fb68628abe2d7c",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-83238c78-2a82-4345-bcff-bc087b07f639.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "A Bangladeshi man and woman sitting together sorting application paperwork at a desk",
+      "scene_match": "সেবার নাম, আবেদন নম্বর ও জমার তারিখ লিখুন। একই সমস্যায় নতুন আবেদন করার আগে পুরোনোটির অবস্থা জানুন।",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:37fb41cab86cc8b73d2c2e3299b8cb9e0115f06d9e09523937fb68628abe2d7c"
+    },
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-03.png",
+      "sha256": "f2663eadcf6689e172b2f627f19bd0c853007d0765674d14d21bc1c7dccefe6d",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-f3a9d6ed-bd6e-439e-957f-8121b409a9e7.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Couple reviewing a phone error at home in the evening",
+      "scene_match": "ঠিক কী সমস্যা হয়েছে, সময়সহ লিখুন। বার্তার স্ক্রিনশট ও রসিদ নিজের কাছে সংরক্ষণ করুন।",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:f2663eadcf6689e172b2f627f19bd0c853007d0765674d14d21bc1c7dccefe6d"
+    },
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-04.png",
+      "sha256": "96d39d844387ab46f6cca7286c1e353cc858526f35777540efcd25407f21f349",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-9e467c19-8134-4c2e-9cb7-59a1841adf65.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Man writing a complaint at a library desk with his partner",
+      "scene_match": "কী সমাধান চান, নির্দিষ্ট করে বলুন। অনুমান বা অভিযোগের বদলে যাচাইযোগ্য ঘটনা দিন।",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:96d39d844387ab46f6cca7286c1e353cc858526f35777540efcd25407f21f349"
+    },
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-05.png",
+      "sha256": "68b0c532c0cf458bd980ebde00ec12a7b94b6ab80bc70e38142b8fb3aa9d53bc",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-e8de92ab-54d8-45d1-8c95-bba4b1865530.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "A Bangladeshi couple sitting at an outdoor table, a woman talking on her mobile phone and a man using a laptop",
+      "scene_match": "সরকারি ভূমি তথ্য বাতায়নে সহায়তার নম্বর ১৬১২২। অপরিচিত কলের সরকারি পরিচয় আগে যাচাই করুন।",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:68b0c532c0cf458bd980ebde00ec12a7b94b6ab80bc70e38142b8fb3aa9d53bc"
+    },
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-06.png",
+      "sha256": "3104d37d3517bde51d2cfb687baafe2609dc16e6b2d1ff0e013201eb0fa6f143",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-064a73ed-0fd6-40fa-a11b-71f4f8134480.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "A Bangladeshi couple talking with a gray-haired adviser who holds a smartphone showing a padlock symbol beside a window",
+      "scene_match": "ওটিপি বা পাসওয়ার্ড প্রকাশ করবেন না। ব্যক্তিগত নম্বরে টাকা পাঠানোর আগে সরকারি পদ্ধতি ও রসিদ যাচাই করুন।",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:3104d37d3517bde51d2cfb687baafe2609dc16e6b2d1ff0e013201eb0fa6f143"
+    },
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-07.png",
+      "sha256": "d1a8e81618100684f32e7675cc248d5264ffc42d44e32071feed6a4f430b77f8",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-291d8ac8-6fbf-43a3-bd31-a6b3cb841634.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "A Bangladeshi couple and an adviser discussing paperwork together at a wooden table",
+      "scene_match": "যোগাযোগের নোট রাখুন। তথ্যসেবা মালিকানার প্রমাণ বা বিরোধের চূড়ান্ত নিষ্পত্তি নয়।",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:d1a8e81618100684f32e7675cc248d5264ffc42d44e32071feed6a4f430b77f8"
+    }
+  ],
+  "illustrations": [
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-01.png",
+      "sha256": "057cf6bd174edf802b6b95ebec64837f90eea075b9e668edb5d68c38c1938b8f",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-46c6bb50-8df9-457c-8a84-5dfd03a853c0.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Bangladeshi couple outside a public service office holding an application folder",
+      "scene_match": "ভূমিসেবা আটকে গেছে? অভিযোগের আগে কী গুছিয়ে রাখবেন?",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:057cf6bd174edf802b6b95ebec64837f90eea075b9e668edb5d68c38c1938b8f"
+    },
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-02.png",
+      "sha256": "37fb41cab86cc8b73d2c2e3299b8cb9e0115f06d9e09523937fb68628abe2d7c",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-83238c78-2a82-4345-bcff-bc087b07f639.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "A Bangladeshi man and woman sitting together sorting application paperwork at a desk",
+      "scene_match": "সেবার নাম, আবেদন নম্বর ও জমার তারিখ লিখুন। একই সমস্যায় নতুন আবেদন করার আগে পুরোনোটির অবস্থা জানুন।",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:37fb41cab86cc8b73d2c2e3299b8cb9e0115f06d9e09523937fb68628abe2d7c"
+    },
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-03.png",
+      "sha256": "f2663eadcf6689e172b2f627f19bd0c853007d0765674d14d21bc1c7dccefe6d",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-f3a9d6ed-bd6e-439e-957f-8121b409a9e7.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Couple reviewing a phone error at home in the evening",
+      "scene_match": "ঠিক কী সমস্যা হয়েছে, সময়সহ লিখুন। বার্তার স্ক্রিনশট ও রসিদ নিজের কাছে সংরক্ষণ করুন।",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:f2663eadcf6689e172b2f627f19bd0c853007d0765674d14d21bc1c7dccefe6d"
+    },
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-04.png",
+      "sha256": "96d39d844387ab46f6cca7286c1e353cc858526f35777540efcd25407f21f349",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-9e467c19-8134-4c2e-9cb7-59a1841adf65.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "Man writing a complaint at a library desk with his partner",
+      "scene_match": "কী সমাধান চান, নির্দিষ্ট করে বলুন। অনুমান বা অভিযোগের বদলে যাচাইযোগ্য ঘটনা দিন।",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:96d39d844387ab46f6cca7286c1e353cc858526f35777540efcd25407f21f349"
+    },
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-05.png",
+      "sha256": "68b0c532c0cf458bd980ebde00ec12a7b94b6ab80bc70e38142b8fb3aa9d53bc",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-e8de92ab-54d8-45d1-8c95-bba4b1865530.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "A Bangladeshi couple sitting at an outdoor table, a woman talking on her mobile phone and a man using a laptop",
+      "scene_match": "সরকারি ভূমি তথ্য বাতায়নে সহায়তার নম্বর ১৬১২২। অপরিচিত কলের সরকারি পরিচয় আগে যাচাই করুন।",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:68b0c532c0cf458bd980ebde00ec12a7b94b6ab80bc70e38142b8fb3aa9d53bc"
+    },
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-06.png",
+      "sha256": "3104d37d3517bde51d2cfb687baafe2609dc16e6b2d1ff0e013201eb0fa6f143",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-064a73ed-0fd6-40fa-a11b-71f4f8134480.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "A Bangladeshi couple talking with a gray-haired adviser who holds a smartphone showing a padlock symbol beside a window",
+      "scene_match": "ওটিপি বা পাসওয়ার্ড প্রকাশ করবেন না। ব্যক্তিগত নম্বরে টাকা পাঠানোর আগে সরকারি পদ্ধতি ও রসিদ যাচাই করুন।",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:3104d37d3517bde51d2cfb687baafe2609dc16e6b2d1ff0e013201eb0fa6f143"
+    },
+    {
+      "asset_type": "illustration",
+      "asset_path": "assets/editorial/2026-10-30-reviewed/background-07.png",
+      "sha256": "d1a8e81618100684f32e7675cc248d5264ffc42d44e32071feed6a4f430b77f8",
+      "creator": "OpenAI image generation, owner-requested AbasonPlus artwork",
+      "origin_reference": "Owner-authorized image generation in this conversation, 2026-10-30; source exec-291d8ac8-6fbf-43a3-bd31-a6b3cb841634.png",
+      "rights_evidence": "Generated for owner at explicit request; no stock photograph or third-party license claim. Original resolution exception explicitly approved for this exact video.",
+      "rights_confirmed": true,
+      "contains_text": false,
+      "illustrative_not_real_event": true,
+      "scene": "A Bangladeshi couple and an adviser discussing paperwork together at a wooden table",
+      "scene_match": "যোগাযোগের নোট রাখুন। তথ্যসেবা মালিকানার প্রমাণ বা বিরোধের চূড়ান্ত নিষ্পত্তি নয়।",
+      "native_source_dimensions": [
+        941,
+        1672
+      ],
+      "resolution_exception": "audits/creative-authorizations/2026-10-30.json",
+      "source": "illustration-sha256:d1a8e81618100684f32e7675cc248d5264ffc42d44e32071feed6a4f430b77f8"
+    }
+  ],
+  "slide_briefs": [
+    {
+      "text": "ভূমিসেবা আটকে গেছে? অভিযোগের আগে কী গুছিয়ে রাখবেন?",
+      "scene": "Bangladeshi couple organizing a land service problem at a desk",
+      "asset_status": "missing",
+      "contains_text": false,
+      "illustrative_not_real_event": true
+    },
+    {
+      "text": "সেবার নাম, আবেদন নম্বর ও জমার তারিখ লিখুন। একই সমস্যায় নতুন আবেদন করার আগে পুরোনোটির অবস্থা জানুন।",
+      "scene": "Applicant checking an application receipt with an adviser",
+      "asset_status": "missing",
+      "contains_text": false,
+      "illustrative_not_real_event": true
+    },
+    {
+      "text": "ঠিক কী সমস্যা হয়েছে, সময়সহ লিখুন। বার্তার স্ক্রিনশট ও রসিদ নিজের কাছে সংরক্ষণ করুন।",
+      "scene": "Applicant recording an error screen beside receipts",
+      "asset_status": "missing",
+      "contains_text": false,
+      "illustrative_not_real_event": true
+    },
+    {
+      "text": "কী সমাধান চান, নির্দিষ্ট করে বলুন। অনুমান বা অভিযোগের বদলে যাচাইযোগ্য ঘটনা দিন।",
+      "scene": "Citizen preparing a concise written complaint",
+      "asset_status": "missing",
+      "contains_text": false,
+      "illustrative_not_real_event": true
+    },
+    {
+      "text": "সরকারি ভূমি তথ্য বাতায়নে সহায়তার নম্বর ১৬১২২। অপরিচিত কলের সরকারি পরিচয় আগে যাচাই করুন।",
+      "scene": "Citizen checking an official government website before a phone call",
+      "asset_status": "missing",
+      "contains_text": false,
+      "illustrative_not_real_event": true
+    },
+    {
+      "text": "ওটিপি বা পাসওয়ার্ড প্রকাশ করবেন না। ব্যক্তিগত নম্বরে টাকা পাঠানোর আগে সরকারি পদ্ধতি ও রসিদ যাচাই করুন।",
+      "scene": "Adviser warning a couple against sharing passwords and sending money",
+      "asset_status": "missing",
+      "contains_text": false,
+      "illustrative_not_real_event": true
+    },
+    {
+      "text": "যোগাযোগের নোট রাখুন। তথ্যসেবা মালিকানার প্রমাণ বা বিরোধের চূড়ান্ত নিষ্পত্তি নয়।",
+      "scene": "Couple keeping dated follow up notes with land documents",
+      "asset_status": "missing",
+      "contains_text": false,
+      "illustrative_not_real_event": true
+    }
+  ],
+  "source_kind": "external_news_report",
+  "expires_on": "2026-10-30"
+}
