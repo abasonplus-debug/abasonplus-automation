@@ -167,10 +167,19 @@ def main():
         print(json.dumps(evidence,ensure_ascii=False));return
     payload={'kind':'publication_status_provider' if platform=='instagram' else 'publication_status_'+platform,
              'audit_date':day,'audit_platform':platform}
+    # Reuse only an independently inspected, still-fresh native/reservation receipt.
+    # Avoid spending free credits twice on the same bounded pre-upload lookup.
+    path=ROOT/'audits/recovery-status'/day/(platform+'.json')
     try:
-        req=Request(url,data=json.dumps(payload).encode(),headers={'Content-Type':'application/json'},method='POST')
-        with urlopen(req,timeout=90) as response: receipt=json.load(response)
+        receipt=verified_async_receipt(path,platform,day,datetime.now(ZoneInfo('Europe/Berlin')))
     except Exception:
+        try:
+            req=Request(url,data=json.dumps(payload).encode(),headers={'Content-Type':'application/json'},method='POST')
+            with urlopen(req,timeout=90) as response: receipt=json.load(response)
+        except Exception:
+            raise ValueError('Async receipt needs fresh inspected Make reservation/native-feed evidence; no publication sent') from None
+    # The full original validation below applies to both routes.
+    if False:
         # Sequential Make webhooks can return Accepted before the native GET runs.
         # Never interpret that as absence/publication: require fresh inspected
         # execution evidence from the owner session, not a fabricated empty feed.
