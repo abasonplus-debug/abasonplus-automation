@@ -1,6 +1,6 @@
 {
   "date": "2026-10-30",
-  "status": "exact_owner_approved_dispatch_pending",
+  "status": "published_verified",
   "preview_run_id": "40979349214",
   "preview_head_sha": "5df9abba0c68f98f0d61501670bf1ac4c4c2faee",
   "artifact_id": null,
@@ -58,7 +58,7 @@
   },
   "owner_approved": true,
   "posting_enabled": false,
-  "note": "Owner replied Ok tiktok after exact displayed video/caption/comment/settings; approval applies only to this immutable artifact. Publication must be verified separately.",
+  "note": "Exact owner Ok tiktok reconciled; published once and verified. Do not resend or request approval again for this artifact.",
   "duplicate_lookup": {
     "scenario_id": 8007397,
     "execution_id": "dc33024e207e4a5e93f180eba983a5fd",
@@ -67,5 +67,7 @@
   "review_notified_at": "2026-10-30T08:07:20+01:00",
   "creator_options_verified_on": "2026-10-30",
   "approval_file": "audits/tiktok-approvals/2026-10-30.json",
-  "approved_at": "2026-10-30T08:10:53.263891+01:00"
+  "publication_file": "audits/tiktok-publications/2026-10-30.json",
+  "post_id": "7702355853663309088",
+  "url": "https://www.tiktok.com/@abasonplus/video/7702355853663309088"
 }
