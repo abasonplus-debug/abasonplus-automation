@@ -1,0 +1,52 @@
+name: AbasonPlus Exact Three Social Dispatch 2026-10-30
+on:
+  push:
+    branches: [main]
+    paths: ['audits/approved-media/social-dispatch-2026-10-30.json']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: abasonplus-video-one-source-per-day
+  cancel-in-progress: false
+jobs:
+  guarded-single-platform:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        platform: [youtube, facebook, instagram]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python3 -m pip install Pillow==12.3.0 fonttools numpy
+      - name: Fetch only successful exact immutable QA artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 40979349214 --repo "$GITHUB_REPOSITORY" -n abasonplus-source-checked-video -D output
+      - name: Existing guarded one-platform route; one transfer only, no TikTok
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+          RECOVERY_DAY: '2026-10-30'
+          RECOVERY_PLATFORM: ${{ matrix.platform }}
+          PREVIEW_RUN_ID: '40979349214'
+          VIDEO_SHA256: '3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136'
+          RECOVERY_CONFIRMATION: RECOVER_ONE_PLATFORM
+          DRY_RUN: 'false'
+        run: python3 scripts/recover_one_platform.py
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: exact-social-outcome-${{ matrix.platform }}-20261030
+          path: output/recovery_result.json
+          if-no-files-found: warn
+          retention-days: 7
+# Dated explicit owner request only; no cron, key deletion, whole-router replay or automatic retry.
