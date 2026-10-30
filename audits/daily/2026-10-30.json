@@ -1,8 +1,8 @@
 {
-  "checked_at": "2026-10-30T08:07:20+01:00",
+  "checked_at": "2026-10-30T08:17:30.839921+01:00",
   "context": {
     "fresh_content_ready": true,
-    "exact_tiktok_video_approved": false,
+    "exact_tiktok_video_approved": true,
     "lookup_complete": {
       "website": true,
       "facebook": true,
@@ -58,19 +58,19 @@
     },
     {
       "platform": "tiktok",
-      "post_id": null,
-      "url": null,
-      "status": "awaiting_video_review",
-      "published_at": null,
-      "observed_at": "2026-10-30T08:07:20+01:00",
+      "post_id": "7702355853663309088",
+      "url": "https://www.tiktok.com/@abasonplus/video/7702355853663309088",
+      "status": "published",
+      "published_at": "2026-10-30T07:14:42.375Z",
+      "observed_at": "2026-10-30T08:17:30.839921+01:00",
       "verification": "platform_readback",
-      "identity_matched": false,
-      "source_reference": "checker8007397:dc33024e207e4a5e93f180eba983a5fd no current-day post; approval/publication files absent; exact preview pending"
+      "identity_matched": true,
+      "source_reference": "checker8007397:f6f2ffdbb0f1471da9191d1295a4a6da"
     }
   ],
   "quota": {
-    "used": 963,
-    "remaining": 37,
+    "used": 976,
+    "remaining": 24,
     "reserve": 20,
     "free": true,
     "auto_purchase": false,
@@ -83,7 +83,9 @@
       "Exact immutable MP4 SHA256 3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136; QA run40979349214 successful.",
       "Seven distinct repository illustration backgrounds; same characters; original small bottom-right logo;1080x1920;45.4s;full CosyVoice3 Dan Mason1.1x voice100 music20.",
       "Owner-authorized one-video upscale exception; not native-resolution claim. No real-device review; platform UI may cover bottom-right logo.",
-      "All inspected upload/readback/comment executions module errors0, despite warning execution labels."
+      "All inspected upload/readback/comment executions module errors0, despite warning execution labels.",
+      "Exact-video owner OK reconciled against dated approval and publication records; preview false flags describe the earlier pre-approval state.",
+      "Exact TikTok published status, native URL, caption/settings and own first brand comment verified. Make upload and comment modules had zero errors; no duplicate resend."
     ]
   },
   "weekly_metrics": {
@@ -109,7 +111,8 @@
     "preview_run_id": 40979349214,
     "dispatch_run_id": 41017557825,
     "video_sha256": "3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136",
-    "library_file_id": "libfile_116c40bc4698819182b120ccb8abca5d"
+    "library_file_id": "libfile_116c40bc4698819182b120ccb8abca5d",
+    "tiktok_dispatch_run_id": 41018769803
   },
   "first_comments": {
     "facebook": {
@@ -127,10 +130,20 @@
       "status": "verified_own_comment",
       "source": "checker8007397:c04769f59b184a3e9e2026cf90f56eb2",
       "url": "https://www.instagram.com/reel/DfHAKpnlKuH/?comment_id=18170519995486964"
+    },
+    "tiktok": {
+      "id": "7702177630837621537",
+      "status": "verified_own_comment",
+      "source": "checker8007397:9f43acd5a5e24d788eb574425ec1f3cb"
     }
   },
   "youtube_cover": {
     "status": "write_succeeded",
     "display_on_all_shorts_surfaces_unverified": true
+  },
+  "consent_evidence": {
+    "approval_file": "audits/tiktok-approvals/2026-10-30.json",
+    "publication_file": "audits/tiktok-publications/2026-10-30.json",
+    "video_sha256": "3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136"
   }
 }
