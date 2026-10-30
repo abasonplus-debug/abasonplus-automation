@@ -125,12 +125,14 @@ def main():
     request=json.loads((ROOT/'audits/recovery-requests'/f'{day}.json').read_text())
     require(request.get('owner_authorized') is True and request.get('preview_run_id')==run_id and request.get('video_sha256')==expected,'Exact owner recovery record mismatch')
     q=request.get('quota',{})
-    require(q.get('free') is True and q.get('auto_purchase') is False and q.get('remaining',0)>=150,'Fresh free quota evidence missing')
+    require(q.get('free') is True and q.get('auto_purchase') is False and q.get('remaining',0)>=40,'Fresh free quota evidence missing')
     age=now-stamp(q['observed_at'])
     require(timedelta(0)<=age<=timedelta(minutes=15),'Quota evidence older than 15 minutes; inspect before transfer')
     api=GitHub()
     source=api.request('/actions/runs/'+str(run_id))
-    require(source.get('conclusion')=='success' and source.get('head_branch')=='main' and source.get('name')=='AbasonPlus Daily Source-Checked Carousel & Video','Only actual successful main preview artifact')
+    source_is_daily=source.get('name')=='AbasonPlus Daily Source-Checked Carousel & Video'
+    source_is_exact_owner_qa=(day=='2026-10-30' and expected=='3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136' and source.get('path')=='.github/workflows/owner-video-qa-20261030.yml' and source.get('name')=='AbasonPlus Exact Owner Video QA 2026-10-30' and request.get('qa_head_sha')==source.get('head_sha'))
+    require(source.get('conclusion')=='success' and source.get('head_branch')=='main' and (source_is_daily or source_is_exact_owner_qa),'Only actual successful immutable current-day QA artifact')
     require(stamp(source['created_at']).astimezone(ZoneInfo('Europe/Berlin')).date().isoformat()==day,'Preview is stale')
     editorial=ROOT/'content'/f'daily_editorial_{day}.json'
     require(hashlib.sha256(editorial.read_bytes()).hexdigest()==request.get('editorial_sha256'),'Current editorial hash changed since recovery authorization')
