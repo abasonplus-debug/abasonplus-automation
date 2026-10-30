@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-30T08:17:30.839921+01:00",
+  "checked_at": "2026-10-30T11:04:35.888013+01:00",
   "context": {
     "fresh_content_ready": true,
     "exact_tiktok_video_approved": true,
@@ -7,6 +7,13 @@
       "website": true,
       "facebook": true,
       "youtube": true,
+      "instagram": true,
+      "tiktok": true
+    },
+    "fresh_readback": {
+      "website": true,
+      "facebook": false,
+      "youtube": false,
       "instagram": true,
       "tiktok": true
     }
@@ -18,10 +25,10 @@
       "url": "https://abasonplus.wordpress.com/2026/10/30/ap-land-service-complaint-preparation-2026-10-30/",
       "status": "published",
       "published_at": "2026-10-30T00:26:53+00:00",
-      "observed_at": "2026-10-30T08:07:20+01:00",
+      "observed_at": "2026-10-30T11:04:35.888013+01:00",
       "verification": "platform_readback",
       "identity_matched": true,
-      "source_reference": "WordPress public API site257973809 exact slug/title ID65"
+      "source_reference": "WordPress public API site257973809 current exact slug/title/post65 readback at 2026-10-30T11:04:35.888013+01:00"
     },
     {
       "platform": "facebook",
@@ -51,10 +58,10 @@
       "url": "https://www.instagram.com/reel/DfHAKpnlKuH/",
       "status": "published",
       "published_at": "2026-10-30T07:04:29.864Z",
-      "observed_at": "2026-10-30T08:07:20+01:00",
+      "observed_at": "2026-10-30T11:04:35.888013+01:00",
       "verification": "platform_readback",
       "identity_matched": true,
-      "source_reference": "checker8007397:a59ad1237a844bd59cdee3d3d61a9289 exact provider6ae4415fb6b0feea1fdd674f account6ad380c8b835331ad1563a7a"
+      "source_reference": "checker8007397:79fb018453f840be9de70b3a5a598a30 exact fixed account published post readback"
     },
     {
       "platform": "tiktok",
@@ -62,20 +69,23 @@
       "url": "https://www.tiktok.com/@abasonplus/video/7702355853663309088",
       "status": "published",
       "published_at": "2026-10-30T07:14:42.375Z",
-      "observed_at": "2026-10-30T08:17:30.839921+01:00",
+      "observed_at": "2026-10-30T11:04:35.888013+01:00",
       "verification": "platform_readback",
       "identity_matched": true,
-      "source_reference": "checker8007397:f6f2ffdbb0f1471da9191d1295a4a6da"
+      "source_reference": "checker8007397:79fb018453f840be9de70b3a5a598a30 exact fixed account published post readback"
     }
   ],
   "quota": {
-    "used": 976,
-    "remaining": 24,
+    "used": 978,
+    "remaining": 22,
     "reserve": 20,
     "free": true,
     "auto_purchase": false,
     "days_until_reset": 13,
-    "measured_daily_credits": null
+    "measured_daily_credits": null,
+    "provider_accounts": 2,
+    "provider_free_allowance": 2,
+    "forecast_status": "unverified_no_complete_day_measurement"
   },
   "quality": {
     "status": "passed_machine_qa_and_visual_contact_sheet",
@@ -85,7 +95,10 @@
       "Owner-authorized one-video upscale exception; not native-resolution claim. No real-device review; platform UI may cover bottom-right logo.",
       "All inspected upload/readback/comment executions module errors0, despite warning execution labels.",
       "Exact-video owner OK reconciled against dated approval and publication records; preview false flags describe the earlier pre-approval state.",
-      "Exact TikTok published status, native URL, caption/settings and own first brand comment verified. Make upload and comment modules had zero errors; no duplicate resend."
+      "Exact TikTok published status, native URL, caption/settings and own first brand comment verified. Make upload and comment modules had zero errors; no duplicate resend.",
+      "Full audit 2026-10-30T11:04:35.888013+01:00: WordPress/Instagram/TikTok publication readback refreshed; both connected provider accounts active, exactly two. Facebook/YouTube use actual same-day native readbacks at 07:05 UTC; not re-requested because two additional fixed read branches cost8 credits and would cross the 20-credit reserve from24.",
+      "Full audit: Existing successful exact QA run and prior contact-sheet review retained; mobile_qa_contact_sheet.jpg/mobile_qa_notes.json not freshly accessible here, no real-device review claimed.",
+      "Full audit: Make current Free, automatic purchasing disabled, remaining22. Further credit-consuming optional work held where defensible maximum would cross20. Forecast unavailable; current day is not complete."
     ]
   },
   "weekly_metrics": {
@@ -105,7 +118,11 @@
     "github_job_status": "success",
     "prior_retries": 0,
     "current_day_verified": true,
-    "quota_safe": true
+    "quota_safe": true,
+    "published": true,
+    "provider_accepted": true,
+    "audit_delivery_attempted": false,
+    "audit_recovery_action": "none_no_resend"
   },
   "media": {
     "preview_run_id": 40979349214,
