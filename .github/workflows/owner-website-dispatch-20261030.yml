@@ -1,0 +1,60 @@
+name: AbasonPlus Exact Website Dispatch 2026-10-30
+on:
+  push:
+    branches: [main]
+    paths: ['audits/approved-media/website-dispatch-2026-10-30.json']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: abasonplus-video-one-source-per-day
+  cancel-in-progress: false
+jobs:
+  publish-exact-article-once:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Verify exact owner request, successful immutable QA and no prior scheduled send
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json,datetime,zoneinfo,subprocess,pathlib
+          assert datetime.datetime.now(zoneinfo.ZoneInfo('Europe/Berlin')).date().isoformat()=='2026-10-30'
+          import os
+          assert os.environ['GITHUB_RUN_ATTEMPT']=='1'
+          r=json.loads(subprocess.check_output(['gh','api','repos/abasonplus-debug/abasonplus-automation/actions/runs/40979349214']))
+          assert r['conclusion']=='success' and r['head_sha']=='5df9abba0c68f98f0d61501670bf1ac4c4c2faee'
+          jobs=json.loads(subprocess.check_output(['gh','api','repos/abasonplus-debug/abasonplus-automation/actions/runs/40976627059/jobs']))['jobs']
+          sent=[s for j in jobs for s in j.get('steps',[]) if s['name']=='Send exactly one approved article on SCHEDULED runs only']
+          assert sent and all(s['conclusion']=='skipped' for s in sent)
+          d=json.loads(pathlib.Path('content/daily_editorial_2026-10-30.json').read_text())
+          assert d['slug']=='ap-land-service-complaint-preparation-2026-10-30' and d['publication_ready'] is True
+          q=json.loads(pathlib.Path('audits/recovery-requests/2026-10-30.json').read_text())['quota']
+          assert q['free'] is True and q['auto_purchase'] is False and q['remaining']>=85
+          PY
+      - name: Prepare exact current article with fresh public duplicate lookup
+        run: |
+          python3 wordpress_email_prepare.py
+          test -f output/wordpress_email_preview.json
+      - name: One guarded delivery through original Make WordPress route
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+          ABASONPLUS_PUBLISH: OWNER_APPROVED
+          ABASONPLUS_POST_BY_EMAIL_READY: CONFIRMED
+        run: python3 wordpress_email_send.py
+      - name: Verify actual public WordPress publication
+        run: python3 scripts/verify_wordpress_publication.py --attempts 3 --interval 15
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: exact-website-outcome-20261030
+          path: |
+            output/wordpress_send_receipt.json
+            output/wordpress_published_verified.json
+          if-no-files-found: warn
+          retention-days: 7
+# Exact owner requested current article only; no cron, reservation deletion or retry.
