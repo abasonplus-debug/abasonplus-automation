@@ -1,10 +1,10 @@
 {
   "date": "2026-10-30",
-  "status": "publishing",
-  "platform_status": "uploading",
+  "status": "published",
+  "platform_status": "published",
   "provider_post_id": "6ae443cd1d0254053d924548",
-  "post_id": null,
-  "url": null,
+  "post_id": "7702355853663309088",
+  "url": "https://www.tiktok.com/@abasonplus/video/7702355853663309088",
   "account_id": "6ad22ddb280aa6cf7d25310d",
   "preview_run_id": "40979349214",
   "preview_head_sha": "5df9abba0c68f98f0d61501670bf1ac4c4c2faee",
@@ -19,5 +19,9 @@
   "dispatch_run_id": 41018769803,
   "make_execution_id": "f3a8a802ae3e4c7bb181bed950b5d469",
   "delivery_attempted": true,
-  "note": "Accepted exact video once; preserve reservation. Pending actual account-specific readback; never resend."
+  "note": "Exact owner-approved MP4, caption and settings published once and verified through account-specific provider readback.",
+  "published_at": "2026-10-30T07:14:42.375Z",
+  "verification": "account-specific provider readback",
+  "source_reference": "checker8007397:f6f2ffdbb0f1471da9191d1295a4a6da",
+  "caption": "ভূমিসেবা আটকে গেলে আবেদন, ঘটনার বিবরণ ও রসিদ গুছিয়ে সরকারি সহায়তা নিন। আরও ব্যবহারিক তথ্যের জন্য আবাসন প্লাস অনুসরণ করুন।\n#ভূমিসেবা #অভিযোগ #Bangladesh #বাংলাদেশ #BanglaTikTok"
 }
