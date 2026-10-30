@@ -12,7 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Install free independent release checks
-        run: python3 -m pip install Pillow==12.3.0 fonttools numpy
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          python3 -m pip install Pillow==12.3.0 fonttools numpy
       - name: Verify immutable archive and extract only safe output files
         run: |
           python3 - <<'PY'
