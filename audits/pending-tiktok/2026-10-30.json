@@ -1,6 +1,6 @@
 {
   "date": "2026-10-30",
-  "status": "awaiting_exact_owner_review",
+  "status": "exact_owner_approved_dispatch_pending",
   "preview_run_id": "40979349214",
   "preview_head_sha": "5df9abba0c68f98f0d61501670bf1ac4c4c2faee",
   "artifact_id": null,
@@ -56,14 +56,16 @@
     "scenario_id": 8007397,
     "execution_id": "5aeebdf6bf6740e8984a64e33f1f937a"
   },
-  "owner_approved": false,
+  "owner_approved": true,
   "posting_enabled": false,
-  "note": "This exact preview handoff is pending, not approval; no prior day's OK applies.",
+  "note": "Owner replied Ok tiktok after exact displayed video/caption/comment/settings; approval applies only to this immutable artifact. Publication must be verified separately.",
   "duplicate_lookup": {
     "scenario_id": 8007397,
     "execution_id": "dc33024e207e4a5e93f180eba983a5fd",
     "current_day_post_found": false
   },
   "review_notified_at": "2026-10-30T08:07:20+01:00",
-  "creator_options_verified_on": "2026-10-30"
+  "creator_options_verified_on": "2026-10-30",
+  "approval_file": "audits/tiktok-approvals/2026-10-30.json",
+  "approved_at": "2026-10-30T08:10:53.263891+01:00"
 }
