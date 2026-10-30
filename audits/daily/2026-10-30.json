@@ -1,0 +1,136 @@
+{
+  "checked_at": "2026-10-30T08:07:20+01:00",
+  "context": {
+    "fresh_content_ready": true,
+    "exact_tiktok_video_approved": false,
+    "lookup_complete": {
+      "website": true,
+      "facebook": true,
+      "youtube": true,
+      "instagram": true,
+      "tiktok": true
+    }
+  },
+  "evidence": [
+    {
+      "platform": "website",
+      "post_id": "65",
+      "url": "https://abasonplus.wordpress.com/2026/10/30/ap-land-service-complaint-preparation-2026-10-30/",
+      "status": "published",
+      "published_at": "2026-10-30T00:26:53+00:00",
+      "observed_at": "2026-10-30T08:07:20+01:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "WordPress public API site257973809 exact slug/title ID65"
+    },
+    {
+      "platform": "facebook",
+      "post_id": "1532017192096145",
+      "url": "https://www.facebook.com/reel/1532017192096145/",
+      "status": "published",
+      "published_at": "2026-10-30T07:03:09Z",
+      "observed_at": "2026-10-30T08:07:20+01:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make7968544:3fce01401b5242f5a488fa1d2ce57f5c module34 cycle1"
+    },
+    {
+      "platform": "youtube",
+      "post_id": "vepgYhEIPXQ",
+      "url": "https://www.youtube.com/watch?v=vepgYhEIPXQ",
+      "status": "published",
+      "published_at": "2026-10-30T07:02:52Z",
+      "observed_at": "2026-10-30T08:07:20+01:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "Make7968544:3880575528b84cd99b70f2cfd1a9d9b3 module33 cycle1; processed/public/succeeded"
+    },
+    {
+      "platform": "instagram",
+      "post_id": "18120250309766289",
+      "url": "https://www.instagram.com/reel/DfHAKpnlKuH/",
+      "status": "published",
+      "published_at": "2026-10-30T07:04:29.864Z",
+      "observed_at": "2026-10-30T08:07:20+01:00",
+      "verification": "platform_readback",
+      "identity_matched": true,
+      "source_reference": "checker8007397:a59ad1237a844bd59cdee3d3d61a9289 exact provider6ae4415fb6b0feea1fdd674f account6ad380c8b835331ad1563a7a"
+    },
+    {
+      "platform": "tiktok",
+      "post_id": null,
+      "url": null,
+      "status": "awaiting_video_review",
+      "published_at": null,
+      "observed_at": "2026-10-30T08:07:20+01:00",
+      "verification": "platform_readback",
+      "identity_matched": false,
+      "source_reference": "checker8007397:dc33024e207e4a5e93f180eba983a5fd no current-day post; approval/publication files absent; exact preview pending"
+    }
+  ],
+  "quota": {
+    "used": 963,
+    "remaining": 37,
+    "reserve": 20,
+    "free": true,
+    "auto_purchase": false,
+    "days_until_reset": 13,
+    "measured_daily_credits": null
+  },
+  "quality": {
+    "status": "passed_machine_qa_and_visual_contact_sheet",
+    "findings": [
+      "Exact immutable MP4 SHA256 3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136; QA run40979349214 successful.",
+      "Seven distinct repository illustration backgrounds; same characters; original small bottom-right logo;1080x1920;45.4s;full CosyVoice3 Dan Mason1.1x voice100 music20.",
+      "Owner-authorized one-video upscale exception; not native-resolution claim. No real-device review; platform UI may cover bottom-right logo.",
+      "All inspected upload/readback/comment executions module errors0, despite warning execution labels."
+    ]
+  },
+  "weekly_metrics": {
+    "status": "not_sunday",
+    "observations": [],
+    "unavailable_metrics": [
+      "retention",
+      "shares",
+      "saves",
+      "clicks"
+    ]
+  },
+  "recovery": {
+    "delivery_attempted": true,
+    "failure_phase": null,
+    "transient_failure": false,
+    "github_job_status": "success",
+    "prior_retries": 0,
+    "current_day_verified": true,
+    "quota_safe": true
+  },
+  "media": {
+    "preview_run_id": 40979349214,
+    "dispatch_run_id": 41017557825,
+    "video_sha256": "3aee9d795e0a49f6786b808934cc40bfe7a92b48a10bdfb4e7ccd8df1c287136",
+    "library_file_id": "libfile_116c40bc4698819182b120ccb8abca5d"
+  },
+  "first_comments": {
+    "facebook": {
+      "id": "122254022384270684_1471060541550160",
+      "status": "write_returned_id",
+      "source": "10e8277dd7f24eebbf7ef851040075c7 module38 cycle1"
+    },
+    "youtube": {
+      "id": "Ugy9dnaJVseRkHwUUrV4AaABAg",
+      "status": "write_returned_id",
+      "source": "8fe6053cf12746e4a7473771a63b9c8c module40 cycle1"
+    },
+    "instagram": {
+      "id": "18170519995486964",
+      "status": "verified_own_comment",
+      "source": "checker8007397:c04769f59b184a3e9e2026cf90f56eb2",
+      "url": "https://www.instagram.com/reel/DfHAKpnlKuH/?comment_id=18170519995486964"
+    }
+  },
+  "youtube_cover": {
+    "status": "write_succeeded",
+    "display_on_all_shorts_surfaces_unverified": true
+  }
+}
