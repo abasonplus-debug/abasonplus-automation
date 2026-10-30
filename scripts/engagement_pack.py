@@ -7,7 +7,7 @@ def hashtag_tokens(text):
 
 BROAD_TAGS = {
     "facebook": ["#Bangladesh", "#বাংলাদেশ", "#ReelsBD"],
-    "youtube": ["#Shorts", "#Bangladesh", "#Bangla"],
+    "youtube": ["#Bangladesh", "#বাংলাদেশ", "#Bangla", "#Shorts"],
     "instagram": ["#Bangladesh", "#Bangla", "#Reels"],
     "tiktok": ["#Bangladesh", "#বাংলাদেশ", "#BanglaTikTok"],
 }
@@ -38,7 +38,7 @@ def validate_pack(pack):
         broad=hashtag_tokens(' '.join(BROAD_TAGS[platform])) if platform else hashtag_tokens('#Bangladesh #বাংলাদেশ #Bangla')
         tokens=hashtag_tokens(pack[field])
         raw=re.findall(r'(?<!\S)#[^\s#]+',pack[field])
-        if len(raw)!=5 or len(tokens)!=5 or not broad.issubset(tokens):
+        if len(raw)!=len(broad)+2 or len(tokens)!=len(broad)+2 or not broad.issubset(tokens):
             raise ValueError('Exactly two topic tags and three broad audience tags required; no duplicates')
     if not pack['hook'].strip() or not 1<=len(pack['first_comment'])<=500:
         raise ValueError('Hook or first comment missing/too long')
