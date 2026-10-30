@@ -7,7 +7,7 @@ class PlatformHashtagTests(unittest.TestCase):
    groups=[hashtags_for(topic,p) for p in BROAD_TAGS]
    self.assertEqual(len({tuple(g[:2]) for g in groups}),1)
    self.assertEqual(len({tuple(g[2:]) for g in groups}),4)
-   for g in groups:self.assertEqual(len(hashtag_tokens(' '.join(g))),5)
+   for platform,g in zip(BROAD_TAGS,groups):self.assertEqual(len(hashtag_tokens(' '.join(g))),6 if platform=='youtube' else 5)
    self.assertIn('#Shorts',hashtags_for(topic,'youtube'))
  def test_output_files_reach_each_platform_without_repeated_tags(self):
   with tempfile.TemporaryDirectory() as d:
