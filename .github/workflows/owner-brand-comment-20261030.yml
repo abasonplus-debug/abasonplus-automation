@@ -1,0 +1,43 @@
+name: AbasonPlus Exact Own Instagram Comment 2026-10-30
+on:
+  push:
+    paths: ['audits/comment-requests/2026-10-30-instagram.json']
+permissions:
+  contents: read
+concurrency:
+  group: exact-brand-comment-instagram-18120250309766289
+  cancel-in-progress: false
+jobs:
+  comment-once:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: One bounded prepared brand comment; never a video upload
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: |
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          from datetime import datetime,timedelta
+          from zoneinfo import ZoneInfo
+          from urllib.request import Request,urlopen
+          now=datetime.now(ZoneInfo('Europe/Berlin'))
+          assert now.date().isoformat()=='2026-10-30'
+          r=json.loads(Path('audits/comment-requests/2026-10-30-instagram.json').read_text())
+          assert r['post_id']=='18120250309766289' and r['publication_verified'] and r['no_own_matching_comment'] and r['pagination_complete']
+          assert timedelta(0)<=now-datetime.fromisoformat(r['comments_observed_at'])<=timedelta(minutes=5)
+          assert r['quota_remaining']>=24 and r['reserve']==20
+          payload={'kind':'publish_first_comment','comment_platform':'instagram','comment_post_id':r['post_id'],'platform_publication_verified':True,'comment_owner_approved':True,'first_comment':r['first_comment']}
+          try:
+              req=Request(os.environ['MAKE_WEBHOOK_URL'],data=json.dumps(payload,ensure_ascii=False).encode(),headers={'Content-Type':'application/json','Idempotency-Key':'abasonplus-first-comment-instagram-18120250309766289'},method='POST')
+              with urlopen(req,timeout=90) as response:
+                  assert 200<=response.status<300
+                  response.read(4096)
+              print('One prepared comment requested; verify actual module47 and own-comment readback. Never resend.')
+          except Exception:
+              raise RuntimeError('Comment outcome uncertain; reconcile, never resend') from None
+          PY
