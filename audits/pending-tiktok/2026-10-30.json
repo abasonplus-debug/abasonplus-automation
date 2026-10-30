@@ -54,9 +54,16 @@
   },
   "creator_options_source": {
     "scenario_id": 8007397,
-    "execution_id": "078f792398934321b7659a7f5bbd29e2"
+    "execution_id": "5aeebdf6bf6740e8984a64e33f1f937a"
   },
   "owner_approved": false,
   "posting_enabled": false,
-  "note": "This exact preview handoff is pending, not approval; no prior day's OK applies."
+  "note": "This exact preview handoff is pending, not approval; no prior day's OK applies.",
+  "creator_options_verified_at": "2026-10-30T06:58:00+00:00",
+  "duplicate_lookup": {
+    "scenario_id": 8007397,
+    "execution_id": "dc33024e207e4a5e93f180eba983a5fd",
+    "current_day_post_found": false
+  },
+  "review_notified_at": null
 }
