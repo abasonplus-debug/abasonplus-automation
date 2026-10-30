@@ -1,0 +1,42 @@
+name: AbasonPlus Exact Native Readback 2026-10-30 NO POSTS
+on:
+  push:
+    paths: ['audits/readback-requests/2026-10-30.json']
+permissions:
+  contents: read
+concurrency:
+  group: exact-readback-20261030
+  cancel-in-progress: false
+jobs:
+  native-read-once:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Only fixed GET branches for actual uploader IDs; never upload
+        env:
+          MAKE_WEBHOOK_URL: ${{ secrets.MAKE_WEBHOOK_URL }}
+        run: |
+          python3 - <<'PY'
+          import json,os,re
+          from datetime import datetime
+          from zoneinfo import ZoneInfo
+          from urllib.request import Request,urlopen
+          from pathlib import Path
+          assert datetime.now(ZoneInfo('Europe/Berlin')).date().isoformat()=='2026-10-30'
+          r=json.loads(Path('audits/readback-requests/2026-10-30.json').read_text())
+          assert r['youtube']=='vepgYhEIPXQ' and r['facebook']=='1532017192096145'
+          assert r['quota_remaining']>=28 and r['reserve']==20
+          for platform in ['youtube','facebook']:
+              payload={'kind':'audit_'+platform+'_read','audit_video_id':r[platform]}
+              try:
+                  req=Request(os.environ['MAKE_WEBHOOK_URL'],data=json.dumps(payload).encode(),headers={'Content-Type':'application/json'},method='POST')
+                  with urlopen(req,timeout=90) as response:
+                      assert 200<=response.status<300
+                      response.read(4096)
+                  print(platform+': bounded read requested; inspect actual native module output')
+              except Exception:
+                  raise RuntimeError(platform+': read response unavailable; do not replay automatically') from None
+          PY
