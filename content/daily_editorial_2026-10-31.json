@@ -142,5 +142,9 @@
     "stop_floor": 20,
     "spendable_above_floor": 2,
     "publication_call_status": "held_unknown_or_greater_than_two_credit_cost"
-  }
+  },
+  "publication_ready": false,
+  "video_ready": false,
+  "status": "held",
+  "hold_reason": "Original illustration generator returned 941x1672, below immutable 1080x1920 minimum; Make has 22 credits with a strict 20-credit floor and delivery cost above 2 is not defensibly bounded."
 }
